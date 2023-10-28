@@ -4,28 +4,26 @@ import Link from 'next/link'
 import house from '@/images/house.png'
 import { Logo } from '@/components/Logo'
 import { createClient } from '@supabase/supabase-js'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const supabaseUrl = 'https://tnykhejxqrbaefhiinac.supabase.co'
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-if (!supabaseKey) {
-  throw new Error("Missing Supabase key");
-}
-const supabase = createClient(supabaseUrl, supabaseKey)
-
+// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+// const supabase = createClient(supabaseUrl, supabaseKey)
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    let { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password
-    })
-    console.log(data)
-    console.log(error)
-  }
+
+  // const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   let { data, error } = await supabase.auth.signInWithPassword({
+  //     email: email,
+  //     password: password
+  //   })
+  //   console.log(data)
+  //   console.log(error)
+  // }
+
   return (
     <>
       <div className="flex min-h-full flex-1 bg-gray-50">
@@ -48,7 +46,7 @@ export default function Login() {
 
             <div className="mt-10">
               <div>
-                <form action="#" method="POST" onSubmit={handleLogin} className="space-y-6">
+                <form action="../../auth/login" method="POST" className="space-y-6">
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                       Email address

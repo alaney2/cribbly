@@ -7,9 +7,30 @@ import { Pricing } from '@/components/Pricing'
 import { PrimaryFeatures } from '@/components/PrimaryFeatures'
 import { SecondaryFeatures } from '@/components/SecondaryFeatures'
 import { Testimonials } from '@/components/Testimonials'
+import { NavLink } from '@/components/NavLink'
 
-export default function Home() {
-  return (
+import { cookies } from 'next/headers'
+import { createClient } from '@/utils/supabase/server'
+
+const Logout = () => (
+  <form action="/auth/logout" method="post">
+    {/* <NavLink href="/login">Sign out</NavLink> */}
+    <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
+    {/* <NavLink href="/login">Sign out</NavLink> */}
+
+      Logout
+    </button>
+  </form>
+)
+
+export default async function Home() {
+  const cookieStore = cookies()
+  const supabase = createClient(cookieStore)
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  return user ? (<Logout />) : (
     <>
       <Header />
       <main>
