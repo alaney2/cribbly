@@ -7,9 +7,9 @@ export async function POST(request: Request) {
   const formData = await request.formData()
   const email = String(formData.get('email'))
   const password = String(formData.get('password'))
-  const first_name = String(formData.get('first_name'))
-  const last_name = String(formData.get('last_name'))
-  const referral_source = String(formData.get('referral_source'))
+  // const first_name = String(formData.get('first_name'))
+  // const last_name = String(formData.get('last_name'))
+  // const referral_source = String(formData.get('referral_source'))
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 

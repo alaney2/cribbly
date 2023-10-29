@@ -1,6 +1,4 @@
 import Image from 'next/image'
-
-import backgroundImage from '@/images/background-auth.jpg'
 import house from '@/images/house.png'
 
 export function SlimLayout({ children }: { children: React.ReactNode }) {
@@ -18,7 +16,7 @@ export function SlimLayout({ children }: { children: React.ReactNode }) {
             src={house}
             alt=""
             unoptimized
-            priority
+            priority={false}
           />
         </div>
       </div>
