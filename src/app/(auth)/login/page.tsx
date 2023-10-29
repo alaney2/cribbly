@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Messages from './messages'
+import Messages from '@/components/Messages'
 
 import { Button } from '@/components/Button'
 import { TextField } from '@/components/Fields'
@@ -12,7 +12,6 @@ export const metadata: Metadata = {
 }
 
 export default function Login() {
-
   return (
     <SlimLayout>
       <div className="flex">

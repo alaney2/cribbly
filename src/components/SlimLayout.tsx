@@ -18,6 +18,7 @@ export function SlimLayout({ children }: { children: React.ReactNode }) {
             src={house}
             alt=""
             unoptimized
+            priority
           />
         </div>
       </div>

@@ -1,7 +1,8 @@
 import Link from 'next/link'
+import Messages from '@/components/Messages'
 
 import { Button } from '@/components/Button'
-import { SelectField, TextField } from '@/components/Fields'
+import { TextField, SelectFieldNew } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
@@ -31,10 +32,7 @@ export default function Register() {
         </Link>{' '}
         to your account.
       </p>
-      <form
-        action="#"
-        className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2"
-      >
+      <form method="POST" className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
         <TextField
           label="First name"
           name="first_name"
@@ -65,23 +63,22 @@ export default function Register() {
           autoComplete="new-password"
           required
         />
-        <SelectField
+        <SelectFieldNew
           className="col-span-full"
           label="How did you hear about us?"
           name="referral_source"
+          optional={true}
+          options={["Select option", "Word of mouth", 'Google Ads', 'Facebook Ads']}
         >
-          <option>AltaVista search</option>
-          <option>Super Bowl commercial</option>
-          <option>Our route 34 city bus ad</option>
-          <option>The “Never Use This” podcast</option>
-        </SelectField>
+        </SelectFieldNew>
         <div className="col-span-full">
-          <Button type="submit" variant="solid" color="blue" className="w-full">
+          <Button formAction="../../auth/signup" type="submit" variant="solid" color="blue" className="w-full">
             <span>
               Sign up <span aria-hidden="true">&rarr;</span>
             </span>
           </Button>
         </div>
+        <Messages />
       </form>
     </SlimLayout>
   )
