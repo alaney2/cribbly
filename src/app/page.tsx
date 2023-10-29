@@ -11,6 +11,8 @@ import { NavLink } from '@/components/NavLink'
 
 import { cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
+import { Dashboard } from '@/components/Dashboard'
+import Dashboard1 from '@/components/Dashboard1'
 
 const Logout = () => (
   <form action="/auth/logout" method="post">
@@ -28,7 +30,7 @@ export default async function Home() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  return user ? (<Logout />) : (
+  return user ? (<Dashboard1 />) : (
     <>
       <Header />
       <main>
