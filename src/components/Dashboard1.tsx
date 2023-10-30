@@ -12,19 +12,21 @@ import {
   UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
+// import ConditionalLink from '@/utils/ConditionalLink'
+import Link from 'next/link';
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Dashboard', href: '/', icon: HomeIcon, current: true },
+  { name: 'Team', href: '/', icon: UsersIcon, current: false },
+  { name: 'Projects', href: '/', icon: FolderIcon, current: false },
+  { name: 'Calendar', href: '/', icon: CalendarIcon, current: false },
+  { name: 'Documents', href: '/', icon: DocumentDuplicateIcon, current: false },
+  { name: 'Reports', href: '', icon: ChartPieIcon, current: false },
 ]
 const teams = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
+  { id: 1, name: 'Heroicons', href: '/', initial: 'H', current: false },
+  { id: 2, name: 'Tailwind Labs', href: '/', initial: 'T', current: false },
+  { id: 3, name: 'Workcation', href: '/', initial: 'W', current: false },
 ]
 
 function classNames(...classes: string[]) {
@@ -33,6 +35,7 @@ function classNames(...classes: string[]) {
 
 export default function Dashboard1() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [currentNavItem, setCurrentNavItem] = useState('Dashboard');
 
   return (
     <>
@@ -62,22 +65,6 @@ export default function Dashboard1() {
                 leaveTo="-translate-x-full"
               >
                 <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1">
-                  {/* <Transition.Child
-                    as={Fragment}
-                    enter="ease-in-out duration-300"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="ease-in-out duration-300"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  > */}
-                    {/* <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                      <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
-                        <span className="sr-only">Close sidebar</span>
-                        <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
-                      </button>
-                    </div> */}
-                  {/* </Transition.Child> */}
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow w-64 flex-col gap-y-5 overflow-y-auto bg-gray-100 px-6 pb-2">
                     <div className="absolute top-0 right-0 flex w-16 justify-center pt-5">
@@ -99,24 +86,27 @@ export default function Dashboard1() {
                           <ul role="list" className="space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <a
+                                <Link
                                   href={item.href}
                                   className={classNames(
-                                    item.current
+                                    item.name === currentNavItem
                                       ? ' text-indigo-600'
                                       : 'text-gray-700 hover:text-indigo-600',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                   )}
+                                  onClick={() => setCurrentNavItem(item.name)}
                                 >
                                   <item.icon
                                     className={classNames(
-                                      item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
+                                      item.name === currentNavItem 
+                                        ? 'text-indigo-600' 
+                                        : 'text-gray-400 group-hover:text-indigo-600',
                                       'h-6 w-6 shrink-0'
                                     )}
                                     aria-hidden="true"
                                   />
                                   {item.name}
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -126,18 +116,19 @@ export default function Dashboard1() {
                           <ul role="list" className="mt-2 space-y-1">
                             {teams.map((team) => (
                               <li key={team.name}>
-                                <a
+                                <Link
                                   href={team.href}
                                   className={classNames(
-                                    team.current
+                                    team.name === currentNavItem
                                       ? 'text-indigo-600'
                                       : 'text-gray-700 hover:text-indigo-600',
                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                   )}
+                                  onClick={() => setCurrentNavItem(team.name)}
                                 >
                                   <span
                                     className={classNames(
-                                      team.current
+                                      team.name === currentNavItem
                                         ? 'text-indigo-600 border-indigo-600'
                                         : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
                                       'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
@@ -146,7 +137,7 @@ export default function Dashboard1() {
                                     {team.initial}
                                   </span>
                                   <span className="truncate">{team.name}</span>
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -179,24 +170,25 @@ export default function Dashboard1() {
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>
-                        <a
+                        <Link
                           href={item.href}
                           className={classNames(
-                            item.current
+                            item.name === currentNavItem
                               ? ' text-indigo-600'
                               : 'text-gray-700 hover:text-indigo-600 ',
                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                           )}
+                          onClick={() => setCurrentNavItem(item.name)}
                         >
                           <item.icon
                             className={classNames(
-                              item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
+                              item.name === currentNavItem ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
                               'h-6 w-6 shrink-0'
                             )}
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -206,18 +198,19 @@ export default function Dashboard1() {
                   <ul role="list" className="-mx-2 mt-2 space-y-1">
                     {teams.map((team) => (
                       <li key={team.name}>
-                        <a
+                        <Link
                           href={team.href}
                           className={classNames(
-                            team.current
+                            team.name === currentNavItem
                               ? ' text-indigo-600'
                               : 'text-gray-700 hover:text-indigo-600 ',
                             'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                           )}
+                          onClick={() => setCurrentNavItem(team.name)}
                         >
                           <span
                             className={classNames(
-                              team.current
+                              team.name === currentNavItem
                                 ? 'text-indigo-600 border-indigo-600'
                                 : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
                               'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
@@ -226,15 +219,15 @@ export default function Dashboard1() {
                             {team.initial}
                           </span>
                           <span className="truncate">{team.name}</span>
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
                 </li>
                 <li className="-mx-6 mt-auto">
-                  <a
+                  <Link
                     href="#"
-                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900"
                   >
                     <img
                       className="h-8 w-8 rounded-full bg-gray-50"
@@ -243,7 +236,7 @@ export default function Dashboard1() {
                     />
                     <span className="sr-only">Your profile</span>
                     <span aria-hidden="true">Tom Cook</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>
@@ -252,7 +245,6 @@ export default function Dashboard1() {
 
         <main className="flex-1 bg-white h-full rounded-3xl shadow-md hidden lg:block lg:mr-8">
           {/* Main area */}
-          {/* <div>Hello</div> */}
         </main>
       </div>
 
@@ -262,14 +254,14 @@ export default function Dashboard1() {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
           <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Dashboard</div>
-          <a href="#">
+          <Link href="#">
             <span className="sr-only">Your profile</span>
             <img
               className="h-8 w-8 rounded-full bg-gray-50"
               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
               alt=""
             />
-          </a>
+          </Link>
         </div>
       </div>
     </>
