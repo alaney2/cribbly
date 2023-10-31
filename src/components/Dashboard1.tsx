@@ -248,7 +248,7 @@ export default function Dashboard1() {
                         leaveTo="transform opacity-0 scale-95"
                       >
                         <Menu.Items className="ml-4 w-40 origin-bottom-left absolute bottom-full left-0 z-10 mt-2 divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                          <form method="POST" action="/auth/logout">
+                          <form method="POST" action="/auth/sign-out">
                             <Menu.Item>
                               {({ active }) => (
                                 <button

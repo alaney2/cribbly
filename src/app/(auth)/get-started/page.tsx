@@ -8,7 +8,7 @@ import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Sign Up',
+  title: 'Get started',
 }
 
 export default function Register() {
@@ -49,10 +49,11 @@ export default function Register() {
         /> */}
         <TextField
           className="col-span-full"
-          label="Email address"
+          label="Email"
           name="email"
           type="email"
           autoComplete="email"
+          placeholder='you@example.com'
           required
         />
         <TextField
@@ -61,6 +62,7 @@ export default function Register() {
           name="password"
           type="password"
           autoComplete="new-password"
+          placeholder='••••••••'
           required
         />
         {/* <SelectFieldNew
@@ -71,7 +73,7 @@ export default function Register() {
           options={["Select option", "Word of mouth", 'Google Ads', 'Facebook Ads']}
         /> */}
         <div className="col-span-full">
-          <Button formAction="../../auth/signup" type="submit" variant="solid" color="blue" className="w-full">
+          <Button formAction="../../auth/sign-up" type="submit" variant="solid" color="blue" className="w-full">
             <span>
               Sign up <span aria-hidden="true">&rarr;</span>
             </span>

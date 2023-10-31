@@ -8,7 +8,7 @@ import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Sign In',
+  title: 'Sign in',
 }
 
 export default function Login() {
@@ -25,19 +25,20 @@ export default function Login() {
       <p className="mt-2 text-sm text-gray-700">
         Don’t have an account?{' '}
         <Link
-          href="/register"
+          href="/get-started"
           className="font-medium text-blue-600 hover:underline"
         >
           Sign up
         </Link>{' '}
         for a free trial.
       </p>
-      <form action="/auth/login" method="POST" className="mt-10 grid grid-cols-1 gap-y-8">
+      <form action="/auth/sign-in" method="POST" className="mt-10 grid grid-cols-1 gap-y-8">
         <TextField
-          label="Email address"
+          label="Email"
           name="email"
           type="email"
           autoComplete="email"
+          placeholder='Enter your email'
           required
         />
         <TextField
@@ -45,6 +46,7 @@ export default function Login() {
           name="password"
           type="password"
           autoComplete="current-password"
+          placeholder='••••••••'
           required
         />
         <div>
