@@ -1,8 +1,9 @@
-import { Inter, Lexend } from 'next/font/google'
+import { Inter, Lexend, Poppins } from 'next/font/google'
 import clsx from 'clsx'
 
 import '@/styles/tailwind.css'
 import { type Metadata } from 'next'
+
 
 export const metadata: Metadata = {
   title: {
@@ -23,6 +24,13 @@ const lexend = Lexend({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-lexend',
+})
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-poppins',
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
 })
 
 export default function RootLayout({
