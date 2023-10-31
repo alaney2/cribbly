@@ -7,8 +7,8 @@ export async function POST(request: Request) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
-  await supabase.auth.signOut()
-
+  const { error } = await supabase.auth.signOut()
+  console.log(error)
   return NextResponse.redirect(`${requestUrl.origin}/login`, {
     // a 301 status is required to redirect from a POST to a GET route
     status: 301,

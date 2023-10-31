@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, Transition, Menu } from '@headlessui/react'
 import {
   Bars3Icon,
   CalendarIcon,
@@ -11,6 +11,7 @@ import {
   HomeIcon,
   UsersIcon,
   XMarkIcon,
+  ChevronDownIcon,
 } from '@heroicons/react/24/outline'
 import Link from 'next/link';
 
@@ -152,100 +153,155 @@ export default function Dashboard1() {
 
         {/* Static sidebar for desktop */}
         <div className="mx-auto flex w-full h-full items-start gap-x-8 lg:p-8 sm:px-6 lg:mt-8">
-        <aside className={`lg:sticky top-16 left-4 flex-col mt-2 gap-y-5 overflow-y-auto absolute hidden lg:block`}>
-          {/* Left column */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto px-6 pb-2">
-            <div className="flex h-16 shrink-0 items-center">
-              {/* <Logo className="h-10 w-auto" /> */}
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                alt="Your Company"
-              />
-            </div>
-            <nav className="flex flex-1 flex-col">
-              <ul role="list" className="flex flex-1 flex-col gap-y-7">
-                <li>
-                  <ul role="list" className="-mx-2 space-y-1">
-                    {navigation.map((item) => (
-                      <li key={item.name}>
-                        <Link
-                          href={item.href}
-                          className={classNames(
-                            item.name === currentNavItem
-                              ? ' text-indigo-600'
-                              : 'text-gray-700 hover:text-indigo-600 ',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                          )}
-                          onClick={() => setCurrentNavItem(item.name)}
-                        >
-                          <item.icon
+          <aside className={`lg:sticky top-16 left-4 flex-col mt-2 gap-y-5 overflow-y-auto absolute hidden lg:block`}>
+            {/* Left column */}
+            <div className="flex grow flex-col gap-y-5 overflow-y-auto px-6 pb-2 min-h-full">
+              <div className="flex h-16 shrink-0 items-center">
+                {/* <Logo className="h-10 w-auto" /> */}
+                <img
+                  className="h-8 w-auto"
+                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                  alt="Your Company"
+                />
+              </div>
+              <nav className="flex flex-1 flex-col">
+                <ul role="list" className="gap-y-7">
+                  <li>
+                    <ul role="list" className="-mx-2 space-y-1">
+                      {navigation.map((item) => (
+                        <li key={item.name}>
+                          <Link
+                            href={item.href}
                             className={classNames(
-                              item.name === currentNavItem ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
-                              'h-6 w-6 shrink-0'
+                              item.name === currentNavItem
+                                ? ' text-indigo-600'
+                                : 'text-gray-700 hover:text-indigo-600 ',
+                              'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                             )}
-                            aria-hidden="true"
-                          />
-                          {item.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-                <li>
-                  <div className="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
-                  <ul role="list" className="-mx-2 mt-2 space-y-1">
-                    {teams.map((team) => (
-                      <li key={team.name}>
-                        <Link
-                          href={team.href}
-                          className={classNames(
-                            team.name === currentNavItem
-                              ? ' text-indigo-600'
-                              : 'text-gray-700 hover:text-indigo-600 ',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                          )}
-                          onClick={() => setCurrentNavItem(team.name)}
-                        >
-                          <span
+                            onClick={() => setCurrentNavItem(item.name)}
+                          >
+                            <item.icon
+                              className={classNames(
+                                item.name === currentNavItem ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
+                                'h-6 w-6 shrink-0'
+                              )}
+                              aria-hidden="true"
+                            />
+                            {item.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                  <li>
+                    <div className="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
+                    <ul role="list" className="flex flex-1 flex-col -mx-2 mt-2 space-y-1">
+                      {teams.map((team) => (
+                        <li key={team.name}>
+                          <Link
+                            href={team.href}
                             className={classNames(
                               team.name === currentNavItem
-                                ? 'text-indigo-600 border-indigo-600'
-                                : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
-                              'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
+                                ? ' text-indigo-600'
+                                : 'text-gray-700 hover:text-indigo-600 ',
+                              'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                             )}
+                            onClick={() => setCurrentNavItem(team.name)}
                           >
-                            {team.initial}
-                          </span>
-                          <span className="truncate">{team.name}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-                <li className="-mx-6 mt-auto">
-                  <Link
-                    href="#"
-                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900"
-                  >
-                    <img
-                      className="h-8 w-8 rounded-full bg-gray-50"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
-                    />
-                    <span className="sr-only">Your profile</span>
-                    <span aria-hidden="true">Tom Cook</span>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </aside>
+                            <span
+                              className={classNames(
+                                team.name === currentNavItem
+                                  ? 'text-indigo-600 border-indigo-600'
+                                  : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
+                              )}
+                            >
+                              {team.initial}
+                            </span>
+                            <span className="truncate">{team.name}</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                  <li className="fixed bottom-10 left-8 mx-auto text-sm font-semibold gap-x-4 px-6 py-3 leading-6 text-gray-900">
+                    {/* <Link
+                      href="#"
+                      className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900"
+                    > */}
+                    <Menu as="div" className="font-medium">
+                      <Menu.Button>
+                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
+                          <span className="text-sm font-medium leading-none text-white">TC</span>
+                        </span>
+                        <span className="sr-only">Your profile</span>
+                        <span aria-hidden="true" className='p-2'>Profile</span>
+                      </Menu.Button>
+                      {/* <Menu.Items as="ul" className="origin-bottom-right absolute bottom-full right-0"> */}
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items className="ml-4 w-40 origin-bottom-left absolute bottom-full left-0 z-10 mt-2 divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <form method="POST" action="/auth/logout">
+                            <Menu.Item>
+                              {({ active }) => (
+                                <button
+                                  type="submit"
+                                  className={classNames(
+                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                    'block w-full px-4 py-2 text-left text-sm'
+                                  )}
+                                >
+                                  Sign out
+                                </button>
+                              )}
+                            </Menu.Item>
+                          </form>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <a
+                                href="#"
+                                className={classNames(
+                                  active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                  'block px-4 py-2 text-sm'
+                                )}
+                              >
+                                Support
+                              </a>
+                            )}
+                          </Menu.Item>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <a
+                                href="#"
+                                className={classNames(
+                                  active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                  'block px-4 py-2 text-sm'
+                                )}
+                              >
+                                Account settings
+                              </a>
+                            )}
+                          </Menu.Item>
+                        </Menu.Items>
+                      </Transition>
+                    </Menu>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </aside>
 
-        <main className="flex-1 bg-white h-full rounded-3xl shadow-md hidden lg:block lg:mr-8">
-          {/* Main area */}
-        </main>
-      </div>
+          <main className="flex-1 bg-white h-full rounded-3xl shadow-md hidden lg:block lg:mr-8">
+            {/* Main area */}
+          </main>
+        </div>
 
         <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-gray-100 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
           <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>

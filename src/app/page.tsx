@@ -14,15 +14,6 @@ import { createClient } from '@/utils/supabase/server'
 import { Dashboard } from '@/components/Dashboard'
 import Dashboard1 from '@/components/Dashboard1'
 
-const Logout = () => (
-  <form action="/auth/logout" method="post">
-    <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
-    <NavLink href="/login">Sign out</NavLink>
-      {/* Sign Out */}
-    </button>
-  </form>
-)
-
 export default async function Home() {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)

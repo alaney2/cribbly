@@ -32,7 +32,7 @@ export default function Login() {
         </Link>{' '}
         for a free trial.
       </p>
-      <form action="../../auth/login" method="POST" className="mt-10 grid grid-cols-1 gap-y-8">
+      <form action="/auth/login" method="POST" className="mt-10 grid grid-cols-1 gap-y-8">
         <TextField
           label="Email address"
           name="email"
