@@ -6,7 +6,7 @@ import { TextField } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
-import  CleanURL from '@/components/CleanUrl';
+import  CleanURL from '@/components/CleanURL';
 
 export const metadata: Metadata = {
   title: 'Sign in',
