@@ -13,16 +13,16 @@ const nextConfig = {
         destination: '/sign-in',
         permanent: true,
       },
-      {
-        source: '/register',
-        destination: 'get-started',
-        permanent: true,
-      },
-      {
-        source: '/sign-up',
-        destination: 'get-started',
-        permanent: true,
-      },
+      // {
+      //   source: '/register',
+      //   destination: '/get-started',
+      //   permanent: true,
+      // },
+      // {
+      //   source: '/sign-up',
+      //   destination: '/get-started',
+      //   permanent: true,
+      // },
     ]
   },
   images: {
