@@ -74,7 +74,7 @@ export function SignUpForm() {
         optional={true}
         options={["Select option", "Word of mouth", 'Google Ads', 'Facebook Ads']}
       /> */}
-      <div className={clsx("max-h-[500px] col-span-full transition-all duration-500 ease-in-out overflow-y-hidden text-gray-600", isPasswordFocused ? "opacity-100 max-h-[500px]" : "opacity-0 max-h-0")}>
+      <div className={clsx("col-span-full transition-all duration-500 ease-in-out overflow-y-hidden text-gray-600", isPasswordFocused ? "opacity-100 max-h-[500px]" : "opacity-0 max-h-0")}>
         <div className="text-sm">
           <div className={checkClasses}>
             {hasUpperCase ? <FilledCheck /> : <UnfilledCheck />}
