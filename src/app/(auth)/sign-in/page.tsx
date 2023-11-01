@@ -8,6 +8,7 @@ import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 import  CleanURL from '@/components/CleanURL';
 
+
 export const metadata: Metadata = {
   title: 'Sign in',
 }
