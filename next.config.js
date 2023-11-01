@@ -18,6 +18,11 @@ const nextConfig = {
         destination: 'get-started',
         permanent: true,
       },
+      {
+        source: '/sign-up',
+        destination: 'get-started',
+        permanent: true,
+      },
     ]
   },
   images: {

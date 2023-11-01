@@ -1,19 +1,22 @@
 import Link from 'next/link'
-import Messages from '@/components/Messages'
 
 import { Button } from '@/components/Button'
 import { TextField, SelectFieldNew } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
+import  CleanURL from '@/components/CleanURL';
 import { type Metadata } from 'next'
+import { SignUpForm } from '@/components/SignUpForm'
 
 export const metadata: Metadata = {
   title: 'Get started',
 }
 
 export default function Register() {
+
   return (
     <SlimLayout>
+      <CleanURL />
       <div className="flex">
         <Link href="/" aria-label="Home">
           <Logo className="h-10 w-auto" />
@@ -32,55 +35,7 @@ export default function Register() {
         </Link>{' '}
         to your account.
       </p>
-      <form method="POST" className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
-        {/* <TextField
-          label="First name"
-          name="first_name"
-          type="text"
-          autoComplete="given-name"
-          required
-        />
-        <TextField
-          label="Last name"
-          name="last_name"
-          type="text"
-          autoComplete="family-name"
-          required
-        /> */}
-        <TextField
-          className="col-span-full"
-          label="Email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          placeholder='you@example.com'
-          required
-        />
-        <TextField
-          className="col-span-full"
-          label="Password"
-          name="password"
-          type="password"
-          autoComplete="new-password"
-          placeholder='••••••••'
-          required
-        />
-        {/* <SelectFieldNew
-          className="col-span-full"
-          label="How did you hear about us?"
-          name="referral_source"
-          optional={true}
-          options={["Select option", "Word of mouth", 'Google Ads', 'Facebook Ads']}
-        /> */}
-        <div className="col-span-full">
-          <Button formAction="../../auth/sign-up" type="submit" variant="solid" color="blue" className="w-full">
-            <span>
-              Sign up <span aria-hidden="true">&rarr;</span>
-            </span>
-          </Button>
-        </div>
-        <Messages />
-      </form>
+      <SignUpForm />
       <div className="mt-10">
         <div className="relative">
           <div className="absolute inset-0 flex items-center" aria-hidden="true">
@@ -91,7 +46,7 @@ export default function Register() {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-4">
+        <div className="mt-10 grid grid-cols-2 gap-4">
           <a
             href="#"
             className="flex w-full items-center justify-center gap-3 rounded-md bg-[#fff] shadow-sm px-3 py-1.5 text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fff]"
@@ -102,7 +57,6 @@ export default function Register() {
             </svg>
             <span className="text-sm font-semibold leading-6">Google</span>
           </a>
-
           <a
             href="#"
             className="flex w-full items-center justify-center gap-3 rounded-md bg-[#080808] shadow-sm px-3 py-1.5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#080808]"

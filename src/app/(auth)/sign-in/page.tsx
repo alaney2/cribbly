@@ -6,6 +6,7 @@ import { TextField } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
+import  CleanURL from '@/components/CleanUrl';
 
 export const metadata: Metadata = {
   title: 'Sign in',
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 export default function Login() {
   return (
     <SlimLayout>
+      <CleanURL />
       <div className="flex">
         <Link href="/" aria-label="Home">
           <Logo className="h-10 w-auto" />
@@ -68,7 +70,7 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-4">
+        <div className="mt-8 grid grid-cols-2 gap-4">
           <a
             href="#"
             className="flex w-full items-center justify-center gap-3 rounded-md bg-[#fff] shadow-sm px-3 py-1.5 text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fff]"
