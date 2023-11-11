@@ -16,9 +16,9 @@ export async function POST(request: Request) {
   const { error } = await supabase.auth.signUp({
     email,
     password,
-    options: {
-      emailRedirectTo: `${requestUrl.origin}/auth/callback`,
-    },
+    // options: {
+    //   emailRedirectTo: `${requestUrl.origin}/auth/callback`,
+    // },
   })
 
   if (error) {
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.redirect(
-    `${requestUrl.origin}/get-started?message=Check email to continue sign in process`,
+    `${requestUrl.origin}/get-started/otp?email=${email}`,
     {
       // a 301 status is required to redirect from a POST to a GET route
       status: 301,

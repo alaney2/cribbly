@@ -9,31 +9,32 @@ import { UnfilledCheck, FilledCheck, OpenEye, ClosedEye } from '@/components/Pas
 const checkClasses = 'flex items-center gap-1 space-x-1.5 transition duration-200 text-foreground-lighter'
 
 export function SignUpForm() {
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('')
   const [isPasswordFocused, setIsPasswordFocused] = useState(false)
 
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-  const [hasUpperCase, setHasUpperCase] = useState(false);
-  const [hasLowerCase, setHasLowerCase] = useState(false);
-  const [hasNumber, setHasNumber] = useState(false);
-  const [hasSpecialChar, setHasSpecialChar] = useState(false);
-  const [hasMinLength, setHasMinLength] = useState(false);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false)
+  const [hasUpperCase, setHasUpperCase] = useState(false)
+  const [hasLowerCase, setHasLowerCase] = useState(false)
+  const [hasNumber, setHasNumber] = useState(false)
+  const [hasSpecialChar, setHasSpecialChar] = useState(false)
+  const [hasMinLength, setHasMinLength] = useState(false)
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newPassword = e.target.value;
-    setPassword(newPassword);
-    setHasUpperCase(/[A-Z]/.test(newPassword));
-    setHasLowerCase(/[a-z]/.test(newPassword));
-    setHasNumber(/[0-9]/.test(newPassword));
-    setHasSpecialChar(/[!?<>@#$%]/.test(newPassword));
-    setHasMinLength(newPassword.length >= 8);
+    const newPassword = e.target.value
+    setPassword(newPassword)
+    setHasUpperCase(/[A-Z]/.test(newPassword))
+    setHasLowerCase(/[a-z]/.test(newPassword))
+    setHasNumber(/[0-9]/.test(newPassword))
+    setHasSpecialChar(/[!?<>@#$%]/.test(newPassword))
+    setHasMinLength(newPassword.length >= 8)
 
     // Check password conditions. For example, let's say the password should be at least 8 characters long.
     if (newPassword.length >= 8) {
-      setIsButtonEnabled(true);
+      setIsButtonEnabled(true)
     } else {
-      setIsButtonEnabled(false);
+      setIsButtonEnabled(false)
     }
   };
   

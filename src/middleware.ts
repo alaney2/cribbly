@@ -1,21 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-import { cookies } from 'next/headers'
-import { createClient } from '@/utils/supabase/server'
-import { withAuth, NextRequestWithAuth } from 'next-auth/middleware';
 
-export default withAuth(async function middleware(request: NextRequestWithAuth) {
-
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (user && (request.nextUrl.pathname === '/sign-in' || request.nextUrl.pathname === '/get-started')) {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
-
+export async function middleware(request: NextRequest) {
   // Create an unmodified response
   let response = NextResponse.next({
     request: {
@@ -85,16 +71,4 @@ export default withAuth(async function middleware(request: NextRequestWithAuth) 
     // your Next.js app connected to your Supabase project.
     return response
   }
-},
-{
-    callbacks: {
-        authorized: () => true,
-    },
-});
-
-export const config = {
-  matcher: [
-    '/api/:path*', 
-    '/((?!_next/static|favicon.ico|login|).*)',
-  ]
 }
