@@ -5,6 +5,7 @@ import clsx from 'clsx'
 import { Button } from '@/components/Button'
 import Messages from '@/components/Messages'
 
+
 export function OtpForm() {
   const searchParams = useSearchParams()
   const email = searchParams.get('email')
@@ -67,7 +68,12 @@ export function OtpForm() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email }),
-      });
+      })
+      if (response.ok) {
+        setCooldownTime(30);
+      } else {
+        throw new Error('Failed to resend OTP');
+      }
     } catch (error) {
       console.error('Error resending OTP:', error);
     }
