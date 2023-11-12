@@ -30,7 +30,6 @@ export function SignUpForm() {
     setHasSpecialChar(/[!?<>@#$%]/.test(newPassword))
     setHasMinLength(newPassword.length >= 8)
 
-    // Check password conditions. For example, let's say the password should be at least 8 characters long.
     if (newPassword.length >= 8) {
       setIsButtonEnabled(true)
     } else {
@@ -39,10 +38,10 @@ export function SignUpForm() {
   };
   
   return (
-    <form method="POST" className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
+    <form method="POST" className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
       <TextField
         className="col-span-full"
-        label="Email"
+        label="Email address"
         name="email"
         type="email"
         autoComplete="email"
@@ -55,7 +54,6 @@ export function SignUpForm() {
           label="Password"
           name="password"
           type={isPasswordVisible ? "text" : "password"}
-          // type="password"
           autoComplete="new-password"
           placeholder='••••••••'
           onChange={handlePasswordChange}

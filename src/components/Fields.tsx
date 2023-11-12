@@ -6,13 +6,13 @@ import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
 const formClasses =
-  'block w-full appearance-none rounded-md border-1 border-gray-200 bg-white px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-blue-500 sm:text-sm'
+  'block w-full appearance-none rounded-md border-1 border-gray-200 bg-white px-3 py-1.5 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-blue-500 sm:text-sm ring-1 ring-inset ring-gray-300'
 
 function Label({ id, children }: { id: string; children: React.ReactNode }) {
   return (
     <label
       htmlFor={id}
-      className="mb-3 block text-sm font-medium text-gray-700"
+      className="mb-2 block text-sm font-medium text-gray-700"
     >
       {children}
     </label>
