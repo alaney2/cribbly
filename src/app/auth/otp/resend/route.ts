@@ -4,19 +4,22 @@ import { cookies } from 'next/headers'
 
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url)
-  const formData = await request.formData()
-  const email = String(formData.get('email'))
-  const token = String(formData.get('token'))
 
-  if (token && email) {
+  const data = await request.json()
+  const email = data.email
+
+  if (email) {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
 
-    const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
+    const { data, error } = await supabase.auth.resend({
+      type: 'signup',
+      email: email,
+    })
 
     if (error) {
       return NextResponse.redirect(
-        `${requestUrl.origin}/get-started/otp?email=${email}&error=Invalid verification code`,
+        `${requestUrl.origin}/get-started/otp?email=${email}&error=Could not resend code`,
         {
           // a 301 status is required to redirect from a POST to a GET route
           status: 301,
@@ -24,14 +27,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Handle the successful verification
-    return NextResponse.redirect(
-      requestUrl.origin,
-      {
-        // a 301 status is required to redirect from a POST to a GET route
-        status: 301,
-      }
-    );
   }
 
   return NextResponse.redirect(
