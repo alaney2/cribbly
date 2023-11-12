@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
     if (error) {
       return NextResponse.redirect(
-        `${requestUrl.origin}/get-started/otp?email=${email}&error=Could not resend code`,
+        `${requestUrl.origin}/get-started/otp?error=Could not resend code`,
         {
           // a 301 status is required to redirect from a POST to a GET route
           status: 301,

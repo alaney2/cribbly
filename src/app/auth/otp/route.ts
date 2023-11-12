@@ -5,18 +5,25 @@ import { cookies } from 'next/headers'
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url)
   const formData = await request.formData()
-  const email = String(formData.get('email'))
-  const token = String(formData.get('token'))
+  const cookieStore = cookies()
+
+  const email = cookieStore.get('email')?.value
+
+  let token = '';
+  for (let i = 0; i < 6; i++) {
+    const otpPart = String(formData.get(`otp${i}`));
+    if (otpPart !== null) {
+      token += otpPart;
+    }
+  }
 
   if (token && email) {
-    const cookieStore = cookies()
     const supabase = createClient(cookieStore)
-
     const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
 
     if (error) {
       return NextResponse.redirect(
-        `${requestUrl.origin}/get-started/otp?email=${email}&error=Invalid verification code`,
+        `${requestUrl.origin}/get-started/otp?error=Invalid verification code`,
         {
           // a 301 status is required to redirect from a POST to a GET route
           status: 301,

@@ -7,9 +7,6 @@ export async function POST(request: Request) {
   const formData = await request.formData()
   const email = String(formData.get('email'))
   const password = String(formData.get('password'))
-  // const first_name = String(formData.get('first_name'))
-  // const last_name = String(formData.get('last_name'))
-  // const referral_source = String(formData.get('referral_source'))
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
@@ -31,8 +28,15 @@ export async function POST(request: Request) {
     )
   }
 
+  cookieStore.set({
+    name: 'email',
+    value: email,
+    httpOnly: true,
+    secure: true,
+  })
+
   return NextResponse.redirect(
-    `${requestUrl.origin}/get-started/otp?email=${email}`,
+    `${requestUrl.origin}/get-started/otp`,
     {
       // a 301 status is required to redirect from a POST to a GET route
       status: 301,
