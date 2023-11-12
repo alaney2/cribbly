@@ -26,18 +26,16 @@ export function OtpForm() {
 
   return (
     <>
-      
-        <div className="text-center mb-4 text-sm text-gray-400">
-          <p>We have sent a verification code to your email</p>
-          <p>{formatEmail(email)}</p>
-        </div>
-        <Messages />
-        <div className="flex flex-col">
-          {/* <input type="hidden" name="email" value={email} /> */}
-          <OtpInput />
-          
-          <OtpResend email={email!} />
-        </div>
+      <div className="text-center mb-4 text-sm text-gray-400">
+        <p>We have sent a verification code to your email</p>
+        <p>{formatEmail(email)}</p>
+      </div>
+      <Messages />
+      <div className="flex flex-col">
+        {/* <input type="hidden" name="email" value={email} /> */}
+        <OtpInput />
+        <OtpResend email={email!} />
+      </div>
     </>
   )
 }
