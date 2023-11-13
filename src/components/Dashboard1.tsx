@@ -70,7 +70,7 @@ export default function Dashboard1() {
                     <div className="absolute top-0 right-0 flex w-16 justify-center pt-5">
                       <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
                         <span className="sr-only">Close sidebar</span>
-                        <XMarkIcon className="h-6 w-6 text-gray-700" aria-hidden="true" />
+                        <XMarkIcon className="h-6 w-6 text-gray-700 focus:border-none focus:outline-none focus:text-red-500" aria-hidden="true" />
                       </button>
                     </div>
                     <div className="flex h-16 shrink-0 items-center">
