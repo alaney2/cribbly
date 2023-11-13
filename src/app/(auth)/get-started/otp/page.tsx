@@ -7,7 +7,7 @@ import { Logo } from '@/components/Logo'
 import { type Metadata } from 'next'
 import  CleanURL from '@/components/CleanURL';
 import icon from '@/images/icon.png'
-import logo from '@/images/logo.svg'
+import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'
 
 export const metadata: Metadata = {
@@ -23,20 +23,17 @@ export default function SignIn() {
           <Link href="/" aria-label="Home">
             <Image
               // className="absolute inset-0 h-full w-full object-cover"
-              className='mx-auto h-28 w-auto'
+              className='mx-auto h-12 w-auto'
               src={logo}
               alt=""
               // unoptimized
               // priority={false}
             />
           </Link>
-          {/* <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Email verification
-          </h2> */}
 
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
+        <div className="mt-16 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-gray-50 px-6 py-12 shadow sm:rounded-lg sm:px-12">
             <OtpForm />
           </div>

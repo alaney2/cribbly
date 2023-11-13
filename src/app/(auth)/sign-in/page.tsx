@@ -6,6 +6,8 @@ import { Logo } from '@/components/Logo'
 import { type Metadata } from 'next'
 import  CleanURL from '@/components/CleanURL';
 import icon from '@/images/icon.png'
+import logo from '@/images/logo-cropped.svg'
+
 import Image from 'next/image'
 
 export const metadata: Metadata = {
@@ -15,26 +17,25 @@ export const metadata: Metadata = {
 export default function SignIn() {
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-100">
+      <div className="flex min-h-full flex-1 flex-col sm:justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 sm:bg-gray-100">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link href="/" aria-label="Home">
 
             <Image
-              // className="absolute inset-0 h-full w-full object-cover"
-              className='mx-auto h-10 w-auto'
-              src={icon}
+              className='h-8 mx-auto w-auto'
+              src={logo}
               alt=""
               // unoptimized
               // priority={false}
             />
           </Link>
-          <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-xl font-semibold leading-9 tracking-tight text-gray-900">
             Welcome back
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-          <div className="bg-gray-50 px-6 py-12 shadow sm:rounded-lg sm:px-12">
+        <div className="sm:mt-6 sm:mx-auto sm:w-full sm:max-w-[480px]">
+          <div className="bg-gray-50 px-6 py-6 sm:py-12 sm:shadow sm:rounded-lg sm:px-12">
             <form className="space-y-6" action="/auth/sign-in" method="POST">
               <div>
                 <div className="mt-2">
@@ -126,7 +127,7 @@ export default function SignIn() {
             </div>
           </div>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
+          <p className="sm:mt-10 text-center text-sm text-gray-500">
             Don&apos;t have an account?{' '}
             <a href="/get-started" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
               Sign up here

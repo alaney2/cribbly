@@ -4,13 +4,13 @@ import { Logo } from '@/components/Logo'
 import  CleanURL from '@/components/CleanURL';
 import { type Metadata } from 'next'
 import { SignUpForm } from '@/components/SignUpForm'
+import logo from '@/images/logo-cropped.svg'
+import icon from '@/images/icon.png'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: 'Get started',
 }
-
-import icon from '@/images/icon.png'
-import Image from 'next/image'
 
 export default function SignIn() {
   return (
@@ -19,22 +19,18 @@ export default function SignIn() {
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-100">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link href="/" aria-label="Home">
-
             <Image
-              // className="absolute inset-0 h-full w-full object-cover"
-              className='mx-auto h-10 w-auto'
-              src={icon}
+              className='mx-auto h-8 w-auto'
+              src={logo}
               alt=""
-              // unoptimized
-              // priority={false}
             />
           </Link>
-          <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="mt-10 text-xl font-semibold leading-9 tracking-tight text-gray-900">
             Get started for free
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
+        <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-gray-50 px-6 py-12 shadow sm:rounded-lg sm:px-12">
             <SignUpForm />
             <div>
