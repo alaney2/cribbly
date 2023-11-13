@@ -1,10 +1,10 @@
 'use client'
 import { TextField, SelectFieldNew } from '@/components/Fields'
 import { Button } from '@/components/Button'
-import Messages from '@/components/Messages'
+import Messages from '@/components/auth/Messages'
 import { useState } from 'react'
 import clsx from 'clsx'
-import { UnfilledCheck, FilledCheck, OpenEye, ClosedEye } from '@/components/PasswordChecks'
+import { UnfilledCheck, FilledCheck, OpenEye, ClosedEye } from '@/components/auth/PasswordChecks'
 
 const checkClasses = 'flex items-center gap-1 space-x-1.5 transition duration-200 text-foreground-lighter'
 
