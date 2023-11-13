@@ -16,7 +16,7 @@ export default function SignIn() {
   return (
     <>
       <CleanURL />
-      <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-100">
+      <div className="flex min-h-full flex-1 flex-col sm:justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 sm:bg-gray-100">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link href="/" aria-label="Home">
             <Image
@@ -25,13 +25,13 @@ export default function SignIn() {
               alt=""
             />
           </Link>
-          <h2 className="mt-10 text-xl font-semibold leading-9 tracking-tight text-gray-900">
+          <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-xl font-semibold leading-9 tracking-tight text-gray-900">
             Get started for free
           </h2>
         </div>
 
-        <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-[480px]">
-          <div className="bg-gray-50 px-6 py-12 shadow sm:rounded-lg sm:px-12">
+        <div className="sm:mt-6 sm:mx-auto sm:w-full sm:max-w-[480px]">
+          <div className="bg-gray-50 px-6 py-6 sm:py-12 sm:shadow sm:rounded-lg sm:px-12">
             <SignUpForm />
             <div>
               <div className="relative mt-10">
@@ -68,7 +68,7 @@ export default function SignIn() {
             </div>
           </div>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
+          <p className="sm:mt-10 text-center text-sm text-gray-500">
             Already registered?{' '}
             <a href="/sign-in" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
               Sign in here
