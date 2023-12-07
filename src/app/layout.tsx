@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { Analytics } from '@vercel/analytics/react';
 
 import '@/styles/tailwind.css'
+import 'node_modules/leaflet-geosearch/dist/geosearch.css';
 import { type Metadata } from 'next'
 
 
