@@ -1,0 +1,14 @@
+.leaflet-control-geosearch form input {
+  font-size: 14px;
+}
+
+
+.leaflet-touch .leaflet-geosearch-bar form input {
+  height: 36px !important;
+}
+
+[type='text']:focus {
+  border-color: none;
+  border: none;
+  --tw-ring-color: transparent;
+}

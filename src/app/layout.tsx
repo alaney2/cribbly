@@ -2,8 +2,9 @@ import { Inter, Lexend, Poppins } from 'next/font/google'
 import clsx from 'clsx'
 import { Analytics } from '@vercel/analytics/react';
 
-import '@/styles/tailwind.css'
 import 'node_modules/leaflet-geosearch/dist/geosearch.css';
+import '@/styles/tailwind.css'
+import './globals.css'
 import { type Metadata } from 'next'
 
 
