@@ -29,6 +29,12 @@ importers:
       '@tailwindcss/forms':
         specifier: ^0.5.3
         version: 0.5.4(tailwindcss@3.3.3)
+      '@types/mapbox-gl':
+        specifier: ^2.7.19
+        version: 2.7.19
+      '@types/mapbox__mapbox-gl-geocoder':
+        specifier: ^4.7.7
+        version: 4.7.7
       '@types/node':
         specifier: 20.4.6
         version: 20.4.6
@@ -596,7 +602,6 @@ packages:
 
   /@types/geojson@7946.0.12:
     resolution: {integrity: sha512-uK2z1ZHJyC0nQRbuovXFt4mzXDwf27vQeUWNhfKGwRcWW429GOhP8HxUHlM6TLH4bzmlv/HlEjpvJh3JfmGsAA==}
-    dev: true
 
   /@types/http-cache-semantics@4.0.4:
     resolution: {integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==}
@@ -617,6 +622,19 @@ packages:
     dependencies:
       '@types/geojson': 7946.0.12
     dev: true
+
+  /@types/mapbox-gl@2.7.19:
+    resolution: {integrity: sha512-pkRdlhQJNbtwcKJSVC4uuOA6M3OlOObIMhNecqHB991oeaDF5XkjSIRaTE0lh5p4KClptSCxW6MBiREVRHrl2A==}
+    dependencies:
+      '@types/geojson': 7946.0.12
+    dev: false
+
+  /@types/mapbox__mapbox-gl-geocoder@4.7.7:
+    resolution: {integrity: sha512-RFUDSDnFoCBapQWfGdgNGkB76drJ2kVG9tH0ottQtDpTW3KPtdQobw0lvvJK4VIMDEKIt/ssEyyLvY1Tja7MSw==}
+    dependencies:
+      '@types/geojson': 7946.0.12
+      '@types/mapbox-gl': 2.7.19
+    dev: false
 
   /@types/minimist@1.2.5:
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
