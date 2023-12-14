@@ -3,8 +3,12 @@ import clsx from 'clsx'
 import { Analytics } from '@vercel/analytics/react';
 
 import 'node_modules/leaflet-geosearch/dist/geosearch.css';
+import '@/styles/mapbox-gl.css';
+import '@/styles/geoencoder.css';
+// import 'https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css';
+// import 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css';
 import '@/styles/tailwind.css'
-import './globals.css'
+import '@/styles/globals.css'
 import { type Metadata } from 'next'
 
 
