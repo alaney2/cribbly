@@ -21,6 +21,7 @@ const SearchField = ({  }) => {
   const provider = new OpenStreetMapProvider();
 
   // @ts-ignore
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const searchControl = new GeoSearchControl({
     provider: provider,
     style: 'bar',
@@ -37,7 +38,7 @@ const SearchField = ({  }) => {
   useEffect(() => {
     map.addControl(searchControl);
     return () => map.removeControl(searchControl);
-  }, []);
+  }, [map, searchControl]);
 
   return null;
 };

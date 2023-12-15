@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { DesktopSidebar, MobileSidebar } from '@/components/Sidebars';
 import Map from '@/components/Map';
 import { DynamicMap } from '@/components/DynamicMap';
-
+import { MapBox } from '@/components/MapBox';
 
 export default function Dashboard1() {
 
@@ -20,7 +20,8 @@ export default function Dashboard1() {
             {/* Main area */}
 
             {/* <DynamicMap /> */}
-            <iframe width='100%' height="100%" src="https://api.mapbox.com/styles/v1/alan3y2/clq361ynz002t01ql64d81csd.html?title=false&access_token=pk.eyJ1IjoiYWxhbjN5MiIsImEiOiJjbHEzNXJ6ZDcwOWEwMmxvYnF1dzF4ZWN1In0.SOVZ1N2VP0ktHmDp8IoZXQ&zoomwheel=false#1.65/42.9/-58.8" title="Streets" ></iframe>
+            <MapBox />
+            {/* <iframe width='100%' height="100%" src="https://api.mapbox.com/styles/v1/alan3y2/clq361ynz002t01ql64d81csd.html?title=false&access_token=pk.eyJ1IjoiYWxhbjN5MiIsImEiOiJjbHEzNXJ6ZDcwOWEwMmxvYnF1dzF4ZWN1In0.SOVZ1N2VP0ktHmDp8IoZXQ&zoomwheel=false#1.65/42.9/-58.8" title="Streets" ></iframe> */}
           </main>
         </div>
       </div>

@@ -1,4 +1,3 @@
-// pages/map.js
 "use client"
 import Head from 'next/head';
 import { useEffect } from 'react';
@@ -7,8 +6,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 export default function Home() {
+  const token = process.env.NEXT_PUBLIC_MAPBOX_KEY!
   useEffect(() => {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYWxhbjN5MiIsImEiOiJjbHEzNXJ6ZDcwOWEwMmxvYnF1dzF4ZWN1In0.SOVZ1N2VP0ktHmDp8IoZXQ';
+    mapboxgl.accessToken = token
 
     const geojson = {
       // ... your geojson data
@@ -21,13 +21,14 @@ export default function Home() {
       zoom: 3,
     });
 
-    // map.addControl(new mapboxgl.NavigationControl());
     map.addControl(
       new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl
       })
     );
+    map.addControl(new mapboxgl.NavigationControl());
+
     // add markers to map
     // ... your marker code
   }, []);
