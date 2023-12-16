@@ -10,6 +10,7 @@ import '@/styles/mapbox-gl.css';
 import '@/styles/tailwind.css'
 import '@/styles/globals.css'
 import { type Metadata } from 'next'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 
 export const metadata: Metadata = {
@@ -56,6 +57,7 @@ export default function RootLayout({
     >
       <body className="flex h-full flex-col">{children}</body>
       <Analytics />
+      <SpeedInsights />
     </html>
   )
 }
