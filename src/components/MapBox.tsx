@@ -21,6 +21,9 @@ export function MapBox() {
 
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
+      marker: {
+        color: 'orange'
+      },
       mapboxgl: mapboxgl
     });
 
@@ -28,6 +31,12 @@ export function MapBox() {
     const geocoderContainer = document.getElementById('geocoder');
     geocoderContainer!.innerHTML = '';
     geocoderContainer!.appendChild(geocoder.onAdd(map));
+
+    geocoder.on('result', function (e) {
+      console.log(e.result);
+    });
+    console.log(geocoder.getWorldview())
+
 
     return () => {
       geocoderContainer!.innerHTML = '';

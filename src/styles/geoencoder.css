@@ -5,10 +5,11 @@
 .mapboxgl-ctrl-geocoder *:before {
   box-sizing: border-box;
   border-radius: 0.5rem !important;
+  opacity: 1;
 }
 
 .mapboxgl-ctrl-geocoder {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 20px;
   font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, Helvetica, sans-serif;
   position: relative;
@@ -18,13 +19,16 @@
   z-index: 1;
   border-radius: 4px;
   transition: width .25s, min-width .25s;
+  padding: 2px 6px;
 }
 
 .mapboxgl-ctrl-geocoder--input {
+  /* display: flex; */
+  /* flex-direction: row; */
   font: inherit;
   width: 100%;
   border: 0;
-  background-color: transparent;
+  /* background-color: transparent; */
   margin: 0;
   height: 36px;
   color: #404040; /* fallback */
@@ -48,10 +52,11 @@
 }
 
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--pin-right > * {
-  z-index: 2;
+  z-index: 10;
+  display: flex;
   position: absolute;
-  right: 8px;
-  top: 7px;
+  right: 6px;
+  top: 6px;
   display: none;
 }
 
@@ -81,7 +86,7 @@
   top: calc(100% + 6px);
   z-index: 1000;
   overflow: hidden;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .mapboxgl-ctrl-bottom-left .suggestions,
@@ -122,7 +127,7 @@
   vertical-align: middle;
   speak: none;
   fill: #757575;
-  top: 15px;
+  top: 14px;
 }
 
 .mapboxgl-ctrl-geocoder--icon-search {
@@ -135,19 +140,12 @@
 }
 
 .mapboxgl-ctrl-geocoder--button {
-  padding: 0;
+  padding: 4px 6px;
   margin: 0;
   border: none;
   cursor: pointer;
   background: #fff;
   line-height: 1;
-}
-
-.mapboxgl-ctrl-geocoder--icon-close {
-  width: 20px;
-  height: 20px;
-  margin-top: 8px;
-  margin-right: 3px;
 }
 
 .mapboxgl-ctrl-geocoder--button:hover .mapboxgl-ctrl-geocoder--icon-close {
@@ -174,9 +172,6 @@
 .mapboxgl-ctrl-geocoder--powered-by {
   display: none;
   float: left;
-  padding: 6px 12px;
-  padding-bottom: 9px;
-  font-size: 13px;
 }
 
 .mapboxgl-ctrl-geocoder--powered-by a {
@@ -222,7 +217,7 @@
 
   .mapboxgl-ctrl-geocoder {
     width: 33.3333%;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 20px;
     max-width: 360px;
   }
@@ -240,6 +235,7 @@
     height: 16px;
     margin-top: 3px;
     margin-right: 0;
+    opacity: 1;
   }
 
   .mapboxgl-ctrl-geocoder--icon-geolocate {
