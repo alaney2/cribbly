@@ -21,9 +21,7 @@ export function MapBox() {
 
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
-      marker: {
-        color: 'orange'
-      },
+      marker: new mapboxgl.Marker({ color: 'orange' }),
       mapboxgl: mapboxgl
     });
 
