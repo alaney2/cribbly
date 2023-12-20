@@ -23,13 +23,15 @@ export function TextField({
   label,
   type = 'text',
   className,
+  id,
   ...props
-}: Omit<React.ComponentPropsWithoutRef<'input'>, 'id'> & { label: string }) {
-  let id = useId()
+}: React.ComponentPropsWithoutRef<'input'> & { label: string }) {
+  let generatedId = useId()
+  let finalId = id || generatedId;
 
   return (
     <div className={className}>
-      {label && <Label id={id}>{label}</Label>}
+      {label && <Label id={finalId}>{label}</Label>}
       <input id={id} type={type} {...props} className={formClasses} />
     </div>
   )

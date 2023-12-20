@@ -58,6 +58,7 @@ export default function SignIn() {
                     name="password"
                     type="password"
                     autoComplete="current-password"
+                    id="current-password"
                     placeholder='••••••••'
                     required
                   />

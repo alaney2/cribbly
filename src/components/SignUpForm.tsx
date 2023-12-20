@@ -55,6 +55,7 @@ export function SignUpForm() {
           name="password"
           type={isPasswordVisible ? "text" : "password"}
           autoComplete="new-password"
+          id="new-password"
           placeholder='••••••••'
           onChange={handlePasswordChange}
           onFocus={() => setIsPasswordFocused(true)}
