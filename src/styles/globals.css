@@ -7,11 +7,11 @@
   height: 36px !important;
 }
 
-[type='text']:focus {
+/* [type='text']:focus {
   border-color: none;
   border: none;
   --tw-ring-color: transparent;
-}
+} */
 
 .mapbox-improve-map {
   display: none;

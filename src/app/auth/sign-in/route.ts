@@ -10,10 +10,12 @@ export async function POST(request: Request) {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
+
+  console.log(data)
 
   if (error) {
     return NextResponse.redirect(
@@ -24,6 +26,19 @@ export async function POST(request: Request) {
       }
     )
   }
+
+  const user = {
+    id: data?.user?.id,
+    email: data?.user?.email,
+  }
+
+  cookieStore.set({
+    name: 'currentUser', 
+    value: JSON.stringify(user),
+    path: '/',
+    httpOnly: true,
+    secure: true,
+  })
 
   return NextResponse.redirect(requestUrl.origin, {
     // a 301 status is required to redirect from a POST to a GET route

@@ -8,7 +8,21 @@ export async function POST(request: Request) {
   const supabase = createClient(cookieStore)
 
   const { error } = await supabase.auth.signOut()
-  console.log(error)
+  if (error) {
+    console.log(error);
+    return NextResponse.redirect(
+      `${requestUrl.origin}/sign-out?error=Could not sign out user`,
+      {
+        // a 301 status is required to redirect from a POST to a GET route
+        status: 301,
+      }
+    )
+  }
+
+  if (cookieStore.has('currentUser')) {
+    cookieStore.delete('currentUser')
+  }
+
   return NextResponse.redirect(`${requestUrl.origin}/login`, {
     // a 301 status is required to redirect from a POST to a GET route
     status: 301,

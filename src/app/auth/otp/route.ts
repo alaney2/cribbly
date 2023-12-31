@@ -32,13 +32,29 @@ export async function POST(request: Request) {
     }
 
     // Handle the successful verification
-    return NextResponse.redirect(
-      requestUrl.origin,
-      {
-        // a 301 status is required to redirect from a POST to a GET route
-        status: 301,
+    if (data) {
+      const user = {
+        id: data?.user?.id,
+        email: data?.user?.email,
       }
-    );
+
+      cookieStore.set({
+        name: 'currentUser',
+        value: JSON.stringify(user),
+        path: '/',
+        httpOnly: true,
+        secure: true,
+      })
+
+      cookieStore.delete('email');
+      return NextResponse.redirect(
+        requestUrl.origin,
+        {
+          // a 301 status is required to redirect from a POST to a GET route
+          status: 301,
+        }
+      );
+    }
   }
 
   return NextResponse.redirect(

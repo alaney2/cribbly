@@ -15,25 +15,32 @@ export function OtpInput() {
   const handleInput = (index: number, e: React.FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     const value = target.value;
+
     if (!/^[0-9]$/.test(value)) {
       target.value = '';
       return;
     }
-    if (target.value.length === 1 && index < 5) {
+
+    if (target.value.length >= 1 && index < 5) {
       inputsRef.current[index + 1].focus();
-      checkAndSubmit();
     }
+    checkAndSubmit();
   }
 
   const handleKeyPress = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    const currentInput = inputsRef.current[index];
     if (e.key === 'Backspace') {
-      if (e.currentTarget.value.length !== 0) {
+      if (currentInput.value.length !== 0) {
         // Clear the current input value
-        e.currentTarget.value = '';
+        currentInput.value = '';
       } else if (index > 0) {
         // Focus the previous input if the current one is already empty
         inputsRef.current[index - 1].focus();
       }
+    }
+
+    if (currentInput.value.length === 1 && /^[0-9]$/.test(e.key)) {
+      currentInput.value = e.key;
     }
 
     if (e.key === 'ArrowRight' && index < inputsRef.current.length - 1) {
@@ -64,7 +71,7 @@ export function OtpInput() {
   }, []);
 
   return (
-    <form method="POST" className="">
+    <form method="POST" className="" autoComplete='off'>
       <div className="flex justify-center space-x-2 mt-10 mb-8" onPaste={handlePaste}>
         {[...Array(6)].map((_, index) => (
           <input
@@ -74,7 +81,7 @@ export function OtpInput() {
                 inputsRef.current[index] = el;
               }
             }}
-            className="w-10 h-12 border-1 border-gray-300 text-center rounded-md caret-transparent"
+            className="w-10 h-12 border-1 border-gray-300 text-center rounded-md caret-transparent focus:border-blue-300"
             type="text"
             name={`otp${index}`}
             maxLength={1}
@@ -83,6 +90,7 @@ export function OtpInput() {
             onPaste={handlePaste}
             pattern="[0-9]*"
             inputMode="numeric"
+            autoComplete='off'
             required
           />
         ))}
@@ -93,7 +101,7 @@ export function OtpInput() {
         type="submit"
         variant="solid"
         color="blue"
-        className="w-full mt-12 hidden"
+        className="w-full mt-6"
       >
         Verify Account
       </Button>
