@@ -11,7 +11,7 @@ import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'
 
 export const metadata: Metadata = {
-  title: 'Verify code',
+  title: 'Verify email',
 }
 
 export default function SignIn() {

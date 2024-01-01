@@ -16,8 +16,8 @@ export function OtpForm() {
   const formatEmail = (email: string | string[] | null | undefined) => {
     if (email) {
       const atIndex = email.indexOf('@');
-      if (atIndex > 11) {
-        return `${email.slice(0, 8)}**${email.slice(atIndex - 2, atIndex)}${email.slice(atIndex)}`;
+      if (atIndex > 7) {
+        return `${email.slice(0, 3)}***${email.slice(atIndex - 2, atIndex)}${email.slice(atIndex)}`;
       }
       return email;
     }
