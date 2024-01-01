@@ -32,7 +32,7 @@ export function OtpInput() {
 
   const handleKeyPress = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     const currentInput = inputsRef.current[index];
-    if (e.key === 'Backspace') {
+    if (e.key === 'Backspace' || e.key === 'Delete') {
       if (currentInput.value.length !== 0) {
         // Clear the current input value
         currentInput.value = '';
