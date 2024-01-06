@@ -9,19 +9,9 @@ import { SecondaryFeatures } from '@/components/landing/SecondaryFeatures'
 import { Testimonials } from '@/components/landing/Testimonials'
 import { NavLink } from '@/components/NavLink'
 
-import { cookies } from 'next/headers'
-import { createClient } from '@/utils/supabase/server'
-import { Dashboard } from '@/components/Dashboard'
-import Dashboard1 from '@/components/Dashboard1'
-
 export default async function Home() {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
 
-  return user ? (<Dashboard1 />) : (
+  return (
     <>
       <Header />
       <main>
