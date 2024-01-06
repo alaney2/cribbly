@@ -11,11 +11,11 @@ import Image from 'next/image'
 import { Apple } from '@/components/auth/Apple'
 import { Google } from '@/components/auth/Google'
 
-export const metadata: Metadata = {
-  title: 'Sign in',
-}
+// export const metadata: Metadata = {
+//   title: 'Forgot password',
+// }
 
-export default function SignIn() {
+export default function ForgotPassword() {
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col sm:justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 sm:bg-gray-100">

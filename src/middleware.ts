@@ -72,16 +72,18 @@ export async function middleware(request: NextRequest) {
     userAuthenticated = true;
   }
 
+  const pathsWithoutAuth = ['/sign-in', '/', '/get-started', '/forgot-password', '/update-password'];
+
   // Redirect to login if not authenticated
-  if (!userAuthenticated && (!url.pathname.startsWith('/sign-in') && url.pathname !== '/' && !url.pathname.startsWith('/get-started'))) {
+  if (!userAuthenticated && !pathsWithoutAuth.some(path => url.pathname.startsWith(path))) {
     url.pathname = '/';
     return NextResponse.redirect(url);
   }
 
   // Can't sign in or sign up if already logged in
-  if (userAuthenticated && (url.pathname.startsWith('/sign-in') || url.pathname.startsWith('/get-started'))) {
-    url.pathname = '/';
-    return NextResponse.redirect(url);
+  if (userAuthenticated && url.pathname !== '/dashboard' && pathsWithoutAuth.some(path => url.pathname.startsWith(path))) {
+      url.pathname = '/dashboard';
+      return NextResponse.redirect(url);
   }
 
   if (!cookies().has('email') && url.pathname === '/get-started/otp') {

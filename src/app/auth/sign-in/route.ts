@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     password,
   })
 
-  console.log(data)
+  // console.log(data)
 
   if (error) {
     return NextResponse.redirect(

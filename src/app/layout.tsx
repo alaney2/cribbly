@@ -55,9 +55,11 @@ export default function RootLayout({
         lexend.variable,
       )}
     >
-      <body className="flex h-full flex-col">{children}</body>
-      <Analytics />
-      <SpeedInsights />
+      <body className="flex h-full flex-col">
+        {children}
+        <Analytics />
+        <SpeedInsights />``
+      </body>
     </html>
   )
 }
