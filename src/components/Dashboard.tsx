@@ -1,7 +1,5 @@
 import Link from 'next/link';
 import { DesktopSidebar, MobileSidebar } from '@/components/Sidebars';
-import Map from '@/components/Map';
-import { DynamicMap } from '@/components/DynamicMap';
 import { MapBox } from '@/components/MapBox';
 
 export default function Dashboard() {
