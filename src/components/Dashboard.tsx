@@ -4,7 +4,7 @@ import Map from '@/components/Map';
 import { DynamicMap } from '@/components/DynamicMap';
 import { MapBox } from '@/components/MapBox';
 
-export default function Dashboard1() {
+export default function Dashboard() {
 
   return (
     <>
