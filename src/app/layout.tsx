@@ -58,7 +58,7 @@ export default function RootLayout({
       <body className="flex h-full flex-col">
         {children}
         <Analytics />
-        <SpeedInsights />``
+        <SpeedInsights />
       </body>
     </html>
   )
