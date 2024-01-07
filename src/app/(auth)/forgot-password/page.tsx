@@ -8,8 +8,6 @@ import  CleanURL from '@/components/CleanURL';
 import icon from '@/images/icon.png'
 import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'
-import { Apple } from '@/components/auth/Apple'
-import { Google } from '@/components/auth/Google'
 
 // export const metadata: Metadata = {
 //   title: 'Forgot password',
@@ -30,14 +28,17 @@ export default function ForgotPassword() {
               // priority={false}
             />
           </Link>
-          <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-xl font-semibold leading-9 tracking-tight text-gray-900">
-            Welcome back
+          <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-2xl font-medium leading-9 tracking-tight text-gray-900">
+            Reset your password
           </h2>
+          <h3 className="text-gray-500 text-sm">
+            Type in your email to get a link to reset your password
+          </h3>
         </div>
 
         <div className="sm:mt-6 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-gray-50 px-6 py-6 sm:py-12 sm:shadow sm:rounded-lg sm:px-12">
-            <form className="space-y-6" action="/auth/sign-in" method="POST">
+            <form className="space-y-6" action="/auth/forgot-password" method="POST">
               <div>
                 <div className="mt-2">
                   <TextField
@@ -51,81 +52,31 @@ export default function ForgotPassword() {
                 </div>
               </div>
 
-              <div>
-                <div className="mt-2">
-                  <TextField
-                    label="Password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    id="current-password"
-                    placeholder='••••••••'
-                    required
-                  />
+              <div className="relative">
+                <div className="absolute inset-1 flex items-center" aria-hidden="true">
+                  <div className="w-full border-t border-gray-300" />
                 </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="invisible flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                  />
-                  <label htmlFor="remember-me" className="ml-3 block text-sm leading-6 text-gray-900">
-                    Remember me
-                  </label>
-                </div>
-
-                <div className="text-sm leading-6">
-                  <a href="/forgot_password" className="font-semibold text-blue-600 hover:text-blue-500">
-                    Forgot password?
-                  </a>
+                <div className="relative flex justify-center mt-6">
+                  <span className="bg-white px-2 text-sm text-gray-500"></span>
                 </div>
               </div>
 
               <div>
                 <Button type="submit" variant="solid" color="blue" className="w-full">
                   <span>
-                    Sign in <span aria-hidden="true">&rarr;</span>
+                    Send reset email <span aria-hidden="true">&rarr;</span>
                   </span>
                 </Button>
               </div>
             </form>
 
-            <div>
-              <div className="relative mt-10">
-                <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                  <div className="w-full border-t border-gray-200" />
-                </div>
-                <div className="relative flex justify-center text-sm font-medium leading-6">
-                  <span className="bg-gray-50 px-6 text-gray-900">Or continue with</span>
-                </div>
-              </div>
-
-              <div className="mt-6 grid grid-cols-2 gap-4">
-              <Link
-                href="#"
-                className="flex w-full items-center justify-center gap-3 rounded-md bg-[#fff] shadow-sm px-3 py-1.5 text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fff]"
-              >
-                <Google />
-              </Link>
-
-                <Link
-                  href="#"
-                  className="flex w-full items-center justify-center gap-3 rounded-md bg-[#080808] shadow-sm px-3 py-1.5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#080808]"
-                >
-                  <Apple />
-                </Link>
-              </div>
-            </div>
+            
           </div>
 
           <p className="sm:mt-10 text-center text-sm text-gray-500">
-            Don&apos;t have an account?{' '}
-            <a href="/get-started" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
-              Sign up here
+            Already have an account?{' '}
+            <a href="/sign-in" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+              Sign in
             </a>
           </p>
         </div>

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Logo } from '@/components/Logo'
 import  CleanURL from '@/components/CleanURL';
 import { type Metadata } from 'next'
-import { SignUpForm } from '@/components/SignUpForm'
+import { SignUpForm } from '@/components/auth/SignUpForm'
 import logo from '@/images/logo-cropped.svg'
 import icon from '@/images/icon.png'
 import Image from 'next/image'
@@ -20,16 +20,19 @@ export default function SignIn() {
       <CleanURL />
       <div className="flex min-h-full flex-1 flex-col sm:justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 sm:bg-gray-100">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <Link href="/" aria-label="Home">
+          {/* <Link href="/" aria-label="Home">
             <Image
               className='mx-auto h-8 w-auto'
               src={logo}
               alt=""
             />
-          </Link>
-          <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-xl font-semibold leading-9 tracking-tight text-gray-900">
-            Get started for free
+          </Link> */}
+          <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-2xl font-medium leading-9 tracking-normal text-gray-900">
+            Get started
           </h2>
+          <h3 className="text-gray-500 text-sm">
+            Create a new account
+          </h3>
         </div>
 
         <div className="sm:mt-6 sm:mx-auto sm:w-full sm:max-w-[480px]">

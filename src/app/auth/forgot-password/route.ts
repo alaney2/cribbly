@@ -6,39 +6,30 @@ export async function POST(request: Request) {
   const requestUrl = new URL(request.url)
   const formData = await request.formData()
   const email = String(formData.get('email'))
-  const password = String(formData.get('password'))
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
 
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    // options: {
-    //   emailRedirectTo: `${requestUrl.origin}/auth/callback`,
-    // },
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${requestUrl.origin}/update-password`,
   })
 
   if (error) {
     return NextResponse.redirect(
-      `${requestUrl.origin}/get-started?error=Could not authenticate user`,
+      `${requestUrl.origin}/forgot-password?error=Could not send reset email`,
       {
         status: 301,
       }
     )
   }
 
-  cookieStore.set({
-    name: 'email',
-    value: email,
-    httpOnly: true,
-    secure: true,
-    maxAge: 60 * 60 // 1 hour
-  })
+  console.log(data)
 
   return NextResponse.redirect(
-    `${requestUrl.origin}/get-started/otp`,
+    `${requestUrl.origin}/sign-in?success=Check your email for a reset link`,
     {
       status: 301,
     }
   )
+
 }
+

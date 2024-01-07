@@ -20,8 +20,7 @@ export default function SignIn() {
     <>
       <div className="flex min-h-full flex-1 flex-col sm:justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 sm:bg-gray-100">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <Link href="/" aria-label="Home">
-
+          {/* <Link href="/" aria-label="Home">
             <Image
               className='h-8 mx-auto w-auto'
               src={logo}
@@ -29,10 +28,13 @@ export default function SignIn() {
               // unoptimized
               // priority={false}
             />
-          </Link>
-          <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-xl font-semibold leading-9 tracking-tight text-gray-900">
+          </Link> */}
+          <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-2xl font-medium leading-9 text-gray-900 tracking-wide">
             Welcome back
           </h2>
+          <h3 className="text-gray-500 text-sm">
+            Sign in to your account
+          </h3>
         </div>
 
         <div className="sm:mt-6 sm:mx-auto sm:w-full sm:max-w-[480px]">
@@ -79,7 +81,7 @@ export default function SignIn() {
                 </div>
 
                 <div className="text-sm leading-6">
-                  <a href="/forgot_password" className="font-semibold text-blue-600 hover:text-blue-500">
+                  <a href="/forgot-password" className="font-semibold text-blue-600 hover:text-blue-500">
                     Forgot password?
                   </a>
                 </div>
