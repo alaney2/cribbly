@@ -1,11 +1,9 @@
 "use client"
 import Link from 'next/link'
 
-import { Logo } from '@/components/Logo'
 import  CleanURL from '@/components/CleanURL';
 import { type Metadata } from 'next'
 import logo from '@/images/logo-cropped.svg'
-import icon from '@/images/icon.png'
 import Image from 'next/image'
 
 import { TextField, SelectFieldNew } from '@/components/Fields'
@@ -16,6 +14,7 @@ import { useState } from 'react'
 import clsx from 'clsx'
 import { UnfilledCheck, FilledCheck, OpenEye, ClosedEye } from '@/components/auth/PasswordChecks'
 
+import { updatePassword } from '@/app/auth/update-password/action';
 // export const metadata: Metadata = {
 //   title: 'Get started',
 // }
@@ -25,6 +24,7 @@ const checkClasses = 'flex items-center gap-1 space-x-1.5 transition duration-20
 export default function UpdatePassword() {
   const searchParams = useSearchParams()
   const code = searchParams.get('code')
+  const updatePasswordWithCode = updatePassword.bind(null, code!)
 
   const [password, setPassword] = useState('')
   const [isPasswordFocused, setIsPasswordFocused] = useState(false)
@@ -67,11 +67,13 @@ export default function UpdatePassword() {
       })
       if (response.ok) {
         console.log('Update done')
+        console.log(response)
       } else {
+        console.log('Update failed')
         throw new Error('Failed to update');
       }
     } catch (error) {
-      console.error('Error resending OTP:', error);
+      console.error('Error updating:', error);
     }
   }
 
@@ -97,7 +99,7 @@ export default function UpdatePassword() {
 
         <div className="sm:mt-6 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-gray-50 px-6 py-6 sm:py-12 sm:shadow sm:rounded-lg sm:px-12">
-            <form method="POST" className="space-y-3">
+            <form className="space-y-3" action={updatePasswordWithCode}>
               <div className="relative col-span-full">
                 <TextField
                   className="col-span-full"
@@ -169,7 +171,6 @@ export default function UpdatePassword() {
               <Messages />
             </form>
           </div>
-
         </div>
       </div>
     </>

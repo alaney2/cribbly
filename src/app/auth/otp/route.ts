@@ -48,7 +48,7 @@ export async function POST(request: Request) {
 
       cookieStore.delete('email');
       return NextResponse.redirect(
-        requestUrl.origin,
+        `${requestUrl.origin}/dashboard`,
         {
           // a 301 status is required to redirect from a POST to a GET route
           status: 301,

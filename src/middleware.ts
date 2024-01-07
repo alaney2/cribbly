@@ -58,7 +58,6 @@ export async function middleware(request: NextRequest) {
   )
 
 
-
   const url = request.nextUrl.clone();
 
   const { pathname } = request.nextUrl;
@@ -72,7 +71,7 @@ export async function middleware(request: NextRequest) {
     userAuthenticated = true;
   }
 
-  const pathsWithoutAuth = ['/sign-in', '/', '/get-started', '/forgot-password', '/update-password'];
+  const pathsWithoutAuth = ['/sign-in', '/get-started', '/forgot-password', 'update-password'];
 
   // Redirect to login if not authenticated
   if (!userAuthenticated && !pathsWithoutAuth.some(path => url.pathname.startsWith(path))) {
@@ -80,8 +79,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  if (!userAuthenticated && !cookies().has(process.env.NEXT_PUBLIC_SUPABASE_STRING + '-auth-token-code-verifier') && url.pathname.startsWith('/update-password')) {
+    url.pathname = '/forgot-password';
+    return NextResponse.redirect(url);
+  }
+
+  const unavailableRoutes = ['/sign-in', '/get-started', '/forgot-password', 'update-password'];
+
   // Can't sign in or sign up if already logged in
-  if (userAuthenticated && url.pathname !== '/dashboard' && pathsWithoutAuth.some(path => url.pathname.startsWith(path))) {
+  if (userAuthenticated && unavailableRoutes.some(path => url.pathname.startsWith(path))) {
       url.pathname = '/dashboard';
       return NextResponse.redirect(url);
   }

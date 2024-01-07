@@ -7,7 +7,9 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 export function MapBox() {
   const token = process.env.NEXT_PUBLIC_MAPBOX_KEY!
+
   useEffect(() => {
+
     mapboxgl.accessToken = token
 
     const map = new mapboxgl.Map({
@@ -45,7 +47,7 @@ export function MapBox() {
   return (
     <div className='relative h-full w-full rounded-lg'>
       <div id="geocoder" className="absolute z-10 w-1/2 top-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center"></div>
-      <div id="map" className='absolute top-0 bottom-0 w-full h-full rounded-2xl' />
+      <div id="map" className='absolute top-0 bottom-0 w-full h-full rounded-2xl'></div>
     </div>
   );
 }

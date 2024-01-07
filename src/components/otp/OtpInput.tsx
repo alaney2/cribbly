@@ -6,7 +6,6 @@ export function OtpInput() {
   const inputsRef = useRef<HTMLInputElement[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-
   const checkAndSubmit = () => {
     const allFilled = inputsRef.current.every(input => input.value !== '');
     if (allFilled) {
