@@ -8,31 +8,11 @@ import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'
 import { Apple } from '@/components/auth/Apple'
 import { Google } from '@/components/auth/Google'
+import { signInGoogle } from '@/app/auth/sign-in/google/action'
 
 // export const metadata: Metadata = {
 //   title: 'Sign in',
 // }
-
-async function handleSignIn() {
-  try {
-    const response = await fetch('/auth/sign-in/google', {
-      method: 'POST', // or 'POST', depending on your API method
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-
-    // Handle the response here. For example, redirect to a URL provided by the API
-    // const data = await response.json();
-    // if (data.url) {
-    //   window.location.href = data.url;
-    // }
-  } catch (error) {
-    console.error('Failed to sign in:', error);
-  }
-}
-
 
 export default function SignIn() {
   return (
@@ -126,12 +106,15 @@ export default function SignIn() {
               </div>
 
               <div className="mt-6 grid grid-cols-2 gap-4">
-                <Button
-                  onClick={handleSignIn}
+                <button
+                  type='button'
+                  onClick={async () => {
+                    await signInGoogle()
+                  }}
                   className="flex w-full items-center justify-center gap-3 rounded-md bg-[#fff] shadow-sm px-3 py-1.5 text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fff]"
                 >
                   <Google />
-                </Button>
+                </button>
 
                 {/* <Link
                   href="#"

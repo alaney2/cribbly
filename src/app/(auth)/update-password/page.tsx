@@ -49,30 +49,6 @@ export default function UpdatePassword() {
     }
   };
 
-  const handleUpdate = async () => {
-    try {
-      const response = await fetch('/auth/update-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          code: code, 
-          password: password
-        }),
-      })
-      if (response.ok) {
-        console.log('Update done')
-        console.log(response)
-      } else {
-        console.log('Update failed')
-        throw new Error('Failed to update');
-      }
-    } catch (error) {
-      console.error('Error updating:', error);
-    }
-  }
-
   return (
     <>
       {/* <CleanURL /> */}
@@ -151,9 +127,6 @@ export default function UpdatePassword() {
               
               <div className="col-span-full">
                 <Button 
-                  // formAction="/auth/update-password"
-                  onClick={handleUpdate}
-                  // type="submit"
                   variant="solid"
                   color="blue" 
                   className={clsx('w-full ease-out duration-200 outline-none transition-all', isButtonEnabled ? 'brightness-100' : 'brightness-75')} 

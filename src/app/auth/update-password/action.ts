@@ -28,6 +28,6 @@ export async function updatePassword(code: string, formData: FormData) {
 
   console.log(data)
 
-  redirect('/sign-in')
+  redirect('/sign-in?success=Password updated successfully')
 }
 

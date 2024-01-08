@@ -69,12 +69,20 @@ export async function middleware(request: NextRequest) {
 
   if (cookies().has('currentUser')) {
     userAuthenticated = true;
+    const unavailableRoutes = ['/sign-in', '/get-started', '/forgot-password', '/update-password'];
+    // Can't sign in or sign up if already logged in
+    if (unavailableRoutes.some(path => url.pathname.startsWith(path))) {
+        url.pathname = '/dashboard';
+        return NextResponse.redirect(url);
+    } else {
+        return NextResponse.next();
+    }
   }
 
-  const pathsWithoutAuth = ['/sign-in', '/get-started', '/forgot-password', 'update-password'];
+  const pathsWithoutAuth = ['/sign-in', '/get-started', '/forgot-password', '/update-password', '/privacy'];
 
   // Redirect to login if not authenticated
-  if (!userAuthenticated && !pathsWithoutAuth.some(path => url.pathname.startsWith(path))) {
+  if (!userAuthenticated && url.pathname !== '/' && !pathsWithoutAuth.some(path => url.pathname.startsWith(path))) {
     url.pathname = '/';
     return NextResponse.redirect(url);
   }
@@ -82,14 +90,6 @@ export async function middleware(request: NextRequest) {
   if (!userAuthenticated && !cookies().has(process.env.NEXT_PUBLIC_SUPABASE_STRING + '-auth-token-code-verifier') && url.pathname.startsWith('/update-password')) {
     url.pathname = '/forgot-password';
     return NextResponse.redirect(url);
-  }
-
-  const unavailableRoutes = ['/sign-in', '/get-started', '/forgot-password', 'update-password'];
-
-  // Can't sign in or sign up if already logged in
-  if (userAuthenticated && unavailableRoutes.some(path => url.pathname.startsWith(path))) {
-      url.pathname = '/dashboard';
-      return NextResponse.redirect(url);
   }
 
   if (!cookies().has('email') && url.pathname === '/get-started/otp') {
