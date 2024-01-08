@@ -1,6 +1,5 @@
 "use server"
 import { createClient } from '@/utils/supabase/server'
-import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 

@@ -1,6 +1,7 @@
 import { Inter, Lexend, Poppins } from 'next/font/google'
 import clsx from 'clsx'
 import { Analytics } from '@vercel/analytics/react';
+import Script from 'next/script'
 
 // import 'node_modules/leaflet-geosearch/dist/geosearch.css';
 import '@/styles/geoencoder.css';
@@ -55,6 +56,7 @@ export default function RootLayout({
         lexend.variable,
       )}
     >
+      <Script src="https://apis.google.com/js/platform.js" />
       <body className="flex h-full flex-col">
         {children}
         <Analytics />

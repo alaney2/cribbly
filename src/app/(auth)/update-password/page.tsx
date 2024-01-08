@@ -5,7 +5,6 @@ import  CleanURL from '@/components/CleanURL';
 import { type Metadata } from 'next'
 import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'
-
 import { TextField, SelectFieldNew } from '@/components/Fields'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/Button'
@@ -15,9 +14,6 @@ import clsx from 'clsx'
 import { UnfilledCheck, FilledCheck, OpenEye, ClosedEye } from '@/components/auth/PasswordChecks'
 
 import { updatePassword } from '@/app/auth/update-password/action';
-// export const metadata: Metadata = {
-//   title: 'Get started',
-// }
 
 const checkClasses = 'flex items-center gap-1 space-x-1.5 transition duration-200 text-foreground-lighter'
 
