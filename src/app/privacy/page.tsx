@@ -1,9 +1,11 @@
-
+import { Text } from "@/components/catalyst/text"
 
 export default function Privacy() {
   return (
     <>
-      <div>Hello world</div>
+      <Text>
+        Hello world
+      </Text>
     </>
   )
 }

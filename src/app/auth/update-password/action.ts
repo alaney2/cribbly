@@ -5,10 +5,8 @@ import { redirect } from 'next/navigation'
 
 
 export async function updatePassword(code: string, formData: FormData) {
-  // const requestUrl = new URL(request.url)
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
-
 
   const password = String(formData.get('password'))
 
