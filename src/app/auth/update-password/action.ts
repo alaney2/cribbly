@@ -9,8 +9,6 @@ export async function updatePassword(code: string, formData: FormData) {
   const supabase = createClient(cookieStore)
 
   const password = String(formData.get('password'))
-
-  console.log(code, password)
   
   supabase.auth.exchangeCodeForSession(code)
 

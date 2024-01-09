@@ -10,6 +10,7 @@ import { Testimonials } from '@/components/landing/Testimonials'
 import { NavLink } from '@/components/NavLink'
 
 export default async function Home() {
+
   return (
     <>
       <Header />
