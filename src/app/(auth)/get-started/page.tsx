@@ -1,5 +1,5 @@
+"use client"
 import Link from 'next/link'
-
 import { Logo } from '@/components/Logo'
 import  CleanURL from '@/components/CleanURL';
 import { type Metadata } from 'next'
@@ -9,10 +9,11 @@ import icon from '@/images/icon.png'
 import Image from 'next/image'
 import { Apple } from '@/components/auth/Apple'
 import { Google } from '@/components/auth/Google'
+import { signInGoogle } from '@/app/auth/sign-in/google/action'
 
-export const metadata: Metadata = {
-  title: 'Get started',
-}
+// export const metadata: Metadata = {
+//   title: 'Get started',
+// }
 
 export default function SignIn() {
   return (
@@ -44,23 +45,26 @@ export default function SignIn() {
                   <div className="w-full border-t border-gray-200" />
                 </div>
                 <div className="relative flex justify-center text-sm font-medium leading-6">
-                  <span className="bg-gray-50 px-6 text-gray-900">Or continue with</span>
+                  <span className="bg-gray-50 px-6 text-gray-900">Or sign up with</span>
                 </div>
               </div>
 
-              <div className="mt-6 grid grid-cols-2 gap-4">
-                <Link
-                  href="#"
-                  className="flex w-full items-center justify-center gap-3 rounded-md bg-[#fff] shadow-sm px-3 py-1.5 text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fff]"
+              <div className="mt-6 grid grid-cols-1 gap-4">
+                <button
+                  type='button'
+                  onClick={async () => {
+                    await signInGoogle()
+                  }}
+                  className="flex w-full items-center justify-center gap-3 rounded-md bg-white shadow-sm px-3 py-1.5 text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white hover:bg-gray-100 active:text-slate-900 active:bg-gray-200"
                 >
                   <Google />
-                </Link>
-                <Link
+                </button>
+                {/* <Link
                   href="#"
                   className="flex w-full items-center justify-center gap-3 rounded-md bg-[#080808] shadow-sm px-3 py-1.5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#080808]"
                 >
                   <Apple />
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>

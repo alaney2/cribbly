@@ -11,7 +11,7 @@ import '@/styles/tailwind.css'
 import '@/styles/globals.css'
 import { type Metadata } from 'next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
-
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: {
@@ -55,6 +55,8 @@ export default function RootLayout({
         lexend.variable,
       )}
     >
+      <Script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></Script>
+
       <body className="flex h-full flex-col">
         {children}
         <Analytics />

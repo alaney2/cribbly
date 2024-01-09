@@ -19,7 +19,6 @@ export function SignUpForm() {
   const [hasSpecialChar, setHasSpecialChar] = useState(false)
   const [hasMinLength, setHasMinLength] = useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value
@@ -30,7 +29,7 @@ export function SignUpForm() {
     setHasSpecialChar(/[!?<>@#$%]/.test(newPassword))
     setHasMinLength(newPassword.length >= 8)
 
-    if (newPassword.length >= 8) {
+    if (newPassword.length >= 8 && newPassword.length <= 72) {
       setIsButtonEnabled(true)
     } else {
       setIsButtonEnabled(false)
@@ -67,13 +66,6 @@ export function SignUpForm() {
           </button>
         </div>
       </div>
-      {/* <SelectFieldNew
-        className="col-span-full"
-        label="How did you hear about us?"
-        name="referral_source"
-        optional={true}
-        options={["Select option", "Word of mouth", 'Google Ads', 'Facebook Ads']}
-      /> */}
       <div className={clsx("col-span-full transition-all duration-500 ease-in-out overflow-y-hidden text-gray-600", isPasswordFocused ? "opacity-100 max-h-[500px]" : "opacity-0 max-h-0")}>
         <div className="text-sm">
           <div className={checkClasses}>
