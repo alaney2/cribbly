@@ -31,8 +31,8 @@ export default function ForgotPassword() {
           <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-2xl font-medium leading-9 tracking-tight text-gray-900">
             Reset your password
           </h2>
-          <h3 className="text-gray-500 text-sm">
-            Type in your email to get a link to reset your password
+          <h3 className="px-6 sm:px-0 text-gray-500 text-sm">
+            Type in your email for a password reset link
           </h3>
         </div>
 

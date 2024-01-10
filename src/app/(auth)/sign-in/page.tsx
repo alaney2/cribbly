@@ -31,7 +31,7 @@ export default function SignIn() {
           <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-2xl font-medium leading-9 text-gray-900 tracking-wide">
             Welcome back
           </h2>
-          <h3 className="text-gray-500 text-sm">
+          <h3 className="px-6 sm:px-0 text-gray-500 text-sm">
             Sign in to your account
           </h3>
         </div>
