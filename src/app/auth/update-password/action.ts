@@ -10,7 +10,7 @@ export async function updatePassword(code: string, formData: FormData) {
 
   const password = String(formData.get('password'))
   
-  // supabase.auth.exchangeCodeForSession(code)
+  supabase.auth.exchangeCodeForSession(code)
 
   const { data, error } = await supabase.auth.updateUser({
     password: password

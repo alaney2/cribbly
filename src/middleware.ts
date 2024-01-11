@@ -82,10 +82,6 @@ export async function middleware(request: NextRequest) {
       url.pathname = '/forgot-password';
       return NextResponse.redirect(url)
     }
-    const code = url.searchParams.get('code');
-    const { data } = await supabase.auth.exchangeCodeForSession(code!);
-    console.log('EXCHANGED CODE FOR SESSION', data)
-    url.searchParams.delete('code');
   }
 
   if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/favicon.ico') || pathname.startsWith('/auth')) {
