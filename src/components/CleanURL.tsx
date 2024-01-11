@@ -11,5 +11,3 @@ export const CleanURL = () => {
 
   return null;
 };
-
-// export default CleanURL;

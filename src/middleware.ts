@@ -59,12 +59,12 @@ export async function middleware(request: NextRequest) {
 
 
   const url = request.nextUrl.clone();
+  const { pathname } = request.nextUrl;
 
-  if (url.searchParams.has('code')) {
+  if (pathname === '/' && url.searchParams.has('code')) {
     const code = url.searchParams.get('code');
-    
     const { data } = await supabase.auth.exchangeCodeForSession(code!);
-    console.log('EXCHANGED CODE FOR SESSION', data)
+    // console.log('EXCHANGED CODE FOR SESSION', data)
     url.pathname = '/dashboard'
     url.searchParams.delete('code');
     const response = NextResponse.redirect(url);
@@ -76,8 +76,18 @@ export async function middleware(request: NextRequest) {
     response.cookies.set(process.env.NEXT_PUBLIC_SUPABASE_STRING + 'auth-token', JSON.stringify(data))
     return response
   }
+  
+  if (pathname === '/update-password') {
+    if (!url.searchParams.has('code')) {
+      url.pathname = '/forgot-password';
+      return NextResponse.redirect(url)
+    }
+    const code = url.searchParams.get('code');
+    const { data } = await supabase.auth.exchangeCodeForSession(code!);
+    console.log('EXCHANGED CODE FOR SESSION', data)
+    url.searchParams.delete('code');
+  }
 
-  const { pathname } = request.nextUrl;
   if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/favicon.ico') || pathname.startsWith('/auth')) {
     return NextResponse.next();
   }

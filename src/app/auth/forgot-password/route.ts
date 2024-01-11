@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   console.log(data)
 
   return NextResponse.redirect(
-    `${requestUrl.origin}/sign-in?success=Check your email for a reset link`,
+    `${requestUrl.origin}/sign-in?success=If you registered using your email and password, you will receive a password reset email shortly`,
     {
       status: 301,
     }

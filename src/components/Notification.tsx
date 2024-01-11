@@ -1,21 +1,33 @@
 "use client"
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Transition } from '@headlessui/react'
-import { CheckCircleIcon } from '@heroicons/react/24/outline'
+import { XCircleIcon, ExclamationCircleIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
 import { XMarkIcon } from '@heroicons/react/20/solid'
 import { useSearchParams } from 'next/navigation'
 import { CleanURL } from '@/components/CleanURL'
 
-export default function Example() {
-  const [show, setShow] = useState(true)
+export function Notification() {
+  const [show, setShow] = useState(false)
+  const [notification, setNotification] = useState({ type: '', message: '' })
 
   const searchParams = useSearchParams()
  
   const success = searchParams.get('success')
   const error = searchParams.get('error')
 
+  useEffect(() => {
+    if (success) {
+      setNotification({ type: 'success', message: success });
+      setShow(true);
+    } else if (error) {
+      setNotification({ type: 'error', message: error });
+      setShow(true);
+    }
+  }, [success, error]);
+
   return (
     <>
+      <CleanURL />
       {/* Global notification live region, render this permanently at the end of the document */}
       <div
         aria-live="assertive"
@@ -37,11 +49,13 @@ export default function Example() {
               <div className="p-4">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
-                    <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
+                  {notification.type === 'error' ?
+                      <ExclamationCircleIcon className="h-6 w-6 text-red-400" aria-hidden="true" /> :
+                      <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />}
                   </div>
                   <div className="ml-3 w-0 flex-1 pt-0.5">
-                    <p className="text-sm font-medium text-gray-900">Success!</p>
-                    <p className="mt-1 text-sm text-gray-500">Anyone with a link can now view this file.</p>
+                    <p className="text-sm font-medium text-gray-900">{notification.type === 'error' ? 'Error' : 'Success!'}</p>
+                    <p className="mt-1 text-sm text-gray-500">{notification.message}</p>
                   </div>
                   <div className="ml-4 flex flex-shrink-0">
                     <button

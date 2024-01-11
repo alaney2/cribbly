@@ -1,6 +1,5 @@
 "use client"
 import Link from 'next/link'
-
 import { CleanURL } from '@/components/CleanURL';
 import { type Metadata } from 'next'
 import logo from '@/images/logo-cropped.svg'
@@ -8,7 +7,6 @@ import Image from 'next/image'
 import { TextField, SelectFieldNew } from '@/components/default/Fields'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/default/Button'
-import Messages from '@/components/auth/Messages'
 import { useState } from 'react'
 import clsx from 'clsx'
 import { UnfilledCheck, FilledCheck, OpenEye, ClosedEye } from '@/components/auth/PasswordChecks'
@@ -51,7 +49,6 @@ export default function UpdatePassword() {
 
   return (
     <>
-      {/* <CleanURL /> */}
       <div className="flex min-h-full flex-1 flex-col sm:justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 sm:bg-gray-100">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link href="/" aria-label="Home">
@@ -137,7 +134,6 @@ export default function UpdatePassword() {
                   </span>
                 </Button>
               </div>
-              <Messages />
             </form>
           </div>
         </div>
