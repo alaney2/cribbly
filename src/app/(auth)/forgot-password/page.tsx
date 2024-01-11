@@ -4,7 +4,6 @@ import { Button } from '@/components/default/Button'
 import { TextField } from '@/components/default/Fields'
 import { Logo } from '@/components/Logo'
 import { type Metadata } from 'next'
-import { CleanURL } from '@/components/CleanURL';
 import icon from '@/images/icon.png'
 import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'

@@ -32,7 +32,7 @@ export function Hero() {
         opposite trade-off, and hope you don’t get sued.
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
-        <Button href="/register">Get 6 months free</Button>
+        <Button href="/get-started">Get 6 months free</Button>
         <Button
           href=""
           variant="outline"

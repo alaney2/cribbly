@@ -4,7 +4,6 @@ import { Transition } from '@headlessui/react'
 import { XCircleIcon, ExclamationCircleIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
 import { XMarkIcon } from '@heroicons/react/20/solid'
 import { useSearchParams, usePathname } from 'next/navigation'
-import { CleanURL } from '@/components/CleanURL'
 
 
 export function Notification() {
@@ -43,7 +42,6 @@ export function Notification() {
 
   return (
     <>
-      {/* <CleanURL /> */}
       {/* Global notification live region, render this permanently at the end of the document */}
       <div
         onMouseEnter={() => setIsHovering(true)}

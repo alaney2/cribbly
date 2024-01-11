@@ -1,6 +1,5 @@
 "use client"
 import Link from 'next/link'
-import { CleanURL } from '@/components/CleanURL';
 import { type Metadata } from 'next'
 import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'
