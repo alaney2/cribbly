@@ -94,7 +94,7 @@ export async function middleware(request: NextRequest) {
     userAuthenticated = true;
     const unavailableRoutes = ['/sign-in', '/get-started', '/forgot-password', '/update-password'];
     // Can't sign in or sign up if already logged in
-    if (unavailableRoutes.some(path => url.pathname.startsWith(path))) {
+    if (url.pathname === '/' || unavailableRoutes.some(path => url.pathname.startsWith(path))) {
         url.pathname = '/dashboard';
         return NextResponse.redirect(url);
     } else {
