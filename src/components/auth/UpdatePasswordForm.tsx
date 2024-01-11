@@ -1,7 +1,6 @@
 'use client'
 import { TextField, SelectFieldNew } from '@/components/default/Fields'
 import { Button } from '@/components/default/Button'
-import Messages from '@/components/auth/Messages'
 import { useState } from 'react'
 import clsx from 'clsx'
 import { UnfilledCheck, FilledCheck, OpenEye, ClosedEye } from '@/components/auth/PasswordChecks'
@@ -99,6 +98,5 @@ export function UpdatePasswordForm() {
           </span>
         </Button>
       </div>
-      <Messages />
     </form>
 )}

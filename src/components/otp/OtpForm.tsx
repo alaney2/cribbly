@@ -1,6 +1,5 @@
 import clsx from 'clsx'
 import { Button } from '@/components/default/Button'
-import Messages from '@/components/auth/Messages'
 import { cookies } from 'next/headers'
 import { OtpResend } from '@/components/otp/OtpResend'
 import { OtpInput } from '@/components/otp/OtpInput'
@@ -30,7 +29,6 @@ export function OtpForm() {
         <p>We have sent a verification code to your email</p>
         <p>{formatEmail(email)}</p>
       </div>
-      <Messages />
       <div className="flex flex-col">
         {/* <input type="hidden" name="email" value={email} /> */}
         <OtpInput />
