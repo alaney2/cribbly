@@ -1,4 +1,3 @@
-"use client"
 import Link from 'next/link'
 import { Button } from '@/components/Button'
 import { TextField } from '@/components/Fields'
@@ -7,12 +6,11 @@ import  CleanURL from '@/components/CleanURL';
 import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'
 import { Apple } from '@/components/auth/Apple'
-import { Google } from '@/components/auth/Google'
-import { signInGoogle } from '@/app/auth/sign-in/google/action'
+import { GoogleSignIn } from '@/components/auth/GoogleSignIn'
 
-// export const metadata: Metadata = {
-//   title: 'Sign in',
-// }
+export const metadata: Metadata = {
+  title: 'Sign in',
+}
 
 export default function SignIn() {
   return (
@@ -106,15 +104,7 @@ export default function SignIn() {
               </div>
 
               <div className="mt-6 grid grid-cols-1 gap-4">
-                <button
-                  type='button'
-                  onClick={async () => {
-                    await signInGoogle()
-                  }}
-                  className="flex w-full items-center justify-center gap-3 rounded-md bg-white shadow-sm px-3 py-1.5 text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white hover:bg-gray-100 active:text-slate-900 active:bg-gray-200"
-                >
-                  <Google />
-                </button>
+                <GoogleSignIn />
 
                 {/* <Link
                   href="#"
