@@ -8,3 +8,6 @@ vectorart.ai
 
 
 React suspense
+
+
+lemon squeezy

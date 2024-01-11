@@ -79,14 +79,14 @@ export default function SignIn() {
                 </div>
 
                 <div className="text-sm leading-6">
-                  <a href="/forgot-password" className="font-semibold text-blue-600 hover:text-blue-500">
+                  <a href="/forgot-password" className="font-semibold text-blue-600 hover:text-blue-500 cursor-default">
                     Forgot password?
                   </a>
                 </div>
               </div>
 
               <div>
-                <Button type="submit" variant="solid" color="blue" className="w-full">
+                <Button type="submit" variant="solid" color="blue" className="w-full cursor-default">
                   <span>
                     Sign in <span aria-hidden="true">&rarr;</span>
                   </span>
@@ -118,7 +118,7 @@ export default function SignIn() {
 
           <p className="sm:mt-10 text-center text-sm text-gray-500">
             Don&apos;t have an account?{' '}
-            <a href="/get-started" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+            <a href="/get-started" className="font-semibold leading-6 text-blue-600 hover:text-blue-500 cursor-default">
               Sign up here
             </a>
           </p>

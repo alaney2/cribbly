@@ -13,14 +13,11 @@ export async function POST(request: Request) {
   const { error } = await supabase.auth.signUp({
     email,
     password,
-    // options: {
-    //   emailRedirectTo: `${requestUrl.origin}/auth/callback`,
-    // },
   })
 
   if (error) {
     return NextResponse.redirect(
-      `${requestUrl.origin}/get-started?error=Could not authenticate user`,
+      `${requestUrl.origin}/get-started?error=Could not sign up. Please check if you already have an account`,
       {
         status: 301,
       }

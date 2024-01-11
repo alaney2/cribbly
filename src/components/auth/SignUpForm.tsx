@@ -91,7 +91,7 @@ export function SignUpForm() {
       </div>
       <div className="col-span-full">
         <Button formAction="/auth/sign-up" type="submit" variant="solid" color="blue" 
-          className={clsx('w-full ease-out duration-200 outline-none transition-all', isButtonEnabled ? 'brightness-100' : 'brightness-75')} 
+          className={clsx('w-full ease-out duration-200 outline-none transition-all cursor-default', isButtonEnabled ? 'brightness-100' : 'brightness-75')} 
           disabled={!isButtonEnabled}
         >
           <span>

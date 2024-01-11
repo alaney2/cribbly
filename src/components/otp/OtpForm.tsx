@@ -26,7 +26,7 @@ export function OtpForm() {
   return (
     <>
       <div className="text-center mb-4 text-sm text-gray-400">
-        <p>We have sent a verification code to your email</p>
+        <p>A verification code has been sent to your email</p>
         <p>{formatEmail(email)}</p>
       </div>
       <div className="flex flex-col">

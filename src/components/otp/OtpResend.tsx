@@ -39,7 +39,7 @@ export function OtpResend({ email }: { email: string }) {
     <div className="text-center mt-6 text-sm text-gray-500">
       <p>Didn&apos;t receive code?{' '}
         <button
-          className={clsx(" font-semibold",
+          className={clsx("font-semibold cursor-default",
                           cooldownTime > 0 ? 'text-blue-400 hover:text-blue-400 cursor-default' : 'text-blue-600 hover:text-blue-500' )}
           onClick={handleResendOtp}
           disabled={cooldownTime > 0}
