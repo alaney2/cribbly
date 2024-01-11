@@ -8,7 +8,7 @@ export default function NotFound() {
   return (
     <SlimLayout>
       <div className="flex">
-        <Link href="/" aria-label="Home">
+        <Link href={{pathname: '/'}} aria-label="Home">
           <Logo className="h-10 w-auto" />
         </Link>
       </div>

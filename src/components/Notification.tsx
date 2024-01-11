@@ -3,10 +3,13 @@ import { Fragment, useState, useEffect } from 'react'
 import { Transition } from '@headlessui/react'
 import { XCircleIcon, ExclamationCircleIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
 import { XMarkIcon } from '@heroicons/react/20/solid'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, usePathname } from 'next/navigation'
 import { CleanURL } from '@/components/CleanURL'
 
+
 export function Notification() {
+  const pathname = usePathname()
+
   const [show, setShow] = useState(false)
   const [notification, setNotification] = useState({ type: '', message: '' })
 
@@ -16,18 +19,30 @@ export function Notification() {
   const error = searchParams.get('error')
 
   useEffect(() => {
-    if (success) {
-      setNotification({ type: 'success', message: success });
+    let timer: NodeJS.Timeout;
+
+    if (success || error) {
+      const messageType = success ? 'success' : 'error';
+      const messageContent = success || error;
+
+      setNotification({ type: messageType, message: messageContent! });
       setShow(true);
-    } else if (error) {
-      setNotification({ type: 'error', message: error });
-      setShow(true);
+      window.history.pushState({}, document.title, pathname);
+
+
+      timer = setTimeout(() => {
+        setShow(false);
+      }, 3000);
     }
-  }, [success, error]);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [success, error, pathname]);
 
   return (
     <>
-      <CleanURL />
+      {/* <CleanURL /> */}
       {/* Global notification live region, render this permanently at the end of the document */}
       <div
         aria-live="assertive"
