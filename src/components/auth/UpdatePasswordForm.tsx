@@ -1,6 +1,6 @@
 'use client'
-import { TextField, SelectFieldNew } from '@/components/Fields'
-import { Button } from '@/components/Button'
+import { TextField, SelectFieldNew } from '@/components/default/Fields'
+import { Button } from '@/components/default/Button'
 import Messages from '@/components/auth/Messages'
 import { useState } from 'react'
 import clsx from 'clsx'

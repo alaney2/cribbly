@@ -1,13 +1,13 @@
 "use client"
 import Link from 'next/link'
 
-import  CleanURL from '@/components/CleanURL';
+import { CleanURL } from '@/components/CleanURL';
 import { type Metadata } from 'next'
 import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'
-import { TextField, SelectFieldNew } from '@/components/Fields'
+import { TextField, SelectFieldNew } from '@/components/default/Fields'
 import { useSearchParams } from 'next/navigation'
-import { Button } from '@/components/Button'
+import { Button } from '@/components/default/Button'
 import Messages from '@/components/auth/Messages'
 import { useState } from 'react'
 import clsx from 'clsx'

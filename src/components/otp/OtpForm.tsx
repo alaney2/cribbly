@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { Button } from '@/components/Button'
+import { Button } from '@/components/default/Button'
 import Messages from '@/components/auth/Messages'
 import { cookies } from 'next/headers'
 import { OtpResend } from '@/components/otp/OtpResend'

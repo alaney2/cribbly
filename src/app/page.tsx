@@ -7,7 +7,7 @@ import { Pricing } from '@/components/landing/Pricing'
 import { PrimaryFeatures } from '@/components/landing/PrimaryFeatures'
 import { SecondaryFeatures } from '@/components/landing/SecondaryFeatures'
 import { Testimonials } from '@/components/landing/Testimonials'
-import { NavLink } from '@/components/NavLink'
+import { NavLink } from '@/components/default/NavLink'
 
 export default async function Home() {
 

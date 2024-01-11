@@ -1,7 +1,7 @@
 "use client"
 import { useEffect } from 'react';
 
-const CleanURL = () => {
+export const CleanURL = () => {
   useEffect(() => {
     if (window.history.replaceState) {
       const cleanURL = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
@@ -12,4 +12,4 @@ const CleanURL = () => {
   return null;
 };
 
-export default CleanURL;
+// export default CleanURL;

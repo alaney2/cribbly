@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Logo } from '@/components/Logo'
-import  CleanURL from '@/components/CleanURL';
+import { CleanURL } from '@/components/CleanURL';
 import { type Metadata } from 'next'
 import { SignUpForm } from '@/components/auth/SignUpForm'
 import logo from '@/images/logo-cropped.svg'

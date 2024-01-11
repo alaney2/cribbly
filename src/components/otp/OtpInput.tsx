@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { Button } from '@/components/Button'
+import { Button } from '@/components/default/Button'
 import { Spinner } from '@/components/Spinner'
 
 export function OtpInput() {

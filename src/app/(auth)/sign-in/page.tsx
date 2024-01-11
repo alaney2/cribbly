@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { Button } from '@/components/Button'
-import { TextField } from '@/components/Fields'
+import { Button } from '@/components/default/Button'
+import { TextField } from '@/components/default/Fields'
 import { type Metadata } from 'next'
-import  CleanURL from '@/components/CleanURL';
+import  { CleanURL } from '@/components/CleanURL';
 import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'
 import { Apple } from '@/components/auth/Apple'
@@ -105,7 +105,6 @@ export default function SignIn() {
 
               <div className="mt-6 grid grid-cols-1 gap-4">
                 <GoogleSignIn />
-
                 {/* <Link
                   href="#"
                   className="flex w-full items-center justify-center gap-3 rounded-md bg-[#080808] shadow-sm px-3 py-1.5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#080808]"
