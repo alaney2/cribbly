@@ -25,7 +25,6 @@ export async function POST(request: Request) {
       return NextResponse.redirect(
         `${requestUrl.origin}/get-started/otp?error=Invalid verification code`,
         {
-          // a 301 status is required to redirect from a POST to a GET route
           status: 301,
         }
       );

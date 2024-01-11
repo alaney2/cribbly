@@ -8,6 +8,7 @@ import { CleanURL } from '@/components/CleanURL';
 import icon from '@/images/icon.png'
 import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'
+import { Notification } from '@/components/Notification'
 
 // export const metadata: Metadata = {
 //   title: 'Forgot password',
@@ -16,6 +17,7 @@ import Image from 'next/image'
 export default function ForgotPassword() {
   return (
     <>
+      <Notification />
       <div className="flex min-h-full flex-1 flex-col sm:justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 sm:bg-gray-100">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link href="/" aria-label="Home">

@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { Logo } from '@/components/Logo'
-import { CleanURL } from '@/components/CleanURL';
 import { type Metadata } from 'next'
 import { SignUpForm } from '@/components/auth/SignUpForm'
 import logo from '@/images/logo-cropped.svg'
@@ -8,6 +7,7 @@ import icon from '@/images/icon.png'
 import Image from 'next/image'
 import { Apple } from '@/components/auth/Apple'
 import { GoogleSignIn } from '@/components/auth/GoogleSignIn'
+import { Notification } from '@/components/Notification'
 
 export const metadata: Metadata = {
   title: 'Get started',
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function SignIn() {
   return (
     <>
-      <CleanURL />
+      <Notification />
       <div className="flex min-h-full flex-1 flex-col sm:justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 sm:bg-gray-100">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           {/* <Link href="/" aria-label="Home">

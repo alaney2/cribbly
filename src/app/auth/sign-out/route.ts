@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   if (error) {
     console.log(error);
     return NextResponse.redirect(
-      `${requestUrl.origin}/sign-out?error=Could not sign out user`,
+      `${requestUrl.origin}/dashboard?error=Could not sign out`,
       {
         // a 301 status is required to redirect from a POST to a GET route
         status: 301,

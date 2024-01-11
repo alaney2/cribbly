@@ -22,8 +22,6 @@ export async function updatePassword(code: string, formData: FormData) {
     redirect('/sign-in?error=Could not update password')
   }
 
-  console.log(data)
-
   redirect('/sign-in?success=Your password has been updated')
 }
 
