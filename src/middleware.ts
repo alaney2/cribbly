@@ -4,7 +4,6 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers'
 
 export async function middleware(request: NextRequest) {
-
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -64,8 +63,13 @@ export async function middleware(request: NextRequest) {
   if (pathname === '/' && url.searchParams.has('code')) {
     const code = url.searchParams.get('code');
     const { data } = await supabase.auth.exchangeCodeForSession(code!);
+    // console.log(data)
     // console.log('EXCHANGED CODE FOR SESSION', data)
-    url.pathname = '/dashboard'
+    if (!data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true) {
+      url.pathname = '/welcome'
+    } else {
+      url.pathname = '/dashboard'
+    }
     url.searchParams.delete('code');
     const response = NextResponse.redirect(url);
     const user = {
@@ -92,6 +96,13 @@ export async function middleware(request: NextRequest) {
 
   if (cookies().has('currentUser')) {
     userAuthenticated = true;
+    const { data, error } = await supabase.auth.getUser()
+
+    if (url.pathname !== '/welcome' && !data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true) {
+      url.pathname = '/welcome';
+      return NextResponse.redirect(url);
+    }
+
     const unavailableRoutes = ['/sign-in', '/get-started', '/forgot-password', '/update-password'];
     // Can't sign in or sign up if already logged in
     if (url.pathname === '/' || unavailableRoutes.some(path => url.pathname.startsWith(path))) {

@@ -46,6 +46,16 @@ export async function POST(request: Request) {
       })
 
       cookieStore.delete('email');
+      
+      if (!data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true) {
+        return NextResponse.redirect(
+          `${requestUrl.origin}/welcome`,
+          {
+            status: 301,
+          }
+        );
+      }
+
       return NextResponse.redirect(
         `${requestUrl.origin}/dashboard`,
         {
