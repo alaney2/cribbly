@@ -1,6 +1,7 @@
 "use client"
 import { WelcomeMap } from "@/components/WelcomeMap"
 import { SetStateAction, useState } from "react";
+import { Step0 } from '@/components/welcome/Step0'
 
 export default function Welcome() {
   const [currentStep, setCurrentStep] = useState(2);
@@ -26,9 +27,9 @@ export default function Welcome() {
   const renderStepContent = (stepIndex: number) => {
     switch(stepIndex) {
       case 0:
-        return <div className="w-full h-full px-32 pb-28 pt-16">Content for Step 0</div>;
+        return <div className="w-full h-full px-32 pb-28 pt-16"><Step0 /></div>;
       case 1:
-        return <>Content for Step 1</>;
+        return <div className="w-full h-full px-32 pb-28 pt-16">Content for Step 1</div>;
       case 2:
         return <WelcomeMap />;
       case 3:
@@ -42,7 +43,7 @@ export default function Welcome() {
   
   return (
     <>
-      <div className="w-full h-full px-32 pb-28 pt-16 rounded-xl">
+      <div className="w-full h-full px-32 pb-28 pt-16">
         {renderStepContent(currentStep)}
 
         <nav className="flex items-center justify-center mt-8" aria-label="Progress">

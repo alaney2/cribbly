@@ -4,7 +4,6 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
-
 export function WelcomeMap() {
   const token = process.env.NEXT_PUBLIC_MAPBOX_KEY!
   const [isMapLoaded, setIsMapLoaded] = useState(false);
