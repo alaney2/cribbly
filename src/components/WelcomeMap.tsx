@@ -1,5 +1,5 @@
 "use client"
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
@@ -7,9 +7,9 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 export function WelcomeMap() {
   const token = process.env.NEXT_PUBLIC_MAPBOX_KEY!
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
 
   useEffect(() => {
-
     mapboxgl.accessToken = token
 
     const map = new mapboxgl.Map({
@@ -37,6 +37,9 @@ export function WelcomeMap() {
     });
     console.log(geocoder.getWorldview())
 
+    map.on('load', () => {
+      setIsMapLoaded(true);
+    });
 
     return () => {
       geocoderContainer!.innerHTML = '';
@@ -45,7 +48,7 @@ export function WelcomeMap() {
   }, [token]);
 
   return (
-    <div className='flex relative h-full w-full rounded-lg'>
+    <div className={`flex relative h-full w-full transition-opacity duration-500 ${isMapLoaded ? 'opacity-100' : 'opacity-0'}`}>
       <div id="geocoder" className="absolute z-10 w-1/2 top-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center"></div>
       <div id="map" className='absolute w-full h-full rounded-2xl'></div>
     </div>

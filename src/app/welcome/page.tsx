@@ -16,31 +16,33 @@ export default function Welcome() {
   // const currentStepIndex = steps.findIndex(step => step.status === 'current');
 
   const handleStepClick = (stepIndex: number) => {
-    if (stepIndex <= currentStep) {
-      setCurrentStep(stepIndex);
-    }
+    // if (stepIndex <= currentStep) {
+    //   setCurrentStep(stepIndex);
+    // }
+    setCurrentStep(stepIndex);
+
   };
 
   const renderStepContent = (stepIndex: number) => {
     switch(stepIndex) {
       case 0:
-        return <div>Content for Step 0</div>;
+        return <div className="w-full h-full px-32 pb-28 pt-16">Content for Step 0</div>;
       case 1:
-        return <div>Content for Step 1</div>;
+        return <>Content for Step 1</>;
       case 2:
         return <WelcomeMap />;
       case 3:
-        return <div>Content for Step 3</div>;
+        return <div className="w-full h-full px-32 pb-28 pt-16">Content for Step 3</div>;
       case 4:
-        return <div>Content for Step 4</div>;
+        return <div className="w-full h-full px-32 pb-28 pt-16">Content for Step 4</div>;
       default:
-        return <div>Welcome! Please select a step.</div>;
+        return <div className="w-full h-full px-32 pb-28 pt-16">Welcome! Please select a step.</div>;
     }
   };
   
   return (
     <>
-      <div className="w-full h-full px-32 pb-28 pt-16">
+      <div className="w-full h-full px-32 pb-28 pt-16 rounded-xl">
         {renderStepContent(currentStep)}
 
         <nav className="flex items-center justify-center mt-8" aria-label="Progress">
