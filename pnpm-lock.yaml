@@ -50,6 +50,9 @@ importers:
       '@vercel/speed-insights':
         specifier: ^1.0.2
         version: 1.0.2
+      animate.css:
+        specifier: ^4.1.1
+        version: 4.1.1
       autoprefixer:
         specifier: ^10.4.12
         version: 10.4.14(postcss@8.4.31)
@@ -955,6 +958,10 @@ packages:
       json-schema-traverse: 0.4.1
       uri-js: 4.4.1
     dev: true
+
+  /animate.css@4.1.1:
+    resolution: {integrity: sha512-+mRmCTv6SbCmtYJCN4faJMNFVNN5EuCTTprDTAo7YzIGji2KADmakjVA3+8mVDkZ2Bf09vayB35lSQIex2+QaQ==}
+    dev: false
 
   /ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}

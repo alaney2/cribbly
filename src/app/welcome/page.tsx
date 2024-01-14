@@ -1,6 +1,6 @@
 "use client"
 import { WelcomeMap } from "@/components/WelcomeMap"
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { Step0 } from '@/components/welcome/Step0'
 
 export default function Welcome() {
@@ -13,8 +13,6 @@ export default function Welcome() {
     { name: 'Step 3', href: '' },
     { name: 'Step 4', href: '' },
   ]
-
-  // const currentStepIndex = steps.findIndex(step => step.status === 'current');
 
   const handleStepClick = (stepIndex: number) => {
     // if (stepIndex <= currentStep) {
@@ -58,11 +56,11 @@ export default function Welcome() {
             {steps.map((step, index) => (
               <li key={step.name} onClick={() => handleStepClick(index)}>
                 {index === currentStep ? (
-                  <a className="block h-2.5 w-2.5 rounded-full bg-indigo-600 hover:bg-indigo-900">
+                  <a className="block h-2.5 w-2.5 rounded-full bg-blue-600">
                     <span className="sr-only">{step.name}</span>
                   </a>
                 ) : (
-                  <a className="block h-2.5 w-2.5 rounded-full bg-zinc-100 hover:bg-zinc-300">
+                  <a className="block h-2.5 w-2.5 rounded-full bg-zinc-100 hover:bg-zinc-300 transition duration-300 ease-in-out">
                     <span className="sr-only">{step.name}</span>
                   </a>
                 )}
