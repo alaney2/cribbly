@@ -34,7 +34,7 @@ export function Step0( { buttonOnClick }: { buttonOnClick: () => void }) {
             className="mt-6 select-none animate__animated animate__fadeIn animate__fast"
             style={{ animationDelay: '1.3s' }}
           >
-            Cribbly helps you streamline rent collection and property analytics for all your rental properties.
+            Cribbly helps you streamline rent collection and property analytics for all your homes.
           </Text>
           <Button 
             onClick={handleButtonClick}

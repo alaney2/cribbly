@@ -28,7 +28,7 @@
   font: inherit;
   width: 100%;
   border: 0;
-  /* background-color: transparent; */
+  background-color: transparent;
   margin: 0;
   height: 36px;
   color: #404040; /* fallback */
