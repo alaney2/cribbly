@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Step0 } from '@/components/welcome/Step0'
 
 export default function Welcome() {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(2);
 
   const steps = [
     { name: 'Step 0', href: '' },
@@ -26,7 +26,7 @@ export default function Welcome() {
     switch(stepIndex) {
       case 0:
         return (
-          <div className="w-full h-full px-8 sm:px-32 sm:pb-28 sm:pt-16">
+          <div className="w-full h-full px-8">
             <Step0 buttonOnClick={() => setCurrentStep(currentStep+1)}/>
           </div>
         );
@@ -38,9 +38,9 @@ export default function Welcome() {
         );
       case 2:
         return (
-          <>
+          <div className="w-full h-full">
             <WelcomeMap />
-          </>
+          </div>
         );
       case 3:
         return <div className="w-full h-full px-32 pb-28 pt-16">Content for Step 3</div>;
@@ -53,9 +53,9 @@ export default function Welcome() {
   
   return (
     <>
-      <div className="w-full h-full pb-20 bg-zinc-200">
+      <div className="w-full h-full pb-16 bg-zinc-200">
         {renderStepContent(currentStep)}
-        <nav className="flex items-center justify-center mt-8" aria-label="Progress">
+        <nav className="flex items-center justify-center" aria-label="Progress">
           <ol role="list" className="flex items-center space-x-5">
             {steps.map((step, index) => (
               <li key={step.name} onClick={() => handleStepClick(index)}>

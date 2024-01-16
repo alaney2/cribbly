@@ -19,7 +19,7 @@
   z-index: 1;
   border-radius: 4px;
   transition: width .25s, min-width .25s;
-  padding: 2px 6px;
+  padding: 0px 0px;
 }
 
 .mapboxgl-ctrl-geocoder--input {
