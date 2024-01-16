@@ -162,7 +162,7 @@
 .mapboxgl-ctrl-geocoder--icon-loading {
   width: 26px;
   height: 26px;
-  margin-top: 5px;
+  margin-top: 0px;
   margin-right: 0px;
   -moz-animation: rotate 0.8s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
   -webkit-animation: rotate 0.8s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
@@ -253,14 +253,14 @@
 
   .mapboxgl-ctrl-geocoder--input {
     height: 36px;
-    padding: 6px 35px;
+    padding: 6px 0px;
   }
 
   .mapboxgl-ctrl-geocoder--icon-loading {
     width: 26px;
     height: 26px;
-    margin-top: -2px;
-    margin-right: -5px;
+    margin-top: 0px;
+    margin-right: 0px;
   }
 
   .mapbox-gl-geocoder--error{
