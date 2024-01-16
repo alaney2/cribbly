@@ -26,7 +26,7 @@ export default function Welcome() {
     switch(stepIndex) {
       case 0:
         return (
-          <div className="w-full h-full px-32 pb-28 pt-16">
+          <div className="w-full h-full px-8 sm:px-32 sm:pb-28 sm:pt-16">
             <Step0 buttonOnClick={() => setCurrentStep(currentStep+1)}/>
           </div>
         );
@@ -37,7 +37,11 @@ export default function Welcome() {
           </div>
         );
       case 2:
-        return <WelcomeMap />;
+        return (
+          <>
+            <WelcomeMap />
+          </>
+        );
       case 3:
         return <div className="w-full h-full px-32 pb-28 pt-16">Content for Step 3</div>;
       case 4:
@@ -49,7 +53,7 @@ export default function Welcome() {
   
   return (
     <>
-      <div className="w-full h-full px-32 pb-28 pt-16 bg-zinc-200">
+      <div className="w-full h-full pb-20 bg-zinc-200">
         {renderStepContent(currentStep)}
         <nav className="flex items-center justify-center mt-8" aria-label="Progress">
           <ol role="list" className="flex items-center space-x-5">
@@ -68,7 +72,6 @@ export default function Welcome() {
             ))}
           </ol>
         </nav>
-
       </div>
     </>
   )
