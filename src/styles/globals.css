@@ -20,3 +20,19 @@
 /* .mapboxgl-ctrl-bottom-right {
   display: none;
 } */
+
+.mapboxgl-popup {
+  background-color: gray;
+  border-radius: 100px;
+  font-family: Inter, sans-serif;
+}
+
+.mapboxgl-popup-content {
+  color: black;
+  padding: 10px;
+  border-radius: 100px;
+}
+
+.mapboxgl-popup-tip {
+  border-color: red;
+}

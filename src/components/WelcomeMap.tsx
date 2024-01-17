@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
@@ -10,17 +10,20 @@ export function WelcomeMap() {
   const token = process.env.NEXT_PUBLIC_MAPBOX_KEY!
   const [isMapLoaded, setIsMapLoaded] = useState(false);
 
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const currentPopup = useRef<mapboxgl.Popup | null>(null);
+
   useEffect(() => {
     mapboxgl.accessToken = token
 
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd',
-      center: [-96, 37.8],
-      zoom: 0,
-    });
-
-    // map.addControl(new mapboxgl.NavigationControl(), 'bottom-left');
+    if (!mapRef.current) {
+      mapRef.current = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd',
+        center: [-96, 37.8],
+        zoom: 0,
+      });
+    }
 
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
@@ -28,25 +31,58 @@ export function WelcomeMap() {
       mapboxgl: mapboxgl
     });
 
+    geocoder.on('result', function (e) {
+      const result = e.result;
+      console.log(result);
+      if (currentPopup.current) {
+        currentPopup.current.remove();
+      }
+      // Assuming the geocoder creates its own marker, we retrieve it
+      const markers = document.querySelectorAll('.mapboxgl-marker');
+      const latestMarker = markers[markers.length - 1]; // Get the latest marker
+    
+      if (mapRef.current) {
+      currentPopup.current = new mapboxgl.Popup({ offset: 50 })
+        .setLngLat(e.result.geometry.coordinates)
+        .setHTML(`
+          <h3>${e.result.text}</h3>
+          <p>${e.result.place_name}</p>
+          <button className='text-xl'>Add property</button>
+        `)
+        .addTo(mapRef.current);
+      }
+    });
+
+    geocoder.on('clear', function() {
+      if (currentPopup.current) {
+        currentPopup.current.remove();
+        currentPopup.current = null;
+      }
+    });
 
     const geocoderContainer = document.getElementById('geocoder');
-    geocoderContainer!.innerHTML = '';
-    geocoderContainer!.appendChild(geocoder.onAdd(map));
 
-    geocoder.on('result', function (e) {
-      console.log(e.result);
-    });
+    if (geocoderContainer) {
+      geocoderContainer.innerHTML = '';
+      geocoderContainer.appendChild(geocoder.onAdd(mapRef.current));
+    }
+
     console.log(geocoder.getWorldview())
 
-    map.on('load', () => {
+    mapRef.current.on('load', () => {
       setIsMapLoaded(true);
     });
 
+    // return () => {
+    //   geocoderContainer!.innerHTML = '';
+    // };
     return () => {
-      geocoderContainer!.innerHTML = '';
+      if (currentPopup.current) {
+        currentPopup.current.remove();
+      }
     };
 
-  }, [token]);
+  }, [token, currentPopup]);
 
   return (
     <div className={`flex flex-col px-8 py-16 sm:py-8 justify-center items-center relative h-full w-full transition-opacity duration-500 ${isMapLoaded ? 'opacity-100' : 'opacity-0'}`}>
