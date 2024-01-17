@@ -63,8 +63,7 @@ export async function middleware(request: NextRequest) {
   if (pathname === '/' && url.searchParams.has('code')) {
     const code = url.searchParams.get('code');
     const { data } = await supabase.auth.exchangeCodeForSession(code!);
-    // console.log(data)
-    // console.log('EXCHANGED CODE FOR SESSION', data)
+
     if (!data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true) {
       url.pathname = '/welcome'
     } else {
