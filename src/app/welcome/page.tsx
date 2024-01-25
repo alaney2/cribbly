@@ -26,7 +26,7 @@ export default function Welcome() {
     switch(stepIndex) {
       case 0:
         return (
-          <div className="w-full h-full px-8">
+          <div className="w-full h-full px-8 overscroll-none">
             <Step0 buttonOnClick={() => setCurrentStep(currentStep+1)}/>
           </div>
         );

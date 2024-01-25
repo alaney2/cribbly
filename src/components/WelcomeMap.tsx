@@ -86,7 +86,7 @@ export function WelcomeMap() {
   }, [token, currentPopup]);
 
   return (
-    <div className={`flex flex-col px-8 py-16 sm:py-8 justify-center items-center relative h-full w-full transition-opacity duration-500 ${isMapLoaded ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`flex flex-col px-8 py-16 sm:py-8 justify-center items-center relative h-full w-full transition-opacity duration-500 overscroll-none ${isMapLoaded ? 'opacity-100' : 'opacity-0'}`}>
       <h1 
         className='mb-2 text-2xl font-medium text-center animate__animated animate__fadeIn'
       >
