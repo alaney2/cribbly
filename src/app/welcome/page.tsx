@@ -53,7 +53,7 @@ export default function Welcome() {
   
   return (
     <>
-      <div className="w-full h-full pb-16 bg-gray-100 overscroll-none">
+      <div className="w-full h-full pb-16 bg-gray-50 overscroll-none">
         {renderStepContent(currentStep)}
         <nav className="flex items-center justify-center" aria-label="Progress">
           <ol role="list" className="flex items-center space-x-5">
