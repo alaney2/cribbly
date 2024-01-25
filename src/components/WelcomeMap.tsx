@@ -21,9 +21,11 @@ export function WelcomeMap() {
         container: 'map',
         style: 'mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd',
         center: [-96, 37.8],
-        zoom: 0,
+        zoom: 2,
       });
     }
+
+    mapRef.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
@@ -37,7 +39,6 @@ export function WelcomeMap() {
       if (currentPopup.current) {
         currentPopup.current.remove();
       }
-      // Assuming the geocoder creates its own marker, we retrieve it
       const markers = document.querySelectorAll('.mapboxgl-marker');
       const latestMarker = markers[markers.length - 1]; // Get the latest marker
     
