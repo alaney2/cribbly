@@ -26,7 +26,7 @@ export default function Welcome() {
     switch(stepIndex) {
       case 0:
         return (
-          <div className="w-full h-full px-8">
+          <div className="w-full h-full px-8 overscroll-none">
             <Step0 buttonOnClick={() => setCurrentStep(currentStep+1)}/>
           </div>
         );
@@ -53,7 +53,7 @@ export default function Welcome() {
   
   return (
     <>
-      <div className="w-full h-full pb-16 bg-zinc-200">
+      <div className="w-full h-full pb-16 bg-gray-50 overscroll-none">
         {renderStepContent(currentStep)}
         <nav className="flex items-center justify-center" aria-label="Progress">
           <ol role="list" className="flex items-center space-x-5">
@@ -64,7 +64,7 @@ export default function Welcome() {
                     <span className="sr-only">{step.name}</span>
                   </a>
                 ) : (
-                  <a className="block h-2.5 w-2.5 rounded-full bg-zinc-100 hover:bg-zinc-300 transition duration-300 ease-in-out">
+                  <a className="block h-2.5 w-2.5 rounded-full bg-zinc-300 hover:bg-zinc-400 transition duration-300 ease-in-out">
                     <span className="sr-only">{step.name}</span>
                   </a>
                 )}

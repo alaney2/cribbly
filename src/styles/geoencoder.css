@@ -19,7 +19,7 @@
   z-index: 1;
   border-radius: 4px;
   transition: width .25s, min-width .25s;
-  padding: 0px 0px;
+  padding: 2px 2px;
 }
 
 .mapboxgl-ctrl-geocoder--input {
@@ -33,7 +33,7 @@
   height: 36px;
   color: #404040; /* fallback */
   color: rgba(0, 0, 0, 0.75);
-  padding: 6px 45px;
+  padding: 6px 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -254,7 +254,7 @@
 
   .mapboxgl-ctrl-geocoder--input {
     height: 36px;
-    padding: 6px 0px;
+    padding: 6px 12px;
   }
 
   .mapboxgl-ctrl-geocoder--icon-loading {

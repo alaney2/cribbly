@@ -15,8 +15,6 @@ export async function POST(request: Request) {
     password,
   })
 
-  console.log(error)
-
   if (error) {
     return NextResponse.redirect(
       `${requestUrl.origin}/sign-in?error=Could not authenticate user`,
@@ -40,5 +38,10 @@ export async function POST(request: Request) {
     secure: true,
   })
 
-  return NextResponse.redirect(`${requestUrl.origin}/dashboard`)
+  return NextResponse.redirect(
+    `${requestUrl.origin}/dashboard`,
+    {
+      status: 301,
+    }
+  )
 }

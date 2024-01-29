@@ -21,6 +21,11 @@
   display: none;
 } */
 
+html,
+body {
+  overscroll-behavior: none;
+}
+
 .mapboxgl-popup {
   background-color: gray;
   border-radius: 100px;

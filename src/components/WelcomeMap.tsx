@@ -21,9 +21,11 @@ export function WelcomeMap() {
         container: 'map',
         style: 'mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd',
         center: [-96, 37.8],
-        zoom: 0,
+        zoom: 2,
       });
     }
+
+    mapRef.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
@@ -37,7 +39,6 @@ export function WelcomeMap() {
       if (currentPopup.current) {
         currentPopup.current.remove();
       }
-      // Assuming the geocoder creates its own marker, we retrieve it
       const markers = document.querySelectorAll('.mapboxgl-marker');
       const latestMarker = markers[markers.length - 1]; // Get the latest marker
     
@@ -85,7 +86,7 @@ export function WelcomeMap() {
   }, [token, currentPopup]);
 
   return (
-    <div className={`flex flex-col px-8 py-16 sm:py-8 justify-center items-center relative h-full w-full transition-opacity duration-500 ${isMapLoaded ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`flex flex-col px-8 py-16 sm:py-8 justify-center items-center relative h-full w-full transition-opacity duration-500 overscroll-none ${isMapLoaded ? 'opacity-100' : 'opacity-0'}`}>
       <h1 
         className='mb-2 text-2xl font-medium text-center animate__animated animate__fadeIn'
       >
