@@ -39,7 +39,7 @@ export default function Welcome() {
       case 2:
         return (
           <div className="w-full h-full">
-            <WelcomeMap />
+            <WelcomeMap buttonOnClick={() => setCurrentStep(currentStep+1)} />
           </div>
         );
       case 3:

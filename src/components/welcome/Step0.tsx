@@ -5,7 +5,7 @@ import { Button } from '@/components/catalyst/button'
 import { Text } from '@/components/catalyst/text'
 import 'animate.css';
 
-export function Step0( { buttonOnClick }: { buttonOnClick: () => void }) {
+export function Step0( { buttonOnClick }: { buttonOnClick: () => void } ) {
   const [fadeOut, setFadeOut] = useState(false);
 
   const handleButtonClick = () => {

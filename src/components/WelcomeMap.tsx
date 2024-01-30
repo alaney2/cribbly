@@ -1,18 +1,36 @@
 "use client"
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { Text } from '@/components/catalyst/text';
 import 'animate.css';
 import styles from './WelcomeMap.module.css';
+import ReactDOM from 'react-dom';
 
+interface PopupContentProps {
+  placeName: string;
+  onAdd: () => void;
+}
 
-export function WelcomeMap() {
+const Popup = ({ placeName, onAdd }: PopupContentProps) => {
+  return (
+    <div>
+      <p className={styles.popupText}>{placeName}</p>
+      <button className={styles.popupButton} onClick={onAdd}>
+        Add property
+      </button>
+    </div>
+  );
+}
+
+export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_KEY!
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const currentPopup = useRef<mapboxgl.Popup | null>(null);
+  const popupRef = useRef<mapboxgl.Popup | null>(null);
+  const mapContainer = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     mapboxgl.accessToken = token
@@ -35,29 +53,29 @@ export function WelcomeMap() {
     geocoder.on('result', function (e) {
       const result = e.result;
       console.log(result);
-      if (currentPopup.current) {
-        currentPopup.current.remove();
+      if (popupRef.current) {
+        popupRef.current.remove();
       }
       const markers = document.querySelectorAll('.mapboxgl-marker');
       const latestMarker = markers[markers.length - 1]; // Get the latest marker
-    
+      
+      const popupNode = document.createElement("div")
+      ReactDOM.render(
+        <Popup placeName={e.result.place_name} onAdd={buttonOnClick} />,
+        popupNode
+      );
       if (mapRef.current) {
-        currentPopup.current = new mapboxgl.Popup({ offset: 50 })
+        popupRef.current = new mapboxgl.Popup({ offset: 50, closeOnClick: false, closeButton: false })
           .setLngLat(e.result.geometry.coordinates)
-          .setHTML(`
-            <div style={{  }}>
-              <p class="${styles.popupText}">${e.result.place_name}</p>
-              <button class="${styles.popupButton}">Add property</button>
-            </div>
-          `)
+          .setDOMContent(popupNode)
           .addTo(mapRef.current);
       }
     });
 
     geocoder.on('clear', function() {
-      if (currentPopup.current) {
-        currentPopup.current.remove();
-        currentPopup.current = null;
+      if (popupRef.current) {
+        popupRef.current.remove();
+        popupRef.current = null;
       }
     });
 
@@ -73,36 +91,29 @@ export function WelcomeMap() {
       geocoderContainer.appendChild(geocoder.onAdd(mapRef.current));
     }
 
-    // console.log(geocoder.getWorldview())
-
     mapRef.current.on('load', () => {
       setIsMapLoaded(true);
     });
 
     return () => {
-      if (currentPopup.current) {
-        currentPopup.current.remove();
+      if (popupRef.current) {
+        popupRef.current.remove();
       }
     };
 
-  }, [token, currentPopup]);
+  }, [token, popupRef, buttonOnClick]);
 
   return (
     <div className={`flex flex-col px-2 py-16 sm:py-8 justify-center items-center relative h-full w-full transition-opacity duration-500 overscroll-none ${isMapLoaded ? 'opacity-100' : 'opacity-0'}`}>
-      {/* <h1 
-        className='mb-2 text-2xl font-medium text-center animate__animated animate__fadeIn'
-      >
-        Type in your address to get started
-      </h1> */}
       <Text
         className='mb-6 text-center animate__animated animate__fadeIn'
         style={{ animationDelay: '0.1s' }}
       >
         Type in your address to get started
       </Text>
-      <div id="map" className='mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-4/5 rounded-2xl'>
+      <div ref={mapContainer} id="map" className='mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-4/5 rounded-2xl'>
         <div id="geocoder" className="absolute z-10 w-1/2 top-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center"></div>
-      </div>
+      Bbu</div>
     </div>
   );
 }
