@@ -1,5 +1,4 @@
 "use client"
-import Head from 'next/head';
 import { useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';

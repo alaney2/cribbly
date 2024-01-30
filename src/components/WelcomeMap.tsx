@@ -3,11 +3,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import { Text } from '@/components/catalyst/text';
+import { Text, Strong } from '@/components/catalyst/text';
 import 'animate.css';
 import styles from './WelcomeMap.module.css';
 import ReactDOM from 'react-dom';
-
+import { Button } from '@/components/catalyst/button';
 
 type PopupContentProps = {
   placeName: string;
@@ -18,8 +18,12 @@ const Popup = ({ placeName, onAdd }: PopupContentProps) => {
   return (
     <div>
       <p className={styles.popupText}>{placeName}</p>
-      <button className={styles.popupButton} onClick={onAdd}>
-        Add property
+      <button color="blue" className='button bg-blue-500 rounded-md cursor-default select-none
+        active:translate-y-1 active:[box-shadow:0_3px_0_0_#1b6ff8,0_4px_0_0_#1b70f841]
+        transition-all duration-150 [box-shadow:0_5px_0_0_#1b6ff8,0_7px_0_0_#1b70f841] border-b-0 px-2 py-0.5 mb-1 mt-2' onClick={onAdd}>
+          <span className='flex flex-col justify-center items-center h-full text-white font-bold text-sm'>
+            Add property
+          </span>
       </button>
     </div>
   );
@@ -28,7 +32,9 @@ const Popup = ({ placeName, onAdd }: PopupContentProps) => {
 export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_KEY!
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const popupRef = useRef(new mapboxgl.Popup({ offset: 50, closeOnClick: false, closeButton: false }))
+  const popupRef = useRef(
+    new mapboxgl.Popup({ offset: 50, closeOnClick: false, closeButton: false })
+  )
   const geocoderRef = useRef<HTMLDivElement>(null);
   const mapContainer = useRef<HTMLDivElement>(null);
 
@@ -40,23 +46,32 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
       style: 'mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd',
       center: [-96, 37.8],
       zoom: 2,
-    });
+      attributionControl: false,
+      
+    }).addControl(new mapboxgl.AttributionControl({
+      compact: true,
+  }));;
     
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
-      marker: new mapboxgl.Marker({ color: 'orange' }),
+      filter: function (item) {
+        console.log(item)
+        return item.place_type[0] === 'address';
+      },
+      // marker: new mapboxgl.Marker({ color: 'orange' }),
       mapboxgl: mapboxgl
     });
 
     geocoder.on('result', function (e) {
       const result = e.result;
+      console.log(result)
       if (popupRef.current) {
         popupRef.current.remove();
       }
       
       const popupNode = document.createElement("div")
       ReactDOM.render(
-        <Popup placeName={e.result.place_name} onAdd={buttonOnClick} />,
+        <Popup placeName={e.result.place_name.split(',')[0]} onAdd={buttonOnClick} />,
         popupNode
       );
       popupRef.current
