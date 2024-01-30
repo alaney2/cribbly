@@ -27,22 +27,19 @@ const Popup = ({ placeName, onAdd }: PopupContentProps) => {
 export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_KEY!
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
   const popupRef = useRef<mapboxgl.Popup | null>(null);
+  const geocoderRef = useRef<HTMLDivElement>(null);
   const mapContainer = useRef<HTMLDivElement>(null);
-
 
   useEffect(() => {
     mapboxgl.accessToken = token
 
-    if (!mapRef.current) {
-      mapRef.current = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd',
-        center: [-96, 37.8],
-        zoom: 2,
-      });
-    }
+    const map = new mapboxgl.Map({
+      container: mapContainer.current!,
+      style: 'mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd',
+      center: [-96, 37.8],
+      zoom: 2,
+    });
     
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
@@ -52,7 +49,6 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
 
     geocoder.on('result', function (e) {
       const result = e.result;
-      console.log(result);
       if (popupRef.current) {
         popupRef.current.remove();
       }
@@ -64,12 +60,11 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
         <Popup placeName={e.result.place_name} onAdd={buttonOnClick} />,
         popupNode
       );
-      if (mapRef.current) {
-        popupRef.current = new mapboxgl.Popup({ offset: 50, closeOnClick: false, closeButton: false })
-          .setLngLat(e.result.geometry.coordinates)
-          .setDOMContent(popupNode)
-          .addTo(mapRef.current);
-      }
+      popupRef.current = new mapboxgl.Popup({ offset: 50, closeOnClick: false, closeButton: false })
+        .setLngLat(e.result.geometry.coordinates)
+        .setDOMContent(popupNode)
+        .addTo(map);
+      
     });
 
     geocoder.on('clear', function() {
@@ -79,19 +74,18 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
       }
     });
 
-    const geocoderContainer = document.getElementById('geocoder');
     const navigationControl = new mapboxgl.NavigationControl();
 
-    if (!mapRef.current.hasControl(navigationControl)) {
-      mapRef.current.addControl(navigationControl, 'top-right');
+    if (!map.hasControl(navigationControl)) {
+      map.addControl(navigationControl, 'top-right');
     }
 
-    if (geocoderContainer) {
-      geocoderContainer.innerHTML = '';
-      geocoderContainer.appendChild(geocoder.onAdd(mapRef.current));
+    if (geocoderRef.current) {
+      geocoderRef.current.innerHTML = '';
+      geocoderRef.current.appendChild(geocoder.onAdd(map));
     }
 
-    mapRef.current.on('load', () => {
+    map.on('load', () => {
       setIsMapLoaded(true);
     });
 
@@ -111,8 +105,8 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
       >
         Type in your address to get started
       </Text>
-      <div ref={mapContainer} id="map" className='mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-4/5 rounded-2xl'>
-        <div id="geocoder" className="absolute z-10 w-1/2 top-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center"></div>
+      <div ref={mapContainer} className='mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-4/5 rounded-2xl'>
+        <div ref={geocoderRef} className="absolute z-10 w-1/2 top-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center"></div>
       Bbu</div>
     </div>
   );
