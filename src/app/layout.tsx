@@ -55,7 +55,20 @@ export default function RootLayout({
         lexend.variable,
       )}
     >
-      <Script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></Script>
+      <Script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-MTXEMYC4EM"
+      />
+      <Script id="gtag">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-MTXEMYC4EM');
+        `}
+      </Script>
 
       <body className="flex h-full flex-col">
         {children}
