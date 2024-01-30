@@ -27,7 +27,7 @@ const Popup = ({ placeName, onAdd }: PopupContentProps) => {
 export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_KEY!
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const popupRef = useRef<mapboxgl.Popup | null>(null);
+  const popupRef = useRef(new mapboxgl.Popup({ offset: 50, closeOnClick: false, closeButton: false }))
   const geocoderRef = useRef<HTMLDivElement>(null);
   const mapContainer = useRef<HTMLDivElement>(null);
 
@@ -52,25 +52,21 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
       if (popupRef.current) {
         popupRef.current.remove();
       }
-      const markers = document.querySelectorAll('.mapboxgl-marker');
-      const latestMarker = markers[markers.length - 1]; // Get the latest marker
       
       const popupNode = document.createElement("div")
       ReactDOM.render(
         <Popup placeName={e.result.place_name} onAdd={buttonOnClick} />,
         popupNode
       );
-      popupRef.current = new mapboxgl.Popup({ offset: 50, closeOnClick: false, closeButton: false })
+      popupRef.current
         .setLngLat(e.result.geometry.coordinates)
         .setDOMContent(popupNode)
         .addTo(map);
-      
     });
 
     geocoder.on('clear', function() {
       if (popupRef.current) {
         popupRef.current.remove();
-        popupRef.current = null;
       }
     });
 
@@ -89,10 +85,11 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
       setIsMapLoaded(true);
     });
 
+    const currentPopupRef = popupRef.current;
     return () => {
-      if (popupRef.current) {
-        popupRef.current.remove();
-      }
+      currentPopupRef.remove();
+      map.remove();
+      geocoder.clear();
     };
 
   }, [token, popupRef, buttonOnClick]);
