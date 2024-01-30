@@ -8,10 +8,11 @@ import 'animate.css';
 import styles from './WelcomeMap.module.css';
 import ReactDOM from 'react-dom';
 
-interface PopupContentProps {
+
+type PopupContentProps = {
   placeName: string;
   onAdd: () => void;
-}
+};
 
 const Popup = ({ placeName, onAdd }: PopupContentProps) => {
   return (
