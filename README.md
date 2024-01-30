@@ -11,3 +11,6 @@ React suspense
 
 
 lemon squeezy
+
+Open Runde font
+Can Sans for headlines

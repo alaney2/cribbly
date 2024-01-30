@@ -26,18 +26,34 @@ body {
   overscroll-behavior: none;
 }
 
-.mapboxgl-popup {
-  background-color: gray;
-  border-radius: 100px;
+/* .mapboxgl-popup {
+  background-color: blue;
+  border-radius: 10px;
   font-family: Inter, sans-serif;
+} */
+
+.mapboxgl-popup-close-button {
+  display: none;
+  color: gray;
+  padding: 8px;
+  font-size: 36px;
+  cursor: default;
+  border: none;
 }
 
-.mapboxgl-popup-content {
-  color: black;
-  padding: 10px;
-  border-radius: 100px;
+/* .mapboxgl-popup-content !important {
+  border-radius: 16px;
+} */
+
+.mapboxgl-popup-content div {
+  padding: 2px 8px;
 }
 
-.mapboxgl-popup-tip {
+/* .mapboxgl-popup-content p {
+  margin-bottom: 14px;
+} */
+
+/* .mapboxgl-popup-tip {
   border-color: red;
-}
+  color: blue;
+} */

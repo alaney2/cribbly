@@ -1,6 +1,7 @@
 import Image from 'next/image'
 
-import { Button } from '@/components/default/Button'
+// import { Button } from '@/components/default/Button'
+import { Button } from '@/components/catalyst/button'
 import { Container } from '@/components/default/Container'
 import backgroundImage from '@/images/background-call-to-action.jpg'
 
@@ -28,7 +29,7 @@ export function CallToAction() {
             feel like you’re doing something productive.
           </p>
           <Button href="/get-started" color="white" className="mt-10">
-            Get 6 months free
+            Get started
           </Button>
         </div>
       </Container>

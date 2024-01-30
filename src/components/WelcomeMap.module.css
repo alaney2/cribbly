@@ -1,0 +1,32 @@
+.popupHeader {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.popupText {
+  font-size: 0.9rem;
+  margin: 0;
+  color: #4F4F55;
+}
+
+.popupButton {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  margin-top: 8px;
+  background-color: #2563EB;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: default;
+  transition: background-color 0.3s;
+}
+
+.popupButton:hover {
+  background-color: #3b82f6;
+}
+
+.popupButton:active {
+  background-color: #1e40af;
+}

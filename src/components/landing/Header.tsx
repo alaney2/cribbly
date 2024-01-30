@@ -6,6 +6,8 @@ import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 
 import { Button } from '@/components/default/Button'
+
+// import { Button } from '@/components/catalyst/button'
 import { Container } from '@/components/default/Container'
 import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/default/NavLink'
@@ -104,9 +106,9 @@ export function Header() {
         <nav className="relative z-50 flex justify-between">
           <div className="flex items-center md:gap-x-12">
             <Link href="#" aria-label="Home">
-              <Logo className="h-10 w-auto" />
+              <Logo className="h-8 mb-2 w-auto" />
             </Link>
-            <div className="hidden md:flex md:gap-x-6">
+            <div className="hidden md:flex md:gap-x-4">
               <NavLink href="#features">Features</NavLink>
               <NavLink href="#testimonials">Testimonials</NavLink>
               <NavLink href="#pricing">Pricing</NavLink>
