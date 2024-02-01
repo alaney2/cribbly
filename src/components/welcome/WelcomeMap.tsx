@@ -20,7 +20,7 @@ const Popup = ({ placeName, onAdd }: PopupContentProps) => {
       <p className={styles.popupText}>{placeName}</p>
       <div className="relative my-2">
         <div className="absolute inset-0 flex items-center" aria-hidden="true">
-          <div className="w-full border-t border-gray-600" />
+          <div className="w-full border-t border-gray-300" />
         </div>
       </div>
       <button color="blue" className='button mb-1 mt-3 bg-blue-500 rounded-md cursor-default select-none

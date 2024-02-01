@@ -1,7 +1,8 @@
 "use client"
-import { WelcomeMap } from "@/components/WelcomeMap"
+import { WelcomeMap } from "@/components/welcome/WelcomeMap"
 import { useState } from "react";
 import { Step0 } from '@/components/welcome/Step0'
+import { AutofilledProperty } from "@/components/welcome/AutofilledProperty";
 
 export default function Welcome() {
   const [currentStep, setCurrentStep] = useState(2);
@@ -43,11 +44,19 @@ export default function Welcome() {
           </div>
         );
       case 3:
-        return <div className="w-full h-full px-32 pb-28 pt-16">Content for Step 3</div>;
+        return (
+          <div className="w-full h-full px-32 pb-28 pt-16">
+            Content for Step 3
+            <AutofilledProperty />
+          </div>
+        )
       case 4:
-        return <div className="w-full h-full px-32 pb-28 pt-16">Content for Step 4</div>;
+        return (
+          <div className="w-full h-full px-32 pb-28 pt-16">Content for Step 4
+          </div>
+        )
       default:
-        return <div className="w-full h-full px-32 pb-28 pt-16">Welcome! Please select a step.</div>;
+        return <div className="w-full h-full px-32 pb-28 pt-16">Error here</div>;
     }
   };
   
