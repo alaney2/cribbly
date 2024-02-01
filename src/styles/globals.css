@@ -35,7 +35,7 @@ body {
 .mapboxgl-popup-close-button {
   display: none;
   color: gray;
-  padding: 8px;
+  /* padding: 8px; */
   font-size: 36px;
   cursor: default;
   border: none;
@@ -46,7 +46,7 @@ body {
 } */
 
 .mapboxgl-popup-content div {
-  padding: 0px 4px;
+  padding: 0px 2px;
 }
 
 /* .mapboxgl-popup-content p {

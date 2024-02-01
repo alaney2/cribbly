@@ -16,11 +16,16 @@ type PopupContentProps = {
 
 const Popup = ({ placeName, onAdd }: PopupContentProps) => {
   return (
-    <div>
+    <div className=''>
       <p className={styles.popupText}>{placeName}</p>
-      <button color="blue" className='button bg-blue-500 rounded-md cursor-default select-none
+      <div className="relative my-2">
+        <div className="absolute inset-0 flex items-center" aria-hidden="true">
+          <div className="w-full border-t border-gray-600" />
+        </div>
+      </div>
+      <button color="blue" className='button mb-1 mt-3 bg-blue-500 rounded-md cursor-default select-none
         active:translate-y-1 active:[box-shadow:0_3px_0_0_#1b6ff8,0_4px_0_0_#1b70f841]
-        transition-all duration-150 [box-shadow:0_5px_0_0_#1b6ff8,0_7px_0_0_#1b70f841] border-b-0 px-2 py-0.5 mb-1 mt-2' onClick={onAdd}>
+        transition-all duration-150 [box-shadow:0_5px_0_0_#1b6ff8,0_7px_0_0_#1b70f841] border-b-0 px-2 py-0.5' onClick={onAdd}>
           <span className='flex flex-col justify-center items-center h-full text-white font-bold text-sm'>
             Add property
           </span>
