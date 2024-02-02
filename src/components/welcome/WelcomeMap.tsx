@@ -5,7 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { Text, Strong } from '@/components/catalyst/text';
 import 'animate.css';
-import styles from './WelcomeMap.module.css';
+import styles from './Welcome.module.css';
 import ReactDOM from 'react-dom';
 import { Button } from '@/components/catalyst/button';
 

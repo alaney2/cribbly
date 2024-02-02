@@ -20,12 +20,11 @@ export function Step0( { buttonOnClick }: { buttonOnClick: () => void } ) {
         <div className="text-center">
           <Image 
             src={logo}
-            className='animate__animated animate__backInDown mx-auto mt-12' 
+            className='animate__animated animate__backInDown mx-auto mt-12 w-16 sm:w-24' 
             alt="Cribbly logo" 
-            width={100} height={100}
           />
           <h1 
-            className="text-3xl md:text-6xl select-none tracking-tighter font-semibold mt-4 delay-500 animate__animated animate__fadeIn animate__fast"
+            className="text-2xl sm:text-5xl select-none tracking-tighter font-semibold mt-4 delay-500 animate__animated animate__fadeIn animate__fast"
             style={{ animationDelay: '1.1s' }}
           >
             Welcome to Cribbly
