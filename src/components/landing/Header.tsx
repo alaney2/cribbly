@@ -109,7 +109,7 @@ export function Header() {
               <Logo className="h-8 mb-2 w-auto" />
             </Link>
             <div className="hidden md:flex md:gap-x-4">
-              <NavLink href="#features">Features</NavLink>
+              {/* <NavLink href="#features">Features</NavLink> */}
               {/* <NavLink href="#testimonials">Testimonials</NavLink> */}
               {/* <NavLink href="#pricing">Pricing</NavLink> */}
             </div>
