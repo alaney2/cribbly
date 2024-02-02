@@ -21,7 +21,6 @@ export default function Welcome() {
       setCurrentStep(stepIndex);
     }
     // setCurrentStep(stepIndex);
-
   };
 
   const renderStepContent = (stepIndex: number) => {
