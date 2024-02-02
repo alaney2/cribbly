@@ -38,7 +38,7 @@ export function Step0( { buttonOnClick }: { buttonOnClick: () => void } ) {
           <Button 
             onClick={handleButtonClick}
             color='blue'
-            className="w-64 sm:w-80 h-12 text-4xl mt-8 py-2 px-4 rounded-lg animate__animated animate__fadeIn animate__fast shrink"
+            className="w-64 sm:w-80 h-12 text-4xl mt-8 py-2 px-4 rounded-lg animate__animated animate__fadeIn animate__fast"
             style={{ animationDelay: '1.5s' }}
           >
             Get Started

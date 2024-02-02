@@ -8,6 +8,8 @@ import 'animate.css';
 import styles from './Welcome.module.css';
 import ReactDOM from 'react-dom';
 import { Button } from '@/components/catalyst/button';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 type PopupContentProps = {
   placeName: string;
@@ -108,7 +110,9 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
 
     const currentPopupRef = popupRef.current;
     return () => {
-      currentPopupRef.remove();
+      if (currentPopupRef) {
+        currentPopupRef.remove();
+      }
       map.remove();
       geocoder.clear();
     };
@@ -116,16 +120,24 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
   }, [token, popupRef, buttonOnClick]);
 
   return (
-    <div className={`flex flex-col px-2 py-16 sm:py-8 justify-center items-center relative h-full w-full transition-opacity duration-500 overscroll-none ${isMapLoaded ? 'opacity-100' : 'opacity-0'}`}>
-      <Text
-        className='mb-6 text-center animate__animated animate__fadeIn'
-        style={{ animationDelay: '0.1s' }}
-      >
-        Type in your address to get started
-      </Text>
-      <div ref={mapContainer} className='mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-4/5 rounded-2xl'>
-        <div ref={geocoderRef} className="absolute z-10 w-1/2 top-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center"></div>
-      Bbu</div>
-    </div>
+    <>
+      <div className={`flex flex-col px-2 py-16 sm:py-8 justify-center items-center relative h-full w-full overscroll-none`}>
+        <Text
+          className='mb-6 text-center animate__animated animate__fadeIn'
+          style={{ animationDelay: '0.2s' }}
+        >
+          Type in your address to get started
+        </Text>
+        <div 
+          ref={mapContainer} 
+          className={`mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-4/5 rounded-2xl transition-opacity appearance-none animate__animated animate__fadeIn`}
+          style={{ animationDelay: '0.4s' }}
+        >
+          {!isMapLoaded && <Skeleton containerClassName="flex-1" borderRadius="1rem" height="100%"/>}
+          <div ref={geocoderRef} className="absolute z-10 w-1/2 top-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center">
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

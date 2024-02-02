@@ -34,11 +34,11 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
           src={logo}
           className='animate__animated animate__fadeIn animate__fast mx-auto w-12 sm:w-16'
           alt="Cribbly logo"
-          style={{ animationDelay: '0.2s' }}
+          style={{ animationDelay: '0.1s' }}
         />
         <h2 
           className='text-xl sm:text-2xl font-semibold text-nowrap text-gray-500 mb-4 mt-2 animate__animated animate__fadeIn animate__fast'
-          style={{ animationDelay: '0.4s' }}
+          style={{ animationDelay: '0.2s' }}
         >
           How shall we call you?
         </h2>
@@ -52,7 +52,7 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
             id="name"
             className={`${formClasses} ${styles.inputCenterText}`}
             placeholder="Full name"
-            style={{ animationDelay: '0.6s' }}
+            style={{ animationDelay: '0.3s' }}
             required={true}
             onChange={handleInputChange}
           />
@@ -60,8 +60,8 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
             type="submit"
             onClick={handleButtonClick}
             color='blue'
-            className="w-64 sm:w-80 h-10 text-sm mt-4 mb-12 py-2 px-4 rounded-md animate__animated animate__fadeIn animate__fast shrink"
-            style={{ animationDelay: '0.8s' }}
+            className="w-64 sm:w-80 h-10 text-sm mt-4 mb-12 py-2 px-4 rounded-md animate__animated animate__fadeIn"
+            style={{ animationDelay: '0.4s' }}
           >
             Next
           </Button>
