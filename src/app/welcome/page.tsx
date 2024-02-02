@@ -3,6 +3,7 @@ import { WelcomeMap } from "@/components/welcome/WelcomeMap"
 import { useState } from "react";
 import { Step0 } from '@/components/welcome/Step0'
 import { AutofilledProperty } from "@/components/welcome/AutofilledProperty";
+import { InputName } from '@/components/welcome/InputName'
 
 export default function Welcome() {
   const [currentStep, setCurrentStep] = useState(2);
@@ -34,7 +35,7 @@ export default function Welcome() {
       case 1:
         return (
           <div className="w-full h-full px-32 pb-28 pt-16">
-            Content for Step 1
+            <InputName />
           </div>
         );
       case 2:
