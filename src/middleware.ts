@@ -59,6 +59,12 @@ export async function middleware(request: NextRequest) {
 
   const url = request.nextUrl.clone();
   const { pathname } = request.nextUrl;
+
+  const deprecatedPaths = ['/forgot-password', '/update-password']
+  if (deprecatedPaths.some(path => pathname.startsWith(path))) {
+    url.pathname = '/get-started';
+    return NextResponse.redirect(url)
+  }
   
   // Google sign in?
   if (pathname === '/' && url.searchParams.has('code')) {
