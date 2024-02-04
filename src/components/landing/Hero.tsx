@@ -1,18 +1,12 @@
+"use client"
 import Image from 'next/image'
-
 import { Button } from '@/components/default/Button'
 import { Container } from '@/components/default/Container'
-import logoLaravel from '@/images/logos/laravel.svg'
-import logoMirage from '@/images/logos/mirage.svg'
-import logoStatamic from '@/images/logos/statamic.svg'
-import logoStaticKit from '@/images/logos/statickit.svg'
-import logoTransistor from '@/images/logos/transistor.svg'
-import logoTuple from '@/images/logos/tuple.svg'
 
 export function Hero() {
   return (
     <Container className="pb-16 pt-20 text-center lg:pt-32">
-      <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl">
+      <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl select-none">
         Property management{' '}
         <span className="relative whitespace-nowrap text-blue-600">
           <svg
@@ -29,7 +23,7 @@ export function Hero() {
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
         Most property management software is accurate, but hard to use. We make the
-        opposite trade-off, and hope you don’t get sued.
+        opposite trade-off.
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
         <Button href="/get-started">Get 6 months free</Button>

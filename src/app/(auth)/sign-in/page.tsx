@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Button } from '@/components/default/Button'
+import { Button } from '@/components/catalyst/button'
 import { TextField } from '@/components/default/Fields'
 import { type Metadata } from 'next'
 import logo from '@/images/logo-cropped.svg'
@@ -7,6 +7,8 @@ import Image from 'next/image'
 import { Apple } from '@/components/auth/Apple'
 import { GoogleSignIn } from '@/components/auth/GoogleSignIn'
 import { Notification } from '@/components/Notification'
+import { SlimLayout } from '@/components/default/SlimLayout'
+import { signInWithOtp } from '@/app/auth/action'
 
 export const metadata: Metadata = {
   title: 'Sign in',
@@ -14,81 +16,42 @@ export const metadata: Metadata = {
 
 export default function SignIn() {
   return (
-    <>
+    <SlimLayout>
       <Notification />
-      <div className="flex min-h-full flex-1 flex-col sm:justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 sm:bg-gray-100">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          {/* <Link href="/" aria-label="Home">
-            <Image
-              className='h-8 mx-auto w-auto'
-              src={logo}
-              alt=""
-              // unoptimized
-              // priority={false}
-            />
-          </Link> */}
-          <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-2xl font-medium leading-9 text-gray-900 tracking-wide">
-            Welcome back
-          </h2>
-          <h3 className="px-6 sm:px-0 text-gray-500 text-sm">
+      {/* <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50"> */}
+        <div className="sm:w-full sm:max-w-md">
+          <Image
+            className='h-7 w-auto'
+            src={logo}
+            alt=""
+            unoptimized
+            priority={false}
+          />
+          <h2 className="mt-12 text-lg font-semibold text-gray-900">
             Sign in to your account
-          </h3>
+          </h2>
         </div>
 
-        <div className="sm:mt-6 sm:mx-auto sm:w-full sm:max-w-[480px]">
-          <div className="bg-gray-50 px-6 py-6 sm:py-12 sm:shadow sm:rounded-lg sm:px-12">
-            <form className="space-y-6" action="/auth/sign-in" method="POST">
+        <div className="sm:mt-4 sm:mx-auto">
+          <div className="">
+            <form className="space-y-6" action={signInWithOtp}>
               <div>
                 <div className="mt-2">
                   <TextField
-                    label="Email address"
+                    label=""
                     name="email"
                     type="email"
                     autoComplete="email"
-                    placeholder='you@example.com'
+                    placeholder='Enter your email address...'
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <div className="mt-2">
-                  <TextField
-                    label="Password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    id="current-password"
-                    placeholder='••••••••'
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="invisible flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                  />
-                  <label htmlFor="remember-me" className="ml-3 block text-sm leading-6 text-gray-900">
-                    Remember me
-                  </label>
-                </div>
-
-                <div className="text-sm leading-6">
-                  <a href="/forgot-password" className="font-semibold text-blue-600 hover:text-blue-500 cursor-default">
-                    Forgot password?
-                  </a>
-                </div>
-              </div>
-
-              <div>
-                <Button type="submit" variant="solid" color="blue" className="w-full cursor-default">
+                <Button type="submit" color="blue" className="w-full cursor-default">
                   <span>
-                    Sign in <span aria-hidden="true">&rarr;</span>
+                    Continue
                   </span>
                 </Button>
               </div>
@@ -100,30 +63,17 @@ export default function SignIn() {
                   <div className="w-full border-t border-gray-200" />
                 </div>
                 <div className="relative flex justify-center text-sm font-medium leading-6">
-                  <span className="bg-gray-50 px-6 text-gray-900">Or continue with</span>
+                  {/* <span className="bg-gray-50 px-6 text-gray-900">Or continue with</span> */}
                 </div>
               </div>
 
               <div className="mt-6 grid grid-cols-1 gap-4">
                 <GoogleSignIn />
-                {/* <Link
-                  href="#"
-                  className="flex w-full items-center justify-center gap-3 rounded-md bg-[#080808] shadow-sm px-3 py-1.5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#080808]"
-                >
-                  <Apple />
-                </Link> */}
               </div>
             </div>
           </div>
-
-          <p className="sm:mt-10 text-center text-sm text-gray-500">
-            Don&apos;t have an account?{' '}
-            <a href="/get-started" className="font-semibold leading-6 text-blue-600 hover:text-blue-500 cursor-default">
-              Sign up here
-            </a>
-          </p>
         </div>
-      </div>
-    </>
+      {/* </div> */}
+    </SlimLayout>
   )
 }

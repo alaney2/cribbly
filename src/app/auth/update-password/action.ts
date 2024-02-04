@@ -18,7 +18,6 @@ export async function updatePassword(code: string, formData: FormData) {
 
   if (error) {
     console.log('error', error)
-
     redirect('/sign-in?error=Could not update password')
   }
 

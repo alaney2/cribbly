@@ -79,7 +79,7 @@ export function PrimaryFeatures() {
             Our all-in-one solution is everything you need.
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
-            Managing multiple properties is complex. We make it as easy as calling 911.
+            Managing multiple properties is complex. We make it as easy as calling the cops.
           </p>
         </div>
         <Tab.Group

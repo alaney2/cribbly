@@ -10,6 +10,7 @@ import ReactDOM from 'react-dom';
 import { Button } from '@/components/catalyst/button';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import Script from 'next/script'
 
 type PopupContentProps = {
   placeName: string;
@@ -46,6 +47,10 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
   const mapContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (mapboxgl.supported() === false) {
+      alert('Your browser does not support Mapbox GL');
+      return;
+    }
     mapboxgl.accessToken = token
 
     const map = new mapboxgl.Map({
@@ -121,6 +126,8 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
 
   return (
     <>
+      <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js'></Script>
+
       <div className={`flex flex-col px-2 py-16 sm:py-8 justify-center items-center relative h-full w-full overscroll-none`}>
         <Text
           className='mb-6 text-center animate__animated animate__fadeIn'

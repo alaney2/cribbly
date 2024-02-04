@@ -1,12 +1,12 @@
 import { SetStateAction, useState } from 'react';
 import logo from '@/images/icon.png'
 import Image from 'next/image';
-
 import styles from './Welcome.module.css';
 import { Button } from '@/components/catalyst/button'
+import { setFullName } from '@/components/welcome/action'
 
 const formClasses =
-  'block text-sm w-64 sm:w-80 h-10 appearance-none bg-gray-50 rounded-md border-1 border-gray-200 bg-white px-3 py-1.5 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 text-center animate__animated animate__fadeIn animate__fast'
+  'block text-sm w-72 sm:w-80 h-10 appearance-none bg-gray-50 rounded-md border-1 border-gray-200 bg-white px-3 py-1.5 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 text-center animate__animated animate__fadeIn animate__fast'
 
 
 export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
@@ -19,6 +19,7 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
     const isInputEmpty = inputValue.trim() === '';
     console.log(inputValue.trim())
     if (isInputEmpty) return;
+    // setFullName();
     setFadeOut(true);
     setTimeout(buttonOnClick, 300);
   };
@@ -60,7 +61,7 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
             type="submit"
             onClick={handleButtonClick}
             color='blue'
-            className="w-64 sm:w-80 h-10 text-sm mt-4 mb-12 py-2 px-4 rounded-md animate__animated animate__fadeIn"
+            className="w-72 sm:w-80 h-10 text-sm mt-4 mb-12 py-2 px-4 rounded-md animate__animated animate__fadeIn"
             style={{ animationDelay: '0.4s' }}
           >
             Next

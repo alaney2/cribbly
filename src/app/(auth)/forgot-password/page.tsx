@@ -9,9 +9,9 @@ import logo from '@/images/logo-cropped.svg'
 import Image from 'next/image'
 import { Notification } from '@/components/Notification'
 
-// export const metadata: Metadata = {
-//   title: 'Forgot password',
-// }
+export const metadata: Metadata = {
+  title: 'Forgot password',
+}
 
 export default function ForgotPassword() {
   return (

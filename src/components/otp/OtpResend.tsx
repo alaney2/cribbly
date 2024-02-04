@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import clsx from 'clsx'
 
 export function OtpResend({ email }: { email: string }) {
-  const [cooldownTime, setCooldownTime] = useState(30);
+  const [cooldownTime, setCooldownTime] = useState(60);
 
   useEffect(() => {
     if (cooldownTime > 0) {

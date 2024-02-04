@@ -14,3 +14,5 @@ lemon squeezy
 
 Open Runde font
 Can Sans for headlines
+
+property management software for small landlords

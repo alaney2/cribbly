@@ -1,3 +1,4 @@
+import React from 'react'
 import { CallToAction } from '@/components/landing/CallToAction'
 import { Faqs } from '@/components/landing/Faqs'
 import { Footer } from '@/components/landing/Footer'
@@ -8,8 +9,9 @@ import { PrimaryFeatures } from '@/components/landing/PrimaryFeatures'
 import { SecondaryFeatures } from '@/components/landing/SecondaryFeatures'
 import { Testimonials } from '@/components/landing/Testimonials'
 import { NavLink } from '@/components/default/NavLink'
+import { Container } from '@/components/default/Container'
 
-export default async function Home() {
+export default function Home() {
 
   return (
     <>
@@ -18,10 +20,10 @@ export default async function Home() {
         <Hero />
         <PrimaryFeatures />
         <SecondaryFeatures />
-        {/* <CallToAction /> */}
+        <CallToAction />
         {/* <Testimonials /> */}
         {/* <Pricing /> */}
-        {/* <Faqs /> */}
+        <Faqs />
       </main>
       <Footer />
     </>

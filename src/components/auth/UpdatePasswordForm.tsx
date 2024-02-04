@@ -4,6 +4,8 @@ import { Button } from '@/components/default/Button'
 import { useState } from 'react'
 import clsx from 'clsx'
 import { UnfilledCheck, FilledCheck, OpenEye, ClosedEye } from '@/components/auth/PasswordChecks'
+import { updatePassword } from '@/app/auth/update-password/action'
+import { useSearchParams } from 'next/navigation'
 
 const checkClasses = 'flex items-center gap-1 space-x-1.5 transition duration-200 text-foreground-lighter'
 
@@ -18,7 +20,10 @@ export function UpdatePasswordForm() {
   const [hasSpecialChar, setHasSpecialChar] = useState(false)
   const [hasMinLength, setHasMinLength] = useState(false)
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  
+
+  const searchParams = useSearchParams()
+  const code = searchParams.get('code')
+  const updatePasswordWithCode = updatePassword.bind(null, code!)
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value
@@ -37,7 +42,7 @@ export function UpdatePasswordForm() {
   };
   
   return (
-    <form method="POST" className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
+    <form method="POST" action={updatePasswordWithCode} className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
       <div className="relative col-span-full">
         <TextField
           className="col-span-full"
@@ -57,13 +62,6 @@ export function UpdatePasswordForm() {
           </button>
         </div>
       </div>
-      {/* <SelectFieldNew
-        className="col-span-full"
-        label="How did you hear about us?"
-        name="referral_source"
-        optional={true}
-        options={["Select option", "Word of mouth", 'Google Ads', 'Facebook Ads']}
-      /> */}
       <div className={clsx("col-span-full transition-all duration-500 ease-in-out overflow-y-hidden text-gray-600", isPasswordFocused ? "opacity-100 max-h-[500px]" : "opacity-0 max-h-0")}>
         <div className="text-sm">
           <div className={checkClasses}>
@@ -89,7 +87,7 @@ export function UpdatePasswordForm() {
         </div>
       </div>
       <div className="col-span-full">
-        <Button formAction="/auth/update-password" type="submit" variant="solid" color="blue" 
+        <Button type="submit" variant="solid" color="blue" 
           className={clsx('w-full ease-out duration-200 outline-none transition-all', isButtonEnabled ? 'brightness-100' : 'brightness-75')} 
           disabled={!isButtonEnabled}
         >

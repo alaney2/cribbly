@@ -59,7 +59,8 @@ export async function middleware(request: NextRequest) {
 
   const url = request.nextUrl.clone();
   const { pathname } = request.nextUrl;
-
+  
+  // Google sign in?
   if (pathname === '/' && url.searchParams.has('code')) {
     const code = url.searchParams.get('code');
     const { data } = await supabase.auth.exchangeCodeForSession(code!);
@@ -97,14 +98,14 @@ export async function middleware(request: NextRequest) {
     userAuthenticated = true;
     const { data, error } = await supabase.auth.getUser()
 
-    if (url.pathname !== '/welcome' && !data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true) {
+    if (pathname !== '/welcome' && (!data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true)) {
       url.pathname = '/welcome';
       return NextResponse.redirect(url);
     }
 
     const unavailableRoutes = ['/sign-in', '/get-started', '/forgot-password', '/update-password'];
     // Can't sign in or sign up if already logged in
-    if (url.pathname === '/' || unavailableRoutes.some(path => url.pathname.startsWith(path))) {
+    if (pathname === '/' || unavailableRoutes.some(path => url.pathname.startsWith(path))) {
         url.pathname = '/dashboard';
         return NextResponse.redirect(url);
     } else {
@@ -115,17 +116,17 @@ export async function middleware(request: NextRequest) {
   const pathsWithoutAuth = ['/sign-in', '/get-started', '/forgot-password', '/update-password', '/privacy'];
 
   // Redirect to login if not authenticated
-  if (!userAuthenticated && url.pathname !== '/' && !pathsWithoutAuth.some(path => url.pathname.startsWith(path))) {
+  if (!userAuthenticated && pathname !== '/' && !pathsWithoutAuth.some(path => pathname.startsWith(path))) {
     url.pathname = '/';
     return NextResponse.redirect(url);
   }
 
-  if (!userAuthenticated && !cookies().has(process.env.NEXT_PUBLIC_SUPABASE_STRING + '-auth-token-code-verifier') && url.pathname.startsWith('/update-password')) {
+  if (!userAuthenticated && !cookies().has(process.env.NEXT_PUBLIC_SUPABASE_STRING + '-auth-token-code-verifier') && pathname.startsWith('/update-password')) {
     url.pathname = '/forgot-password';
     return NextResponse.redirect(url);
   }
 
-  if (!cookies().has('email') && url.pathname === '/get-started/otp') {
+  if (!cookies().has('email') && pathname === '/get-started/otp') {
     url.pathname = '/get-started';
     return NextResponse.redirect(url);
   }
