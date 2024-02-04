@@ -60,6 +60,10 @@ export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const { pathname } = request.nextUrl;
 
+  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/favicon.ico') || pathname.startsWith('/auth')) {
+    return NextResponse.next();
+  }
+
   const deprecatedPaths = ['/forgot-password', '/update-password', '/get-started/otp']
   if (deprecatedPaths.some(path => pathname.startsWith(path))) {
     url.pathname = '/get-started';
@@ -87,16 +91,14 @@ export async function middleware(request: NextRequest) {
     return response
   }
   
-  if (pathname === '/update-password') {
-    if (!url.searchParams.has('code')) {
-      url.pathname = '/forgot-password';
-      return NextResponse.redirect(url)
-    }
-  }
+  // if (pathname === '/update-password') {
+  //   if (!url.searchParams.has('code')) {
+  //     url.pathname = '/forgot-password';
+  //     return NextResponse.redirect(url)
+  //   }
+  // }
 
-  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/favicon.ico') || pathname.startsWith('/auth')) {
-    return NextResponse.next();
-  }
+  
   
   let userAuthenticated = false;
 
@@ -109,7 +111,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    const unavailableRoutes = ['/sign-in', '/get-started', '/forgot-password', '/update-password'];
+    const unavailableRoutes = ['/sign-in', '/get-started'];
     // Can't sign in or sign up if already logged in
     if (pathname === '/' || unavailableRoutes.some(path => url.pathname.startsWith(path))) {
         url.pathname = '/dashboard';
@@ -119,7 +121,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const pathsWithoutAuth = ['/sign-in', '/get-started', '/forgot-password', '/update-password', '/privacy'];
+  const pathsWithoutAuth = ['/sign-in', '/get-started', '/privacy'];
 
   // Redirect to login if not authenticated
   if (!userAuthenticated && pathname !== '/' && !pathsWithoutAuth.some(path => pathname.startsWith(path))) {
@@ -127,15 +129,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (!userAuthenticated && !cookies().has(process.env.NEXT_PUBLIC_SUPABASE_STRING + '-auth-token-code-verifier') && pathname.startsWith('/update-password')) {
-    url.pathname = '/forgot-password';
-    return NextResponse.redirect(url);
-  }
+  // if (!userAuthenticated && !cookies().has(process.env.NEXT_PUBLIC_SUPABASE_STRING + '-auth-token-code-verifier') && pathname.startsWith('/update-password')) {
+  //   url.pathname = '/forgot-password';
+  //   return NextResponse.redirect(url);
+  // }
 
-  if (!cookies().has('email') && pathname === '/get-started/otp') {
-    url.pathname = '/get-started';
-    return NextResponse.redirect(url);
-  }
+  // if (!cookies().has('email') && pathname === '/get-started/otp') {
+  //   url.pathname = '/get-started';
+  //   return NextResponse.redirect(url);
+  // }
 
   // await supabase.auth.getSession()
 
