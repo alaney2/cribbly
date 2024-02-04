@@ -6,7 +6,7 @@ import { AutofilledProperty } from "@/components/welcome/AutofilledProperty";
 import { InputName } from '@/components/welcome/InputName'
 
 export default function Welcome() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
     { name: 'Step 0', href: '' },
@@ -20,7 +20,6 @@ export default function Welcome() {
     if (stepIndex < currentStep) {
       setCurrentStep(stepIndex);
     }
-    // setCurrentStep(stepIndex);
   };
 
   const renderStepContent = (stepIndex: number) => {

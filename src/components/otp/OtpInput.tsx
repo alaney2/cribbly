@@ -105,7 +105,7 @@ export function OtpInput({ email }: { email: string } ) {
         type="submit"
         variant="solid"
         color={isSubmitting ? 'lightblue' : 'blue'}
-        className="w-full mt-6 h-10"
+        className="w-full h-10"
       >
         {isSubmitting ? <Spinner /> : 'Submit'}
       </Button>
