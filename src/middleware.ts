@@ -91,21 +91,11 @@ export async function middleware(request: NextRequest) {
     return response
   }
   
-  // if (pathname === '/update-password') {
-  //   if (!url.searchParams.has('code')) {
-  //     url.pathname = '/forgot-password';
-  //     return NextResponse.redirect(url)
-  //   }
-  // }
-
-  
-  
   let userAuthenticated = false;
 
   if (cookies().has('currentUser')) {
     userAuthenticated = true;
     const { data, error } = await supabase.auth.getUser()
-
     if (pathname !== '/welcome' && (!data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true)) {
       url.pathname = '/welcome';
       return NextResponse.redirect(url);
@@ -122,25 +112,11 @@ export async function middleware(request: NextRequest) {
   }
 
   const pathsWithoutAuth = ['/sign-in', '/get-started', '/privacy'];
-
   // Redirect to login if not authenticated
   if (!userAuthenticated && pathname !== '/' && !pathsWithoutAuth.some(path => pathname.startsWith(path))) {
     url.pathname = '/';
     return NextResponse.redirect(url);
   }
 
-  // if (!userAuthenticated && !cookies().has(process.env.NEXT_PUBLIC_SUPABASE_STRING + '-auth-token-code-verifier') && pathname.startsWith('/update-password')) {
-  //   url.pathname = '/forgot-password';
-  //   return NextResponse.redirect(url);
-  // }
-
-  // if (!cookies().has('email') && pathname === '/get-started/otp') {
-  //   url.pathname = '/get-started';
-  //   return NextResponse.redirect(url);
-  // }
-
-  // await supabase.auth.getSession()
-
-  // return response
   return NextResponse.next();
 }
