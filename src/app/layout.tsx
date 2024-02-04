@@ -55,6 +55,7 @@ export default function RootLayout({
         lexend.variable,
       )}
     >
+      <meta property="twitter:image" content="../images/icon.png"></meta>
       <Script
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-MTXEMYC4EM"
