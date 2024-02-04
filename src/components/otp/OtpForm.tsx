@@ -1,39 +1,38 @@
 import clsx from 'clsx'
+import { useState } from 'react'
 import { Button } from '@/components/default/Button'
-import { cookies } from 'next/headers'
 import { OtpResend } from '@/components/otp/OtpResend'
 import { OtpInput } from '@/components/otp/OtpInput'
+import 'animate.css'
 
-export function OtpForm() {
-  const cookieStore = cookies()
-  const email = cookieStore.get('email')?.value
+interface OtpFormProps {
+  email: string;
+  backToSignIn: () => void;
+}
 
-  if (!email) {
-    return null;
+export function OtpForm( { email, backToSignIn }: OtpFormProps ) {
+  const [fadeOut, setFadeOut] = useState(false);
+
+  const handleButtonSubmit = () => {
+    setFadeOut(true)
+    setTimeout(() => {
+      backToSignIn();
+    }, 400);
   }
 
-  const formatEmail = (email: string | string[] | null | undefined) => {
-    if (email) {
-      const atIndex = email.indexOf('@');
-      if (atIndex > 7) {
-        return `${email.slice(0, 3)}***${email.slice(atIndex - 2, atIndex)}${email.slice(atIndex)}`;
-      }
-      return email;
-    }
-    return '';
-  };
-
   return (
-    <>
+    <div className={clsx('animate__animated animate__fastest', fadeOut ? `animate__fadeOut` : 'animate__fadeIn animate__fastest')}>
       <div className="text-center mb-4 text-sm text-gray-400">
-        <p>A verification code has been sent to your email</p>
-        <p>{formatEmail(email)}</p>
+        <p>We&apos;ve sent a verification code to your email</p>
+        <p>{email}</p>
       </div>
       <div className="flex flex-col">
-        {/* <input type="hidden" name="email" value={email} /> */}
-        <OtpInput />
-        <OtpResend email={email!} />
+        <OtpInput email={email} />
+        <OtpResend email={email} />
+        <button onClick={handleButtonSubmit} className="mt-16 text-sm tracking-tight font-medium text-center leading-6 text-blue-500 active:text-gray-500 cursor-default">
+          Back to sign-in
+        </button>
       </div>
-    </>
+    </div>
   )
 }

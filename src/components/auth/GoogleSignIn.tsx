@@ -9,7 +9,7 @@ export function GoogleSignIn() {
       onClick={async () => {
         await signInGoogle()
       }}
-      className="flex w-full items-center justify-center gap-3 rounded-md bg-white shadow-sm px-3 py-1.5 text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white hover:bg-gray-100 active:text-slate-900 active:bg-gray-200 cursor-default"
+      className="flex w-full h-10 items-center justify-center gap-3 rounded-md bg-blue-600 shadow-sm px-3 py-1.5 text-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white hover:bg-blue-700 cursor-default"
     >
       <Google />
     </button>

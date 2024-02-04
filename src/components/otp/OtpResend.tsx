@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import clsx from 'clsx'
+import { Text } from '@/components/catalyst/text'
 
 export function OtpResend({ email }: { email: string }) {
   const [cooldownTime, setCooldownTime] = useState(60);
@@ -36,11 +37,11 @@ export function OtpResend({ email }: { email: string }) {
   };
 
   return (
-    <div className="text-center mt-6 text-sm text-gray-500">
+    <div className="text-center mt-6 text-sm tracking-tight text-gray-400 font-medium">
       <p>Didn&apos;t receive code?{' '}
         <button
-          className={clsx("font-semibold cursor-default",
-                          cooldownTime > 0 ? 'text-blue-400 hover:text-blue-400 cursor-default' : 'text-blue-600 hover:text-blue-500' )}
+          className={clsx("font-semibold",
+                          cooldownTime > 0 ? 'text-blue-300 hover:text-blue-400 cursor-not-allowed' : 'text-blue-500 active:text-gray-500 cursor-default' )}
           onClick={handleResendOtp}
           disabled={cooldownTime > 0}
         >

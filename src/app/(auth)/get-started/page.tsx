@@ -1,72 +1,133 @@
-import Link from 'next/link'
-import { Logo } from '@/components/Logo'
-import { type Metadata } from 'next'
-import { SignUpForm } from '@/components/auth/SignUpForm'
-import logo from '@/images/logo-cropped.svg'
-import icon from '@/images/icon.png'
+"use client"
+import { useState, useEffect, useRef } from 'react'
+import { Button } from '@/components/catalyst/button'
+import { TextField } from '@/components/default/Fields'
+import logo from '@/images/icon.png'
 import Image from 'next/image'
-import { Apple } from '@/components/auth/Apple'
 import { GoogleSignIn } from '@/components/auth/GoogleSignIn'
 import { Notification } from '@/components/Notification'
+import { SlimLayout } from '@/components/default/SlimLayout'
+import styles from '@/components/welcome/Welcome.module.css';
+import { signInWithOtp } from '@/app/auth/action'
+import { OtpForm } from '@/components/otp/OtpForm'
+import 'animate.css'
+import clsx from 'clsx'
 
-export const metadata: Metadata = {
-  title: 'Get started',
-}
+const formClasses = `
+    block text-sm w-full h-10 mb-4 appearance-none bg-gray-50 rounded-md 
+    border-0.5 border-gray-200 bg-white px-3 py-1.5 text-gray-900 
+    placeholder-gray-400 focus:border-blue-500 focus:outline-none 
+    focus:ring-blue-500 sm:text-sm ring-1 focus:ring-0.5 ring-inset ring-gray-300 
+    text-center animate__animated animate__fadeIn animate__fast
+    transition-colors duration-300 box-border	`;
 
-export default function SignIn() {
-  return (
-    <>
-      <Notification />
-      <div className="flex min-h-full flex-1 flex-col sm:justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 sm:bg-gray-100">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          {/* <Link href="/" aria-label="Home">
-            <Image
-              className='mx-auto h-8 w-auto'
-              src={logo}
-              alt=""
-            />
-          </Link> */}
-          <h2 className="px-6 sm:px-0 mt-8 sm:mt-10 text-2xl font-medium leading-9 tracking-normal text-gray-900">
-            Get started
-          </h2>
-          <h3 className="text-gray-500 text-sm px-6 sm:px-0">
-            Create a new account
-          </h3>
-        </div>
+export default function GetStarted() {
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [buttonType, setButtonType] = useState<'submit' | 'button' | 'reset'>('button');
+  const [fadeOut, setFadeOut] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [email, setEmail] = useState('');
+  const emailInputRef = useRef<HTMLInputElement>(null);
 
-        <div className="sm:mt-6 sm:mx-auto sm:w-full sm:max-w-[480px]">
-          <div className="bg-gray-50 px-6 py-6 sm:py-12 sm:shadow sm:rounded-lg sm:px-12">
-            <SignUpForm />
-            <div>
-              <div className="relative mt-10">
-                <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                  <div className="w-full border-t border-gray-200" />
-                </div>
-                <div className="relative flex justify-center text-sm font-medium leading-6">
-                  <span className="bg-gray-50 px-6 text-gray-900">Or sign up with</span>
-                </div>
-              </div>
+  useEffect(() => {
+    setFadeOut(false);
+    if (showEmailInput && emailInputRef && emailInputRef.current) {
+      emailInputRef.current.focus();
+    }
+  }, [showEmailInput]);
 
+  const backToSignIn = () => {
+    setShowEmailInput(false);
+    setFadeOut(false);
+    setButtonType('button');
+    setEmail('');
+    setCurrentStep(0);
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  }
+
+  const handleButtonClick = () => {
+    setShowEmailInput(true)
+    setTimeout(() => {
+      setButtonType('submit')
+    }, 0)
+  }
+
+  const handleButtonSubmit = () => {
+    setFadeOut(true)
+    setTimeout(() => {
+      setCurrentStep(1);
+    }, 400)
+  }
+
+  const renderStepContent = (stepIndex: number) => {
+    switch(stepIndex) {
+      case 0:
+        return (
+          <div className={clsx('animate__animated', fadeOut ? `animate__fadeOut animate__fastest` : 'animate__fadeIn animate__fastest')}>
+            <div className="sm:w-full sm:max-w-md">
+              <Image
+                className='h-16 w-auto mx-auto'
+                src={logo}
+                alt=""
+                priority={false}
+              />
+              <h2 className="text-center my-6 text-lg font-semibold text-zinc-600">
+                Create your Cribbly account
+              </h2>
+            </div>
+
+            <div className="sm:mx-auto">              
               <div className="mt-6 grid grid-cols-1 gap-4">
                 <GoogleSignIn />
-                {/* <Link
-                  href="#"
-                  className="flex w-full items-center justify-center gap-3 rounded-md bg-[#080808] shadow-sm px-3 py-1.5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#080808]"
-                >
-                  <Apple />
-                </Link> */}
               </div>
+
+              <div className="relative my-4 mx-4">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center text-sm font-medium leading-6">
+                </div>
+              </div>
+              <form className="" action={signInWithOtp}>
+                {showEmailInput && (
+                  <input
+                    ref={emailInputRef}
+                    type="email"
+                    name="email"
+                    id="email"
+                    className={`${formClasses} ${styles.inputCenterText}`}
+                    placeholder="Email"
+                    onChange={handleInputChange}
+                    required={true}
+                  />
+                )}
+                <Button type={buttonType} color="light" className="w-full h-10 text-zinc-600 cursor-default"
+                  onClick={buttonType === 'button' ? handleButtonClick : handleButtonSubmit}
+                >
+                  <span>
+                    Continue with Email
+                  </span>
+                </Button>
+              </form>
             </div>
           </div>
+        )
+      case 1:
+        return (
+          <OtpForm email={email} backToSignIn={backToSignIn} />
+        )
+      default:
+        return null;
+    }
+  }
 
-          <p className="sm:mt-10 text-center text-sm text-gray-500 bg-gray-50 sm:bg-gray-100">
-            Already registered?{' '}
-            <a href="/sign-in" className="font-semibold leading-6 text-blue-600 hover:text-blue-500 cursor-default">
-              Sign in here
-            </a>
-          </p>
-        </div>
-      </div>
-    </>
+  return (
+    <SlimLayout>
+      <Notification />
+      {renderStepContent(currentStep)}
+    </SlimLayout>
   )
 }

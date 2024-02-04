@@ -9,6 +9,7 @@ export async function signInWithOtp(formData: FormData) {
   const supabase = createClient(cookieStore)
 
   const email = String(formData.get('email'))
+  console.log('EMAIL', email)
   const { data, error } = await supabase.auth.signInWithOtp({
     email: email,
   })

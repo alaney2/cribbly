@@ -1,13 +1,11 @@
+"use server"
 import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
-export async function POST(request: Request) {
-  const requestUrl = new URL(request.url)
-  const formData = await request.formData()
+export async function verifyOtp(email: string, formData: FormData) {
   const cookieStore = cookies()
-
-  const email = cookieStore.get('email')?.value
 
   let token = '';
   for (let i = 0; i < 6; i++) {
@@ -22,15 +20,10 @@ export async function POST(request: Request) {
     const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
 
     if (error) {
-      return NextResponse.redirect(
-        `${requestUrl.origin}/get-started/otp?error=Invalid verification code`,
-        {
-          status: 301,
-        }
-      );
+      redirect('/get-started/otp?error=Invalid verification code')
     }
 
-    // Handle the successful verification
+    // Handle successful verification
     if (data) {
       const user = {
         id: data?.user?.id,
@@ -48,27 +41,14 @@ export async function POST(request: Request) {
       cookieStore.delete('email');
       
       if (!data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true) {
-        return NextResponse.redirect(
-          `${requestUrl.origin}/welcome`,
-          {
-            status: 301,
-          }
-        );
+        redirect('/welcome')
       }
 
-      return NextResponse.redirect(
-        `${requestUrl.origin}/dashboard`,
-        {
-          status: 301,
-        }
-      );
+      redirect('/dashboard')
     }
   }
 
   return NextResponse.redirect(
-    `${requestUrl.origin}/get-started?error=Invalid email`,
-    {
-      status: 301,
-    }
+    redirect('/get-started?error=Invalid email')
   )
 }
