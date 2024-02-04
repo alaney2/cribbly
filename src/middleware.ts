@@ -60,7 +60,7 @@ export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const { pathname } = request.nextUrl;
 
-  const deprecatedPaths = ['/forgot-password', '/update-password']
+  const deprecatedPaths = ['/forgot-password', '/update-password', '/get-started/otp']
   if (deprecatedPaths.some(path => pathname.startsWith(path))) {
     url.pathname = '/get-started';
     return NextResponse.redirect(url)

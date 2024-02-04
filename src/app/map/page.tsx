@@ -31,14 +31,14 @@ export default function Home() {
 
     // add markers to map
     // ... your marker code
-  }, []);
+  }, [token]);
 
   return (
     <div>
       <Head>
         <title>Demo: Add custom markers in Mapbox GL JS</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+        {/* <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" /> */}
       </Head>
       <div id="map" />
       <style jsx>{`

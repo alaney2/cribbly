@@ -35,7 +35,7 @@ export default function SignIn() {
 
         <div className="mt-8 sm:mt-16 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-gray-50 px-6 py-12 sm:shadow sm:rounded-lg sm:px-12">
-            <OtpForm />
+            {/* <OtpForm /> */}
           </div>
         </div>
       </div>
