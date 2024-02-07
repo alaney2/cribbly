@@ -22,8 +22,7 @@ export function Hero() {
         {/* for landlords. */}
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
-        Most property management software is accurate, but hard to use. We make the
-        opposite trade-off.
+        Manage your properties with ease and efficiency. Automate rent collection, maintenance requests, and view financial reports all in one place.
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
         <Button href="/get-started">Get 6 months free</Button>
