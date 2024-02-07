@@ -16,10 +16,11 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const isInputEmpty = inputValue.trim() === '';
-    console.log(inputValue.trim())
-    if (isInputEmpty) return;
-    // setFullName();
+    const fullName = inputValue.trim();
+    if (fullName === '') return;
+    if (typeof window !== "undefined") {
+      localStorage.setItem("fullName", fullName);
+    }
     setFadeOut(true);
     setTimeout(buttonOnClick, 300);
   };

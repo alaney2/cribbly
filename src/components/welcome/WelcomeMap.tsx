@@ -14,10 +14,23 @@ import Script from 'next/script'
 
 type PopupContentProps = {
   placeName: string;
-  onAdd: () => void;
+  buttonOnClick: () => void;
+  result: any;
+  setFadeOut: (fadeOut: boolean) => void;
 };
 
-const Popup = ({ placeName, onAdd }: PopupContentProps) => {
+const Popup = ({ placeName, buttonOnClick, result, setFadeOut }: PopupContentProps) => {
+  const onPopUpAdd = () => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("placeName", result['place_name_en-US']);
+      localStorage.setItem("text", result['text_en-US']);
+      console.log('here wtf')
+      console.log(localStorage.getItem("placeName"))
+    }
+    setFadeOut(true);
+    setTimeout(buttonOnClick, 300);
+  }
+
   return (
     <div className=''>
       <p className={styles.popupText}>{placeName}</p>
@@ -28,7 +41,7 @@ const Popup = ({ placeName, onAdd }: PopupContentProps) => {
       </div>
       <button color="blue" className='button mb-1 mt-3 bg-blue-500 rounded-md cursor-default select-none
         active:translate-y-1 active:[box-shadow:0_3px_0_0_#1b6ff8,0_4px_0_0_#1b70f841]
-        transition-all duration-150 [box-shadow:0_5px_0_0_#1b6ff8,0_7px_0_0_#1b70f841] border-b-0 px-2 py-0.5' onClick={onAdd}>
+        transition-all duration-150 [box-shadow:0_5px_0_0_#1b6ff8,0_7px_0_0_#1b70f841] border-b-0 px-2 py-0.5' onClick={onPopUpAdd}>
           <span className='flex flex-col justify-center items-center h-full text-white font-bold text-sm'>
             Add property
           </span>
@@ -40,6 +53,9 @@ const Popup = ({ placeName, onAdd }: PopupContentProps) => {
 export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_KEY!
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
+  const animationClass = fadeOut ? 'animate__animated animate__fadeOut animate__faster' : '';
+
   const popupRef = useRef(
     new mapboxgl.Popup({ offset: 50, closeOnClick: false, closeButton: false })
   )
@@ -70,20 +86,18 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
         console.log(item)
         return item.place_type[0] === 'address';
       },
-      // marker: new mapboxgl.Marker({ color: 'orange' }),
       mapboxgl: mapboxgl
     });
 
     geocoder.on('result', function (e) {
       const result = e.result;
-      console.log(result)
       if (popupRef.current) {
         popupRef.current.remove();
       }
       
       const popupNode = document.createElement("div")
       ReactDOM.render(
-        <Popup placeName={e.result.place_name.split(',')[0]} onAdd={buttonOnClick} />,
+        <Popup placeName={e.result.place_name.split(',')[0]} buttonOnClick={buttonOnClick} result={result} setFadeOut={setFadeOut} />,
         popupNode
       );
       popupRef.current
@@ -128,12 +142,12 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
     <>
       <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js'></Script>
 
-      <div className={`flex flex-col px-2 py-16 sm:py-8 justify-center items-center relative h-full w-full overscroll-none`}>
+      <div className={`flex flex-col px-2 py-16 sm:py-8 justify-center items-center relative h-full w-full overscroll-none ${animationClass}`}>
         <Text
           className='mb-6 text-center animate__animated animate__fadeIn'
           style={{ animationDelay: '0.2s' }}
         >
-          Type in your address to get started
+          Type in your rental property address to get started
         </Text>
         <div 
           ref={mapContainer} 
