@@ -1,8 +1,6 @@
 import { Inter, Lexend, Poppins } from 'next/font/google'
 import clsx from 'clsx'
 import { Analytics } from '@vercel/analytics/react';
-
-// import 'node_modules/leaflet-geosearch/dist/geosearch.css';
 import '@/styles/mapbox-gl.css';
 import '@/styles/geoencoder.css';
 // import 'https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css';
@@ -13,13 +11,14 @@ import { type Metadata } from 'next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from 'next/script';
 
+
 export const metadata: Metadata = {
   title: {
     template: '%s | Cribbly',
-    default: 'Cribbly | Property Management Made Easy',
+    default: 'Property Management Software for Small Landlords | Cribbly',
   },
   description:
-    'Most property management software is advanced, but hard to use. We make the opposite trade-off, and hope you don’t want advanced features.',
+    'Cribbly is the all-in-one property management software designed for small landlords. Its powerful platform automates rent collection, maintenance requests, and more.',
 }
 
 const inter = Inter({
@@ -56,6 +55,14 @@ export default function RootLayout({
       )}
     >
       <meta property="twitter:image" content="../images/icon.png"></meta>
+      <meta property="twitter:card" content="../images/icon.png"></meta>
+      <meta property="twitter:title" content="Property Management Software for Small Landlords | Cribbly"></meta>
+      <meta property="twitter:description" content="Cribbly is the all-in-one property management software designed for small landlords. Its powerful platform automates rent collection, maintenance requests, and more."></meta>
+      <meta property="og:image" content="../images/icon.png"></meta>
+      <meta property="og:title" content="Property Management Software for Small Landlords | Cribbly"></meta>
+      <meta property="og:description" content="Cribbly is the all-in-one property management software designed for small landlords. Its powerful platform automates rent collection, maintenance requests, and more." />
+      <meta property="og:url" content="https://cribbly.io"></meta>
+
       <Script
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-MTXEMYC4EM"

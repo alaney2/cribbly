@@ -6,7 +6,7 @@ import { AutofilledProperty } from "@/components/welcome/AutofilledProperty";
 import { InputName } from '@/components/welcome/InputName'
 
 export default function Welcome() {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(2);
 
   const steps = [
     { name: 'Step 0', href: '' },
