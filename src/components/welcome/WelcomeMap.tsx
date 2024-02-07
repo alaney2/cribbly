@@ -6,7 +6,7 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { Text, Strong } from '@/components/catalyst/text';
 import 'animate.css';
 import styles from './Welcome.module.css';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Button } from '@/components/catalyst/button';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -24,8 +24,9 @@ const Popup = ({ placeName, buttonOnClick, result, setFadeOut }: PopupContentPro
     if (typeof window !== "undefined") {
       localStorage.setItem("placeName", result['place_name_en-US']);
       localStorage.setItem("text", result['text_en-US']);
-      console.log('here wtf')
       console.log(localStorage.getItem("placeName"))
+    } else {
+      console.log('window is undefined')
     }
     setFadeOut(true);
     setTimeout(buttonOnClick, 300);
@@ -69,6 +70,10 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
     }
     mapboxgl.accessToken = token
 
+    if (mapContainer && mapContainer.current) {
+      mapContainer.current.innerHTML = '';
+    }
+    
     const map = new mapboxgl.Map({
       container: mapContainer.current!,
       style: 'mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd',
@@ -78,12 +83,11 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
       
     }).addControl(new mapboxgl.AttributionControl({
       compact: true,
-  }));;
+    }));;
     
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       filter: function (item) {
-        console.log(item)
         return item.place_type[0] === 'address';
       },
       mapboxgl: mapboxgl
@@ -96,9 +100,9 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
       }
       
       const popupNode = document.createElement("div")
-      ReactDOM.render(
+      const root = createRoot(popupNode);
+      root.render(
         <Popup placeName={e.result.place_name.split(',')[0]} buttonOnClick={buttonOnClick} result={result} setFadeOut={setFadeOut} />,
-        popupNode
       );
       popupRef.current
         .setLngLat(e.result.geometry.coordinates)
@@ -141,7 +145,6 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
   return (
     <>
       <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js'></Script>
-
       <div className={`flex flex-col px-2 py-16 sm:py-8 justify-center items-center relative h-full w-full overscroll-none ${animationClass}`}>
         <Text
           className='mb-6 text-center animate__animated animate__fadeIn'

@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from 'react';
+import { SetStateAction, useState, useRef, useEffect } from 'react';
 import logo from '@/images/icon.png'
 import Image from 'next/image';
 import styles from './Welcome.module.css';
@@ -13,6 +13,16 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
   const [fadeOut, setFadeOut] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const animationClass = fadeOut ? 'animate__animated animate__fadeOut animate__faster' : '';
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+    if (inputRef.current) {
+
+        inputRef.current.focus();
+    }
+    }, 300);
+  }, []);
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -49,6 +59,7 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
             Full name
           </label>
           <input
+            ref={inputRef}
             type="name"
             name="name"
             id="name"
