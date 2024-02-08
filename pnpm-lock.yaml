@@ -65,6 +65,9 @@ importers:
       clsx:
         specifier: ^1.2.1
         version: 1.2.1
+      country-state-city:
+        specifier: ^3.2.1
+        version: 3.2.1
       mapbox-gl:
         specifier: ^3.0.1
         version: 3.0.1
@@ -1413,6 +1416,10 @@ packages:
   /cookie@0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /country-state-city@3.2.1:
+    resolution: {integrity: sha512-kxbanqMc6izjhc/EHkGPCTabSPZ2G6eG4/97akAYHJUN4stzzFEvQPZoF8oXDQ+10gM/O/yUmISCR1ZVxyb6EA==}
     dev: false
 
   /cross-spawn@7.0.3:

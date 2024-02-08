@@ -5,16 +5,17 @@ import { InputName } from '@/components/welcome/InputName'
 import { WelcomeMap } from "@/components/welcome/WelcomeMap"
 import { AutofilledProperty } from "@/components/welcome/AutofilledProperty";
 import { NewWelcomeMap } from "@/components/welcome/NewWelcomeMap";
+import { ConfirmAddress } from "@/components/welcome/ConfirmAddress";
 
 export default function Welcome() {
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(3);
 
   const steps = [
-    { name: 'Step 0', href: '' },
-    { name: 'Step 1', href: '' },
-    { name: 'Step 2', href: '' },
-    { name: 'Step 3', href: '' },
-    { name: 'Step 4', href: '' },
+    { name: 'Step 0' },
+    { name: 'Step 1' },
+    { name: 'Step 2' },
+    { name: 'Step 3' },
+    { name: 'Step 4' },
   ]
 
   const handleStepClick = (stepIndex: number) => {
@@ -47,13 +48,12 @@ export default function Welcome() {
       case 3:
         return (
           <div className="w-full h-full px-32 pb-28 pt-16">
-            Content for Step 3
-            <AutofilledProperty />
+            <ConfirmAddress />
           </div>
         )
       case 4:
         return (
-          <div className="w-full h-full px-32 pb-28 pt-16">Content for Step 4
+          <div className="w-full h-full px-32 pb-28 pt-16">
           </div>
         )
       default:

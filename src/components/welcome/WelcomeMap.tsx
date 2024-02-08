@@ -24,7 +24,6 @@ const Popup = ({ placeName, buttonOnClick, result, setFadeOut }: PopupContentPro
     if (typeof window !== "undefined") {
       localStorage.setItem("placeName", result['place_name_en-US']);
       localStorage.setItem("text", result['text_en-US']);
-      console.log(localStorage.getItem("placeName"))
     } else {
       console.log('window is undefined')
     }
