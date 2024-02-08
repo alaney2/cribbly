@@ -1,9 +1,10 @@
 "use client"
-import { WelcomeMap } from "@/components/welcome/WelcomeMap"
 import { useState } from "react";
 import { Step0 } from '@/components/welcome/Step0'
-import { AutofilledProperty } from "@/components/welcome/AutofilledProperty";
 import { InputName } from '@/components/welcome/InputName'
+import { WelcomeMap } from "@/components/welcome/WelcomeMap"
+import { AutofilledProperty } from "@/components/welcome/AutofilledProperty";
+import { NewWelcomeMap } from "@/components/welcome/NewWelcomeMap";
 
 export default function Welcome() {
   const [currentStep, setCurrentStep] = useState(2);
@@ -39,7 +40,8 @@ export default function Welcome() {
       case 2:
         return (
           <div className="w-full h-full">
-            <WelcomeMap buttonOnClick={() => setCurrentStep(currentStep+1)} />
+            {/* <WelcomeMap buttonOnClick={() => setCurrentStep(currentStep+1)} /> */}
+            <NewWelcomeMap buttonOnClick={() => setCurrentStep(currentStep+1)} />
           </div>
         );
       case 3:

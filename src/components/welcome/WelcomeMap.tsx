@@ -70,9 +70,9 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
     }
     mapboxgl.accessToken = token
 
-    if (mapContainer && mapContainer.current) {
-      mapContainer.current.innerHTML = '';
-    }
+    // if (mapContainer && mapContainer.current) {
+    //   mapContainer.current.innerHTML = '';
+    // }
     
     const map = new mapboxgl.Map({
       container: mapContainer.current!,

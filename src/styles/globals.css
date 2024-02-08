@@ -1,24 +1,7 @@
-.leaflet-control-geosearch form input {
-  font-size: 14px;
-}
-
-
-.leaflet-touch .leaflet-geosearch-bar form input {
-  height: 36px !important;
-}
-
 /* [type='text']:focus {
   border-color: none;
   border: none;
   --tw-ring-color: transparent;
-} */
-
-/* .mapbox-improve-map {
-  display: none;
-} */
-
-/* .mapboxgl-ctrl-bottom-right {
-  display: none;
 } */
 
 html,
@@ -32,22 +15,22 @@ body {
   font-family: Inter, sans-serif;
 } */
 
-.mapboxgl-popup-close-button {
+/* .mapboxgl-popup-close-button {
   display: none;
   color: gray;
-  /* padding: 8px; */
+  padding: 8px;
   font-size: 36px;
   cursor: default;
   border: none;
-}
+} */
 
 /* .mapboxgl-popup-content !important {
   border-radius: 16px;
 } */
 
-.mapboxgl-popup-content div {
+/* .mapboxgl-popup-content div {
   padding: 0px 2px;
-}
+} */
 
 /* .mapboxgl-popup-content p {
   margin-bottom: 14px;
