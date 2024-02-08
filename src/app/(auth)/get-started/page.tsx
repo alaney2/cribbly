@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import { Button } from '@/components/catalyst/button'
 import { TextField } from '@/components/default/Fields'
 import logo from '@/images/icon.png'
@@ -126,7 +126,9 @@ export default function GetStarted() {
 
   return (
     <SlimLayout>
-      <Notification />
+      <Suspense>
+        <Notification />
+      </Suspense>
       {renderStepContent(currentStep)}
     </SlimLayout>
   )
