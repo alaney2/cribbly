@@ -47,7 +47,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={clsx(
-        'h-full scroll-smooth bg-white antialiased',
+        'h-full scroll-smooth bg-white antialiased touch-none',
         inter.variable,
         lexend.variable,
       )}
@@ -79,7 +79,7 @@ export default function RootLayout({
         `}
       </Script>
 
-      <body className="flex h-full flex-col">
+      <body className="flex h-full flex-col touch-none">
         {children}
         <Analytics />
         <SpeedInsights />
