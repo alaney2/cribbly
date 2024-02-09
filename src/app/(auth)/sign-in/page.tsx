@@ -31,9 +31,9 @@ export default function SignIn() {
 
   useEffect(() => {
     setFadeOut(false);
-    if (showEmailInput && emailInputRef && emailInputRef.current) {
-      emailInputRef.current.focus();
-    }
+    // if (showEmailInput && emailInputRef && emailInputRef.current) {
+    //   emailInputRef.current.focus();
+    // }
   }, [showEmailInput]);
 
   const backToSignIn = () => {
@@ -50,12 +50,18 @@ export default function SignIn() {
 
   const handleButtonClick = () => {
     setShowEmailInput(true)
+    if (showEmailInput && emailInputRef && emailInputRef.current) {
+      emailInputRef.current.focus();
+    }
     setTimeout(() => {
       setButtonType('submit')
     }, 0)
   }
 
   const handleButtonSubmit = () => {
+    if (email.trim().length === 0) {
+      return;
+    }
     setFadeOut(true)
     setTimeout(() => {
       setCurrentStep(1);
@@ -102,6 +108,7 @@ export default function SignIn() {
                     placeholder="Email"
                     onChange={handleInputChange}
                     required={true}
+                    autoComplete='off'
                   />
                 )}
                 <Button type={buttonType} color="light" className="w-full h-10 text-zinc-600 cursor-default"
