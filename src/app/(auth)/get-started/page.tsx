@@ -66,7 +66,7 @@ export default function GetStarted() {
     switch(stepIndex) {
       case 0:
         return (
-          <div className={clsx('animate__animated', fadeOut ? `animate__fadeOut animate__fastest` : 'animate__fadeIn animate__fastest')}>
+          <div className={clsx('animate__animated touch-none', fadeOut ? `animate__fadeOut animate__fastest` : 'animate__fadeIn animate__fastest')}>
             <div className="sm:w-full sm:max-w-md">
               <Image
                 className='h-16 w-auto mx-auto'
@@ -102,6 +102,7 @@ export default function GetStarted() {
                     placeholder="Email"
                     onChange={handleInputChange}
                     required={true}
+                    autoComplete='off'
                   />
                 )}
                 <Button type={buttonType} color="light" className="w-full h-10 text-zinc-600 cursor-default"
