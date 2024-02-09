@@ -52,7 +52,9 @@ export default function RootLayout({
         lexend.variable,
       )}
     >
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+      {/* <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta> */}
       <meta property="twitter:image" content="../images/icon.png"></meta>
       <meta property="twitter:card" content="../images/icon.png"></meta>
       <meta property="twitter:title" content="Property Management Software for Small Landlords | Cribbly"></meta>
