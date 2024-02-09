@@ -31,9 +31,9 @@ export default function GetStarted() {
 
   useEffect(() => {
     setFadeOut(false);
-    if (showEmailInput && emailInputRef && emailInputRef.current) {
-      emailInputRef.current.focus();
-    }
+    // if (showEmailInput && emailInputRef && emailInputRef.current) {
+    //   emailInputRef.current.focus();
+    // }
   }, [showEmailInput]);
 
   const backToSignIn = () => {
@@ -56,6 +56,9 @@ export default function GetStarted() {
   }
 
   const handleButtonSubmit = () => {
+    if (email.trim().length === 0) {
+      return;
+    }
     setFadeOut(true)
     setTimeout(() => {
       setCurrentStep(1);
