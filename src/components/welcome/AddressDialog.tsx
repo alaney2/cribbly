@@ -10,7 +10,7 @@ export function AddressDialog({ isOpen, setIsOpen } : { isOpen: boolean; setIsOp
     <Dialog open={isOpen} onClose={setIsOpen}>
         <DialogTitle>Confirm address details</DialogTitle>
         <DialogDescription>
-          The refund will be reflected in the customer’s bank account 2 to 3 business days after processing.
+          Please confirm the address details for the property you are adding.
         </DialogDescription>
         <DialogBody>
           <Field>
