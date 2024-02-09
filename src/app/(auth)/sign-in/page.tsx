@@ -72,7 +72,7 @@ export default function SignIn() {
     switch(stepIndex) {
       case 0:
         return (
-          <div className={clsx('animate__animated', fadeOut ? `animate__fadeOut animate__fastest` : 'animate__fadeIn animate__fastest')}>
+          <div className={clsx('animate__animated', fadeOut ? `animate__fadeOut animate__fastest` : 'animate__fadeIn animate__fastest touch-none')}>
             <div className="sm:w-full sm:max-w-md">
               <Image
                 className='h-16 w-auto mx-auto'
