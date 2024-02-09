@@ -7,9 +7,10 @@ function classNames(...classes: (string | boolean)[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function ComboBoxCustom({ inputs }: { inputs: any }) {
+export function ComboBoxCustom({ inputs, defaultCountry }: { inputs: any; defaultCountry: any }) {
   const [query, setQuery] = useState('')
-  const [selectedInput, setSelectedInput] = useState({ name: 'United States' })
+  const [selectedInput, setSelectedInput] = useState(defaultCountry)
+  console.log('defaultCountry', defaultCountry)
 
   const filteredInputs =
     query === ''

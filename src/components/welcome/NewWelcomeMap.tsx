@@ -3,6 +3,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { Text } from '@/components/catalyst/text';
+import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
+import { Field, Label } from '@/components/catalyst/fieldset'
+import { Input } from '@/components/catalyst/input'
 import 'animate.css';
 import styles from './Welcome.module.css';
 import Skeleton from 'react-loading-skeleton'
@@ -11,7 +14,7 @@ import Script from 'next/script'
 import Map, { AttributionControl, FullscreenControl, NavigationControl, Popup } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import type {MapRef} from 'react-map-gl';
-
+import { AddressDialog } from '@/components/welcome/AddressDialog'
 
 export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
   const [fadeOut, setFadeOut] = useState(false);
@@ -24,13 +27,16 @@ export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) 
   const geocoderRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapRef>(null);
   const popupRef = useRef<mapboxgl.Popup>(null);
+  let [isOpen, setIsOpen] = useState(false)
+
 
   const popupClick = () => {
     if (typeof window !== "undefined") {
       localStorage.setItem("result", JSON.stringify(result));
     }
-    setFadeOut(true);
-    setTimeout(buttonOnClick, 300);
+    setIsOpen(true)
+    // setFadeOut(true);
+    // setTimeout(buttonOnClick, 300);
   }
 
   useEffect(() => {
@@ -125,7 +131,6 @@ export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) 
                 offset={50}
                 closeOnClick={false}
                 closeButton={false}
-
               >
                 <p className={styles.popupText}>{popupText}</p>
                 <div className="relative my-2">
@@ -140,6 +145,7 @@ export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) 
                       Add property
                     </span>
                 </button>
+                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} />
               </Popup>
             )}
           </Map>
