@@ -107,7 +107,7 @@ export default function GetStarted() {
                 <Button type={buttonType} color="light" className="w-full h-10 text-zinc-600 cursor-default"
                   onClick={buttonType === 'button' ? handleButtonClick : handleButtonSubmit}
                 >
-                  <span>
+                  <span className="text-sm leading-6 font-semibold">
                     Continue with Email
                   </span>
                 </Button>
