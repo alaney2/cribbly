@@ -14,7 +14,7 @@ import 'animate.css'
 import clsx from 'clsx'
 
 const formClasses = `
-    block text-base w-full h-10 mb-4 appearance-none bg-gray-50 rounded-md 
+    block text-baseg w-full h-10 mb-4 appearance-none bg-gray-50 rounded-md 
     border-0.5 border-gray-200 bg-white px-3 py-1.5 text-gray-900 
     placeholder-gray-400 focus:border-blue-500 focus:outline-none 
     focus:ring-blue-500 sm:text-sm ring-1 focus:ring-0.5 ring-inset ring-gray-300 
@@ -90,13 +90,14 @@ export default function SignIn() {
                 <GoogleSignIn />
               </div>
 
-              <div className="relative my-4 mx-4">
+              <div className="relative my-6 mx-2">
                 <div className="absolute inset-0 flex items-center" aria-hidden="true">
                   <div className="w-full border-t border-gray-300" />
                 </div>
                 <div className="relative flex justify-center font-medium leading-6">
                 </div>
               </div>
+
               <form className="" action={signInWithOtp}>
                 {showEmailInput && (
                   <input
@@ -111,7 +112,7 @@ export default function SignIn() {
                     autoComplete='off'
                   />
                 )}
-                <Button type={buttonType} color="light" className="w-full h-10 text-zinc-600 cursor-default"
+                <Button type={buttonType} color="light" className="w-full h-12 text-zinc-600 cursor-default"
                   onClick={buttonType === 'button' ? handleButtonClick : handleButtonSubmit}
                 >
                   <span className="text-sm leading-6 font-semibold">
