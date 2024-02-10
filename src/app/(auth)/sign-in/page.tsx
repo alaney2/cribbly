@@ -14,7 +14,7 @@ import 'animate.css'
 import clsx from 'clsx'
 
 const formClasses = `
-    block text-baseg w-full h-10 mb-4 appearance-none bg-gray-50 rounded-md 
+    block text-base w-full h-11 mb-4 appearance-none bg-gray-50 rounded-md 
     border-0.5 border-gray-200 bg-white px-3 py-1.5 text-gray-900 
     placeholder-gray-400 focus:border-blue-500 focus:outline-none 
     focus:ring-blue-500 sm:text-sm ring-1 focus:ring-0.5 ring-inset ring-gray-300 

@@ -1,5 +1,5 @@
 'use client'
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import Image from 'next/image'
 // import Spline from '@splinetool/react-spline';
 import backgroundDefault from '@/images/background-auth.jpg'
@@ -12,12 +12,24 @@ const Spline = React.lazy(() => import('@splinetool/react-spline'));
 export function SlimLayout({ children }: { children: React.ReactNode }) {
   
   const [isSplineLoaded, setIsSplineLoaded] = useState(false)
+  const [isLargeScreen, setIsLargeScreen] = useState(false)
 
   const handleSplineLoaded = () => {
     setTimeout(() => {
       setIsSplineLoaded(true)
     }, 100)
   }
+
+  useEffect(() => {
+    const checkSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+
+    checkSize();
+    window.addEventListener('resize', checkSize);
+
+    return () => window.removeEventListener('resize', checkSize);
+  }, []);
 
   return (
     <>
@@ -29,18 +41,18 @@ export function SlimLayout({ children }: { children: React.ReactNode }) {
             {children}
           </main>
         </div>
-        <div className="hidden lg:relative lg:block lg:flex-1 leading-4">
-          {!isSplineLoaded && <Skeleton containerClassName="flex-1" height="100%" className="bg-opacity-0.1 opacity-0.05 z-10"/>}
-
-          {/* <Suspense fallback={<Image src={backgroundDefault} alt="" layout="fill" className="absolute inset-0 h-full w-full object-cover" />}> */}
-            <Spline 
-              scene="https://prod.spline.design/zRVkT5sl31cwbtW2/scene.splinecode"
-              className="absolute inset-0 h-full w-full object-cover z-10 animate__animated animate__fadeIn animate__faster"
-              onLoad={handleSplineLoaded}
-            />
-          {/* </Suspense> */}
-          {/* <Image src={backgroundDefault} alt="" className="absolute inset-0 h-full w-full object-cover z-0 opacity-0.05" /> */}
-        </div>
+        {isLargeScreen && (
+          <div className="hidden lg:relative lg:block lg:flex-1 leading-4">
+            {!isSplineLoaded && <Skeleton containerClassName="flex-1" height="100%" className="bg-opacity-0.1 opacity-0.05 z-10"/>}
+              <Spline 
+                scene="https://prod.spline.design/zRVkT5sl31cwbtW2/scene.splinecode"
+                className="absolute inset-0 h-full w-full object-cover z-10 animate__animated animate__fadeIn animate__faster"
+                onLoad={handleSplineLoaded}
+              />
+            {/* </Suspense> */}
+            {/* <Image src={backgroundDefault} alt="" className="absolute inset-0 h-full w-full object-cover z-0 opacity-0.05" /> */}
+          </div>
+        )}
       </div>
     </>
   )
