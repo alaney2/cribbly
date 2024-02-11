@@ -90,14 +90,14 @@ export default function SignIn() {
                 <GoogleSignIn />
               </div>
 
-              <div className="relative my-6 mx-2">
-                <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                  <div className="w-full border-t border-gray-300" />
+              {showEmailInput && (
+                <div className="relative my-6 mx-2">
+                  <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div className="w-full border-t border-gray-300" />
+                  </div>
+                  <div className="relative flex justify-center" />
                 </div>
-                <div className="relative flex justify-center font-medium leading-6">
-                </div>
-              </div>
-
+              )}
               <form className="" action={signInWithOtp}>
                 {showEmailInput && (
                   <input
@@ -112,7 +112,7 @@ export default function SignIn() {
                     autoComplete='off'
                   />
                 )}
-                <Button outline type={buttonType} className="w-full h-12 text-zinc-600 cursor-default"
+                <Button outline type={buttonType} className="w-full mt-4 h-12 text-zinc-600 cursor-default"
                   onClick={buttonType === 'button' ? handleButtonClick : handleButtonSubmit}
                 >
                   <span className="text-sm leading-6 font-semibold">
