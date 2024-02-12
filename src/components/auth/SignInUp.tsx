@@ -58,18 +58,12 @@ export function SignInUp({ signIn } : { signIn : boolean }) {
     }, 0)
   }
 
-  const handleButtonSubmit = () => {
-    if (email.trim().length === 0) {
-      return;
-    }
-    const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-
-    if (email.match(isValidEmail)) {
-      setFadeOut(true)
-      setTimeout(() => {
-        setCurrentStep(1);
-      }, 400)
-    }
+  const handleButtonSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setFadeOut(true)
+    setTimeout(() => {
+      setCurrentStep(1);
+    }, 400)
   }
 
   const renderStepContent = (stepIndex: number) => {
@@ -94,15 +88,7 @@ export function SignInUp({ signIn } : { signIn : boolean }) {
                 <GoogleSignIn />
               </div>
 
-              {/* {showEmailInput && (
-                <div className="relative my-6 mx-2">
-                  <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                    <div className="w-full border-t border-gray-300" />
-                  </div>
-                  <div className="relative flex justify-center" />
-                </div>
-              )} */}
-              <form className="" action={signInWithOtp}>
+              <form className="" action={signInWithOtp} onSubmit={buttonType === 'submit' ? handleButtonSubmit : undefined}>
                 {showEmailInput && (
                   <input
                     ref={emailInputRef}
@@ -117,7 +103,7 @@ export function SignInUp({ signIn } : { signIn : boolean }) {
                   />
                 )}
                 <Button outline type={buttonType} className="w-full mt-4 h-12 text-zinc-600 cursor-default"
-                  onClick={buttonType === 'button' ? handleButtonClick : handleButtonSubmit}
+                  onClick={buttonType === 'button' ? handleButtonClick : undefined}
                 >
                   <span className="text-sm leading-6 font-semibold">
                     Continue with Email
