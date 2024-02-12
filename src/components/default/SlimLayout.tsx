@@ -9,7 +9,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 const Spline = React.lazy(() => import('@splinetool/react-spline'));
 
-export function SlimLayout({ children }: { children: React.ReactNode }) {
+export function SlimLayout({ children, splineLink }: { children: React.ReactNode; splineLink: string }) {
   
   const [isSplineLoaded, setIsSplineLoaded] = useState(false)
   const [isLargeScreen, setIsLargeScreen] = useState(false)
@@ -45,7 +45,7 @@ export function SlimLayout({ children }: { children: React.ReactNode }) {
           <div className="hidden lg:relative lg:block lg:flex-1 leading-4">
             {!isSplineLoaded && <Skeleton containerClassName="flex-1" height="100%" className="bg-opacity-0.1 opacity-0.05 z-10"/>}
               <Spline 
-                scene="https://prod.spline.design/zRVkT5sl31cwbtW2/scene.splinecode"
+                scene={splineLink}
                 className="absolute inset-0 h-full w-full object-cover z-10 animate__animated animate__fadeIn animate__faster"
                 onLoad={handleSplineLoaded}
               />
