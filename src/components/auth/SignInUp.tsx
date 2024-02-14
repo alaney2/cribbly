@@ -58,8 +58,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
     }, 0)
   }
 
-  const handleButtonSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleButtonSubmit = () => {
     setFadeOut(true)
     setTimeout(() => {
       setCurrentStep(1);
@@ -88,7 +87,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
                 <GoogleSignIn />
               </div>
 
-              <form className="" action={signInWithOtp} onSubmit={buttonType === 'submit' ? handleButtonSubmit : undefined}>
+              <form className="" action={signInWithOtp}>
                 {showEmailInput && (
                   <input
                     ref={emailInputRef}
@@ -103,7 +102,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
                   />
                 )}
                 <Button outline type={buttonType} className="w-full mt-4 h-12 text-zinc-600 cursor-default"
-                  onClick={buttonType === 'button' ? handleButtonClick : undefined}
+                  onClick={buttonType === 'button' ? handleButtonClick : handleButtonSubmit}
                 >
                   <span className="text-sm leading-6 font-semibold">
                     Continue with Email
