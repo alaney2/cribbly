@@ -10,9 +10,7 @@ export async function signInWithOtp(formData: FormData) {
 
   const email = String(formData.get('email'))
 
-  console.log('EMAIL', email)
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-
 
   if (!emailRegex.test(email)) {
     console.error('Invalid email format');
