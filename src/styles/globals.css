@@ -4,10 +4,6 @@
   --tw-ring-color: transparent;
 } */
 
-html,
-body {
-  overscroll-behavior: none;
-}
 
 /* .mapboxgl-popup {
   background-color: blue;
