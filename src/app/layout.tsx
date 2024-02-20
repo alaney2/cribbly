@@ -78,7 +78,7 @@ export default function RootLayout({
         `}
       </Script>
 
-      <body className="flex h-full flex-col touch-none">
+      <body className="flex h-full flex-col">
         {children}
         <Analytics />
         <SpeedInsights />
