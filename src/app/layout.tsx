@@ -47,14 +47,13 @@ export default function RootLayout({
     <html
       lang="en"
       className={clsx(
-        'h-full scroll-smooth bg-white antialiased touch-none',
+        'h-full scroll-smooth bg-white antialiased',
         inter.variable,
         lexend.variable,
       )}
     >
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
-      {/* <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta> */}
+      {/* <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta> */}
       <meta property="twitter:image" content="../images/icon.png"></meta>
       <meta property="twitter:card" content="../images/icon.png"></meta>
       <meta property="twitter:title" content="Property Management Software for Small Landlords | Cribbly"></meta>
@@ -79,7 +78,7 @@ export default function RootLayout({
         `}
       </Script>
 
-      <body className="flex h-full flex-col touch-none">
+      <body className="flex h-full flex-col">
         {children}
         <Analytics />
         <SpeedInsights />

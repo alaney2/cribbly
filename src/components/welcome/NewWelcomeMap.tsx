@@ -16,6 +16,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import type {MapRef} from 'react-map-gl';
 import { AddressDialog } from '@/components/welcome/AddressDialog'
 
+
 export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
   const [fadeOut, setFadeOut] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
@@ -145,7 +146,7 @@ export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) 
                       Add property
                     </span>
                 </button>
-                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} />
               </Popup>
             )}
           </Map>
