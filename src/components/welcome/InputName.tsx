@@ -41,7 +41,7 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
 
   return (
     <>
-      <div className={`w-full flex flex-col items-center justify-center h-full mx-auto ${animationClass}`}>
+      <div className={`mt-8 w-full flex flex-col items-center justify-center h-full mx-auto ${animationClass}`}>
         <Image 
           src={logo}
           className='animate__animated animate__fadeIn animate__fast mx-auto w-12 sm:w-16'
