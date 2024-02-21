@@ -19,12 +19,14 @@ export function OtpInput({ email }: { email: string } ) {
 
   const handleInput = (index: number, e: React.FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
+    // optional
     const value = target.value;
 
     if (!/^[0-9]$/.test(value)) {
       target.value = '';
       return;
     }
+    // done
 
     if (target.value.length >= 1 && index < 5) {
       inputsRef.current[index + 1].focus();
@@ -87,7 +89,7 @@ export function OtpInput({ email }: { email: string } ) {
               }
             }}
             className="w-10 h-12 border-1 border-gray-300 text-center rounded-md caret-transparent focus:border-blue-300"
-            type="text"
+            type="number"
             pattern="[0-9]*"
             inputMode='numeric'
             min="0"

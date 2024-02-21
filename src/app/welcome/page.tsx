@@ -8,7 +8,7 @@ import { NewWelcomeMap } from "@/components/welcome/NewWelcomeMap";
 import { ConfirmAddress } from "@/components/welcome/ConfirmAddress";
 
 export default function Welcome() {
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
     { name: 'Step 0' },
