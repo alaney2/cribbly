@@ -6,7 +6,7 @@ import { Button } from '@/components/catalyst/button'
 import { setFullName } from '@/components/welcome/action'
 
 const formClasses =
-  'block text-sm w-72 sm:w-80 h-10 appearance-none bg-gray-50 rounded-md border-1 border-gray-200 bg-white px-3 py-1.5 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 text-center animate__animated animate__fadeIn animate__fast'
+  'block text-base w-72 sm:w-80 h-10 appearance-none bg-gray-50 rounded-md border-1 border-gray-200 bg-white px-3 py-1.5 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 text-center animate__animated animate__fadeIn animate__fast'
 
 
 export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {

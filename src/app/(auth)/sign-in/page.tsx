@@ -6,7 +6,7 @@ export default function SignIn() {
   return (
     <SignInUp 
       signIn={true} 
-      splineLink='https://prod.spline.design/zRVkT5sl31cwbtW2/scene.splinecode'
+      splineLink='https://prod.spline.design/A6UvbhlrrAGFFMv3/scene.splinecode'
     />
   )
 }

@@ -99,6 +99,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
                     onChange={handleInputChange}
                     required={true}
                     autoComplete='off'
+                    autoFocus
                   />
                 )}
                 <Button outline type={buttonType} className="w-full mt-4 h-12 text-zinc-600 cursor-default"

@@ -88,13 +88,12 @@ export function OtpInput({ email }: { email: string } ) {
             }}
             className="w-10 h-12 border-1 border-gray-300 text-center rounded-md caret-transparent focus:border-blue-300"
             type="text"
+            min="0"
             name={`otp${index}`}
             maxLength={1}
             onInput={(e) => handleInput(index, e)}
             onKeyDown={(e) => handleKeyPress(index, e)}
             onPaste={handlePaste}
-            pattern="[0-9]*"
-            inputMode="numeric"
             autoComplete='off'
             required
           />
