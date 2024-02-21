@@ -88,6 +88,8 @@ export function OtpInput({ email }: { email: string } ) {
             }}
             className="w-10 h-12 border-1 border-gray-300 text-center rounded-md caret-transparent focus:border-blue-300"
             type="text"
+            pattern="[0-9]*"
+            inputMode='numeric'
             min="0"
             name={`otp${index}`}
             maxLength={1}
