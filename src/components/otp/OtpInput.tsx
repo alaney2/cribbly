@@ -3,11 +3,23 @@ import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/default/Button'
 import { Spinner } from '@/components/Spinner'
 import { verifyOtp } from '@/app/auth/otp/action'
+// @ts-expect-error
+import { useFormState } from 'react-dom'
+import { Suspense } from 'react'
+import { Notification } from '@/components/Notification'
 
 export function OtpInput({ email }: { email: string } ) {
   const inputsRef = useRef<HTMLInputElement[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const verifyOtpWithEmail = verifyOtp.bind(null, email)
+  const [state, formAction] = useFormState(verifyOtpWithEmail, { message: '' })
+
+  useEffect(() => {
+    if (state?.message) {
+      setIsSubmitting(false)
+    }
+  }
+  , [state?.message])
 
   const checkAndSubmit = () => {
     const allFilled = inputsRef.current.every(input => input.value !== '');
@@ -78,8 +90,9 @@ export function OtpInput({ email }: { email: string } ) {
   }, []);
 
   return (
-    <form action={verifyOtpWithEmail} className="" autoComplete='off'>
-      <div className="flex justify-center space-x-2 mt-10 mb-8" onPaste={handlePaste}>
+    <>
+    <form action={formAction} className="" autoComplete='off'>
+      <div className="flex justify-center space-x-2 mt-10 mb-4" onPaste={handlePaste}>
         {[...Array(6)].map((_, index) => (
           <input
             key={index}
@@ -103,15 +116,17 @@ export function OtpInput({ email }: { email: string } ) {
           />
         ))}
       </div>
+      {state?.message && <p className="text-red-500 text-xs text-center">{state.message}</p>}
       <Button
         id="submitButton"
         type="submit"
         variant="solid"
         color={isSubmitting ? 'lightblue' : 'blue'}
-        className="w-full h-10"
+        className="w-full h-10 mt-2"
       >
         {isSubmitting ? <Spinner /> : 'Submit'}
       </Button>
     </form>
+    </>
   )
 }

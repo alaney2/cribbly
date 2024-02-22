@@ -6,7 +6,7 @@ import { XMarkIcon } from '@heroicons/react/20/solid'
 import { useSearchParams, usePathname } from 'next/navigation'
 
 
-export function Notification() {
+export function Notification( { success, error } : { success?: string, error?: string }) {
   const pathname = usePathname()
 
   const [show, setShow] = useState(false)
@@ -16,8 +16,12 @@ export function Notification() {
 
   const searchParams = useSearchParams()
  
-  const success = searchParams.get('success')
-  const error = searchParams.get('error')
+  if (!success) {
+    success = searchParams.get('success') || undefined
+  }
+  if (!error) {
+    error = searchParams.get('error') || undefined
+  }
 
   useEffect(() => {
     let timer: NodeJS.Timeout;

@@ -1,16 +1,17 @@
 "use client"
-import { useState, useEffect, useRef, Suspense } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/catalyst/button'
 import { TextField } from '@/components/default/Fields'
 import logo from '@/images/icon.png'
 import Image from 'next/image'
 import { GoogleSignIn } from '@/components/auth/GoogleSignIn'
-import { Notification } from '@/components/Notification'
 import { SlimLayout } from '@/components/default/SlimLayout'
 import styles from '@/components/welcome/Welcome.module.css';
 import { signInWithOtp } from '@/app/auth/action'
 import { OtpForm } from '@/components/otp/OtpForm'
 import 'animate.css'
+// @ts-expect-error
+import { useFormState } from 'react-dom'
 import clsx from 'clsx'
 
 const formClasses = `
@@ -124,9 +125,6 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
 
   return (
     <SlimLayout splineLink={splineLink}>
-      <Suspense>
-        <Notification />
-      </Suspense>
       {renderStepContent(currentStep)}
     </SlimLayout>
   )

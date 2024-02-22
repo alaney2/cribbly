@@ -6,6 +6,7 @@ import backgroundDefault from '@/images/background-auth.jpg'
 import 'animate.css';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css'
+import { Notification } from '@/components/Notification'
 
 const Spline = React.lazy(() => import('@splinetool/react-spline'));
 
@@ -34,6 +35,9 @@ export function SlimLayout({ children, splineLink }: { children: React.ReactNode
   return (
     <>
       <div className="relative flex min-h-full justify-center md:px-12 lg:px-0 bg-gray-100">
+        <Suspense>
+          <Notification />
+        </Suspense>
         <div className="relative z-10 flex flex-1 flex-col  px-4 py-10 justify-center md:flex-none md:px-28">
           <main className="mx-auto w-full max-w-md sm:px-4 md:w-96 md:max-w-sm md:px-0">
             {children}

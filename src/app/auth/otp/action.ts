@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-export async function verifyOtp(email: string, formData: FormData) {
+export async function verifyOtp(email: string, prevState: any, formData: FormData) {
   const cookieStore = cookies()
 
   let token = '';
@@ -20,7 +20,10 @@ export async function verifyOtp(email: string, formData: FormData) {
     const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
 
     if (error) {
-      redirect('/get-started/otp?error=Invalid verification code')
+      // redirect('/get-started/otp?error=Invalid verification code')
+      return {
+        message: 'Please enter a valid verification code'
+      }
     }
 
     // Handle successful verification
@@ -47,8 +50,7 @@ export async function verifyOtp(email: string, formData: FormData) {
       redirect('/dashboard')
     }
   }
-
-  return NextResponse.redirect(
-    redirect('/get-started?error=Invalid email')
-  )
+  return {
+    message: 'Invalid email or verification code'
+  }
 }
