@@ -60,7 +60,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
   }
 
   const isValidEmail = (email: string) => {
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email.toLowerCase());
   }
 
