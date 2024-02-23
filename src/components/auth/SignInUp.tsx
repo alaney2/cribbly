@@ -59,11 +59,18 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
     }, 0)
   }
 
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailRegex.test(email.toLowerCase());
+  }
+
   const handleButtonSubmit = () => {
-    setFadeOut(true)
-    setTimeout(() => {
-      setCurrentStep(1);
-    }, 400)
+    if (isValidEmail(email)) {
+      setFadeOut(true)
+      setTimeout(() => {
+        setCurrentStep(1);
+      }, 400)
+    }
   }
 
   const renderStepContent = (stepIndex: number) => {

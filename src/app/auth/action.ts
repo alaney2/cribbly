@@ -12,7 +12,7 @@ export async function signInWithOtp(formData: FormData) {
 
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-  if (!emailRegex.test(email)) {
+  if (!emailRegex.test(email.toLowerCase())) {
     console.error('Invalid email format');
     return
   }

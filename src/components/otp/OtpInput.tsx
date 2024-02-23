@@ -5,8 +5,6 @@ import { Spinner } from '@/components/Spinner'
 import { verifyOtp } from '@/app/auth/otp/action'
 // @ts-expect-error
 import { useFormState } from 'react-dom'
-import { Suspense } from 'react'
-import { Notification } from '@/components/Notification'
 
 export function OtpInput({ email }: { email: string } ) {
   const inputsRef = useRef<HTMLInputElement[]>([])
@@ -15,51 +13,40 @@ export function OtpInput({ email }: { email: string } ) {
   const [state, formAction] = useFormState(verifyOtpWithEmail, { message: '' })
 
   useEffect(() => {
-    if (state?.message) {
-      setIsSubmitting(false)
-    }
-  }
-  , [state?.message])
+    setIsSubmitting(false);
+  }, [state]);
 
   const checkAndSubmit = () => {
     const allFilled = inputsRef.current.every(input => input.value !== '');
     if (allFilled) {
-      setIsSubmitting(true)
       document.getElementById('submitButton')?.click();
+      setIsSubmitting(true)
     }
-  }
-
-  const handleInput = (index: number, e: React.FormEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    // optional
-    const value = target.value;
-
-    if (!/^[0-9]$/.test(value)) {
-      target.value = '';
-      return;
-    }
-    // done
-
-    if (target.value.length >= 1 && index < 5) {
-      inputsRef.current[index + 1].focus();
-    }
-    checkAndSubmit();
   }
 
   const handleKeyPress = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     const currentInput = inputsRef.current[index];
+    if (e.key === '-' || e.key === '+') {
+      e.preventDefault();
+      return;
+    }
+    
     if (e.key === 'Backspace' || e.key === 'Delete') {
       if (currentInput.value.length !== 0) {
-        // Clear the current input value
         currentInput.value = '';
       } else if (index > 0) {
-        // Focus the previous input if the current one is already empty
+        inputsRef.current[index - 1].value = '';
         inputsRef.current[index - 1].focus();
       }
     }
 
-    if (currentInput.value.length === 1 && /^[0-9]$/.test(e.key)) {
+    if (/^[0-9]$/.test(e.key)) {
+      e.preventDefault();
       currentInput.value = e.key;
+      if (index < 5) {
+        inputsRef.current[index + 1].focus();
+
+      }
     }
 
     if (e.key === 'ArrowRight' && index < inputsRef.current.length - 1) {
@@ -69,6 +56,8 @@ export function OtpInput({ email }: { email: string } ) {
     if (e.key === 'ArrowLeft' && index > 0) {
       inputsRef.current[index - 1].focus();
     }
+
+    checkAndSubmit();
   }
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -106,9 +95,9 @@ export function OtpInput({ email }: { email: string } ) {
             pattern="[0-9]*"
             inputMode='numeric'
             min="0"
+            max="9"
             name={`otp${index}`}
             maxLength={1}
-            onInput={(e) => handleInput(index, e)}
             onKeyDown={(e) => handleKeyPress(index, e)}
             onPaste={handlePaste}
             autoComplete='off'
