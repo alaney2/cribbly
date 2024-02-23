@@ -17,6 +17,9 @@ export function OtpInput({ email }: { email: string } ) {
   }, [state]);
 
   const checkAndSubmit = () => {
+    if (state?.message !== '') {
+      return;
+    }
     const allFilled = inputsRef.current.every(input => input.value !== '');
     if (allFilled) {
       document.getElementById('submitButton')?.click();
@@ -112,6 +115,7 @@ export function OtpInput({ email }: { email: string } ) {
         variant="solid"
         color={isSubmitting ? 'lightblue' : 'blue'}
         className="w-full h-10 mt-2"
+        onClick={() => setIsSubmitting(true)}
       >
         {isSubmitting ? <Spinner /> : 'Submit'}
       </Button>
