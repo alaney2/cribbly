@@ -115,7 +115,11 @@ export function OtpInput({ email }: { email: string } ) {
         variant="solid"
         color={isSubmitting ? 'lightblue' : 'blue'}
         className="w-full h-10 mt-2"
-        onClick={() => setIsSubmitting(true)}
+        onClick={() => {
+          if (inputsRef.current.every(input => input.value !== '')) {
+            setIsSubmitting(true)
+          }
+        }}
       >
         {isSubmitting ? <Spinner /> : 'Submit'}
       </Button>

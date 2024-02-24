@@ -2,7 +2,7 @@ import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } fro
 import { Field, Label } from '@/components/catalyst/fieldset'
 import { Input } from '@/components/catalyst/input'
 import { Button } from '@/components/catalyst/button';
-import { ComboBoxCustom } from '@/components/welcome/ComboBox';
+import { ComboBoxCustom } from '@/components/welcome/ComboBoxCustom';
 import { Country, State, City }  from 'country-state-city';
 
 

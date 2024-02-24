@@ -1,7 +1,7 @@
 "use client"
 import { useEffect } from 'react';
 import { Country, State, City }  from 'country-state-city';
-import { ComboBoxCustom } from '@/components/welcome/ComboBox';
+import { ComboBoxCustom } from '@/components/welcome/ComboBoxCustom';
 
 export function ConfirmAddress() {
   let countryObject = {}
