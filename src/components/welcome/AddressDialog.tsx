@@ -3,11 +3,11 @@ import { Field, Label, Fieldset, Legend, FieldGroup } from '@/components/catalys
 import { Input } from '@/components/catalyst/input'
 import { Button } from '@/components/catalyst/button';
 import { ComboBoxCustom } from '@/components/welcome/ComboBoxCustom';
-import { Country, State, City }  from 'country-state-city';
+import { ICountry, IState, Country, State, City }  from 'country-state-city';
 import { Text } from '@/components/catalyst/text';
 import { Listbox, ListboxLabel, ListboxOption } from '@/components/catalyst/listbox'
 import { Select } from '@/components/catalyst/select'
-
+import { useState, useEffect } from 'react'
 
 export function AddressDialog({ isOpen, setIsOpen, result } : { isOpen: boolean; setIsOpen: (isOpen: boolean) => void; result: any } ) {
   const address = result.place_name;
@@ -15,27 +15,41 @@ export function AddressDialog({ isOpen, setIsOpen, result } : { isOpen: boolean;
   for (let i = 0; i < addressArray.length; i++) {
     addressArray[i] = addressArray[i].trim();
   }
+  const numSlices = addressArray.length;
+  const countryName = addressArray[numSlices - 1].trim();
+  const initialCountry = Country.getAllCountries().find((country: { name: string; }) => country.name === countryName);
+  const [selectedCountry, setSelectedCountry] = useState<ICountry | null | undefined>(initialCountry);
+  const [stateOrProvince, setStateOrProvince] = useState('Province');
+  const [zipOrPostal, setZipOrPostal] = useState('Postal Code');
+
+  useEffect(() => {
+    const countriesWithStates = ['United States', 'Australia', 'Austria', 'Brazil', 'South Sudan', 'Palau', 'Germany', 'India', 'Nigeria', 'New Zealand', 'Malaysia', 'Myanmar', 'Micronesia', 'Mexico'];
+    const countriesWithZip = ['United States', 'Philippines'];
+
+    if (selectedCountry && countriesWithStates.includes(selectedCountry.name)) {
+      setStateOrProvince('State');
+    } else {
+      setStateOrProvince('Province');
+    }
+
+    if (selectedCountry && countriesWithZip.includes(selectedCountry.name)) {
+      setZipOrPostal('Zip Code');
+    } else {
+      setZipOrPostal('Postal Code');
+    }
+  }, [selectedCountry]);
+
+  const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newCountry = Country.getAllCountries().find(country => country.name === event.target.value);
+    if (newCountry) {
+      setSelectedCountry(newCountry);
+    }
+  };
+
   let stateObject = null;
   let zipCode = '';
   let city = '';
-  let countryObject = null;
-
-  const numSlices = addressArray.length;
-  const countryName = addressArray[numSlices - 1].trim();
-  let allCountries = Country.getAllCountries();
-  countryObject = allCountries.find((country: { name: string; }) => country.name === countryName);
-  let states = State.getStatesOfCountry(countryObject?.isoCode || '');
-
-  const countriesWithStates = ['United States', 'Australia', 'Austria', 'Brazil', 'South Sudan', 'Palau', 'Germany', 'India', 'Nigeria', 'New Zealand', 'Malaysia', 'Myanmar', 'Micronesia', 'Mexico']
-  let stateOrProvince = 'Province'
-  if (countriesWithStates.includes(countryName)) {
-    stateOrProvince = 'State'
-  }
-  const countriesWithZip = ['United States', 'Philippines']
-  let zipOrPostal = 'Postal code'
-  if (countriesWithZip.includes(countryName)) {
-    zipOrPostal = 'Zip code'
-  }
+  let states = State.getStatesOfCountry(selectedCountry?.isoCode || '');
   
   while (!stateObject) {
     for (let i = numSlices - 2; i > 0; i--) {
@@ -134,7 +148,11 @@ export function AddressDialog({ isOpen, setIsOpen, result } : { isOpen: boolean;
                 </Field>
                 <Field className="sm:col-span-1">
                   <Label>Country</Label>
-                  <Select name="country" defaultValue={countryObject?.name}>
+                  <Select 
+                    name="country" 
+                    onChange={handleCountryChange} 
+                    defaultValue={selectedCountry?.name}
+                  >
                     {Country.getAllCountries().map((country: { name: string; }) => (
                       <option key={country.name} value={country.name}>
                         {country.name}
