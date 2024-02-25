@@ -138,10 +138,10 @@ export function PrimaryFeatures() {
                         {feature.description}
                       </p>
                     </div>
-                    <div className="mt-10 w-[45rem] overflow-hidden rounded-xl bg-slate-50 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
-                      <CardContainer>
-                        <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:border-white/[0.2] border-black/[0.1] w-auto h-auto rounded-xl border p-0">
-                        <CardItem translateZ="100" className="w-full mt-0">
+                    <div className="mt-10 w-[45rem] overflow-hidden rounded-xl bg-gray-100 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
+                      <CardContainer className="">
+                        <CardBody className="bg-gray-100 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:border-white/[0.2] border-black/[0.1] w-auto h-auto rounded-xl border p-0">
+                        <CardItem translateZ="40" className="w-full mt-0">
                           <Image
                             className="w-full rounded-2xl"
                             src={feature.image}
