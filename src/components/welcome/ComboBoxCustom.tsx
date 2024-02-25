@@ -20,7 +20,7 @@ export function ComboBoxCustom({ inputs, defaultCountry }: { inputs: any; defaul
 
   return (
     <Combobox as="div" value={selectedInput} onChange={setSelectedInput}>
-      <Label className="block text-sm font-medium leading-6 text-gray-900">Assigned to</Label>
+      {/* <Label className="block text-sm font-medium leading-6 text-gray-900">Assigned to</Label> */}
       <div className="relative mt-2">
         <Combobox.Input
           className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

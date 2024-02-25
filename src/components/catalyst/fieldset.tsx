@@ -36,7 +36,7 @@ export function Legend({ ...props }: HeadlessLegendProps) {
 }
 
 export function FieldGroup({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
-  return <div {...props} data-slot="control" className={clsx(className, 'space-y-8')} />
+  return <div {...props} data-slot="control" className={clsx(className, 'space-y-4')} />
 }
 
 export function Field({ className, ...props }: HeadlessFieldProps) {

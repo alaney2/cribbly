@@ -101,7 +101,7 @@ export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) 
           className='mb-6 text-center animate__animated animate__fadeIn'
           style={{ animationDelay: '0.2s' }}
         >
-          Type in your rental property address to get started
+          Enter your rental property address to get started
         </Text>
         <div
           className={`mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-4/5 transition-opacity appearance-none animate__animated animate__fadeIn`}
