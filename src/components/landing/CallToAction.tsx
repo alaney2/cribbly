@@ -4,11 +4,9 @@ import Image from 'next/image'
 import { Button } from '@/components/catalyst/button'
 import { Container } from '@/components/default/Container'
 import backgroundImage from '@/images/background-call-to-action.jpg'
-import { FollowerPointerCard } from '@/components/aceternity/following-pointer'
 
 export function CallToAction() {
   return (
-    <FollowerPointerCard title="🏠 Future Property Manager">
     <section
       id="get-started-today"
       className="relative overflow-hidden bg-blue-600 py-32"
@@ -30,12 +28,11 @@ export function CallToAction() {
             It’s time to take control of your books. Buy our software so you can
             feel like you’re doing something productive.
           </p>
-          <Button href="/get-started" color="white" className="mt-10 cursor-none">
+          <Button href="/get-started" color="white" className="mt-10">
             Get started
           </Button>
         </div>
       </Container>
     </section>
-    </FollowerPointerCard>
   )
 }

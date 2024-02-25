@@ -118,7 +118,7 @@ export function Header() {
             <div className="hidden md:block">
               <NavLink href="/sign-in">Sign in</NavLink>
             </div>
-            <Button href="/get-started" color="blue">
+            <Button href="/get-started" color="blue" className='cursor-pointer'>
               <span>
                 Get started <span className="hidden lg:inline"></span>
               </span>

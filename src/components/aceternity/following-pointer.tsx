@@ -1,8 +1,9 @@
 // Core component that receives mouse positions and renders pointer and content
 "use client"
 import React, { useEffect, useState } from "react";
+
 import { motion, AnimatePresence, useMotionValue } from "framer-motion";
-import { cn } from "@/utils/cn"
+import { cn } from "@/utils/cn";
 
 export const FollowerPointerCard = ({
   children,
@@ -25,14 +26,35 @@ export const FollowerPointerCard = ({
     }
   }, []);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (rect) {
-      const scrollX = window.scrollX;
-      const scrollY = window.scrollY;
-      x.set(e.clientX - rect.left + scrollX);
-      y.set(e.clientY - rect.top + scrollY);
-    }
+  const throttle = (func: { (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void; apply?: any; }, limit: number | undefined) => {
+    let inThrottle: boolean;
+    return function(this: any) {
+      const args = arguments;
+      const context: any = this;
+      if (!inThrottle) {
+        func.apply(context, args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
+      }
+    };
   };
+  
+  const handleMouseMove = throttle((e: React.MouseEvent<HTMLDivElement>) => {
+    if (ref.current) {
+      const rect = ref.current.getBoundingClientRect(); // Get the updated bounding rect on every mouse move
+      const newX = e.clientX - rect.left;
+      const newY = e.clientY - rect.top;
+
+      if (newX >= 0 && newY >= 0 && newX <= rect.width && newY <= rect.height) {
+        x.set(newX);
+        y.set(newY);
+        setIsInside(true);
+      } else {
+        setIsInside(false);
+      }
+    }
+  }, 1);
+  
   const handleMouseLeave = () => {
     setIsInside(false);
   };
@@ -49,7 +71,7 @@ export const FollowerPointerCard = ({
         cursor: "none",
       }}
       ref={ref}
-      className={cn("relative", className)}
+      className={cn("relative overflow-hidden", className)}
     >
       <AnimatePresence mode="wait">
         {isInside && <FollowPointer x={x} y={y} title={title} />}
@@ -71,7 +93,7 @@ export const FollowPointer = ({
   const colors = [
     "var(--sky-500)",
     "var(--teal-500)",
-    "var(--green-600)",
+    "var(--green-500)",
     "var(--blue-500)",
   ];
   return (
