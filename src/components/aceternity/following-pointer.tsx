@@ -67,9 +67,9 @@ export const FollowerPointerCard = ({
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
-      style={{
-        cursor: "none",
-      }}
+      // style={{
+      //   cursor: "none",
+      // }}
       ref={ref}
       className={cn("relative overflow-hidden", className)}
     >
@@ -122,7 +122,7 @@ export const FollowPointer = ({
         fill="currentColor"
         strokeWidth="1"
         viewBox="0 0 16 16"
-        className="h-6 w-6 text-sky-500 transform -rotate-[70deg] -translate-x-[12px] -translate-y-[10px] stroke-sky-600"
+        className="h-6 w-6 text-sky-500 transform -rotate-[70deg] -translate-x-[6px] -translate-y-[0px] stroke-sky-600"
         height="1em"
         width="1em"
         xmlns="http://www.w3.org/2000/svg"

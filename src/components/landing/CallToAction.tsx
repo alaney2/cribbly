@@ -28,7 +28,7 @@ export function CallToAction() {
             It’s time to take control of your books. Buy our software so you can
             feel like you’re doing something productive.
           </p>
-          <Button href="/get-started" color="white" className="mt-10">
+          <Button href="/get-started" color="sky" className="mt-10 cursor-none">
             Get started
           </Button>
         </div>
