@@ -67,9 +67,9 @@ export const FollowerPointerCard = ({
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
-      // style={{
-      //   cursor: "none",
-      // }}
+      style={{
+        cursor: "none",
+      }}
       ref={ref}
       className={cn("relative overflow-hidden", className)}
     >
