@@ -5,7 +5,6 @@ import { Button } from '@/components/catalyst/button'
 import { Container } from '@/components/default/Container'
 import backgroundImage from '@/images/background-call-to-action.jpg'
 import { FollowerPointerCard } from '@/components/aceternity/following-pointer'
-import { MovingButton } from '@/components/aceternity/moving-border'
 
 export function CallToAction() {
   return (
