@@ -9,7 +9,14 @@ import { Listbox, ListboxLabel, ListboxOption } from '@/components/catalyst/list
 import { Select } from '@/components/catalyst/select'
 import { useState, useEffect } from 'react'
 
-export function AddressDialog({ isOpen, setIsOpen, result } : { isOpen: boolean; setIsOpen: (isOpen: boolean) => void; result: any } ) {
+interface AddressDialogProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  result: any;
+  buttonOnClick: () => void;
+}
+
+export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick } : AddressDialogProps ) {
   const address = result.place_name;
   const addressArray = address.split(',');
   for (let i = 0; i < addressArray.length; i++) {
@@ -102,6 +109,12 @@ export function AddressDialog({ isOpen, setIsOpen, result } : { isOpen: boolean;
       city = addressArray[1].trim();
     }
   }
+
+  const handleClick = () => {
+    // event.preventDefault();
+    setIsOpen(false);
+    buttonOnClick();
+  }
   
   return (
     <Dialog open={isOpen} onClose={setIsOpen}>
@@ -176,7 +189,7 @@ export function AddressDialog({ isOpen, setIsOpen, result } : { isOpen: boolean;
           <Button plain onClick={() => setIsOpen(false)}>
             Cancel
           </Button>
-          <Button color="blue" onClick={() => setIsOpen(false)}>Confirm</Button>
+          <Button color="blue" onClick={handleClick}>Confirm</Button>
         </DialogActions>
       </form>
     </Dialog>
