@@ -4,6 +4,7 @@ import { useId } from 'react'
 import Image, { type ImageProps } from 'next/image'
 import { Tab } from '@headlessui/react'
 import clsx from 'clsx'
+import { BackgroundGradient } from '@/components/aceternity/background-gradient'
 
 import { Container } from '@/components/default/Container'
 import screenshotContacts from '@/images/screenshots/contacts.png'
@@ -205,7 +206,9 @@ function FeaturesDesktop() {
                   style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
                   aria-hidden={featureIndex !== selectedIndex}
                 >
+                  <BackgroundGradient className="">
                   <div className="w-[52.75rem] overflow-hidden rounded-xl bg-white shadow-lg shadow-slate-900/5 ring-1 ring-slate-500/10">
+
                     <Image
                       className="w-full"
                       src={feature.image}
@@ -213,6 +216,7 @@ function FeaturesDesktop() {
                       sizes="52.75rem"
                     />
                   </div>
+                  </BackgroundGradient>
                 </Tab.Panel>
               ))}
             </div>
