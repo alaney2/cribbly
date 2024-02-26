@@ -2,8 +2,8 @@
 import { cn } from "@/utils/cn";
 import React, { useEffect, useRef, useState } from "react";
 import { createNoise3D } from "simplex-noise";
-import { debounce } from 'lodash';
 import { on } from "events";
+import { debounce } from 'lodash';
 
 export const WavyBackground = ({
   children,
