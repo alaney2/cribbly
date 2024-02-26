@@ -22,7 +22,7 @@ const formClasses = `
     text-center animate__animated animate__fadeIn animate__fast
     transition-colors duration-300 box-border	`;
 
-export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink : string; }) {
+export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink? : string; }) {
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [buttonType, setButtonType] = useState<'submit' | 'button' | 'reset'>('button');
   const [fadeOut, setFadeOut] = useState(false);

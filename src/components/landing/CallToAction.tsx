@@ -1,6 +1,4 @@
 import Image from 'next/image'
-
-// import { Button } from '@/components/default/Button'
 import { Button } from '@/components/catalyst/button'
 import { Container } from '@/components/default/Container'
 import backgroundImage from '@/images/background-call-to-action.jpg'

@@ -1,6 +1,6 @@
 'use client'
-
-import { Fragment } from 'react'
+import { useRouter } from 'next/navigation'
+import { Fragment, useRef } from 'react'
 import Link from 'next/link'
 import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
@@ -100,20 +100,22 @@ function MobileNavigation() {
 
 export function Header() {
   const { makeBurst, sparks } = useSparks();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
-  const handleClick = (e: { currentTarget: any; pageX: number; pageY: number }) => {
-    const buttonElement = e.currentTarget;
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!containerRef.current) return;
   
-    // Get button's position and dimensions
-    const rect = buttonElement.getBoundingClientRect();
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const clickX = e.pageX - window.scrollX;
+    const clickY = e.pageY - window.scrollY;
   
-    // Calculate the center position for the sparks, adjusting for button width
-    const center = {
-      x: e.pageX - rect.left - window.scrollX + rect.width / 2,
-      y: e.pageY - rect.top - window.scrollY
-    };
+    const relativeX = clickX - containerRect.left;
+    const relativeY = clickY - containerRect.top;
   
-    makeBurst(center);
+    makeBurst({ x: relativeX, y: relativeY });
+    setTimeout(() => router.push('/get-started'), 150);
   };
 
   return (
@@ -130,7 +132,7 @@ export function Header() {
               {/* <NavLink href="#pricing">Pricing</NavLink> */}
             </div>
           </div>
-          <div className="flex items-center gap-x-5 md:gap-x-8">
+          <div ref={containerRef} className="relative flex items-center gap-x-5 md:gap-x-8">
             <div className="hidden md:block">
               <NavLink href="/sign-in">Sign in</NavLink>
             </div>
@@ -142,7 +144,7 @@ export function Header() {
             {sparks.map(spark => (
               <div
                 key={spark.id}
-                className="absolute w-6 h-2 rounded-sm bg-gray-500 z-50 transform-none"
+                className="absolute w-6 h-2 rounded-sm bg-purple-400 z-50 transform-none"
                 style={{
                   left: `${spark.center.x}px`,
                   top: `${spark.center.y}px`,
