@@ -6,11 +6,10 @@ import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 
 import { Button } from '@/components/default/Button'
-
-// import { Button } from '@/components/catalyst/button'
 import { Container } from '@/components/default/Container'
 import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/default/NavLink'
+import useSparks from '@/components/default/useSparks'
 
 function MobileNavLink({
   href,
@@ -100,6 +99,23 @@ function MobileNavigation() {
 }
 
 export function Header() {
+  const { makeBurst, sparks } = useSparks();
+
+  const handleClick = (e: { currentTarget: any; pageX: number; pageY: number }) => {
+    const buttonElement = e.currentTarget;
+  
+    // Get button's position and dimensions
+    const rect = buttonElement.getBoundingClientRect();
+  
+    // Calculate the center position for the sparks, adjusting for button width
+    const center = {
+      x: e.pageX - rect.left - window.scrollX + rect.width / 2,
+      y: e.pageY - rect.top - window.scrollY
+    };
+  
+    makeBurst(center);
+  };
+
   return (
     <header className="py-10">
       <Container>
@@ -118,11 +134,22 @@ export function Header() {
             <div className="hidden md:block">
               <NavLink href="/sign-in">Sign in</NavLink>
             </div>
-            <Button href="/get-started" color="blue" className='cursor-pointer'>
+            <Button onClick={handleClick} color="blue" className='cursor-pointer'>
               <span>
                 Get started <span className="hidden lg:inline"></span>
               </span>
             </Button>
+            {sparks.map(spark => (
+              <div
+                key={spark.id}
+                className="absolute w-6 h-2 rounded-sm bg-gray-500 z-50 transform-none"
+                style={{
+                  left: `${spark.center.x}px`,
+                  top: `${spark.center.y}px`,
+                  animation: `${spark.aniName} 500ms ease-out both`
+                }}
+              />
+            ))}
             <div className="-mr-1 md:hidden">
               <MobileNavigation />
             </div>

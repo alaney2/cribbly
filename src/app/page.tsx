@@ -19,7 +19,7 @@ export default function Home() {
     <>
       <Header />
       <main>
-        <WavyBackground>
+        <WavyBackground> 
           <Hero />
         </WavyBackground>
         <PrimaryFeatures />

@@ -1,12 +1,32 @@
 "use client"
+import { useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Button } from '@/components/default/Button'
 import { Container } from '@/components/default/Container'
-import { WavyBackground } from '@/components/aceternity/wavy-background'
+import useSparks from '@/components/default/useSparks'
 
 export function Hero() {
+  const { makeBurst, sparks } = useSparks();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (!containerRef.current) return;
+  
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const clickX = e.pageX - window.scrollX;
+    const clickY = e.pageY - window.scrollY;
+  
+    const relativeX = clickX - containerRect.left;
+    const relativeY = clickY - containerRect.top;
+  
+    makeBurst({ x: relativeX, y: relativeY });
+    setTimeout(() => router.push('/get-started'), 150);
+  };
+
   return (
-      // <WavyBackground className="max-w-4xl mx-auto">
     <Container className="pb-16 pt-20 text-center lg:pt-32">
       <div className="relative z-20">
       <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl select-none">
@@ -28,10 +48,21 @@ export function Hero() {
         Manage your properties efficiently. Easily automate rent collection and maintenance requests, and analyze financial reports in one place.
       </p>
       </div>
-      <div className="mt-10 flex justify-center gap-x-6">
-        <Button href="/get-started" className="cursor-pointer">
-          Get 6 months free
+      <div ref={containerRef} className="relative mt-10 flex justify-center gap-x-6">
+        <Button onClick={handleClick} href='/get-started' className="cursor-pointer">
+          Get started for free
         </Button>
+        {sparks.map(spark => (
+          <div
+            key={spark.id}
+            className="absolute w-6 h-2 rounded-sm bg-blue-500 z-50 transform-none"
+            style={{
+              left: `${spark.center.x}px`,
+              top: `${spark.center.y}px`,
+              animation: `${spark.aniName} 500ms ease-out both`
+            }}
+          />
+        ))}
         <Button
           href=""
           variant="outline"
@@ -82,7 +113,5 @@ export function Hero() {
         </ul> */}
       </div>
     </Container>
-    // </WavyBackground>
-
   )
 }

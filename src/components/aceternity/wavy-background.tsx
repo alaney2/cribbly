@@ -1,7 +1,9 @@
 "use client";
 import { cn } from "@/utils/cn";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createNoise3D } from "simplex-noise";
+import { debounce } from 'lodash';
+import { on } from "events";
 
 export const WavyBackground = ({
   children,
@@ -38,13 +40,17 @@ export const WavyBackground = ({
   const getSpeed = () => {
     switch (speed) {
       case "slow":
-        return 0.001;
+        return 0.005;
       case "fast":
-        return 0.002;
+        return 0.0007;
       default:
         return 0.001;
     }
   };
+
+  let animationId: number = 0;
+
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const init = () => {
     canvas = canvasRef.current;
@@ -65,38 +71,53 @@ export const WavyBackground = ({
     "#38bdf8",
     "#818cf8",
     "rgb(59 130 246)",
-    "rgb(37 99 235)",
+    // "rgb(37 99 235)",
     "#c084fc",
     // "#e879f9",
     // "#22d3ee",
   ];
-  const drawWave = (n: number) => {
+
+
+  const drawWave = (n: number, waveOffset=100) => {
     nt += getSpeed();
-    for (i = 0; i < n; i++) {
-      ctx.beginPath();
-      ctx.lineWidth = waveWidth || 50;
-      ctx.strokeStyle = waveColors[i % waveColors.length];
-      for (x = 0; x < w; x += 5) {
-        var y = noise(x / 800, 0.3 * i, nt) * 100;
-        ctx.lineTo(x, y + h * 0.5); // adjust for height, currently at 50% of the container
+    for (let i = 0; i < n; i++) {
+      const wavePath = new Path2D();
+      const stepSize = 5;
+      for (let x = 0; x < w; x += stepSize) {
+        const y = noise(x / 800, 0.3 * i, nt) * 160;
+        if (x === 0) {
+          wavePath.moveTo(x, y + h * 0.5 + waveOffset);
+        } else {
+          wavePath.lineTo(x, y + h * 0.5 + waveOffset);
+        }
       }
-      ctx.stroke();
-      ctx.closePath();
+      ctx.lineWidth = waveWidth || 100;
+      ctx.strokeStyle = waveColors[i % waveColors.length];
+      ctx.stroke(wavePath);
     }
   };
 
-  let animationId: number;
+  
   const render = () => {
+    if (!ctx) return;
     ctx.fillStyle = backgroundFill || "rgb(249 250 251)";
     ctx.globalAlpha = waveOpacity || 0.5;
     ctx.fillRect(0, 0, w, h);
-    drawWave(5);
+    drawWave(6);
     animationId = requestAnimationFrame(render);
   };
 
   useEffect(() => {
+    setDimensions({ width: window.innerWidth, height: window.innerHeight });
+
+    const handleResize = debounce(() => {
+      setDimensions({ width: canvas.clientWidth, height: canvas.clientHeight });
+    }, 100);
+    window.addEventListener('resize', handleResize);
+
     init();
     return () => {
+      window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationId);
     };
   }, []);
