@@ -28,7 +28,9 @@ export const WavyBackground = ({
   waveOpacity?: number;
   [key: string]: any;
 }) => {
+
   const noise = createNoise3D();
+  
   let w: number,
     h: number,
     nt: number,
@@ -36,6 +38,7 @@ export const WavyBackground = ({
     x: number,
     ctx: any,
     canvas: any;
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const getSpeed = () => {
     switch (speed) {
@@ -71,10 +74,7 @@ export const WavyBackground = ({
     "#38bdf8",
     "#818cf8",
     "rgb(59 130 246)",
-    // "rgb(37 99 235)",
     "#c084fc",
-    // "#e879f9",
-    // "#22d3ee",
   ];
 
 
