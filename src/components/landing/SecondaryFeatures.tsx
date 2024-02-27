@@ -121,7 +121,7 @@ function Feature({
     className={clsx(
       className,
       'transition-all duration-300 ease-in-out',
-      !isActive ? 'opacity-60 hover:opacity-100 ring-4 ring-transparent' : 'ring-4'
+      !isActive ? 'opacity-60 hover:opacity-100 lg:ring-4 ring-transparent' : 'lg:ring-4'
     )}
     {...props}
   >
@@ -159,7 +159,6 @@ function FeaturesMobile() {
           <Feature feature={feature} className="mx-auto max-w-2xl" isActive />
           <div className="relative mt-10 pb-10">
             <div className="absolute -inset-x-4 bottom-0 top-8 bg-slate-200 sm:-inset-x-6" />
-            <BackgroundGradient className="">
               <div className="relative mx-auto w-[52.75rem] overflow-hidden rounded-xl bg-white shadow-lg shadow-slate-900/5 ring-1 ring-slate-500/10">
                 <Image
                   className="w-full"
@@ -168,7 +167,6 @@ function FeaturesMobile() {
                   sizes="52.75rem"
                 />
               </div>
-            </BackgroundGradient>
           </div>
         </div>
       ))}
