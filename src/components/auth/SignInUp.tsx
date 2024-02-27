@@ -22,6 +22,7 @@ const formClasses = `
     text-center animate__animated animate__fadeIn animate__fast
     transition-colors duration-300 box-border	`;
 
+
 export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink? : string; }) {
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [buttonType, setButtonType] = useState<'submit' | 'button' | 'reset'>('button');
@@ -29,12 +30,10 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
   const [currentStep, setCurrentStep] = useState(0);
   const [email, setEmail] = useState('');
   const emailInputRef = useRef<HTMLInputElement>(null);
+  const [showInvalidEmail, setShowInvalidEmail] = useState(false);
 
   useEffect(() => {
     setFadeOut(false);
-    // if (showEmailInput && emailInputRef && emailInputRef.current) {
-    //   emailInputRef.current.focus();
-    // }
   }, [showEmailInput]);
 
   const backToSignIn = () => {
@@ -43,6 +42,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
     setButtonType('button');
     setEmail('');
     setCurrentStep(0);
+    setShowInvalidEmail(false);
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +70,8 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
       setTimeout(() => {
         setCurrentStep(1);
       }, 400)
+    } else {
+      setShowInvalidEmail(true);
     }
   }
 
@@ -85,8 +87,8 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
                 alt=""
                 priority={false}
               />
-              <h2 className="text-center my-6 text-lg font-semibold text-zinc-600">
-                {signIn ? ' Sign in to Cribbly' : 'Create your Cribbly account'}
+              <h2 className="text-center my-6 text-lg font-semibold text-zinc-600 cursor-default">
+                {signIn ? ' Sign in to Cribbly' : 'Create your account'}
               </h2>
             </div>
 
@@ -99,18 +101,26 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
                 {showEmailInput && (
                   <input
                     ref={emailInputRef}
-                    type="email"
+                    // type="email"
                     name="email"
                     id="email"
                     className={`${formClasses} ${styles.inputCenterText}`}
                     placeholder="Email"
                     onChange={handleInputChange}
-                    required={true}
+                    // required={true}
                     autoComplete='off'
                     autoFocus
                   />
                 )}
-                <Button outline type={buttonType} className="w-full mt-4 h-12 text-zinc-600 cursor-default"
+                {showInvalidEmail && (
+                  <p className="text-red-500 text-xs mt-1 -mb-1 text-center">
+                    Please enter a valid email address
+                  </p>
+                )}
+                <Button 
+                  outline 
+                  type={buttonType}
+                  className="w-full mt-4 h-12 text-zinc-600 cursor-default"
                   onClick={buttonType === 'button' ? handleButtonClick : handleButtonSubmit}
                 >
                   <span className="text-sm leading-6 font-semibold">

@@ -4,6 +4,7 @@ import { Container } from '@/components/default/Container'
 import backgroundImage from '@/images/background-call-to-action.jpg'
 
 export function CallToAction() {
+
   return (
     <section
       id="get-started-today"
@@ -26,7 +27,11 @@ export function CallToAction() {
             It’s time to take control of your books. Buy our software so you can
             feel like you’re doing something productive.
           </p>
-          <Button href="/get-started" color="sky" className="mt-10 cursor-none">
+          <Button 
+            href="/get-started"
+            color="sky" 
+            className={`mt-10 cursor-none`}
+          >
             Get started
           </Button>
         </div>
