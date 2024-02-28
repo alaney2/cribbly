@@ -17,7 +17,7 @@ export function OtpResend({ email }: { email: string }) {
   }, [cooldownTime]);
 
   const handleResendOtp = async () => {
-    setCooldownTime(30);
+    setTimeout(() => setCooldownTime(30), 1000);
     try {
       const response = await fetch('/auth/otp/resend', {
         method: 'POST',
@@ -40,8 +40,8 @@ export function OtpResend({ email }: { email: string }) {
     <div className="text-center mt-6 text-sm tracking-tight text-gray-400 font-medium">
       <p>Didn&apos;t receive code?{' '}
         <button
-          className={clsx("font-semibold",
-                          cooldownTime > 0 ? 'text-blue-300 hover:text-blue-400 cursor-not-allowed' : 'text-blue-500 active:text-gray-500 cursor-default' )}
+          className={clsx("font-semibold cursor-default",
+                          cooldownTime > 0 ? 'text-blue-300' : 'text-blue-500 active:text-gray-500 hover:text-blue-400' )}
           onClick={handleResendOtp}
           disabled={cooldownTime > 0}
         >

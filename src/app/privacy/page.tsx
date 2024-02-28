@@ -7,7 +7,7 @@ export default function Privacy() {
       <div className="w-full py-6 space-y-6 md:py-12 justify-center flex">
         <div className="container grid max-w-3xl gap-6 px-4 text-sm md:gap-8 md:px-6">
           <div className="space-y-4">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">Privacy Policy</h1>
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl">Privacy Policy</h1>
             <Text className="text-gray-500 dark:text-gray-400"><Strong>Effective date:</Strong> February 27, 2024</Text>
           </div>
           <div className="space-y-4">
