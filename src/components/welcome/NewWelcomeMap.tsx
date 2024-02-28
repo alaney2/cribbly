@@ -3,9 +3,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import { Text } from '@/components/catalyst/text';
-import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
-import { Field, Label } from '@/components/catalyst/fieldset'
-import { Input } from '@/components/catalyst/input'
 import 'animate.css';
 import styles from './Welcome.module.css';
 import Skeleton from 'react-loading-skeleton'

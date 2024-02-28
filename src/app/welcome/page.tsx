@@ -2,10 +2,9 @@
 import { useState } from "react";
 import { Step0 } from '@/components/welcome/Step0'
 import { InputName } from '@/components/welcome/InputName'
-import { WelcomeMap } from "@/components/welcome/WelcomeMap"
 import { AutofilledProperty } from "@/components/welcome/AutofilledProperty";
 import { NewWelcomeMap } from "@/components/welcome/NewWelcomeMap";
-import { ConfirmAddress } from "@/components/welcome/ConfirmAddress";
+import { Checkout } from "@/components/welcome/Checkout";
 
 export default function Welcome() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -41,14 +40,13 @@ export default function Welcome() {
       case 2:
         return (
           <div className="w-full h-full">
-            {/* <WelcomeMap buttonOnClick={() => setCurrentStep(currentStep+1)} /> */}
             <NewWelcomeMap buttonOnClick={() => setCurrentStep(currentStep+1)} />
           </div>
         );
       case 3:
         return (
           <div className="w-full h-full px-32 pb-28 pt-16">
-            <ConfirmAddress />
+            <Checkout />
           </div>
         )
       case 4:

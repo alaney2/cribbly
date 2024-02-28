@@ -111,7 +111,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const pathsWithoutAuth = ['/sign-in', '/get-started', '/privacy'];
+  const pathsWithoutAuth = ['/sign-in', '/get-started', '/privacy', 'terms'];
   // Redirect to login if not authenticated
   if (!userAuthenticated && pathname !== '/' && !pathsWithoutAuth.some(path => pathname.startsWith(path))) {
     url.pathname = '/';
