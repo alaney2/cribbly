@@ -3,12 +3,11 @@ import Link from "next/link"
 
 export default function Terms() {
   return(
-    <div className="py-6 space-y-6 flex justify-center">
-      <div className="container grid max-w-3xl px-4 md:px-6">
-        <div className="prose prose-sm sm:prose lg:prose-lg xl:prose-xl dark:prose-dark max-w-none">
-          <div className="pb-4 space-y-4 border-b border-gray-200 dark:border-gray-800">
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Terms of Service</h1>
-            <p className="text-gray-500 dark:text-gray-400">Last updated: February 27, 2024</p>
+    <div className="w-full py-6 space-y-6 md:py-12 justify-center flex">
+        <div className="container grid max-w-3xl gap-6 px-4 text-sm md:gap-8 md:px-6">
+          <div className="space-y-4">
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tighter">Terms of Service</h1>
+            <Text className="text-gray-500 dark:text-gray-400"><Strong>Effective date:</Strong> February 27, 2024</Text>
           </div>
           <div className="space-y-8">
             <div className="space-y-2">
@@ -87,6 +86,5 @@ export default function Terms() {
           </div>
         </div>
       </div>
-    </div>
   )
 }
