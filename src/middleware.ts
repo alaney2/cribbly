@@ -96,7 +96,10 @@ export async function middleware(request: NextRequest) {
   if (cookies().has('currentUser')) {
     userAuthenticated = true;
     const { data, error } = await supabase.auth.getUser()
-    if (pathname !== '/welcome' && (!data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true)) {
+
+    const availableRoutes = ['/privacy', '/terms'];
+
+    if (pathname !== '/welcome' && (!data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true) && !availableRoutes.some(path => url.pathname.startsWith(path))) {
       url.pathname = '/welcome';
       return NextResponse.redirect(url);
     }
