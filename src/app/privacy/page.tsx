@@ -1,9 +1,19 @@
 import { Text, Strong } from "@/components/catalyst/text"
 import Link from "next/link"
+import { type Metadata } from 'next'
+import Head from 'next/head'
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy'
+}
 
 export default function Privacy() {
   return (
     <>
+      <Head>
+        <title>Privacy Policy</title>
+        
+      </Head>
       <div className="w-full py-6 space-y-6 md:py-12 justify-center flex">
         <div className="container grid max-w-3xl gap-6 px-4 text-sm md:gap-8 md:px-6">
           <div className="space-y-4">
