@@ -17,6 +17,9 @@ importers:
       '@heroicons/react':
         specifier: ^2.0.18
         version: 2.0.18(react@18.2.0)
+      '@lemonsqueezy/lemonsqueezy.js':
+        specifier: ^2.2.0
+        version: 2.2.0
       '@mapbox/mapbox-gl-geocoder':
         specifier: ^5.0.2
         version: 5.0.2
@@ -354,6 +357,11 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
+    dev: false
+
+  /@lemonsqueezy/lemonsqueezy.js@2.2.0:
+    resolution: {integrity: sha512-DsZTeowehSLTESUZ6xxoYPDhoE8BYepWsj3TCqibG7FvB8X1HERPXQlc6E/IeGj22SOfIM997b7GfFkeLWY8pA==}
+    engines: {node: '>=18'}
     dev: false
 
   /@mapbox/fusspot@0.4.0:

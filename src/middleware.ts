@@ -10,6 +10,13 @@ export async function middleware(request: NextRequest) {
     },
   })
 
+  const url = request.nextUrl.clone();
+  const { pathname } = request.nextUrl;
+
+  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/favicon.ico') || pathname.startsWith('/auth')) {
+    return NextResponse.next();
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -55,14 +62,6 @@ export async function middleware(request: NextRequest) {
       },
     }
   )
-
-
-  const url = request.nextUrl.clone();
-  const { pathname } = request.nextUrl;
-
-  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/favicon.ico') || pathname.startsWith('/auth')) {
-    return NextResponse.next();
-  }
 
   const deprecatedPaths = ['/forgot-password', '/update-password', '/get-started/otp']
   if (deprecatedPaths.some(path => pathname.startsWith(path))) {

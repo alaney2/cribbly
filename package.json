@@ -17,6 +17,7 @@
     "@headlessui/react": "2.0.0-alpha.4",
     "@headlessui/tailwindcss": "^0.2.0",
     "@heroicons/react": "^2.0.18",
+    "@lemonsqueezy/lemonsqueezy.js": "^2.2.0",
     "@mapbox/mapbox-gl-geocoder": "^5.0.2",
     "@preact/signals": "^1.2.2",
     "@splinetool/react-spline": "^2.2.6",

@@ -120,7 +120,7 @@ function Feature({
     <div
     className={clsx(
       className,
-      'transition-all duration-300 ease-in-out',
+      'transition-all duration-150 ease-in-out',
       !isActive ? 'opacity-60 hover:opacity-100 lg:ring-4 ring-transparent' : 'lg:ring-4'
     )}
     {...props}

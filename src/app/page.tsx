@@ -27,8 +27,8 @@ export default function Home() {
         <FollowerPointerCard title="🏠 Future Property Manager">
           <CallToAction />
         </FollowerPointerCard>
-        {/* <Testimonials /> */}
-        {/* <Pricing /> */}
+        <Testimonials />
+        <Pricing />
         <Faqs />
       </main>
       <Footer />
