@@ -1,67 +1,15 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers'
+import { updateSession, createClient } from '@/utils/supabase/middleware';
 
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  })
+
+  const { supabase, response } = createClient(request);
+  const { data, error } = await supabase.auth.getUser()
 
   const url = request.nextUrl.clone();
   const { pathname } = request.nextUrl;
-
-  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/favicon.ico') || pathname.startsWith('/auth')) {
-    return NextResponse.next();
-  }
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-        },
-      },
-    }
-  )
 
   const deprecatedPaths = ['/forgot-password', '/update-password', '/get-started/otp']
   if (deprecatedPaths.some(path => pathname.startsWith(path))) {
@@ -90,12 +38,7 @@ export async function middleware(request: NextRequest) {
     return response
   }
   
-  let userAuthenticated = false;
-
-  if (cookies().has('currentUser')) {
-    userAuthenticated = true;
-    const { data, error } = await supabase.auth.getUser()
-
+  if (data.user) {
     const availableRoutes = ['/privacy', '/terms'];
 
     if (pathname !== '/welcome' && (!data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true) && !availableRoutes.some(path => url.pathname.startsWith(path))) {
@@ -111,14 +54,29 @@ export async function middleware(request: NextRequest) {
     } else {
         return NextResponse.next();
     }
-  }
-
-  const pathsWithoutAuth = ['/sign-in', '/get-started', '/privacy', '/terms'];
-  // Redirect to login if not authenticated
-  if (!userAuthenticated && pathname !== '/' && !pathsWithoutAuth.some(path => pathname.startsWith(path))) {
-    url.pathname = '/';
-    return NextResponse.redirect(url);
+  } else {
+    const pathsWithoutAuth = ['/sign-in', '/get-started', '/privacy', '/terms'];
+    // Redirect to login if not authenticated
+    if (pathname !== '/' && !pathsWithoutAuth.some(path => pathname.startsWith(path))) {
+      url.pathname = '/';
+      return NextResponse.redirect(url);
+    }
   }
 
   return NextResponse.next();
 }
+
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
+     * Feel free to modify this pattern to include more paths.
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'
+  ]
+};
