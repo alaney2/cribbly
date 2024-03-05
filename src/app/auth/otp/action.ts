@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
+
 export async function verifyOtp(email: string, prevState: any, formData: FormData) {
   const cookieStore = cookies()
 
@@ -16,7 +17,7 @@ export async function verifyOtp(email: string, prevState: any, formData: FormDat
   }
 
   if (token && email) {
-    const supabase = createClient(cookieStore)
+    const supabase = createClient()
     const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
 
     if (error) {

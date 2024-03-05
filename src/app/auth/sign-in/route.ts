@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   const email = String(formData.get('email'))
   const password = String(formData.get('password'))
   const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
+  const supabase = createClient()
 
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
