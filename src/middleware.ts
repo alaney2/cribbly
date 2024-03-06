@@ -4,9 +4,9 @@ import { updateSession, createClient } from '@/utils/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone()
-  if (url.pathname.startsWith('/_next') || url.pathname.startsWith('/auth')) {
-    return NextResponse.next()
-  }
+  // if (url.pathname.startsWith('/_next') || url.pathname.startsWith('/auth')) {
+  //   return NextResponse.next()
+  // }
 
   const { supabase, response } = createClient(request)
   let { data, error } = await supabase.auth.getUser()
@@ -67,10 +67,11 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - /auth (auth routes)
+     * - /api (api routes)
      * - favicon.ico (favicon file)
      * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|/auth|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|/auth|/api|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
