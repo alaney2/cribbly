@@ -1,12 +1,9 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { cookies } from 'next/headers'
-import { updateSession, createClient } from '@/utils/supabase/middleware'
+import { createClient } from '@/utils/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone()
-  // if (url.pathname.startsWith('/_next') || url.pathname.startsWith('/auth') || url.pathname.startsWith('/api')) {
-  //   return NextResponse.next()
-  // }
 
   const { supabase, response } = createClient(request)
   let { data, error } = await supabase.auth.getUser()
@@ -18,20 +15,21 @@ export async function middleware(request: NextRequest) {
     '/get-started/otp',
   ]
   if (deprecatedPaths.some((path) => pathname.startsWith(path))) {
-    url.pathname = '/get-started'
-    return NextResponse.redirect(url)
+    return NextResponse.rewrite(new URL('/get-started', request.url))
   }
 
-  if (data.user || cookies().get('currentUser')) {
-    const availableRoutes = ['/privacy', '/terms']
+  const availableRoutes = ['/privacy', '/terms']
+  if (availableRoutes.some((path) => url.pathname.startsWith(path))) {
+    return NextResponse.next()
+  }
+
+  if (data.user) {
     if (
       pathname !== '/welcome' &&
       (!data?.user?.user_metadata?.welcome_screen ||
-        data?.user?.user_metadata?.welcome_screen === true) &&
-      !availableRoutes.some((path) => url.pathname.startsWith(path))
+        data?.user?.user_metadata?.welcome_screen === true)
     ) {
-      url.pathname = '/welcome'
-      return NextResponse.redirect(url)
+      return NextResponse.rewrite(new URL('/welcome', request.url))
     }
 
     const unavailableRoutes = ['/sign-in', '/get-started']
@@ -40,8 +38,7 @@ export async function middleware(request: NextRequest) {
       pathname === '/' ||
       unavailableRoutes.some((path) => url.pathname.startsWith(path))
     ) {
-      url.pathname = '/dashboard'
-      return NextResponse.redirect(url)
+      return NextResponse.rewrite(new URL('/dashboard', request.url))
     } else {
       return NextResponse.next()
     }
@@ -52,11 +49,10 @@ export async function middleware(request: NextRequest) {
       pathname !== '/' &&
       !pathsWithoutAuth.some((path) => pathname.startsWith(path))
     ) {
-      url.pathname = '/'
-      return NextResponse.redirect(url)
+      return NextResponse.rewrite(new URL('/', request.url))
     }
   }
-
+  return response
   return NextResponse.next()
 }
 
@@ -72,6 +68,12 @@ export const config = {
      * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|auth|api|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    {
+      source: '/((?!_next/static|_next/image|auth|api|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+      missing: [
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
+      ],
+    }
   ],
 }

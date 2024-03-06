@@ -8,30 +8,23 @@ export async function GET(request: NextRequest) {
   // by the `@supabase/ssr` package. It exchanges an auth code for the user's session.
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  const next = requestUrl.searchParams.get('next') ?? '/'
+
   if (code) {
     const supabase = createClient();
 
-    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data: { session, user }, error } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (error) {
-      return NextResponse.redirect(
-        `${requestUrl.origin}/sign-in`,
-        {
-          status: 301,
-        }
-      );
+    if (!error) {
+      return NextResponse.redirect(`${requestUrl.origin}${next}`)
     }
 
-    const user = {
-      id: data?.user?.id,
-      email: data?.user?.email,
-    }
-
-    const response = NextResponse.redirect(requestUrl.origin);
-
-    response.cookies.set('currentUser', JSON.stringify(user))
-
-    return response;
+    return NextResponse.redirect(
+      `${requestUrl.origin}/sign-in`,
+      {
+        status: 301,
+      }
+    );
   }
 
   // URL to redirect to after sign in process completes

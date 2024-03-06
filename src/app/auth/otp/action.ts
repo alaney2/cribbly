@@ -6,7 +6,6 @@ import { redirect } from 'next/navigation'
 
 
 export async function verifyOtp(email: string, prevState: any, formData: FormData) {
-  const cookieStore = cookies()
 
   let token = '';
   for (let i = 0; i < 6; i++) {
@@ -21,7 +20,6 @@ export async function verifyOtp(email: string, prevState: any, formData: FormDat
     const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
 
     if (error) {
-      // redirect('/get-started/otp?error=Invalid verification code')
       return {
         message: 'Please enter a valid verification code'
       }
@@ -29,21 +27,6 @@ export async function verifyOtp(email: string, prevState: any, formData: FormDat
 
     // Handle successful verification
     if (data) {
-      const user = {
-        id: data?.user?.id,
-        email: data?.user?.email,
-      }
-
-      cookieStore.set({
-        name: 'currentUser',
-        value: JSON.stringify(user),
-        path: '/',
-        httpOnly: true,
-        secure: true,
-      })
-
-      cookieStore.delete('email');
-      
       if (!data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true) {
         redirect('/welcome')
       }
