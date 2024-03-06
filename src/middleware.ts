@@ -4,7 +4,7 @@ import { updateSession, createClient } from '@/utils/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone()
-  // if (url.pathname.startsWith('/_next') || url.pathname.startsWith('/auth')) {
+  // if (url.pathname.startsWith('/_next') || url.pathname.startsWith('/auth') || url.pathname.startsWith('/api')) {
   //   return NextResponse.next()
   // }
 
@@ -72,6 +72,6 @@ export const config = {
      * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|/auth|/api|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|auth|api|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
