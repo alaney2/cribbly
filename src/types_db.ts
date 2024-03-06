@@ -24,65 +24,65 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "customers_id_fkey"
-            columns: ["id"]
+            foreignKeyName: 'customers_id_fkey'
+            columns: ['id']
             isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       prices: {
         Row: {
           active: boolean | null
-          billing_scheme: "per_unit" | "tiered" | null
+          billing_scheme: 'per_unit' | 'tiered' | null
           currency: string | null
           id: string
-          interval: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval: Database['public']['Enums']['pricing_plan_interval'] | null
           interval_count: number | null
           product_id: string | null
-          tax_behavior?: "exclusive" | "inclusive" | "unspecified" | null
-          tiers_mode: "graduated" | "volume" | null
+          tax_behavior?: 'exclusive' | 'inclusive' | 'unspecified' | null
+          tiers_mode: 'graduated' | 'volume' | null
           trial_period_days: number | null
-          type: Database["public"]["Enums"]["pricing_type"] | null
+          type: Database['public']['Enums']['pricing_type'] | null
           unit_amount: number | null
         }
         Insert: {
           active?: boolean | null
-          billing_scheme: "per_unit" | "tiered" | null
+          billing_scheme: 'per_unit' | 'tiered' | null
           currency?: string | null
           id: string
-          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval?: Database['public']['Enums']['pricing_plan_interval'] | null
           interval_count?: number | null
           product_id?: string | null
-          tax_behavior?: "exclusive" | "inclusive" | "unspecified" | null
-          tiers_mode: "graduated" | "volume" | null
+          tax_behavior?: 'exclusive' | 'inclusive' | 'unspecified' | null
+          tiers_mode: 'graduated' | 'volume' | null
           trial_period_days?: number | null
-          type?: Database["public"]["Enums"]["pricing_type"] | null
+          type?: Database['public']['Enums']['pricing_type'] | null
           unit_amount?: number | null
         }
         Update: {
           active?: boolean | null
-          billing_scheme: "per_unit" | "tiered" | null
+          billing_scheme: 'per_unit' | 'tiered' | null
           currency?: string | null
           id?: string
-          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval?: Database['public']['Enums']['pricing_plan_interval'] | null
           interval_count?: number | null
           product_id?: string | null
-          tax_behavior?: "exclusive" | "inclusive" | "unspecified"
-          tiers_mode: "graduated" | "volume" | null
+          tax_behavior?: 'exclusive' | 'inclusive' | 'unspecified'
+          tiers_mode: 'graduated' | 'volume' | null
           trial_period_days?: number | null
-          type?: Database["public"]["Enums"]["pricing_type"] | null
+          type?: Database['public']['Enums']['pricing_type'] | null
           unit_amount?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "prices_product_id_fkey"
-            columns: ["product_id"]
+            foreignKeyName: 'prices_product_id_fkey'
+            columns: ['product_id']
             isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          }
+            referencedRelation: 'products'
+            referencedColumns: ['id']
+          },
         ]
       }
       products: {
@@ -125,7 +125,7 @@ export interface Database {
           metadata: Json | null
           price_id: string | null
           quantity: number | null
-          status: Database["public"]["Enums"]["subscription_status"] | null
+          status: Database['public']['Enums']['subscription_status'] | null
           trial_end: string | null
           trial_start: string | null
           user_id: string
@@ -142,7 +142,7 @@ export interface Database {
           metadata?: Json | null
           price_id?: string | null
           quantity?: number | null
-          status?: Database["public"]["Enums"]["subscription_status"] | null
+          status?: Database['public']['Enums']['subscription_status'] | null
           trial_end?: string | null
           trial_start?: string | null
           user_id: string
@@ -159,26 +159,26 @@ export interface Database {
           metadata?: Json | null
           price_id?: string | null
           quantity?: number | null
-          status?: Database["public"]["Enums"]["subscription_status"] | null
+          status?: Database['public']['Enums']['subscription_status'] | null
           trial_end?: string | null
           trial_start?: string | null
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "subscriptions_price_id_fkey"
-            columns: ["price_id"]
+            foreignKeyName: 'subscriptions_price_id_fkey'
+            columns: ['price_id']
             isOneToOne: false
-            referencedRelation: "prices"
-            referencedColumns: ["id"]
+            referencedRelation: 'prices'
+            referencedColumns: ['id']
           },
           {
-            foreignKeyName: "subscriptions_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: 'subscriptions_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
       users: {
@@ -205,12 +205,12 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "users_id_fkey"
-            columns: ["id"]
+            foreignKeyName: 'users_id_fkey'
+            columns: ['id']
             isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
         ]
       }
     }
@@ -221,17 +221,17 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      pricing_plan_interval: "day" | "week" | "month" | "year"
-      pricing_type: "one_time" | "recurring"
+      pricing_plan_interval: 'day' | 'week' | 'month' | 'year'
+      pricing_type: 'one_time' | 'recurring'
       subscription_status:
-        | "trialing"
-        | "active"
-        | "canceled"
-        | "incomplete"
-        | "incomplete_expired"
-        | "past_due"
-        | "unpaid"
-        | "paused"
+        | 'trialing'
+        | 'active'
+        | 'canceled'
+        | 'incomplete'
+        | 'incomplete_expired'
+        | 'past_due'
+        | 'unpaid'
+        | 'paused'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -241,23 +241,23 @@ export interface Database {
 
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | keyof (Database['public']['Tables'] & Database['public']['Views'])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never
+    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+        Database[PublicTableNameOrOptions['schema']]['Views'])
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
-      Database["public"]["Views"])
-  ? (Database["public"]["Tables"] &
-      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof (Database['public']['Tables'] &
+      Database['public']['Views'])
+  ? (Database['public']['Tables'] &
+      Database['public']['Views'])[PublicTableNameOrOptions] extends {
       Row: infer R
     }
     ? R
@@ -266,19 +266,19 @@ export type Tables<
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof Database['public']['Tables']
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
+  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
       Insert: infer I
     }
     ? I
@@ -287,19 +287,19 @@ export type TablesInsert<
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof Database['public']['Tables']
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof Database['public']['Tables']
+  ? Database['public']['Tables'][PublicTableNameOrOptions] extends {
       Update: infer U
     }
     ? U
@@ -308,13 +308,13 @@ export type TablesUpdate<
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof Database["public"]["Enums"]
+    | keyof Database['public']['Enums']
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
-    : never = never
+    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
+    : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
-  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database['public']['Enums']
+  ? Database['public']['Enums'][PublicEnumNameOrOptions]
   : never
