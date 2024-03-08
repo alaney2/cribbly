@@ -32,9 +32,6 @@ interface Props {
 type BillingInterval = 'lifetime' | 'year' | 'month';
 
 export default function Pricing({ user, products, subscription }: Props) {
-  // console.log('user', user)
-  // console.log('products', products)
-  // console.log('subscription', subscription)
   const intervals = Array.from(
     new Set(
       products.flatMap((product) =>
