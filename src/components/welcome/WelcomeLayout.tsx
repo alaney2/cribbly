@@ -8,7 +8,7 @@ import { Checkout } from '@/components/welcome/Checkout'
 import Payment from '@/components/welcome/Payment'
 
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
-  const [currentStep, setCurrentStep] = useState(0)
+  const [currentStep, setCurrentStep] = useState(3)
 
   const steps = [
     { name: 'Step 0' },
@@ -29,7 +29,6 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
       case 0:
         return (
           <div className="h-full w-full overscroll-none px-8">
-            <Payment user={user} subscription={subscription} products={products} />
             <Step0 buttonOnClick={() => setCurrentStep(currentStep + 1)} />
           </div>
         )
@@ -50,6 +49,8 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
       case 3:
         return (
           <div className="h-full w-full px-32 pb-28 pt-16">
+            <Payment user={user} subscription={subscription} products={products} />
+
             <Checkout />
           </div>
         )
