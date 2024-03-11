@@ -6,6 +6,7 @@ import { AutofilledProperty } from '@/components/welcome/AutofilledProperty'
 import { NewWelcomeMap } from '@/components/welcome/NewWelcomeMap'
 import { Checkout } from '@/components/welcome/Checkout'
 import Payment from '@/components/welcome/Payment'
+import { Pricing } from '@/components/landing/Pricing'
 
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
   const [currentStep, setCurrentStep] = useState(3)
@@ -49,6 +50,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
       case 3:
         return (
           <div className="h-full w-full px-32 pb-28 pt-16">
+            <Pricing />
             <Payment user={user} subscription={subscription} products={products} />
 
             <Checkout />
