@@ -47,7 +47,6 @@ export default function Pricing({ user, products, subscription }: Props) {
 
   const handleStripeCheckout = async (price: Price) => {
     setPriceIdLoading(price.id);
-    console.log(user)
     if (!user) {
       setPriceIdLoading(undefined);
       return router.push('/sign-in');
@@ -147,7 +146,7 @@ export default function Pricing({ user, products, subscription }: Props) {
                 (price) => price.interval === billingInterval
               );
               if (!price) return null;
-              console.log('price', price)
+              // console.log('price', price)
               const priceString = new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: price.currency!,
