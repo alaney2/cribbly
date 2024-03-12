@@ -9,15 +9,6 @@ export async function middleware(request: NextRequest) {
   let { data, error } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
 
-  const deprecatedPaths = [
-    '/forgot-password',
-    '/update-password',
-    '/get-started/otp',
-  ]
-  if (deprecatedPaths.some((path) => pathname.startsWith(path))) {
-    return NextResponse.rewrite(new URL('/get-started', request.url))
-  }
-
   const availableRoutes = ['/privacy', '/terms']
   if (availableRoutes.some((path) => url.pathname.startsWith(path))) {
     return NextResponse.next()
@@ -29,7 +20,7 @@ export async function middleware(request: NextRequest) {
       (!data?.user?.user_metadata?.welcome_screen ||
         data?.user?.user_metadata?.welcome_screen === true)
     ) {
-      return NextResponse.rewrite(new URL('/welcome', request.url))
+      return NextResponse.redirect(new URL('/welcome', request.url))
     }
 
     const unavailableRoutes = ['/sign-in', '/get-started']
@@ -38,7 +29,7 @@ export async function middleware(request: NextRequest) {
       pathname === '/' ||
       unavailableRoutes.some((path) => url.pathname.startsWith(path))
     ) {
-      return NextResponse.rewrite(new URL('/dashboard', request.url))
+      return NextResponse.redirect(new URL('/dashboard', request.url))
     } else {
       return NextResponse.next()
     }
@@ -49,7 +40,7 @@ export async function middleware(request: NextRequest) {
       pathname !== '/' &&
       !pathsWithoutAuth.some((path) => pathname.startsWith(path))
     ) {
-      return NextResponse.rewrite(new URL('/', request.url))
+      return NextResponse.redirect(new URL('/', request.url))
     }
   }
   return response

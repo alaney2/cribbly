@@ -50,7 +50,6 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
       case 3:
         return (
           <div className="h-full w-full px-32 pb-28 pt-16">
-            <Pricing />
             <Payment user={user} subscription={subscription} products={products} />
 
             <Checkout />
