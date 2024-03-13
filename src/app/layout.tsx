@@ -81,9 +81,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <SpeedInsights />
       </body>
 
-      <Suspense>
+      {/* <Suspense>
         <Toaster />
-      </Suspense>
+      </Suspense> */}
     </html>
   )
 }

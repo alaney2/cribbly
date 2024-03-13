@@ -50,9 +50,9 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
       case 3:
         return (
           <div className="h-full w-full px-32 pb-28 pt-16">
-            <Payment user={user} subscription={subscription} products={products} />
+            {/* <Payment user={user} subscription={subscription} products={products} /> */}
 
-            <Checkout />
+            <Checkout user={user} subscription={subscription} products={products} />
           </div>
         )
       case 4:
