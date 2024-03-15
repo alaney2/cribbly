@@ -18,6 +18,20 @@ export const metadata: Metadata = {
   },
   description:
     'Cribbly is the all-in-one property management software designed for small landlords. Its powerful platform automates rent collection, maintenance requests, and more.',
+  metadataBase: new URL('https://www.cribbly.io'),
+  openGraph: {
+    title: 'Cribbly',
+    description: 'Property management software for small landlords',
+    url: 'https://cribbly.io',
+    siteName: 'Cribbly',
+    images: [
+      {
+        url: '/src/images/logo.svg'
+      }
+    ],
+    locale: 'en_US',
+    type: 'website'
+  },
 }
 
 const inter = Inter({
