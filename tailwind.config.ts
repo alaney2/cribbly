@@ -45,6 +45,7 @@ export default {
     headlessuiPlugin,
     require('@tailwindcss/forms'),
     addVariablesForColors,
+    require("tailwindcss-animate"),
   ],
 } satisfies Config
 
