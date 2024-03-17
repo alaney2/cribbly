@@ -63,16 +63,15 @@ export default function RootLayout({ children }: PropsWithChildren) {
         lexend.variable,
       )}
     >
-      {/* <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"></meta> */}
-      <meta property="twitter:image" content="../images/icon.png"></meta>
+
+      {/* <meta property="twitter:image" content="../images/icon.png"></meta>
       <meta property="twitter:card" content="../images/icon.png"></meta>
       <meta property="twitter:title" content="Property Management Software for Small Landlords | Cribbly"></meta>
       <meta property="twitter:description" content="Cribbly is the all-in-one property management software designed for small landlords. Its powerful platform automates rent collection, maintenance requests, and more."></meta>
       <meta property="og:image" content="../images/icon.png"></meta>
       <meta property="og:title" content="Property Management Software for Small Landlords | Cribbly"></meta>
       <meta property="og:description" content="Cribbly is the all-in-one property management software designed for small landlords. Its powerful platform automates rent collection, maintenance requests, and more." />
-      <meta property="og:url" content="https://cribbly.io"></meta>
+      <meta property="og:url" content="https://cribbly.io"></meta> */}
 
       <Script
         async

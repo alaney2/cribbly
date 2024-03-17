@@ -56,7 +56,7 @@ export function SlimLayout({ children, splineLink }: { children: React.ReactNode
                   <div className="absolute inset-0 bg-blue-500/60 w-full h-full z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
                   <Image src={backgroundDefault} alt="" className="absolute inset-0 h-full w-full object-cover z-0 " />
                   <Boxes/>
-                  <h1 className={"md:text-4xl text-xl text-white relative z-20"}>
+                  <h1 className={"md:text-2xl xl:text-3xl text-xl text-white relative z-20"}>
                     Get started with Cribbly
                   </h1>
                   <p className="text-center mt-2 text-neutral-300 relative z-20">
