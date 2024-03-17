@@ -23,8 +23,6 @@ export async function middleware(request: NextRequest) {
 
     const welcome_screen = show_welcome?.data?.welcome_screen
 
-    console.log('show_welcome', welcome_screen)
-
     if (pathname !== '/welcome' && welcome_screen) {
       return NextResponse.redirect(new URL('/welcome', request.url))
     }
