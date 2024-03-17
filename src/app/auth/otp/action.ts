@@ -33,7 +33,9 @@ export async function verifyOtp(email: string, prevState: any, formData: FormDat
         .eq('id', user?.id)
         .single()
 
-      if (show_welcome) {
+      const welcome_screen = show_welcome?.data?.welcome_screen
+
+      if (welcome_screen) {
         redirect('/welcome')
       }
 

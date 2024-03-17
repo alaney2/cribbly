@@ -20,8 +20,12 @@ export async function middleware(request: NextRequest) {
       .select('welcome_screen')
       .eq('id', user?.id)
       .single()
-      
-    if (pathname !== '/welcome' && show_welcome) {
+
+    const welcome_screen = show_welcome?.data?.welcome_screen
+
+    console.log('show_welcome', welcome_screen)
+
+    if (pathname !== '/welcome' && welcome_screen) {
       return NextResponse.redirect(new URL('/welcome', request.url))
     }
 
