@@ -10,6 +10,23 @@ export async function getUser() {
   return user;
 }
 
+export async function updateFullName(formData: FormData) {
+  const user = await getUser();
+  if (!user) return;
+  const supabase = createClient();
+  const name = String(formData.get('name'));
+  if (!name) return;
+  const { error } = await supabase
+    .from('users')
+    .update({ full_name: name })
+    .eq('id', user.id);
+
+  if (error) {
+    console.error(error);
+  }
+
+}
+
 export async function getSubscription() {
   const supabase = createClient();
 

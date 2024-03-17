@@ -22,7 +22,7 @@
     "@preact/signals": "^1.2.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@splinetool/react-spline": "^2.2.6",
-    "@splinetool/runtime": "^1.0.46",
+    "@splinetool/runtime": "^1.0.67",
     "@stripe/stripe-js": "^3.0.7",
     "@supabase/ssr": "^0.0.4",
     "@supabase/supabase-js": "^2.38.4",

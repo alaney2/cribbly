@@ -31,10 +31,10 @@ importers:
         version: 1.1.5(@types/react-dom@18.2.7)(@types/react@18.2.18)(react-dom@18.2.0)(react@18.2.0)
       '@splinetool/react-spline':
         specifier: ^2.2.6
-        version: 2.2.6(@splinetool/runtime@1.0.46)(react-dom@18.2.0)(react@18.2.0)
+        version: 2.2.6(@splinetool/runtime@1.0.67)(react-dom@18.2.0)(react@18.2.0)
       '@splinetool/runtime':
-        specifier: ^1.0.46
-        version: 1.0.46
+        specifier: ^1.0.67
+        version: 1.0.67
       '@stripe/stripe-js':
         specifier: ^3.0.7
         version: 3.0.7
@@ -67,7 +67,7 @@ importers:
         version: 4.1.1
       autoprefixer:
         specifier: ^10.4.12
-        version: 10.4.14(postcss@8.4.33)
+        version: 10.4.14(postcss@8.4.35)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -1007,22 +1007,22 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  /@splinetool/react-spline@2.2.6(@splinetool/runtime@1.0.46)(react-dom@18.2.0)(react@18.2.0):
+  /@splinetool/react-spline@2.2.6(@splinetool/runtime@1.0.67)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-y9L2VEbnC6FNZZu8XMmWM9YTTTWal6kJVfP05Amf0QqDNzCSumKsJxZyGUODvuCmiAvy0PfIfEsiVKnSxvhsDw==}
     peerDependencies:
       '@splinetool/runtime': '*'
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
     dependencies:
-      '@splinetool/runtime': 1.0.46
+      '@splinetool/runtime': 1.0.67
       lodash.debounce: 4.0.8
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-merge-refs: 2.1.1
     dev: false
 
-  /@splinetool/runtime@1.0.46:
-    resolution: {integrity: sha512-/laut/GHbhbXS8PDXj7s+G+lC8o2np4cqgPpm2SZfgg+aAoA0uQtkTm8zWpUxc22ELc55Wn1Q9WXqBJHBu37Jw==}
+  /@splinetool/runtime@1.0.67:
+    resolution: {integrity: sha512-J/mK2BBqoTjHnSdgdhxPxTz7uczzLeDbImNeKDgofPpRaxjkz8DHj2O4X3boQ7Wo78jrGUOMrguBmro71gwE5Q==}
     dependencies:
       on-change: 4.0.2
       semver-compare: 1.0.0
@@ -1452,7 +1452,7 @@ packages:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
     dev: false
 
-  /autoprefixer@10.4.14(postcss@8.4.33):
+  /autoprefixer@10.4.14(postcss@8.4.35):
     resolution: {integrity: sha512-FQzyfOsTlwVzjHxKEqRIAdJx9niO6VCBCoEwax/VLSoQF29ggECcPuBqUMZ+u8jCZOPSy8b8/8KnuFbp0SaFZQ==}
     engines: {node: ^10 || ^12 || >=14}
     hasBin: true
@@ -1464,7 +1464,7 @@ packages:
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
-      postcss: 8.4.33
+      postcss: 8.4.35
       postcss-value-parser: 4.2.0
     dev: false
 
@@ -3754,6 +3754,15 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.0.2
+
+  /postcss@8.4.35:
+    resolution: {integrity: sha512-u5U8qYpBCpN13BsiEB0CbR1Hhh4Gc0zLFuedrHJKMctHCHAGrMdG0PRM/KErzAL3CU6/eckEtmHNB3x6e3c0vA==}
+    engines: {node: ^10 || ^12 || >=14}
+    dependencies:
+      nanoid: 3.3.7
+      picocolors: 1.0.0
+      source-map-js: 1.0.2
+    dev: false
 
   /potpack@2.0.0:
     resolution: {integrity: sha512-Q+/tYsFU9r7xoOJ+y/ZTtdVQwTWfzjbiXBDMM/JKUux3+QPP02iUuIoeBQ+Ot6oEDlC+/PGjB/5A3K7KKb7hcw==}
