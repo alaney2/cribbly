@@ -17,7 +17,7 @@ export async function verifyOtp(email: string, prevState: any, formData: FormDat
 
   if (token && email) {
     const supabase = createClient()
-    const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
+    const { data: {user}, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
 
     if (error) {
       return {
@@ -26,8 +26,14 @@ export async function verifyOtp(email: string, prevState: any, formData: FormDat
     }
 
     // Handle successful verification
-    if (data) {
-      if (!data?.user?.user_metadata?.welcome_screen || data?.user?.user_metadata?.welcome_screen === true) {
+    if (user) {
+      const show_welcome = await supabase
+        .from('users')
+        .select('welcome_screen')
+        .eq('id', user?.id)
+        .single()
+
+      if (show_welcome) {
         redirect('/welcome')
       }
 

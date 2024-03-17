@@ -24,7 +24,6 @@ export async function updateFullName(formData: FormData) {
   if (error) {
     console.error(error);
   }
-
 }
 
 export async function getSubscription() {

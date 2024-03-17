@@ -3,8 +3,6 @@ import logo from '@/images/icon.png'
 import Image from 'next/image';
 import styles from './Welcome.module.css';
 import { Button } from '@/components/catalyst/button'
-import { setFullName } from '@/components/welcome/action'
-import { getUser } from '@/utils/supabase/actions'
 import { updateFullName } from '@/utils/supabase/actions';
 
 const formClasses =

@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone()
 
   const { supabase, response } = createClient(request)
-  let { data, error } = await supabase.auth.getUser()
+  let { data: {user}, error } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
 
   const availableRoutes = ['/privacy', '/terms']
@@ -14,12 +14,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  if (data.user) {
-    if (
-      pathname !== '/welcome' &&
-      (!data?.user?.user_metadata?.welcome_screen ||
-        data?.user?.user_metadata?.welcome_screen === true)
-    ) {
+  if (user) {
+    const show_welcome = await supabase
+      .from('users')
+      .select('welcome_screen')
+      .eq('id', user?.id)
+      .single()
+      
+    if (pathname !== '/welcome' && show_welcome) {
       return NextResponse.redirect(new URL('/welcome', request.url))
     }
 

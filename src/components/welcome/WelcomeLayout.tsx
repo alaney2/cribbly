@@ -9,7 +9,7 @@ import Payment from '@/components/welcome/Payment'
 import { Pricing } from '@/components/landing/Pricing'
 
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
-  const [currentStep, setCurrentStep] = useState(0)
+  const [currentStep, setCurrentStep] = useState(3)
 
   const steps = [
     { name: 'Step 0' },
