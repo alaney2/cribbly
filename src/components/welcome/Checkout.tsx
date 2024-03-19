@@ -12,6 +12,7 @@ import { getStripe } from '@/utils/stripe/client';
 import { checkoutWithStripe } from '@/utils/stripe/server';
 import { useRouter, usePathname } from 'next/navigation';
 import type { Tables } from '@/types_db';
+import { User } from '@supabase/supabase-js';
 
 
 type Subscription = Tables<'subscriptions'>;
@@ -58,13 +59,12 @@ const tiers = [
   },
 ]
 
-
-
-export function Checkout({ user, subscription, products }: { user: any, subscription: any, products: any }) {
+export function Checkout({ user, subscription, products }: Props) {
   const router = useRouter();
   const currentPath = usePathname();
 
   const [yearly, setYearly] = useState(true)
+  const [billingInterval, setBillingInterval] = useState<BillingInterval>('year');
 
   const handleStripeCheckout = async (price: Price) => {
     if (!user) {
