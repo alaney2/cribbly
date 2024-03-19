@@ -8,6 +8,32 @@ import { Switch, SwitchField } from '@/components/catalyst/switch'
 import { Field as HeadlessField } from '@headlessui/react'
 import { Label } from '@/components/catalyst/fieldset'
 import Link from 'next/link'
+import { getStripe } from '@/utils/stripe/client';
+import { checkoutWithStripe } from '@/utils/stripe/server';
+import { useRouter, usePathname } from 'next/navigation';
+import type { Tables } from '@/types_db';
+
+
+type Subscription = Tables<'subscriptions'>;
+type Product = Tables<'products'>;
+type Price = Tables<'prices'>;
+interface ProductWithPrices extends Product {
+  prices: Price[];
+}
+interface PriceWithProduct extends Price {
+  products: Product | null;
+}
+interface SubscriptionWithProduct extends Subscription {
+  prices: PriceWithProduct | null;
+}
+
+interface Props {
+  user: User | null | undefined;
+  products: ProductWithPrices[];
+  subscription: SubscriptionWithProduct | null;
+}
+
+type BillingInterval = 'lifetime' | 'year' | 'month';
 
 const tiers = [
   {
@@ -32,9 +58,42 @@ const tiers = [
   },
 ]
 
+
+
 export function Checkout({ user, subscription, products }: { user: any, subscription: any, products: any }) {
+  const router = useRouter();
+  const currentPath = usePathname();
 
   const [yearly, setYearly] = useState(true)
+
+  const handleStripeCheckout = async (price: Price) => {
+    if (!user) {
+      return router.push('/sign-in');
+    }
+  
+    const { errorRedirect, sessionId } = await checkoutWithStripe(
+      price,
+      currentPath
+    );
+  
+    if (errorRedirect) {
+      return router.push(errorRedirect);
+    }
+  
+    if (!sessionId) {
+      return
+      // return router.push(
+      //   getErrorRedirect(
+      //     currentPath,
+      //     'An unknown error occurred.',
+      //     'Please try again later or contact a system administrator.'
+      //   )
+      // );
+    }
+  
+    const stripe = await getStripe();
+    stripe?.redirectToCheckout({ sessionId });
+  };
 
   return (
     <div className="isolate overflow-hidden bg-gray-900">
