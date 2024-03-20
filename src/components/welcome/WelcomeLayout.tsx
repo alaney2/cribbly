@@ -9,7 +9,7 @@ import Payment from '@/components/welcome/Payment'
 import { Pricing } from '@/components/landing/Pricing'
 
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
-  const [currentStep, setCurrentStep] = useState(3)
+  const [currentStep, setCurrentStep] = useState(2)
 
   const steps = [
     { name: 'Step 0' },
@@ -68,7 +68,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
         {renderStepContent(currentStep)}
         
         {/* Nav dots */}
-        <nav className="flex items-center justify-center" aria-label="Progress">
+        <nav className="flex items-center justify-center z-50" aria-label="Progress">
           <ol role="list" className="flex items-center space-x-5">
             {steps.map((step, index) => (
               <li key={step.name} onClick={() => handleStepClick(index)}>

@@ -12,9 +12,10 @@ interface AddressDialogProps {
   setIsOpen: (isOpen: boolean) => void;
   result: any;
   buttonOnClick: () => void;
+  setFadeOut: (fadeOut: boolean) => void;
 }
 
-export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick } : AddressDialogProps ) {
+export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFadeOut } : AddressDialogProps ) {
   const address = result.place_name;
   const addressArray = address.split(',');
   for (let i = 0; i < addressArray.length; i++) {
@@ -111,7 +112,10 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick } : Add
   const handleClick = () => {
     // event.preventDefault();
     setIsOpen(false);
-    buttonOnClick();
+    setFadeOut(true);
+    setTimeout(buttonOnClick, 500);
+
+    // buttonOnClick();
   }
   
   return (

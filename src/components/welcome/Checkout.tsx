@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { CheckIcon } from '@heroicons/react/20/solid'
 import clsx from 'clsx'
-import { Button } from '@/components/default/Button'
+import { Button } from '@/components/catalyst/button'
 import { Switch, SwitchField } from '@/components/catalyst/switch'
 import { Field as HeadlessField } from '@headlessui/react'
 import { Label } from '@/components/catalyst/fieldset'
@@ -39,7 +39,7 @@ type BillingInterval = 'lifetime' | 'year' | 'month';
 const tiers = [
   {
     name: 'Subscription',
-    id: 'tier-hobby',
+    id: 'tier-sub',
     href: '',
     priceMonthly: 20,
     priceYearly: 15,
@@ -48,7 +48,7 @@ const tiers = [
   },
   {
     name: 'Lifetime',
-    id: 'tier-team',
+    id: 'tier-life',
     href: '',
     price: 450,
     description: 'Explicabo quo fugit vel facere ullam corrupti non dolores. Expedita eius sit sequi.',
@@ -84,25 +84,23 @@ export function Checkout({ user, subscription, products }: Props) {
       return
       // return router.push(
       //   getErrorRedirect(
-      //     currentPath,
-      //     'An unknown error occurred.',
-      //     'Please try again later or contact a system administrator.'
-      //   )
-      // );
     }
   
     const stripe = await getStripe();
     stripe?.redirectToCheckout({ sessionId });
   };
+  console.log(products)
+  const product = products[0]
+  const priceMonthly = product.prices[0].interval === 'month' ? product.prices[0] : product.prices[1]
+  const priceYearly = product.prices[0].interval === 'year' ? product.prices[0] : product.prices[1]
+
 
   return (
-    <div className="isolate overflow-hidden bg-gray-900">
+    <div className="isolate overflow-hidden bg-slate-900 rounded-2xl">
       <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-32 lg:px-8">
         <div className="mx-auto max-w-4xl">
-          {/* <h2 className="text-base font-semibold leading-7 text-indigo-400">Pricing</h2> */}
           <p className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-            The right price for you, <br className="hidden sm:inline lg:hidden" />
-            whoever you are
+            Choose the right price for you
           </p>
         </div>
         <div className="relative mt-6">
@@ -111,7 +109,7 @@ export function Checkout({ user, subscription, products }: Props) {
           </p>
           <svg
             viewBox="0 0 1208 1024"
-            className="absolute -top-10 left-1/2 -z-10 h-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:-top-12 md:-top-20 lg:-top-12 xl:top-0"
+            className="absolute -top-10 left-1/2 -z-10 h-[48rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:-top-12 md:-top-20 lg:-top-12 xl:top-0"
           >
             <ellipse cx={604} cy={512} fill="url(#6d1bd035-0dd1-437e-93fa-59d316231eb0)" rx={604} ry={512} />
             <defs>
@@ -123,7 +121,7 @@ export function Checkout({ user, subscription, products }: Props) {
           </svg>
         </div>
       </div>
-      <div className="flow-root bg-white pb-24 sm:pb-32">
+      <div className="flow-root pb-24 sm:pb-32">
         <div className="-mt-80">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2">
@@ -134,13 +132,13 @@ export function Checkout({ user, subscription, products }: Props) {
                 >
                   <div>
                     <div className="flex justify-between">
-                      <h3 id={tier.id} className="text-base font-semibold leading-7 text-indigo-600">
+                      <h3 id={tier.id} className="text-base font-semibold leading-7 text-blue-500">
                         {tier.name}
                       </h3>
                       {tier.name === 'Subscription' && (
                         <SwitchField className="">
                           <Label className="-mr-4">Annual billing</Label>
-                          <Switch name="subscription_interval" defaultChecked onChange={setYearly} />
+                          <Switch color="blue" name="subscription_interval" defaultChecked onChange={setYearly} />
                         </SwitchField>
                       )}
                     </div>
@@ -166,7 +164,6 @@ export function Checkout({ user, subscription, products }: Props) {
                     : (
                       <>
                         <div className="mt-4 flex flex-col items-start gap-x-2">
-                      
                           <div className="flex items-baseline">
                             <span className="text-5xl font-bold track">
                             ${tier.price}
@@ -182,19 +179,20 @@ export function Checkout({ user, subscription, products }: Props) {
                     <ul role="list" className="mt-10 space-y-4 text-sm leading-6 text-gray-600">
                       {tier.features.map((feature) => (
                         <li key={feature} className="flex gap-x-3">
-                          <CheckIcon className="h-6 w-5 flex-none text-indigo-600" aria-hidden="true" />
+                          <CheckIcon className="h-6 w-5 flex-none text-blue-500" aria-hidden="true" />
                           {feature}
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <Link
-                    href={tier.href}
+                  <Button
+                    color="blue"
+                    onClick={() => yearly ? handleStripeCheckout(priceYearly) : handleStripeCheckout(priceMonthly)}
                     aria-describedby={tier.id}
-                    className="mt-8 block rounded-md bg-indigo-600 px-3.5 py-2 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="mt-8 block rounded-md px-3.5 py-2 text-center text-sm font-semibold leading-6 text-white"
                   >
                     Select
-                  </Link>
+                  </Button>
                 </div>
               ))}
             </div>

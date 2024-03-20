@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import { Text } from '@/components/catalyst/text';
+import { Text, Strong } from '@/components/catalyst/text';
 import 'animate.css';
 import styles from './Welcome.module.css';
 import Skeleton from 'react-loading-skeleton'
@@ -32,8 +32,8 @@ export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) 
     if (typeof window !== "undefined") {
       localStorage.setItem("result", JSON.stringify(result));
     }
+    // setTimeout(setIsOpen(true), 300);
     setIsOpen(true)
-    // setFadeOut(true);
     // setTimeout(buttonOnClick, 300);
   }
 
@@ -95,7 +95,7 @@ export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) 
       <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js'></Script>
       <div className={`flex flex-col px-2 py-16 sm:py-8 justify-center items-center relative h-full w-full overscroll-none ${animationClass}`}>
         <Text
-          className='mb-6 text-center animate__animated animate__fadeIn'
+          className='mb-4 text-center animate__animated animate__fadeIn'
           style={{ animationDelay: '0.2s' }}
         >
           Enter your rental property address to get started
@@ -136,14 +136,17 @@ export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) 
                     <div className="w-full border-t border-gray-300" />
                   </div>
                 </div>
-                <button color="blue" className='button mb-1 mt-3 bg-blue-500 rounded-md cursor-default select-none
+                <button
+                  className='button mb-1 mt-3 bg-blue-500 rounded-md cursor-default select-none
                   active:translate-y-1 active:[box-shadow:0_3px_0_0_#1b6ff8,0_4px_0_0_#1b70f841]
-                  transition-all duration-150 [box-shadow:0_5px_0_0_#1b6ff8,0_7px_0_0_#1b70f841] border-b-0 px-2 py-0.5' onClick={popupClick}>
+                  transition-all duration-150 [box-shadow:0_5px_0_0_#1b6ff8,0_7px_0_0_#1b70f841] border-b-0 px-2 py-0.5' 
+                  onClick={popupClick}
+                >
                     <span className='flex flex-col justify-center items-center h-full text-white font-bold text-sm'>
                       Add property
                     </span>
                 </button>
-                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} buttonOnClick={buttonOnClick} />
+                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} buttonOnClick={buttonOnClick} setFadeOut={setFadeOut} />
               </Popup>
             )}
           </Map>
