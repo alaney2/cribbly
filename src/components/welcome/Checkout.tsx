@@ -105,7 +105,7 @@ export function Checkout({ user, subscription, products }: Props) {
         </div>
         <div className="relative mt-6">
           <p className="mx-auto max-w-2xl text-lg leading-8 text-white/60">
-          If you are not satisfied during the first month, we will issue a full refund.
+            We have a money-back guarantee policy: If you are not satisfied with our software during the first month of usage, we will issue a full refund.
           </p>
           <svg
             viewBox="0 0 1208 1024"
