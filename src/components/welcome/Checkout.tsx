@@ -15,6 +15,7 @@ import type { Tables } from '@/types_db';
 import { User } from '@supabase/supabase-js';
 import 'animate.css';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Spinner } from '@/components/Spinner'
 
 
 type Subscription = Tables<'subscriptions'>;
@@ -66,6 +67,9 @@ export function Checkout({ user, subscription, products }: Props) {
   const currentPath = usePathname();
 
   const [yearly, setYearly] = useState(true)
+  const [subSelected, setSubSelected] = useState(false)
+  const [lifetimeSelected, setLifetimeSelected] = useState(false)
+
   const [billingInterval, setBillingInterval] = useState<BillingInterval>('year');
 
   const handleStripeCheckout = async (price: Price) => {
@@ -91,10 +95,30 @@ export function Checkout({ user, subscription, products }: Props) {
     const stripe = await getStripe();
     stripe?.redirectToCheckout({ sessionId });
   };
-  console.log(products)
+  const subscriptionProduct = products.find((product) => product.name?.toLowerCase() === 'test')
+  const lifetimeProduct = products.find((product) => product.name?.toLowerCase() === 'lifetime')
   const product = products[0]
-  const priceMonthly = product.prices[0].interval === 'month' ? product.prices[0] : product.prices[1]
-  const priceYearly = product.prices[0].interval === 'year' ? product.prices[0] : product.prices[1]
+  const priceMonthly = subscriptionProduct?.prices[0].interval === 'month' ? product.prices[0] : product.prices[1]
+  const priceYearly = subscriptionProduct?.prices[0].interval === 'year' ? product.prices[0] : product.prices[1]
+  const priceLifetime = lifetimeProduct!.prices[0]
+
+  const handleButtonClick = (tier: any) => {
+    if (user) {
+      if (tier.name === 'Subscription') {
+        setSubSelected(true)
+        if (yearly) {
+          handleStripeCheckout(priceYearly)
+        } else {
+          handleStripeCheckout(priceMonthly)
+        }
+      } else {
+        setLifetimeSelected(true)
+        handleStripeCheckout(priceLifetime)
+      }
+    } else {
+      router.push('/sign-in')
+    }
+  }
 
 
   return (
@@ -139,8 +163,8 @@ export function Checkout({ user, subscription, products }: Props) {
                           initial={{ opacity: 0, y: -20 }}
                           animate={{ opacity: 1, y: -15 }}
                           exit={{ opacity: 0, y: -20 }}
-                          transition={{ duration: 0.25 }}
-                          className="absolute top-0 -translate-y-1/2 transform items-center rounded-full bg-green-200 px-4 py-1 text-md font-semibold text-green-700"
+                          transition={{ duration: 0.2 }}
+                          className="absolute top-0 -translate-y-1/2 transform items-center rounded-full bg-green-200 px-4 py-1 text-md font-semibold text-green-700 ring-1 ring-inset ring-green-600/20"
                         >
                           Save $60
                         </motion.span>
@@ -204,11 +228,12 @@ export function Checkout({ user, subscription, products }: Props) {
                     </div>
                     <Button
                       color="blue"
-                      onClick={() => yearly ? handleStripeCheckout(priceYearly) : handleStripeCheckout(priceMonthly)}
+                      onClick={() => handleButtonClick(tier)}
                       aria-describedby={tier.id}
-                      className="mt-8 block rounded-md px-3.5 py-2 text-center text-sm font-semibold leading-6 text-white"
+                      className="mt-8 block rounded-md px-3.5 py-2 text-center text-sm font-semibold leading-6 text-white h-10"
                     >
-                      Select
+                        {((tier.name === 'Subscription' && subSelected) || (tier.name === 'Lifetime' && lifetimeSelected)) ? <Spinner /> : 'Select'}
+
                     </Button>
                   </div>
                 ))}
