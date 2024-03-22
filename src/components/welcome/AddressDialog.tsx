@@ -113,7 +113,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
     // event.preventDefault();
     setIsOpen(false);
     setFadeOut(true);
-    setTimeout(buttonOnClick, 500);
+    setTimeout(buttonOnClick, 400);
 
     // buttonOnClick();
   }

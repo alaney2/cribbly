@@ -96,105 +96,107 @@ export function Checkout({ user, subscription, products }: Props) {
 
 
   return (
-    <div className="isolate overflow-hidden bg-slate-900 rounded-2xl">
-      <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-32 lg:px-8">
-        <div className="mx-auto max-w-4xl">
-          <p className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-            Choose the right price for you
-          </p>
+    <div className={`flex flex-col lg:mt-8 md:py-8 justify-center items-center relative md:h-full w-full`}>
+      <div className={`isolate overflow-hidden flex flex-col items-center mx-auto align-center justify-center w-full md:w-4/5 xl:w-2/3 transition-opacity appearance-none animate__animated animate__fadeIn bg-slate-900 md:rounded-2xl pb-24 sm:pb-32`}>
+        <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-24 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <p className="mt-2 text-3xl font-bold tracking-tight text-white md:text-5xl">
+              Choose the right price for you
+            </p>
+          </div>
+          <div className="relative mt-6">
+            <p className="mx-auto max-w-2xl text-lg leading-8 text-white/60">
+              We have a money-back guarantee policy: If you are not satisfied with our software during the first month of usage, we will issue a full refund.
+            </p>
+            <svg
+              viewBox="0 0 1208 1024"
+              className="absolute -top-10 left-1/2 -z-10 h-[72rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:-top-12 md:-top-20 lg:-top-12 xl:top-0"
+            >
+              <ellipse cx={604} cy={512} fill="url(#6d1bd035-0dd1-437e-93fa-59d316231eb0)" rx={604} ry={512} />
+              <defs>
+                <radialGradient id="6d1bd035-0dd1-437e-93fa-59d316231eb0">
+                  <stop stopColor="rgb(29 78 216)" />3b82f6
+                  <stop offset={1} stopColor="#3b82f6" />
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
         </div>
-        <div className="relative mt-6">
-          <p className="mx-auto max-w-2xl text-lg leading-8 text-white/60">
-            We have a money-back guarantee policy: If you are not satisfied with our software during the first month of usage, we will issue a full refund.
-          </p>
-          <svg
-            viewBox="0 0 1208 1024"
-            className="absolute -top-10 left-1/2 -z-10 h-[48rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:-top-12 md:-top-20 lg:-top-12 xl:top-0"
-          >
-            <ellipse cx={604} cy={512} fill="url(#6d1bd035-0dd1-437e-93fa-59d316231eb0)" rx={604} ry={512} />
-            <defs>
-              <radialGradient id="6d1bd035-0dd1-437e-93fa-59d316231eb0">
-                <stop stopColor="#7775D6" />
-                <stop offset={1} stopColor="#E935C1" />
-              </radialGradient>
-            </defs>
-          </svg>
-        </div>
-      </div>
-      <div className="flow-root pb-24 sm:pb-32">
-        <div className="-mt-80">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2">
-              {tiers.map((tier) => (
-                <div
-                  key={tier.id}
-                  className="flex flex-col justify-between rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10"
-                >
-                  <div>
-                    <div className="flex justify-between">
-                      <h3 id={tier.id} className="text-base font-semibold leading-7 text-blue-500">
-                        {tier.name}
-                      </h3>
-                      {tier.name === 'Subscription' && (
-                        <SwitchField className="">
-                          <Label className="-mr-4">Annual billing</Label>
-                          <Switch color="blue" name="subscription_interval" defaultChecked onChange={setYearly} />
-                        </SwitchField>
-                      )}
-                    </div>
-                    {tier.name === 'Subscription' ? (
-                      <>
-                        <div className="mt-4 flex flex-col items-start gap-x-2">
-                          <div className="flex items-baseline">
-                            <span className="text-5xl font-bold tracking-tight text-gray-900">
-                              <span className="ml-2">
-                                ${yearly ? tier.priceYearly : tier.priceMonthly}
-                              </span>
-                            </span>
-                            <span className="text-base font-semibold leading-7 text-gray-600">
-                              /month
-                            </span>
-                          </div>
-                          <span className="text-sm text-gray-600 ml-2">
-                            ${yearly ? tier!.priceYearly! * 12 : tier.priceMonthly} billed {yearly ? "annually" : "monthly"}
-                          </span>
-                        </div>
-                      </>
-                    )
-                    : (
-                      <>
-                        <div className="mt-4 flex flex-col items-start gap-x-2">
-                          <div className="flex items-baseline">
-                            <span className="text-5xl font-bold track">
-                            ${tier.price}
-                            </span>
-                          </div>
-                          <span className="text-sm text-gray-600 ml-2">
-                            One-time purchase
-                          </span>
-                        </div>
-                      </>
-                    )}
-                    <p className="mt-6 text-base leading-7 text-gray-600">{tier.description}</p>
-                    <ul role="list" className="mt-10 space-y-4 text-sm leading-6 text-gray-600">
-                      {tier.features.map((feature) => (
-                        <li key={feature} className="flex gap-x-3">
-                          <CheckIcon className="h-6 w-5 flex-none text-blue-500" aria-hidden="true" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <Button
-                    color="blue"
-                    onClick={() => yearly ? handleStripeCheckout(priceYearly) : handleStripeCheckout(priceMonthly)}
-                    aria-describedby={tier.id}
-                    className="mt-8 block rounded-md px-3.5 py-2 text-center text-sm font-semibold leading-6 text-white"
+        <div className=" ">
+          <div className="-mt-80">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <div className="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2">
+                {tiers.map((tier) => (
+                  <div
+                    key={tier.id}
+                    className="flex flex-col justify-between w-auto rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10"
                   >
-                    Select
-                  </Button>
-                </div>
-              ))}
+                    <div>
+                      <div className="flex justify-between">
+                        <h3 id={tier.id} className="text-base font-semibold leading-7 text-blue-500">
+                          {tier.name}
+                        </h3>
+                        {tier.name === 'Subscription' && (
+                          <SwitchField className="">
+                            <Label className="-mr-4">Annual billing</Label>
+                            <Switch color="blue" name="subscription_interval" defaultChecked onChange={setYearly} />
+                          </SwitchField>
+                        )}
+                      </div>
+                      {tier.name === 'Subscription' ? (
+                        <>
+                          <div className="mt-4 flex flex-col items-start gap-x-2">
+                            <div className="flex items-baseline">
+                              <span className="text-5xl font-bold tracking-tight text-gray-900">
+                                <span className="ml-2">
+                                  ${yearly ? tier.priceYearly : tier.priceMonthly}
+                                </span>
+                              </span>
+                              <span className="text-base font-semibold leading-7 text-gray-600">
+                                /month
+                              </span>
+                            </div>
+                            <span className="text-sm text-gray-600 ml-2">
+                              ${yearly ? tier!.priceYearly! * 12 : tier.priceMonthly} billed {yearly ? "annually" : "monthly"}
+                            </span>
+                          </div>
+                        </>
+                      )
+                      : (
+                        <>
+                          <div className="mt-4 flex flex-col items-start gap-x-2">
+                            <div className="flex items-baseline">
+                              <span className="text-5xl font-bold track">
+                              ${tier.price}
+                              </span>
+                            </div>
+                            <span className="text-sm text-gray-600 ml-2">
+                              One-time purchase
+                            </span>
+                          </div>
+                        </>
+                      )}
+                      <p className="mt-6 text-base leading-7 text-gray-600">{tier.description}</p>
+                      <ul role="list" className="mt-10 space-y-4 text-sm leading-6 text-gray-600">
+                        {tier.features.map((feature) => (
+                          <li key={feature} className="flex gap-x-3">
+                            <CheckIcon className="h-6 w-5 flex-none text-blue-500" aria-hidden="true" />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <Button
+                      color="blue"
+                      onClick={() => yearly ? handleStripeCheckout(priceYearly) : handleStripeCheckout(priceMonthly)}
+                      aria-describedby={tier.id}
+                      className="mt-8 block rounded-md px-3.5 py-2 text-center text-sm font-semibold leading-6 text-white"
+                    >
+                      Select
+                    </Button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

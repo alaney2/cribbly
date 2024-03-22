@@ -9,7 +9,7 @@ import Payment from '@/components/welcome/Payment'
 import { Pricing } from '@/components/landing/Pricing'
 
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
-  const [currentStep, setCurrentStep] = useState(2)
+  const [currentStep, setCurrentStep] = useState(3)
 
   const steps = [
     { name: 'Step 0' },
@@ -29,9 +29,9 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
     switch (stepIndex) {
       case 0:
         return (
-          <div className="h-full w-full overscroll-none px-8">
+          // <div className="h-full w-full overscroll-none px-8">
             <Step0 buttonOnClick={() => setCurrentStep(currentStep + 1)} />
-          </div>
+          // </div>
         )
       case 1:
         return (
@@ -49,9 +49,8 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
         )
       case 3:
         return (
-          <div className="h-full w-full px-32 pb-28 pt-16">
+          <div className="h-full w-full">
             {/* <Payment user={user} subscription={subscription} products={products} /> */}
-
             <Checkout user={user} subscription={subscription} products={products} />
           </div>
         )
@@ -64,11 +63,13 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
 
   return (
     <>
-      <div className="h-full w-full overscroll-none bg-gray-50 pb-16">
-        {renderStepContent(currentStep)}
-        
+      <div className="flex flex-col min-h-screen w-full overscroll-none bg-gray-50">
+        <div className="flex-grow flex flex-col items-center justify-center">
+          {renderStepContent(currentStep)}
+        </div>
+
         {/* Nav dots */}
-        <nav className="flex items-center justify-center z-50" aria-label="Progress">
+        <nav className="flex items-center justify-center z-0 py-16" aria-label="Progress">
           <ol role="list" className="flex items-center space-x-5">
             {steps.map((step, index) => (
               <li key={step.name} onClick={() => handleStepClick(index)}>
@@ -85,7 +86,6 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
             ))}
           </ol>
         </nav>
-
       </div>
     </>
   )
