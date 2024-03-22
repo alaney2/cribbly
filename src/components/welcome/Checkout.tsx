@@ -97,15 +97,15 @@ export function Checkout({ user, subscription, products }: Props) {
 
   return (
     <div className={`flex flex-col lg:mt-8 md:py-8 justify-center items-center relative md:h-full w-full`}>
-      <div className={`isolate overflow-hidden flex flex-col items-center mx-auto align-center justify-center w-full md:w-4/5 xl:w-2/3 transition-opacity appearance-none animate__animated animate__fadeIn bg-slate-900 md:rounded-2xl pb-24 sm:pb-32`}>
+      <div className={`isolate overflow-hidden flex flex-col items-center mx-auto align-center justify-center w-full md:w-4/5 2xl:w-2/3 transition-opacity appearance-none animate__animated animate__fadeIn bg-gray-50 md:rounded-2xl pb-24 sm:pb-32`}>
         <div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-24 lg:px-8">
           <div className="mx-auto max-w-4xl">
-            <p className="mt-2 text-3xl font-bold tracking-tight text-white md:text-5xl">
+            <p className="mt-2 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-black">
               Choose the right price for you
             </p>
           </div>
           <div className="relative mt-6">
-            <p className="mx-auto max-w-2xl text-lg leading-8 text-white/60">
+            <p className="mx-auto max-w-2xl text-lg leading-8 text-black/60">
               We have a money-back guarantee policy: If you are not satisfied with our software during the first month of usage, we will issue a full refund.
             </p>
             <svg
