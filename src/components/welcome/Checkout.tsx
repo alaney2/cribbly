@@ -13,6 +13,8 @@ import { checkoutWithStripe } from '@/utils/stripe/server';
 import { useRouter, usePathname } from 'next/navigation';
 import type { Tables } from '@/types_db';
 import { User } from '@supabase/supabase-js';
+import 'animate.css';
+import { motion, AnimatePresence } from 'framer-motion';
 
 
 type Subscription = Tables<'subscriptions'>;
@@ -106,7 +108,7 @@ export function Checkout({ user, subscription, products }: Props) {
           </div>
           <div className="relative mt-6">
             <p className="mx-auto max-w-2xl text-lg leading-8 text-black/60">
-              We have a money-back guarantee policy: If you are not satisfied with our software during the first month of usage, we will issue a full refund.
+              We have a money-back guarantee: If you&apos;re not satisfied with our software during your first month of usage, we will issue you a full refund.
             </p>
             <svg
               viewBox="0 0 1208 1024"
@@ -129,8 +131,22 @@ export function Checkout({ user, subscription, products }: Props) {
                 {tiers.map((tier) => (
                   <div
                     key={tier.id}
-                    className="flex flex-col justify-between w-auto rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10"
+                    className="flex flex-col relative justify-between w-auto rounded-3xl bg-white p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10"
                   >
+                    <AnimatePresence>
+                      {yearly === true && tier.name === 'Subscription' && (
+                        <motion.span 
+                          initial={{ opacity: 0, y: -20 }}
+                          animate={{ opacity: 1, y: -15 }}
+                          exit={{ opacity: 0, y: -20 }}
+                          transition={{ duration: 0.25 }}
+                          className="absolute top-0 -translate-y-1/2 transform items-center rounded-full bg-green-200 px-4 py-1 text-md font-semibold text-green-700"
+                        >
+                          Save $60
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+
                     <div>
                       <div className="flex justify-between">
                         <h3 id={tier.id} className="text-base font-semibold leading-7 text-blue-500">
@@ -147,8 +163,8 @@ export function Checkout({ user, subscription, products }: Props) {
                         <>
                           <div className="mt-4 flex flex-col items-start gap-x-2">
                             <div className="flex items-baseline">
-                              <span className="text-5xl font-bold tracking-tight text-gray-900">
-                                <span className="ml-2">
+                              <span className="relative text-5xl font-bold tracking-tight text-gray-900">
+                                <span className={`ml-2 transition-opacity duration-500 ${yearly ? 'opacity-100' : 'opacity-100'}`}>
                                   ${yearly ? tier.priceYearly : tier.priceMonthly}
                                 </span>
                               </span>
