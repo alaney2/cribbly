@@ -7,9 +7,10 @@ import { NewWelcomeMap } from '@/components/welcome/NewWelcomeMap'
 import { Checkout } from '@/components/welcome/Checkout'
 import Payment from '@/components/welcome/Payment'
 import { Pricing } from '@/components/landing/Pricing'
+import { Checkout2 } from '@/components/welcome/Checkout2'
 
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
-  const [currentStep, setCurrentStep] = useState(3)
+  const [currentStep, setCurrentStep] = useState(4)
 
   const steps = [
     { name: 'Step 0' },
@@ -29,33 +30,26 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
     switch (stepIndex) {
       case 0:
         return (
-          // <div className="h-full w-full overscroll-none px-8">
-            <Step0 buttonOnClick={() => setCurrentStep(currentStep + 1)} />
-          // </div>
+          <Step0 buttonOnClick={() => setCurrentStep(currentStep + 1)} />
         )
       case 1:
         return (
-          <div className="h-full w-full">
-            <InputName buttonOnClick={() => setCurrentStep(currentStep + 1)} />
-          </div>
+          <InputName buttonOnClick={() => setCurrentStep(currentStep + 1)} />
         )
       case 2:
         return (
-          <div className="h-full w-full">
-            <NewWelcomeMap
-              buttonOnClick={() => setCurrentStep(currentStep + 1)}
-            />
-          </div>
+          <NewWelcomeMap
+            buttonOnClick={() => setCurrentStep(currentStep + 1)}
+          />
         )
       case 3:
         return (
-          <div className="h-full w-full">
-            {/* <Payment user={user} subscription={subscription} products={products} /> */}
-            <Checkout user={user} subscription={subscription} products={products} />
-          </div>
+          <Checkout user={user} subscription={subscription} products={products} />
         )
       case 4:
-        return <div className="h-full w-full px-32 pb-28 pt-16"></div>
+        return (
+          <Checkout2 user={user} subscription={subscription} products={products} />
+        )
       default:
         return <div className="h-full w-full px-32 pb-28 pt-16">Error here</div>
     }

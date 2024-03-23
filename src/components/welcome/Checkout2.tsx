@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import { Button } from '@/components/catalyst/button'
 import { Switch, SwitchField } from '@/components/catalyst/switch'
 import { Field as HeadlessField } from '@headlessui/react'
-import { Label } from '@/components/catalyst/fieldset'
+import { Field, Label } from '@/components/catalyst/fieldset'
 import Link from 'next/link'
 import { getStripe } from '@/utils/stripe/client';
 import { checkoutWithStripe } from '@/utils/stripe/server';
@@ -16,7 +16,8 @@ import { User } from '@supabase/supabase-js';
 import 'animate.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Spinner } from '@/components/Spinner'
-
+import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
+import { Input } from '@/components/catalyst/input'
 
 type Subscription = Tables<'subscriptions'>;
 type Product = Tables<'products'>;
@@ -62,7 +63,7 @@ const tiers = [
   },
 ]
 
-export function Checkout({ user, subscription, products }: Props) {
+export function Checkout2({ user, subscription, products }: Props) {
   const router = useRouter();
   const currentPath = usePathname();
 
@@ -71,6 +72,9 @@ export function Checkout({ user, subscription, products }: Props) {
   const [lifetimeSelected, setLifetimeSelected] = useState(false)
 
   const [billingInterval, setBillingInterval] = useState<BillingInterval>('year');
+
+  let [isOpen, setIsOpen] = useState(false)
+
 
   const handleStripeCheckout = async (price: Price) => {
     if (!user) {
