@@ -18,6 +18,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Spinner } from '@/components/Spinner'
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
 import { Input } from '@/components/catalyst/input'
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import {
+  PaymentElement,
+  useStripe,
+  useElements
+} from "@stripe/react-stripe-js";
+import { CheckoutForm } from '@/components/welcome/CheckoutForm'
+
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 type Subscription = Tables<'subscriptions'>;
 type Product = Tables<'products'>;
@@ -74,6 +85,9 @@ export function Checkout2({ user, subscription, products }: Props) {
   const [billingInterval, setBillingInterval] = useState<BillingInterval>('year');
 
   let [isOpen, setIsOpen] = useState(false)
+  let [isInnerOpen, setIsInnerOpen] = useState(false)
+
+  const [clientSecret, setClientSecret] = useState("");
 
 
   const handleStripeCheckout = async (price: Price) => {
@@ -123,6 +137,14 @@ export function Checkout2({ user, subscription, products }: Props) {
       router.push('/sign-in')
     }
   }
+
+  const appearance = {
+    theme: 'stripe',
+  };
+  const options = {
+    clientSecret,
+    appearance,
+  };
 
 
   return (
@@ -237,12 +259,11 @@ export function Checkout2({ user, subscription, products }: Props) {
                     </div>
                     <Button
                       color="blue"
-                      onClick={() => handleButtonClick(tier)}
+                      onClick={() => setIsOpen(true)}
                       aria-describedby={tier.id}
                       className="mt-8 block rounded-md px-3.5 py-2 text-center text-sm font-semibold leading-6 text-white h-10"
                     >
                         {((tier.name === 'Subscription' && subSelected) || (tier.name === 'Lifetime' && lifetimeSelected)) ? <Spinner /> : 'Select'}
-
                     </Button>
                   </div>
                 ))}
@@ -251,6 +272,34 @@ export function Checkout2({ user, subscription, products }: Props) {
           </div>
         </div>
       </div>
+      <Dialog size={"3xl"} open={isOpen} onClose={setIsOpen}>
+        <DialogTitle>Confirm payment</DialogTitle>
+        {/* <DialogDescription>
+          The refund will be reflected in the customer’s bank account 2 to 3 business days after processing.
+        </DialogDescription> */}
+        <DialogBody>
+          {/* <Field>
+            <Label>Amount</Label>
+            <Input name="amount" placeholder="$0.00" />
+          </Field> */}
+          <div className="grid grid-cols-1 md:grid-cols-2">
+
+            <div>
+              Hello World
+            </div>
+            <Elements options={{ clientSecret: "pi_3OxKzHAdjJ26bYbu0jB3Vyjz_secret_a9mtIxDmpClxcAE1NhrbNpRNQ", appearance: { theme: "stripe" } }} stripe={stripePromise}>
+              <CheckoutForm />
+
+            </Elements>
+          </div>
+        </DialogBody>
+        <DialogActions>
+          <Button plain onClick={() => setIsOpen(false)}>
+            Cancel
+          </Button>
+          <Button onClick={() => setIsOpen(false)}>Confirm</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

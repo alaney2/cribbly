@@ -48,7 +48,6 @@ export async function checkoutWithStripe(
     }
 
     let params: Stripe.Checkout.SessionCreateParams = {
-      ui_mode: 'embedded',
       allow_promotion_codes: true,
       billing_address_collection: 'required',
       customer,
@@ -62,10 +61,11 @@ export async function checkoutWithStripe(
         }
       ],
       mode: 'payment',
-      return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/return?session_id={CHECKOUT_SESSION_ID}`,
-      automatic_tax: {enabled: true},
-      // cancel_url: getURL(),
-      // success_url: getURL(redirectPath)
+      // return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/return?session_id={CHECKOUT_SESSION_ID}`,
+      // ui_mode: 'embedded',
+      // automatic_tax: {enabled: true},
+      cancel_url: getURL(),
+      success_url: getURL(redirectPath)
     };
     // console.log(
     //   'Trial end:',

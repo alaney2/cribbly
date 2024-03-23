@@ -95,7 +95,7 @@ export function Checkout({ user, subscription, products }: Props) {
     const stripe = await getStripe();
     stripe?.redirectToCheckout({ sessionId });
   };
-  const subscriptionProduct = products.find((product) => product.name?.toLowerCase() === 'test')
+  const subscriptionProduct = products.find((product) => product.name?.toLowerCase() === 'subscription')
   const lifetimeProduct = products.find((product) => product.name?.toLowerCase() === 'lifetime')
   const product = products[0]
   const priceMonthly = subscriptionProduct?.prices[0].interval === 'month' ? product.prices[0] : product.prices[1]
@@ -237,8 +237,7 @@ export function Checkout({ user, subscription, products }: Props) {
                       aria-describedby={tier.id}
                       className="mt-8 block rounded-md px-3.5 py-2 text-center text-sm font-semibold leading-6 text-white h-10"
                     >
-                        {((tier.name === 'Subscription' && subSelected) || (tier.name === 'Lifetime' && lifetimeSelected)) ? <Spinner /> : 'Select'}
-
+                      {((tier.name === 'Subscription' && subSelected) || (tier.name === 'Lifetime' && lifetimeSelected)) ? <Spinner /> : 'Select'}
                     </Button>
                   </div>
                 ))}
