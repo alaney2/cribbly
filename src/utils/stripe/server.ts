@@ -57,13 +57,13 @@ export async function checkoutWithStripe(
       line_items: [
         {
           price: price.id,
-          quantity: 1
+          quantity: 2
         }
       ],
       mode: 'payment',
       // return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/return?session_id={CHECKOUT_SESSION_ID}`,
       // ui_mode: 'embedded',
-      // automatic_tax: {enabled: true},
+      automatic_tax: {enabled: true},
       cancel_url: getURL(),
       success_url: getURL(redirectPath)
     };

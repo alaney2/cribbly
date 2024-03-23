@@ -2,8 +2,17 @@ import React from "react";
 import {
   PaymentElement,
   useStripe,
-  useElements
+  useElements,
+  ExpressCheckoutElement,
+  LinkAuthenticationElement
 } from "@stripe/react-stripe-js";
+import { loadStripe } from '@stripe/stripe-js';
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout
+} from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export function CheckoutForm() {
   const stripe = useStripe();
@@ -77,14 +86,35 @@ export function CheckoutForm() {
     setIsLoading(false);
   };
 
-  const paymentElementOptions = {
-    layout: "tabs",
+  const options = {
+    layout: "tabs" as const,
   };
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
-
-      <PaymentElement id="payment-element" options={{ ...paymentElementOptions, layout: "tabs" }} />
+      <LinkAuthenticationElement options={{defaultValues: {email: 'alanyao.training@gmail.com'}}} />
+      <PaymentElement 
+        id="payment-element" 
+        options={{
+          defaultValues: {
+            billingDetails: {
+              name: 'John Doe',
+              // email: 'john@joih.com',
+              phone: '888-888-8888',
+              address: {
+                postal_code: '10001',
+                country: 'US',
+              }
+            },
+          },
+        }}
+      />
+      {/* <EmbeddedCheckoutProvider
+        stripe={stripePromise}
+        options={{clientSecret: 'pi_1J2f6v2eZvKYlo2CQrZvZU7v_secret_6zqD2Dq5qXZ4e2wZ1CqZpZqZ'}}
+      >
+        <EmbeddedCheckout />
+      </EmbeddedCheckoutProvider> */}
       <button disabled={isLoading || !stripe || !elements} id="submit">
         <span id="button-text">
           {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}

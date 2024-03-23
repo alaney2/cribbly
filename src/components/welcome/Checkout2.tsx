@@ -19,7 +19,7 @@ import { Spinner } from '@/components/Spinner'
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
 import { Input } from '@/components/catalyst/input'
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
+import { Elements, EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import {
   PaymentElement,
   useStripe,
@@ -274,22 +274,18 @@ export function Checkout2({ user, subscription, products }: Props) {
       </div>
       <Dialog size={"3xl"} open={isOpen} onClose={setIsOpen}>
         <DialogTitle>Confirm payment</DialogTitle>
-        {/* <DialogDescription>
-          The refund will be reflected in the customer’s bank account 2 to 3 business days after processing.
-        </DialogDescription> */}
         <DialogBody>
-          {/* <Field>
-            <Label>Amount</Label>
-            <Input name="amount" placeholder="$0.00" />
-          </Field> */}
+ 
           <div className="grid grid-cols-1 md:grid-cols-2">
 
             <div>
               Hello World
             </div>
             <Elements options={{ clientSecret: "pi_3OxKzHAdjJ26bYbu0jB3Vyjz_secret_a9mtIxDmpClxcAE1NhrbNpRNQ", appearance: { theme: "stripe" } }} stripe={stripePromise}>
+              {/* <EmbeddedCheckoutProvider stripe={null} options={options}>
+                <EmbeddedCheckout />
+              </EmbeddedCheckoutProvider> */}
               <CheckoutForm />
-
             </Elements>
           </div>
         </DialogBody>
