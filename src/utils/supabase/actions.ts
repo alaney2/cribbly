@@ -54,8 +54,6 @@ export async function addProperty(formData: FormData) {
     return {
       message: 'Property already exists'
     }
-    console.error('Property already exists');
-    return;
   }
 
   const { error } = await supabase.from('properties').insert([
@@ -73,6 +71,12 @@ export async function addProperty(formData: FormData) {
   if (error) {
     console.error(error);
   }
+
+  // update supabase user table with welcome_screen = true
+  await supabase
+    .from('users')
+    .update({ welcome_screen: false })
+    .eq('id', user.id);
 }
 
 export async function getSubscription() {

@@ -16,7 +16,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
     { name: 'Step 0' },
     { name: 'Step 1' },
     { name: 'Step 2' },
-    { name: 'Step 3' },
+    // { name: 'Step 3' },
     // { name: 'Step 4' },
   ]
 

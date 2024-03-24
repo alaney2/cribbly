@@ -9,11 +9,6 @@ export async function middleware(request: NextRequest) {
   let { data: {user}, error } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
 
-  const availableRoutes = ['/privacy', '/terms']
-  if (availableRoutes.some((path) => url.pathname.startsWith(path))) {
-    return NextResponse.next()
-  }
-
   if (user) {
     const show_welcome = await supabase
       .from('users')
@@ -23,19 +18,23 @@ export async function middleware(request: NextRequest) {
 
     const welcome_screen = show_welcome?.data?.welcome_screen
 
-    if (pathname !== '/welcome' && welcome_screen) {
+    if (welcome_screen && pathname !== '/welcome') {
       return NextResponse.redirect(new URL('/welcome', request.url))
+    } else if (!welcome_screen && pathname === '/welcome') {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
     }
 
-    const unavailableRoutes = ['/sign-in', '/get-started']
-    // Can't sign in or sign up if already logged in
-    if (
-      pathname === '/' ||
-      unavailableRoutes.some((path) => url.pathname.startsWith(path))
-    ) {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
-    } else {
-      return NextResponse.next()
+    if (!welcome_screen) {
+      const unavailableRoutes = ['/sign-in', '/get-started', '/welcome']
+      // Can't sign in or sign up if already logged in
+      if (
+        pathname === '/' ||
+        unavailableRoutes.some((path) => url.pathname.startsWith(path))
+      ) {
+        return NextResponse.redirect(new URL('/dashboard', request.url))
+      } else {
+        return NextResponse.next()
+      }
     }
   } else {
     const pathsWithoutAuth = ['/sign-in', '/get-started', '/privacy', '/terms']
@@ -64,7 +63,7 @@ export const config = {
      * Feel free to modify this pattern to include more paths.
      */
     {
-      source: '/((?!_next/static|_next/image|auth|api|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|\\.well-known).*)',
+      source: '/((?!_next/static|_next/image|privacy|terms|auth|api|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$|\\.well-known).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },

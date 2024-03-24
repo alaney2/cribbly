@@ -8,7 +8,9 @@ import { Select } from '@/components/catalyst/select'
 import { useState, useEffect, useRef } from 'react'
 import { addProperty } from '@/utils/supabase/actions'
 import { toast } from 'react-hot-toast';
-
+// @ts-expect-error
+import { useFormState } from 'react-dom'
+import { redirect } from 'next/navigation';
 
 interface AddressDialogProps {
   isOpen: boolean;
@@ -19,6 +21,7 @@ interface AddressDialogProps {
 }
 
 export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFadeOut } : AddressDialogProps ) {
+  const [state, formAction] = useFormState(addProperty, { message: '' })
   const address = result.place_name;
   const addressArray = address.split(',');
   for (let i = 0; i < addressArray.length; i++) {
@@ -114,7 +117,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
   }
 
   const handleClick = () => {
-    toast.success('You did it!');
+    // toast.success('You did it!');
     // event.preventDefault();
     // setIsOpen(false);
     // setFadeOut(true);
@@ -123,7 +126,19 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
   
   return (
     <Dialog open={isOpen} onClose={setIsOpen}>
-      <form autoComplete='off' action={addProperty}>
+      <form autoComplete='off' 
+        action={async (formData) => {
+          const result = await addProperty(formData);
+          if (result && result.message) {
+            toast.error(result.message);
+          } else {
+            toast.success('Property added');
+            setIsOpen(false);
+            setFadeOut(true);
+            setTimeout(redirect('/dashboard'), 300);
+          }
+        }}
+      >
         <DialogTitle>Confirm address</DialogTitle>
         <DialogDescription>
           Please confirm the address details for your property
