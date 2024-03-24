@@ -5,9 +5,9 @@ import { Notification } from '@/components/Notification'
 export default async function Home() {
   return (
     <>
-      <Suspense>
+      {/* <Suspense>
         <Notification />
-      </Suspense>
+      </Suspense> */}
       <Dashboard />
     </>
   )

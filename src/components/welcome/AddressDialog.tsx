@@ -128,14 +128,16 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
     <Dialog open={isOpen} onClose={setIsOpen}>
       <form autoComplete='off' 
         action={async (formData) => {
+          const loadingToast = toast.loading('Adding property');
           const result = await addProperty(formData);
+          toast.dismiss(loadingToast);
           if (result && result.message) {
             toast.error(result.message);
           } else {
-            toast.success('Property added');
+            toast.success('Property added', { duration: 5000 });
             setIsOpen(false);
             setFadeOut(true);
-            setTimeout(() => redirect('/dashboard'), 300);
+            redirect('/dashboard')
           }
         }}
       >
