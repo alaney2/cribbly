@@ -46,21 +46,17 @@ export default function Privacy() {
             </Text>
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold">Information Collection</h2>
+            <h2 className="text-lg font-bold">Data</h2>
             <p>
-              We don&apos;t store personal information on our servers unless required for the on-going operation of our site.
+              We collect information that your browser sends whenever you visit our site. We don&apos;t store personal information on our servers unless required for the on-going operation of our site. User data will be securely stored in AES-256 and TLS-encrypted databases. Data stored will never be sold to third parties.
             </p>
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold">Log Data</h2>
-            <p>Like many site operators, we collect information that your browser sends whenever you visit our site.</p>
+            <h2 className="text-lg font-bold">Cookies</h2>
+            <p>We use cookies for analytics purposes and to provide necessary services such as billing through companies like Stripe.</p>
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold">Cookies</h2>
-            <p>Cookies are files with a small amount of data, which may include an anonymous unique identifier.</p>
-          </div>
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold">Third-Party Services</h2>
+            <h2 className="text-lg font-bold">Third-Party Services</h2>
             <p>We may employ third-party companies and individuals due to the following reasons:</p>
             <ul className="list-disc list-inside">
               <li>To facilitate our Service;</li>
@@ -70,28 +66,28 @@ export default function Privacy() {
             </ul>
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold">Security</h2>
+            <h2 className="text-lg font-bold">Security</h2>
             <p>
               We value your trust in providing us your personal information, thus we are striving to use commercially
               acceptable means of protecting it.
             </p>
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold">Links to Other Sites</h2>
+            <h2 className="text-lg font-bold">Links to Other Sites</h2>
             <p>
               This Service may contain links to other sites. If you click on a third-party link, you will be directed to
               that site.
             </p>
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold">Changes to This Privacy Policy</h2>
+            <h2 className="text-lg font-bold">Changes to This Privacy Policy</h2>
             <p>
               We may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically
               for any changes.
             </p>
           </div>
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold">Contact Us</h2>
+            <h2 className="text-lg font-bold">Contact Us</h2>
             <p>If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us.</p>
             <p>
               Email: support@cribbly.io

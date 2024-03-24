@@ -16,14 +16,14 @@ export default function Terms() {
           </div>
           <div className="space-y-8">
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tight">Introduction</h2>
+              <p>Welcome to Cribbly!</p>
               <p>
                 These terms and conditions outline the rules and regulations for the use of Cribbly&apos;s website,
                 located at https://cribbly.io.
               </p>
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tight">Interpretation and Definitions</h2>
+              <h2 className="text-lg font-bold tracking-tight">Interpretation and Definitions</h2>
               <p>
                 The words of which the initial letter is capitalized have meanings defined under the following
                 conditions. The following definitions shall have the same meaning regardless of whether they appear in
@@ -37,23 +37,18 @@ export default function Terms() {
                   when we refer to &quot;You&quot; or &quot;Your,&quot; we are referring to You, the person accessing the Service and
                   accepting these Terms.
                 </li>
-                <li>
-                  Affiliate means an entity that controls, is controlled by or is under common control with a party,
-                  where &quot;control&quot; means ownership of 50% or more of the shares, equity interest or other securities
-                  entitled to vote for election of directors or other managing authority.
-                </li>
               </ul>
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tight">User Responsibilities</h2>
+              <h2 className="text-lg font-bold tracking-tight">User Responsibilities</h2>
               <p>
-                The User is responsible for the security of their account and password. Users must not disclose their
-                password to anyone else. Users must also agree to accept all risks of unauthorized access to their data
+                The User is responsible for the security of their account. Users must not share their
+                accounts with anyone else. Users must also agree to accept all risks of unauthorized access to their data
                 and any other information they provide to the Service.
               </p>
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tight">Intellectual Property Rights</h2>
+              <h2 className="text-lg font-bold tracking-tight">Intellectual Property Rights</h2>
               <p>
                 The Service and its original content, features, and functionality are and will remain the exclusive
                 property of Example Website and its licensors. The Service is protected by copyright, trademark, and
@@ -61,16 +56,16 @@ export default function Terms() {
               </p>
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tight">Disclaimers</h2>
+              <h2 className="text-lg font-bold tracking-tight">Disclaimers</h2>
               <p>
                 The Service is provided &quot;as is,&quot; without warranty of any kind, express or implied, including but not
                 limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement.
               </p>
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tight">Limitation of Liability</h2>
+              <h2 className="text-lg font-bold tracking-tight">Limitation of Liability</h2>
               <p>
-                In no event shall Example Website, nor its directors, employees, partners, agents, suppliers, or
+                In no event shall Cribbly, nor its directors, employees, partners, agents, suppliers, or
                 affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages,
                 including without limitation, loss of profits, data, use, goodwill, or other intangible losses,
                 resulting from (i) your access to or use of or inability to access or use the Service; (ii) any conduct
@@ -82,9 +77,9 @@ export default function Terms() {
               </p>
             </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tight">Governing Law and Jurisdiction</h2>
+              <h2 className="text-lg font-bold tracking-tight">Governing Law and Jurisdiction</h2>
               <p>
-                These Terms shall be governed and construed in accordance with the laws of the State of example-state,
+                These Terms shall be governed and construed in accordance with the laws of the State of California,
                 United States, without regard to its conflict of law provisions.
               </p>
             </div>

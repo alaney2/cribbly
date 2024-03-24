@@ -13,6 +13,7 @@ import 'animate.css'
 // @ts-expect-error
 import { useFormState } from 'react-dom'
 import clsx from 'clsx'
+import Link from 'next/link'
 
 const formClasses = `
     block text-base w-full mt-6 h-11 appearance-none bg-gray-50 rounded-md 
@@ -128,6 +129,13 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
                   </span>
                 </Button>
               </form>
+              {!signIn && (
+                <div className="mt-8 px-12 text-center text-xs text-zinc-500">
+                  <span>
+                    By signing up, you agree to the <Link href='/terms' className="hover:underline cursor-default">Terms of Service</Link> and <Link href='/terms' className="hover:underline cursor-default">Privacy Policy</Link>.
+                  </span>
+              </div>
+              )}
             </div>
           </div>
         )
