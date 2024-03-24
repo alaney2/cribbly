@@ -17,7 +17,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
     { name: 'Step 1' },
     { name: 'Step 2' },
     { name: 'Step 3' },
-    { name: 'Step 4' },
+    // { name: 'Step 4' },
   ]
 
   const handleStepClick = (stepIndex: number) => {
@@ -42,14 +42,14 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
             buttonOnClick={() => setCurrentStep(currentStep + 1)}
           />
         )
-      case 3:
-        return (
-          <Checkout user={user} subscription={subscription} products={products} />
-        )
-      case 4:
-        return (
-          <Checkout2 user={user} subscription={subscription} products={products} />
-        )
+      // case 3:
+      //   return (
+      //     <Checkout user={user} subscription={subscription} products={products} />
+      //   )
+      // case 4:
+      //   return (
+      //     <Checkout2 user={user} subscription={subscription} products={products} />
+      //   )
       default:
         return <div className="h-full w-full px-32 pb-28 pt-16">Error here</div>
     }

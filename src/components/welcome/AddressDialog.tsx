@@ -6,7 +6,7 @@ import { ICountry, IState, Country, State, City }  from 'country-state-city';
 import { Text } from '@/components/catalyst/text';
 import { Select } from '@/components/catalyst/select'
 import { useState, useEffect, useRef } from 'react'
-
+import { addProperty } from '@/utils/supabase/actions'
 interface AddressDialogProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -59,8 +59,6 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
       setSelectedCountry(newCountry);
     }
   };
-
-  
   
   for (let i = numSlices - 2; i > 0; i--) {
     const parts = addressArray[i].trim().split(' ');
@@ -114,14 +112,14 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
 
   const handleClick = () => {
     // event.preventDefault();
-    setIsOpen(false);
-    setFadeOut(true);
-    setTimeout(buttonOnClick, 200);
+    // setIsOpen(false);
+    // setFadeOut(true);
+    // setTimeout(buttonOnClick, 200);
   }
   
   return (
     <Dialog open={isOpen} onClose={setIsOpen}>
-      <form autoComplete='off'>
+      <form autoComplete='off' action={addProperty}>
         <DialogTitle>Confirm address</DialogTitle>
         <DialogDescription>
           Please confirm the address details for your property
@@ -158,7 +156,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
                         {state.name}
                       </option>
                     ))}
-                  </Select>
+                  </Select>                  
                 </Field>
               </div>
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
@@ -169,7 +167,6 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
                     defaultValue={zipCode.current || ''} 
                     autoComplete='off' 
                     required
-                    className=""
                     disabled
                   />
                 </Field>
@@ -177,7 +174,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
                   <Label>Country</Label>
                   <Select
                     disabled
-                    name="country" 
+                    name="country"
                     onChange={handleCountryChange} 
                     defaultValue={selectedCountry?.name || 'United States'}
                   >
@@ -187,24 +184,51 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
                       </option>
                     ))}
                   </Select>
-                  {/* <Listbox name="country" defaultValue="United States">
-                    {Country.getAllCountries().map((country: { name: string; }) => (
-                      <ListboxOption key={country.name} value={country.name}>
-                        {country.name}
-                      </ListboxOption>
-                    ))}
-                  </Listbox>
-                  <ComboBoxCustom inputs={Country.getAllCountries()} defaultCountry={countryObject} /> */}
                 </Field>
               </div>
             </FieldGroup>
           </Fieldset>
         </DialogBody>
+
+        <div className="hidden">
+          <Input name="street_address_hidden" defaultValue={streetAddress.current || ''} autoComplete='off' />
+          <Input name="city_hidden" defaultValue={city.current || ''} autoComplete='off' required />
+          <Select name="state_hidden" defaultValue={currentState.current || ''} required className="hidden" >
+            <option className="hidden" value="" disabled>Select a {stateOrProvince === 'State' ? 'state' : 'province'}</option>
+              {states.map((state) => (
+                <option className="hidden" key={state.name} value={state.name}>
+                  {state.name}
+                </option>
+              ))}
+          </Select>
+          <Input name="zip_hidden" defaultValue={zipCode.current || ''} autoComplete='off' required />
+          <Select
+            name="country_hidden"
+            onChange={handleCountryChange}
+            defaultValue={selectedCountry?.name || 'United States'}
+          >
+            {Country.getAllCountries().map((country: { name: string; }) => (
+              <option key={country.name} value={country.name}>
+                {country.name}
+              </option>
+            ))}
+          </Select>
+        </div>
+
         <DialogActions>
-          <Button plain onClick={() => setIsOpen(false)} type="submit">
+          <Button 
+            plain 
+            onClick={() => setIsOpen(false)}
+          >
             Cancel
           </Button>
-          <Button color="blue" onClick={handleClick}>Confirm</Button>
+          <Button 
+            type="submit"
+            color="blue"
+            onClick={handleClick}
+          >
+            Confirm
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

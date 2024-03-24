@@ -8,7 +8,6 @@ import '@/styles/globals.css'
 import { type Metadata } from 'next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from 'next/script';
-import { Toaster } from '@/components/Toasts/toaster';
 import { PropsWithChildren, Suspense } from 'react';
 
 export const metadata: Metadata = {

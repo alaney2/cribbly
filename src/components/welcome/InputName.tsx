@@ -53,7 +53,7 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
             className={`${formClasses} ${styles.inputCenterText}`}
             placeholder="Full name"
             style={{ animationDelay: '0.3s' }}
-            required={true}
+            required
             onChange={handleInputChange}
             autoFocus
           />
