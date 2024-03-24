@@ -43,7 +43,7 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
         </h2>
         <form action={updateFullName}>
           <label htmlFor="name" className="sr-only">
-            Full name
+            Legal name
           </label>
           <input
             ref={inputRef}
@@ -51,7 +51,7 @@ export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
             name="name"
             id="name"
             className={`${formClasses} ${styles.inputCenterText}`}
-            placeholder="Full name"
+            placeholder="Legal name"
             style={{ animationDelay: '0.3s' }}
             required
             onChange={handleInputChange}
