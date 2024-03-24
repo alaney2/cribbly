@@ -99,7 +99,7 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
           className='mb-4 text-center animate__animated animate__fadeIn'
           style={{ animationDelay: '0.2s' }}
         >
-          Let&apos;s enter one rental property address to start
+          Let&apos;s enter one rental property to start
         </Text>
         <div
           className={`mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-5/6 transition-opacity appearance-none animate__animated animate__fadeIn`}
