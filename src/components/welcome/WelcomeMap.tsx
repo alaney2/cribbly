@@ -14,7 +14,7 @@ import type {MapRef} from 'react-map-gl';
 import { AddressDialog } from '@/components/welcome/AddressDialog'
 
 
-export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
+export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
   const [fadeOut, setFadeOut] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [showPopup, setShowPopup] = useState(false);

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Step0 } from '@/components/welcome/Step0'
 import { InputName } from '@/components/welcome/InputName'
 import { AutofilledProperty } from '@/components/welcome/AutofilledProperty'
-import { NewWelcomeMap } from '@/components/welcome/NewWelcomeMap'
+import { WelcomeMap } from '@/components/welcome/WelcomeMap'
 import { Checkout } from '@/components/welcome/Checkout'
 import Payment from '@/components/welcome/Payment'
 import { Pricing } from '@/components/landing/Pricing'
@@ -38,7 +38,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
         )
       case 2:
         return (
-          <NewWelcomeMap
+          <WelcomeMap
             buttonOnClick={() => setCurrentStep(currentStep + 1)}
           />
         )
