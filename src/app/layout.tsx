@@ -9,6 +9,7 @@ import { type Metadata } from 'next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from 'next/script';
 import { PropsWithChildren, Suspense } from 'react';
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: {
@@ -88,14 +89,12 @@ export default function RootLayout({ children }: PropsWithChildren) {
       </Script>
 
       <body className="flex h-full flex-col">
+        <Toaster position="top-center" />
         {children}
         <Analytics />
         <SpeedInsights />
       </body>
 
-      {/* <Suspense>
-        <Toaster />
-      </Suspense> */}
     </html>
   )
 }

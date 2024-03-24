@@ -7,6 +7,9 @@ import { Text } from '@/components/catalyst/text';
 import { Select } from '@/components/catalyst/select'
 import { useState, useEffect, useRef } from 'react'
 import { addProperty } from '@/utils/supabase/actions'
+import { toast } from 'react-hot-toast';
+
+
 interface AddressDialogProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
@@ -111,6 +114,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
   }
 
   const handleClick = () => {
+    toast.success('You did it!');
     // event.preventDefault();
     // setIsOpen(false);
     // setFadeOut(true);
