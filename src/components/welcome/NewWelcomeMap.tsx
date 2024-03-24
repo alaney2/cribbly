@@ -52,6 +52,7 @@ export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) 
     const geocoder = new MapboxGeocoder({
       accessToken: process.env.NEXT_PUBLIC_MAPBOX_KEY || '',
       mapboxgl: mapboxgl,
+      countries: 'us',
       filter: (item) => {
         return item.place_type[0] === 'address';
       },
@@ -107,9 +108,9 @@ export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) 
             ref={mapRef}
             mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_KEY}
             initialViewState={{
-              longitude: -122.4,
-              latitude: 37.8,
-              zoom: 2
+              longitude: -95.7,
+              latitude: 37.1,
+              zoom: 3
             }}
             mapStyle="mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd"
             reuseMaps={true}
@@ -142,9 +143,9 @@ export function NewWelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) 
                   transition-all duration-150 [box-shadow:0_5px_0_0_#1b6ff8,0_7px_0_0_#1b70f841] border-b-0 px-2 py-0.5' 
                   onClick={popupClick}
                 >
-                    <span className='flex flex-col justify-center items-center h-full text-white font-bold text-sm'>
-                      Add property
-                    </span>
+                  <span className='flex flex-col justify-center items-center h-full text-white font-bold text-sm'>
+                    Add property
+                  </span>
                 </button>
                 <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} buttonOnClick={buttonOnClick} setFadeOut={setFadeOut} />
               </Popup>

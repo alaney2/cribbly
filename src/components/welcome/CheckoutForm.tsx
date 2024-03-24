@@ -93,6 +93,7 @@ export function CheckoutForm() {
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
       <LinkAuthenticationElement options={{defaultValues: {email: 'alanyao.training@gmail.com'}}} />
+      {/* <ExpressCheckoutElement onConfirm={() => {}}/> */}
       <PaymentElement 
         id="payment-element" 
         options={{

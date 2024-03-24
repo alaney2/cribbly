@@ -1,11 +1,11 @@
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
-import { Field, Label, Fieldset, Legend, FieldGroup } from '@/components/catalyst/fieldset'
+import { ErrorMessage, Field, Label, Fieldset, Legend, FieldGroup } from '@/components/catalyst/fieldset'
 import { Input } from '@/components/catalyst/input'
 import { Button } from '@/components/catalyst/button';
 import { ICountry, IState, Country, State, City }  from 'country-state-city';
 import { Text } from '@/components/catalyst/text';
 import { Select } from '@/components/catalyst/select'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 interface AddressDialogProps {
   isOpen: boolean;
@@ -28,6 +28,14 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
   const [stateOrProvince, setStateOrProvince] = useState('Province');
   const [zipOrPostal, setZipOrPostal] = useState('Postal Code');
 
+  let stateObject = null;
+  let zipCode = useRef('');
+  let city = useRef('');
+  let currentState = useRef('');
+  let states = State.getStatesOfCountry(selectedCountry?.isoCode || '');
+  const [apartment, setApartment] = useState('');
+  let streetAddress = useRef(addressArray[0].trim())
+  
   useEffect(() => {
     const countriesWithStates = ['United States', 'Australia', 'Austria', 'Brazil', 'South Sudan', 'Palau', 'Germany', 'India', 'Nigeria', 'New Zealand', 'Malaysia', 'Myanmar', 'Micronesia', 'Mexico'];
     const countriesWithZip = ['United States', 'Philippines'];
@@ -52,34 +60,26 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
     }
   };
 
-  let stateObject = null;
-  let zipCode = '';
-  let city = '';
-  let states = State.getStatesOfCountry(selectedCountry?.isoCode || '');
   
-  while (!stateObject) {
-    for (let i = numSlices - 2; i > 0; i--) {
-      const parts = addressArray[i].trim().split(' ');
+  
+  for (let i = numSlices - 2; i > 0; i--) {
+    const parts = addressArray[i].trim().split(' ');
 
-      for (let j = 0; j < parts.length; j++) {
-        let potentialStateName = parts[j].trim().toLowerCase();
+    for (let j = 0; j < parts.length; j++) {
+      let potentialStateName = parts[j].trim().toLowerCase();
+      stateObject = states.find(state => state.name.toLowerCase() === potentialStateName);
+      if (stateObject) {
+        currentState.current = stateObject.name;
+        zipCode.current = parts.slice(j+1).join(' ');
+        break;
+      }
+        
+      for (let k = j + 1; k < parts.length; k++) {
+        potentialStateName += " " + parts[k].trim().toLowerCase();
         stateObject = states.find(state => state.name.toLowerCase() === potentialStateName);
         if (stateObject) {
-          zipCode = parts.slice(j+1).join(' ');
-          break;
-        }
-          
-        for (let k = j + 1; k < parts.length; k++) {
-          potentialStateName += " " + parts[k].trim().toLowerCase();
-          stateObject = states.find(state => state.name.toLowerCase() === potentialStateName);
-  
-          if (stateObject) {
-            zipCode = parts.slice(k+1).join(' ');
-            break;
-          }
-        }
-  
-        if (stateObject) {
+          currentState.current = stateObject.name;
+          zipCode.current = parts.slice(k+1).join(' ');
           break;
         }
       }
@@ -88,24 +88,27 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
         break;
       }
     }
-    break;
+
+    if (stateObject) {
+      break;
+    }
   }
 
   if (!stateObject && numSlices === 3) {
     const parts = addressArray[1].trim().split(' ');
-    zipCode = parts[0].trim();
-    city = parts.slice(1).join(' ');
+    zipCode.current = parts[0].trim();
+    city.current = parts.slice(1).join(' ');
   }
 
   if (numSlices >= 4) {
     if (countryName === 'United States') {
-      city = addressArray[1].trim();
+      city.current = addressArray[1].trim();
     } else if (countryName === 'Mexico') {
       const parts = addressArray[1].trim().split(' ');
-      zipCode = parts[0].trim();
-      city = parts.slice(1).join(' ');
+      zipCode.current = parts[0].trim();
+      city.current = parts.slice(1).join(' ');
     } else if (countryName === 'Canada') {
-      city = addressArray[1].trim();
+      city.current = addressArray[1].trim();
     }
   }
 
@@ -113,9 +116,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
     // event.preventDefault();
     setIsOpen(false);
     setFadeOut(true);
-    setTimeout(buttonOnClick, 400);
-
-    // buttonOnClick();
+    setTimeout(buttonOnClick, 200);
   }
   
   return (
@@ -131,42 +132,54 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-4">
                 <Field className="sm:col-span-2">
                   <Label>Street address</Label>
-                  <Input name="street_address" defaultValue={addressArray[0].trim()} autoComplete='off' />
+                  <Input name="street_address" defaultValue={streetAddress.current || ''} autoComplete='off' disabled />
                 </Field>
                 <Field className="sm:col-span-1">
                   <Label>Apt/Suite</Label>
-                  <Input name="apt" defaultValue='' autoComplete='off' />
+                  <Input 
+                    name="apt" 
+                    autoComplete='off'
+                    value={apartment}
+                    onChange={(e) => setApartment(e.target.value)}
+                  />
                 </Field>
               </div>
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4 -mt-20">
                 <Field className="sm:col-span-1">
                   <Label>City</Label>
-                  <Input name="city" defaultValue={city} autoComplete='off' />
+                  <Input name="city" defaultValue={city.current || ''} autoComplete='off' required disabled />
                 </Field>
                 <Field className="sm:col-span-1">
                   <Label>{stateOrProvince}</Label>
-                  <Select name="state" defaultValue={stateObject?.name}>
-                    <option value="">Select a {stateOrProvince === 'State' ? 'state' : 'province'}</option>
-                    {states.map((state: { name: string; }) => (
+                  <Select name="state" defaultValue={currentState.current || ''} required disabled>
+                    <option value="" disabled>Select a {stateOrProvince === 'State' ? 'state' : 'province'}</option>
+                    {states.map((state) => (
                       <option key={state.name} value={state.name}>
                         {state.name}
                       </option>
                     ))}
                   </Select>
                 </Field>
-                
               </div>
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
                 <Field className="sm:col-span-1">
                   <Label>{zipOrPostal}</Label>
-                  <Input name="zip" defaultValue={zipCode} autoComplete='off' />
+                  <Input 
+                    name="zip" 
+                    defaultValue={zipCode.current || ''} 
+                    autoComplete='off' 
+                    required
+                    className=""
+                    disabled
+                  />
                 </Field>
                 <Field className="sm:col-span-1">
                   <Label>Country</Label>
-                  <Select 
+                  <Select
+                    disabled
                     name="country" 
                     onChange={handleCountryChange} 
-                    defaultValue={selectedCountry?.name}
+                    defaultValue={selectedCountry?.name || 'United States'}
                   >
                     {Country.getAllCountries().map((country: { name: string; }) => (
                       <option key={country.name} value={country.name}>
@@ -188,7 +201,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
           </Fieldset>
         </DialogBody>
         <DialogActions>
-          <Button plain onClick={() => setIsOpen(false)}>
+          <Button plain onClick={() => setIsOpen(false)} type="submit">
             Cancel
           </Button>
           <Button color="blue" onClick={handleClick}>Confirm</Button>
