@@ -10,7 +10,7 @@ import { Pricing } from '@/components/landing/Pricing'
 import { Checkout2 } from '@/components/welcome/Checkout2'
 
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
-  const [currentStep, setCurrentStep] = useState(2)
+  const [currentStep, setCurrentStep] = useState(0)
 
   const steps = [
     { name: 'Step 0' },
