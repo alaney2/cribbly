@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
     if (error) {
       return NextResponse.redirect(
-        `${requestUrl.origin}/get-started/otp?error=Could not resend code`,
+        `${requestUrl.origin}/get-started?error=Could not resend code`,
         {
           status: 301,
         }
