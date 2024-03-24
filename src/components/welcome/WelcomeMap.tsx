@@ -93,16 +93,16 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
 
   return (
     <>
-      <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js'></Script>
-      <div className={`flex flex-col px-2 py-16 sm:py-8 justify-center items-center relative h-full w-full overscroll-none ${animationClass}`}>
+      <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js' />
+      <div className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full w-full overscroll-none ${animationClass}`}>
         <Text
           className='mb-4 text-center animate__animated animate__fadeIn'
           style={{ animationDelay: '0.2s' }}
         >
-          Enter your rental property address to get started
+          Let&apos;s enter one rental property address to start
         </Text>
         <div
-          className={`mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-4/5 transition-opacity appearance-none animate__animated animate__fadeIn`}
+          className={`mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-5/6 transition-opacity appearance-none animate__animated animate__fadeIn`}
         >
           <Map
             ref={mapRef}

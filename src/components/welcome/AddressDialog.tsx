@@ -16,7 +16,7 @@ interface AddressDialogProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   result: any;
-  buttonOnClick: () => void;
+  buttonOnClick?: () => void;
   setFadeOut: (fadeOut: boolean) => void;
 }
 
@@ -135,7 +135,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
             toast.success('Property added');
             setIsOpen(false);
             setFadeOut(true);
-            setTimeout(redirect('/dashboard'), 300);
+            setTimeout(() => redirect('/dashboard'), 300);
           }
         }}
       >

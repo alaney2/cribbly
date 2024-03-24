@@ -14,7 +14,7 @@ import type {MapRef} from 'react-map-gl';
 import { AddressDialog } from '@/components/welcome/AddressDialog'
 
 
-export function MapBox({ buttonOnClick }: { buttonOnClick: () => void }) {
+export function MapBox() {
   const [fadeOut, setFadeOut] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -88,12 +88,12 @@ export function MapBox({ buttonOnClick }: { buttonOnClick: () => void }) {
       }
     };
 
-  }, [buttonOnClick, isMapLoaded]);
+  }, [isMapLoaded]);
 
 
   return (
     <>
-      <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js'></Script>
+      <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js' />
       <div className={`flex flex-col justify-center items-center relative h-full w-full overscroll-none ${animationClass}`}>
         <div
           className={`mx-auto text-center items-center w-full h-full transition-opacity appearance-none animate__animated animate__fadeIn`}
@@ -141,7 +141,7 @@ export function MapBox({ buttonOnClick }: { buttonOnClick: () => void }) {
                     Add property
                   </span>
                 </button>
-                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} buttonOnClick={buttonOnClick} setFadeOut={setFadeOut} />
+                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} setFadeOut={setFadeOut} />
               </Popup>
             )}
           </Map>
