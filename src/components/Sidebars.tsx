@@ -16,9 +16,9 @@ import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon, current: true },
+  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: true },
   { name: 'Team', href: '/', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '/', icon: FolderIcon, current: false },
+  { name: 'Properties', href: '/dashboard/properties', icon: FolderIcon, current: false },
   { name: 'Calendar', href: '/', icon: CalendarIcon, current: false },
   { name: 'Documents', href: '/', icon: DocumentDuplicateIcon, current: false },
   { name: 'Reports', href: '', icon: ChartPieIcon, current: false },
@@ -51,15 +51,15 @@ export function DesktopSidebar() {
                     href={item.href}
                     className={classNames(
                       item.name === currentNavItem
-                        ? ' text-indigo-600'
-                        : 'text-gray-700 hover:text-indigo-600 ',
+                        ? ' text-blue-600'
+                        : 'text-gray-700 hover:text-blue-600 ',
                       'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                     )}
                     onClick={() => setCurrentNavItem(item.name)}
                   >
                     <item.icon
                       className={classNames(
-                        item.name === currentNavItem ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
+                        item.name === currentNavItem ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600',
                         'h-6 w-6 shrink-0'
                       )}
                       aria-hidden="true"
@@ -79,8 +79,8 @@ export function DesktopSidebar() {
                     href={team.href}
                     className={classNames(
                       team.name === currentNavItem
-                        ? ' text-indigo-600'
-                        : 'text-gray-700 hover:text-indigo-600 ',
+                        ? ' text-blue-600'
+                        : 'text-gray-700 hover:text-blue-600 ',
                       'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                     )}
                     onClick={() => setCurrentNavItem(team.name)}
@@ -88,8 +88,8 @@ export function DesktopSidebar() {
                     <span
                       className={classNames(
                         team.name === currentNavItem
-                          ? 'text-indigo-600 border-indigo-600'
-                          : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                          ? 'text-blue-600 border-blue-600'
+                          : 'text-gray-400 border-gray-200 group-hover:border-blue-600 group-hover:text-blue-600',
                         'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
                       )}
                     >
@@ -228,8 +228,8 @@ export function MobileSidebar() {
                                 href={item.href}
                                 className={classNames(
                                   item.name === currentNavItem
-                                    ? ' text-indigo-600'
-                                    : 'text-gray-700 hover:text-indigo-600',
+                                    ? ' text-blue-600'
+                                    : 'text-gray-700 hover:text-blue-600',
                                   'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                 )}
                                 onClick={() => setCurrentNavItem(item.name)}
@@ -237,8 +237,8 @@ export function MobileSidebar() {
                                 <item.icon
                                   className={classNames(
                                     item.name === currentNavItem 
-                                      ? 'text-indigo-600' 
-                                      : 'text-gray-400 group-hover:text-indigo-600',
+                                      ? 'text-blue-600' 
+                                      : 'text-gray-400 group-hover:text-blue-600',
                                     'h-6 w-6 shrink-0'
                                   )}
                                   aria-hidden="true"
@@ -258,8 +258,8 @@ export function MobileSidebar() {
                                 href={team.href}
                                 className={classNames(
                                   team.name === currentNavItem
-                                    ? 'text-indigo-600'
-                                    : 'text-gray-700 hover:text-indigo-600',
+                                    ? 'text-blue-600'
+                                    : 'text-gray-700 hover:text-blue-600',
                                   'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                 )}
                                 onClick={() => setCurrentNavItem(team.name)}
@@ -267,8 +267,8 @@ export function MobileSidebar() {
                                 <span
                                   className={classNames(
                                     team.name === currentNavItem
-                                      ? 'text-indigo-600 border-indigo-600'
-                                      : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                      ? 'text-blue-600 border-blue-600'
+                                      : 'text-gray-400 border-gray-200 group-hover:border-blue-600 group-hover:text-blue-600',
                                     'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
                                   )}
                                 >

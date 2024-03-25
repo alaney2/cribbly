@@ -7,6 +7,10 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Link from 'next/link';
 import { Button } from '@/components/catalyst/button';
+import { Input } from '@/components/catalyst/input';
+import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/catalyst/dropdown';
+import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckIcon } from '@heroicons/react/16/solid';
+import Fuse from 'fuse.js';
 
 interface Property {
   id: number;
@@ -38,6 +42,27 @@ const fetcher = async () => {
 
 export function PropertiesGrid() {
   const { data: properties, error, isLoading } = useSWR('properties', fetcher);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('');
+
+  const fuse = new Fuse(properties || [], {    keys: ['street_address', 'city', 'state'],
+    threshold: 0.4,
+  });
+
+  const filteredProperties = searchQuery
+    ? fuse.search(searchQuery).map((result) => result.item)
+    : properties;
+
+  const sortedProperties = filteredProperties?.sort((a, b) => {
+    if (sortBy === 'name') {
+      return a.street_address.localeCompare(b.street_address);
+    } else if (sortBy === 'city') {
+      return a.city.localeCompare(b.city);
+    } else if (sortBy === 'state') {
+      return a.state.localeCompare(b.state)
+    }
+    return 0;
+  });
 
   if (error) {
     toast.error('Error fetching properties');
@@ -64,28 +89,98 @@ export function PropertiesGrid() {
     );
   }
 
-
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-8">
+    <div className="p-6 md:p-8">
+    <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-center mb-4">
+      <div className="relative sm:mr-2.5 w-full sm:w-auto mb-2.5 sm:mb-0">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+        </div>
+        <input
+          type="text"
+          name="search"
+          id="search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full sm:w-72 md:w-96 rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-zinc-950/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 text-sm sm:text-md sm:leading-6 h-10"
+          placeholder="Search Properties..."
+        />
+      </div>
+      <div className="flex items-center justify-end w-full sm:w-auto">
+        <Dropdown>
+          <DropdownButton outline className="mr-2.5 h-10">
+            <span className="text-sm block">
+              Sort by
+            </span>
+            <ChevronDownIcon />
+          </DropdownButton>
+          <DropdownMenu className="min-w-32">
+            <DropdownItem onClick={() => setSortBy('name')} className="justify-between">
+              <div className="flex justify-between">
+                <div className="flex text-sm">
+                  Name
+                </div>
+                <div>
+                  {sortBy === 'name' && (
+                    <CheckIcon className="h-5 w-5 ml-2 text-blue-500" />
+                  )}
+                </div>
+              </div>
+
+            </DropdownItem>
+            <DropdownItem onClick={() => setSortBy('city')}>
+              <div className="flex justify-between">
+                <div className="flex text-sm">
+                  City
+                </div>
+                <div>
+                  {sortBy === 'city' && (
+                    <CheckIcon className="h-5 w-5 ml-2 text-blue-500" />
+                  )}
+                </div>
+              </div>
+            </DropdownItem>
+            <DropdownItem onClick={() => setSortBy('state')}>
+              <div className="flex justify-between">
+                <div className="flex text-sm">
+                  State
+                </div>
+                <div>
+                  {sortBy === 'state' && (
+                    <CheckIcon className="h-5 w-5 ml-2 text-blue-500" />
+                  )}
+                </div>
+              </div>
+            </DropdownItem>
+            </DropdownMenu>
+        </Dropdown>
+        <Button color="blue" className="max-w-40 h-10" href="/dashboard/properties">
+          <PlusIcon className="h-5 w-5 mr-2" />
+          <span className="text-sm block">
+            Add Property
+          </span>
+        </Button>
+      </div>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 py-4 lg:py-8 2xl:p-16">
       {isLoading ? (
         Array.from({ length: 6 }).map((_, index) => (
-          <div key={index} className="rounded-lg p-4 h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300">
+          <div key={index} className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300">
             <Skeleton height={24} width="80%" />
             <Skeleton height={18} width="60%" />
             <Skeleton height={18} width="40%" />
           </div>
         ))
       ) : (
-        properties?.map((property) => (
-          <div key={property.id} className="rounded-lg p-4 h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300">
-            <h3 className="text-lg font-semibold">{property.street_address}</h3>
+        sortedProperties?.map((property) => (
+          <div key={property.id} className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300">
+            <h3 className="text-lg font-semibold truncate">{property.street_address}</h3>
             <p>{property.apt}</p>
             <p>{property.city}, {property.state} {property.zip}</p>
           </div>
         ))
       )}
     </div>
+  </div>
   );
 };
-
-export default PropertiesGrid;
