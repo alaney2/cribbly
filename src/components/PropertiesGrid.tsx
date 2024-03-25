@@ -12,16 +12,6 @@ import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/componen
 import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckIcon } from '@heroicons/react/16/solid';
 import Fuse from 'fuse.js';
 
-interface Property {
-  id: number;
-  user_id: string;
-  street_address: string;
-  zip: string;
-  apt: string;
-  city: string;
-  state: string;
-  country: string;
-}
 
 const fetcher = async () => {
   const supabase = createClient();
