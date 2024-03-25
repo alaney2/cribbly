@@ -7,7 +7,6 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Link from 'next/link';
 import { Button } from '@/components/catalyst/button';
-// import { Input } from '@/components/catalyst/input';
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/catalyst/dropdown';
 import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckIcon } from '@heroicons/react/16/solid';
 import Fuse from 'fuse.js';
@@ -95,44 +94,22 @@ export function PropertiesGrid() {
               <ChevronDownIcon />
             </DropdownButton>
             <DropdownMenu className="min-w-32">
-              <DropdownItem onClick={() => setSortBy('name')} className="justify-between">
-                <div className="flex justify-between">
-                  <div className="flex text-sm">
-                    Name
-                  </div>
-                  <div>
-                    {sortBy === 'name' && (
-                      <CheckIcon className="h-5 w-5 ml-2 text-blue-500" />
-                    )}
-                  </div>
+              <DropdownItem onClick={() => setSortBy('name')}>
+                <div className={`text-sm ${sortBy === 'name' && 'font-semibold'}`}>
+                  Name
                 </div>
-
               </DropdownItem>
               <DropdownItem onClick={() => setSortBy('city')}>
-                <div className="flex justify-between">
-                  <div className="flex text-sm">
-                    City
-                  </div>
-                  <div>
-                    {sortBy === 'city' && (
-                      <CheckIcon className="h-5 w-5 ml-2 text-blue-500" />
-                    )}
-                  </div>
+                <div className={`text-sm ${sortBy === 'city' && 'font-semibold'}`}>
+                  City
                 </div>
               </DropdownItem>
               <DropdownItem onClick={() => setSortBy('state')}>
-                <div className="flex justify-between">
-                  <div className="flex text-sm">
-                    State
-                  </div>
-                  <div>
-                    {sortBy === 'state' && (
-                      <CheckIcon className="h-5 w-5 ml-2 text-blue-500" />
-                    )}
-                  </div>
+                <div className={`text-sm ${sortBy === 'state' && 'font-semibold'}`}>
+                  State
                 </div>
               </DropdownItem>
-              </DropdownMenu>
+            </DropdownMenu>
           </Dropdown>
           <Button color="blue" className="max-w-40 h-10 cursor-default" href="/dashboard/properties">
             <PlusIcon className="h-5 w-5 mr-2" />
