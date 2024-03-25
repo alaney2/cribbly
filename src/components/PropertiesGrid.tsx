@@ -7,11 +7,11 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Link from 'next/link';
 import { Button } from '@/components/catalyst/button';
-import { Input } from '@/components/catalyst/input';
+// import { Input } from '@/components/catalyst/input';
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/catalyst/dropdown';
 import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckIcon } from '@heroicons/react/16/solid';
 import Fuse from 'fuse.js';
-
+import { Input } from '@/components/aceternity/Input'
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -66,7 +66,17 @@ export function PropertiesGrid() {
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
           </div>
-          <input
+          <Input 
+            id="search"
+            placeholder="Search Properties..." 
+            type="text"
+            autoComplete='off'
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full sm:w-72 md:w-96 border-0 py-1.5 pl-10 ring-1 ring-inset ring-zinc-950/10 placeholder:text-gray-400 focus:ring-2 bg-gray-50" 
+          />
+
+          {/* <input
             type="text"
             name="search"
             id="search"
@@ -74,11 +84,11 @@ export function PropertiesGrid() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full sm:w-72 md:w-96 rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-zinc-950/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 text-sm sm:text-md sm:leading-6 h-10"
             placeholder="Search Properties..."
-          />
+          /> */}
         </div>
         <div className="flex items-center justify-end w-full sm:w-auto">
           <Dropdown>
-            <DropdownButton outline className="mr-2.5 h-10">
+            <DropdownButton outline className="mr-2.5 h-10 bg-gray-50">
               <span className="text-sm block">
                 Sort by
               </span>
@@ -124,7 +134,7 @@ export function PropertiesGrid() {
               </DropdownItem>
               </DropdownMenu>
           </Dropdown>
-          <Button color="blue" className="max-w-40 h-10" href="/dashboard/properties">
+          <Button color="blue" className="max-w-40 h-10 cursor-default" href="/dashboard/properties">
             <PlusIcon className="h-5 w-5 mr-2" />
             <span className="text-sm block">
               Add Property
