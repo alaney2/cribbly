@@ -69,25 +69,6 @@ export function PropertiesGrid() {
     toast.error('Error fetching properties');
   }
 
-  if (!isLoading && properties?.length === 0) {
-    return (
-      <div className="flex flex-col h-full pb-32 items-center justify-center p-8">
-        <div className="ring-2 rounded-lg p-2 mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-          </svg>
-        </div>
-        <h2 className="text-lg font-medium mb-3">Add your first property</h2>
-        <Button color="blue" className="bg-blue-500 text-white px-4 py-2 rounded-md" href="/dashboard/properties">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-          Add Property
-        </Button>
-      </div>
-    );
-  }
-
   return (
     <div className="p-6 md:p-8">
       <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-center mb-4">
@@ -170,7 +151,7 @@ export function PropertiesGrid() {
               <Skeleton height={18} width="40%" />
             </div>
           ))
-        ) : true ? (
+        ) : properties?.length === 0 ? (
           <div className="flex col-span-3 mt-8 flex-col h-full items-center justify-center p-8">
             <div className="ring-2 rounded-lg p-2 mb-3">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 sm:h-8 w-6 sm:w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
