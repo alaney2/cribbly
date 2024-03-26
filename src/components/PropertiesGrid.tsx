@@ -5,7 +5,6 @@ import useSWR from 'swr';
 import toast from 'react-hot-toast';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import Link from 'next/link';
 import { Button } from '@/components/catalyst/button';
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/catalyst/dropdown';
 import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckIcon } from '@heroicons/react/16/solid';
@@ -59,7 +58,7 @@ export function PropertiesGrid() {
   }
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-6 md:p-8" style={{ height: 'calc(100vh - 64px)' }}>
       <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-center mb-4">
         <div className="relative sm:mr-2.5 w-full sm:w-auto mb-2.5 sm:mb-0">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -74,16 +73,6 @@ export function PropertiesGrid() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full sm:w-72 md:w-96 border-0 py-1.5 pl-10 ring-1 ring-inset ring-zinc-950/10 placeholder:text-gray-400 focus:ring-2 bg-gray-50" 
           />
-
-          {/* <input
-            type="text"
-            name="search"
-            id="search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full sm:w-72 md:w-96 rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-zinc-950/10 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 text-sm sm:text-md sm:leading-6 h-10"
-            placeholder="Search Properties..."
-          /> */}
         </div>
         <div className="flex items-center justify-end w-full sm:w-auto">
           <Dropdown>
@@ -120,7 +109,7 @@ export function PropertiesGrid() {
         </div>
       </div>
       <div className="max-w-screen-2xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 py-4 lg:py-8 2xl:p-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 py-4 lg:py-8 2xl:p-16 justify-items-center">
           {isLoading ? (
             Array.from({ length: 6 }).map((_, index) => (
               <div key={index} className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md">

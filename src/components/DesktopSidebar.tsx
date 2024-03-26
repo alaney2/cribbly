@@ -8,9 +8,16 @@ import {
   FolderIcon,
   HomeIcon,
   UsersIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
+  Cog6ToothIcon,
+  ArrowRightStartOnRectangleIcon,
+  QuestionMarkCircleIcon
+  // ChevronLeftIcon,
+  // ChevronRightIcon,
 } from '@heroicons/react/24/outline'
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/16/solid'
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -46,15 +53,26 @@ export function DesktopSidebar() {
 
   return (
     <motion.div
-      className={`flex grow flex-col gap-y-5 overflow-hidden px-6 pb-2 min-h-full`}
+      className={`flex grow flex-col gap-y-5 overflow-hidden px-6 pb-2 min-h-full mt-24 overflow-y-auto`}
       initial={{ width: 196 }}
       animate={{ width: isSidebarCollapsed ? 64 : 196 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
-      <div className="flex h-16 shrink-0 items-center">
+      {/* <div className="flex h-8 mt-16 shrink-0 items-center"> */}
         {/* <Logo /> */}
         {/* <Logo className="mx-0 h-8 w-auto"/> */}
-      </div>
+        {/* <button
+          className="p-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none transition duration-200 ease-in-out ml-auto"
+          onClick={toggleSidebar}
+        >
+          {isSidebarCollapsed ? (
+            <ChevronRightIcon className="h-5 w-5 text-gray-600" />
+          ) : (
+            <ChevronLeftIcon className="h-5 w-5 text-gray-600" />
+          )}
+        </button> */}
+      {/* </div> */}
+      
       <nav className="flex flex-1 flex-col">
         <ul role="list" className="gap-y-7">
           <li>
@@ -139,6 +157,7 @@ export function DesktopSidebar() {
               ))}
             </ul>
           </li>
+          
           <li className="fixed bottom-10 left-8 mx-auto text-sm font-semibold gap-x-4 px-6 py-3 leading-6 text-gray-900">
             <Menu as="div" className="font-medium">
               <Menu.Button>
@@ -146,20 +165,6 @@ export function DesktopSidebar() {
                   <span className="text-sm font-medium leading-none text-white">TC</span>
                 </span>
                 <span className="sr-only">Your profile</span>
-                <AnimatePresence>
-                  {!isSidebarCollapsed && (
-                    <motion.span
-                      aria-hidden="true"
-                      className="p-2"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      Profile
-                    </motion.span>
-                  )}
-                </AnimatePresence>
               </Menu.Button>
               <Transition
                 as={Fragment}
@@ -173,11 +178,11 @@ export function DesktopSidebar() {
                 <Menu.Items className="ml-4 w-40 origin-bottom-left absolute bottom-full left-0 z-10 mt-2 divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <form method="POST" action="/auth/sign-out">
                     <Menu.Item>
-                      {({ active }) => (
+                      {({ focus }) => (
                         <button
                           type="submit"
                           className={classNames(
-                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                            focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                             'block w-full px-4 py-2 text-left text-sm'
                           )}
                         >
@@ -187,11 +192,11 @@ export function DesktopSidebar() {
                     </Menu.Item>
                   </form>
                   <Menu.Item>
-                    {({ active }) => (
+                    {({ focus }) => (
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                           'block px-4 py-2 text-sm'
                         )}
                       >
@@ -200,11 +205,11 @@ export function DesktopSidebar() {
                     )}
                   </Menu.Item>
                   <Menu.Item>
-                    {({ active }) => (
+                    {({ focus }) => (
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                           'block px-4 py-2 text-sm'
                         )}
                       >
@@ -218,16 +223,7 @@ export function DesktopSidebar() {
           </li>
         </ul>
       </nav>
-      <button
-        className="fixed bottom-4 left-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
-        onClick={toggleSidebar}
-      >
-        {isSidebarCollapsed ? (
-          <ChevronRightIcon className="h-5 w-5 text-gray-600" />
-        ) : (
-          <ChevronDownIcon className="h-5 w-5 text-gray-600" />
-        )}
-      </button>
+      
     </motion.div>
   )
 }

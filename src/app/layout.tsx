@@ -88,7 +88,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         `}
       </Script>
 
-      <body className="flex h-full flex-col">
+      <body className="bg-gray-50 overflow-hidden">
         <Toaster position="top-center" />
         {children}
         <Analytics />
