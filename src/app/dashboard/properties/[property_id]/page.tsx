@@ -24,7 +24,7 @@ export default async function CurrentProperty({ params } : { params: { property_
   return (
     <>
       <div className="p-6 md:p-8" style={{ height: 'calc(100vh - 48px)' }}>
-        Hello World {params.property_id}
+        {params.property_id}
       </div>
     </>
   )
