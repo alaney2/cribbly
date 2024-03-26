@@ -9,10 +9,10 @@ import {
   HomeIcon,
   UsersIcon,
   Cog6ToothIcon,
-  ArrowRightStartOnRectangleIcon,
-  QuestionMarkCircleIcon
-  // ChevronLeftIcon,
-  // ChevronRightIcon,
+  ArrowRightOnRectangleIcon,
+  QuestionMarkCircleIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
 } from '@heroicons/react/24/outline'
 import {
   ChevronLeftIcon,
@@ -22,7 +22,6 @@ import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation'
-
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -36,6 +35,7 @@ const navigation = [
   { name: 'Documents', href: '/', icon: DocumentDuplicateIcon, current: false },
   { name: 'Reports', href: '', icon: ChartPieIcon, current: false },
 ]
+
 const teams = [
   { id: 1, name: 'Heroicons', href: '/', initial: 'H', current: false },
   { id: 2, name: 'Tailwind Labs', href: '/', initial: 'T', current: false },
@@ -58,57 +58,42 @@ export function DesktopSidebar() {
       animate={{ width: isSidebarCollapsed ? 64 : 196 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
-      {/* <div className="flex h-8 mt-16 shrink-0 items-center"> */}
-        {/* <Logo /> */}
-        {/* <Logo className="mx-0 h-8 w-auto"/> */}
-        {/* <button
-          className="p-1 rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none transition duration-200 ease-in-out ml-auto"
-          onClick={toggleSidebar}
-        >
-          {isSidebarCollapsed ? (
-            <ChevronRightIcon className="h-5 w-5 text-gray-600" />
-          ) : (
-            <ChevronLeftIcon className="h-5 w-5 text-gray-600" />
-          )}
-        </button> */}
-      {/* </div> */}
-      
       <nav className="flex flex-1 flex-col">
         <ul role="list" className="gap-y-7">
           <li>
             <ul role="list" className="-mx-2 space-y-1">
               {navigation.map((item) => (
                 <li key={item.name}>
-                <Link
-                  href={item.href}
-                  className={classNames(
-                    pathname === item.href
-                      ? 'text-blue-600'
-                      : 'text-gray-700 hover:text-blue-600',
-                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                  )}
-                >
-                  <item.icon
+                  <Link
+                    href={item.href}
                     className={classNames(
-                      pathname === item.href ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600',
-                      'h-6 w-6 shrink-0'
+                      pathname === item.href
+                        ? 'text-blue-600'
+                        : 'text-gray-700 hover:text-blue-600',
+                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                     )}
-                    aria-hidden="true"
-                  />
-                  <AnimatePresence>
-                    {!isSidebarCollapsed && (
-                      <motion.span
-                        initial={{ opacity: 1 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        {item.name}
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-              </li>
+                  >
+                    <item.icon
+                      className={classNames(
+                        pathname === item.href ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600',
+                        'h-6 w-6 shrink-0'
+                      )}
+                      aria-hidden="true"
+                    />
+                    <AnimatePresence>
+                      {!isSidebarCollapsed && (
+                        <motion.span
+                          initial={{ opacity: 1 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {item.name}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </Link>
+                </li>
               ))}
             </ul>
           </li>
@@ -157,9 +142,8 @@ export function DesktopSidebar() {
               ))}
             </ul>
           </li>
-          
-          <li className="fixed bottom-10 left-8 mx-auto text-sm font-semibold gap-x-4 px-6 py-3 leading-6 text-gray-900">
-            <Menu as="div" className="font-medium">
+          <li className="fixed bottom-10 left-8 mx-auto text-sm font-semibold gap-x-4 px-6 py-3 min-w-64 leading-6 text-gray-900">
+            <Menu as="div" className="font-medium overscroll-auto overflow-hidden truncate min-w-64 ">
               <Menu.Button>
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
                   <span className="text-sm font-medium leading-none text-white">TC</span>
@@ -176,6 +160,57 @@ export function DesktopSidebar() {
                 leaveTo="transform opacity-0 scale-95"
               >
                 <Menu.Items className="ml-4 w-40 origin-bottom-left absolute bottom-full left-0 z-10 mt-2 divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <Menu.Item>
+                    {({ focus }) => (
+                      <button
+                        onClick={toggleSidebar}
+                        className={classNames(
+                          focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          'block w-full px-4 py-2 text-left text-sm'
+                        )}
+                      >
+                        {isSidebarCollapsed ? (
+                          <>
+                            <ChevronRightIcon className="inline-block h-4 w-4 mr-2" />
+                            Expand
+                          </>
+                        ) : (
+                          <>
+                            <ChevronLeftIcon className="inline-block h-4 w-4 mr-2" />
+                            Shrink
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ focus }) => (
+                      <a
+                        href="#"
+                        className={classNames(
+                          focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          'block px-4 py-2 text-sm'
+                        )}
+                      >
+                        <Cog6ToothIcon className="inline-block h-4 w-4 mr-2" />
+                        Settings
+                      </a>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ focus }) => (
+                      <a
+                        href="#"
+                        className={classNames(
+                          focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                          'block px-4 py-2 text-sm'
+                        )}
+                      >
+                        <QuestionMarkCircleIcon className="inline-block h-4 w-4 mr-2" />
+                        Support
+                      </a>
+                    )}
+                  </Menu.Item>
                   <form method="POST" action="/auth/sign-out">
                     <Menu.Item>
                       {({ focus }) => (
@@ -186,44 +221,18 @@ export function DesktopSidebar() {
                             'block w-full px-4 py-2 text-left text-sm'
                           )}
                         >
+                          <ArrowRightOnRectangleIcon className="inline-block h-4 w-4 mr-2" />
                           Sign out
                         </button>
                       )}
                     </Menu.Item>
                   </form>
-                  <Menu.Item>
-                    {({ focus }) => (
-                      <a
-                        href="#"
-                        className={classNames(
-                          focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
-                        )}
-                      >
-                        Support
-                      </a>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ focus }) => (
-                      <a
-                        href="#"
-                        className={classNames(
-                          focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
-                        )}
-                      >
-                        Account settings
-                      </a>
-                    )}
-                  </Menu.Item>
                 </Menu.Items>
               </Transition>
             </Menu>
           </li>
         </ul>
       </nav>
-      
     </motion.div>
   )
 }
