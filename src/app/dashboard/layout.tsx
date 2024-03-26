@@ -17,7 +17,7 @@ export default function DashboardLayout({
             <DesktopSidebar />
           </aside>
 
-          <main className="flex-1 bg-white h-full rounded-3xl shadow-md lg:block lg:mr-8">
+          <main className="flex-1 bg-white h-full rounded-3xl shadow-md lg:block lg:mr-8 overflow-auto">
             {children}
           </main>
         </div>

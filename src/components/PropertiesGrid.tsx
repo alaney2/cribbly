@@ -119,17 +119,18 @@ export function PropertiesGrid() {
           </Button>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 py-4 lg:py-8 2xl:p-16">
-        {isLoading ? (
-          Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300">
-              <Skeleton height={24} width="80%" />
-              <Skeleton height={18} width="60%" />
-              <Skeleton height={18} width="40%" />
-            </div>
-          ))
-        ) : properties?.length === 0 ? (
-          <div className="flex col-span-3 mt-8 flex-col h-full items-center justify-center p-8">
+      <div className="max-w-screen-2xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 py-4 lg:py-8 2xl:p-16">
+          {isLoading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md">
+                <Skeleton height={24} width="80%" />
+                <Skeleton height={18} width="60%" />
+                <Skeleton height={18} width="40%" />
+              </div>
+            ))
+          ) : properties?.length === 0 ? (
+            <div className="flex col-span-3 mt-8 flex-col h-full items-center justify-center p-8">
             <div className="ring-2 rounded-lg p-2 mb-3">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 sm:h-8 w-6 sm:w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -139,14 +140,18 @@ export function PropertiesGrid() {
           </div>
         ) : (
           sortedProperties?.map((property) => (
-            <div key={property.id} className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300">
+            <div 
+              key={property.id} 
+              className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md cursor-default hover:ring-blue-400 hover:ring-2 transition duration-200 ease-in-out"
+            >
               <h3 className="text-lg font-semibold truncate">{property.street_address}</h3>
               <p>{property.apt}</p>
-              <p>{property.city}, {property.state} {property.zip}</p>
+              <p>{property.city}, {property.state} {property.zip} </p>
             </div>
           ))
         )}
       </div>
     </div>
+  </div>
   );
 };

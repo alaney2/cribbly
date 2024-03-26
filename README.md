@@ -21,3 +21,4 @@ visx, chart.js
 
 fffuel.co
 
+daisyui
