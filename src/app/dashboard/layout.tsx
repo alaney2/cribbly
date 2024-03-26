@@ -1,5 +1,7 @@
 import Link from 'next/link';
-import { DesktopSidebar, MobileSidebar } from '@/components/Sidebars';
+import { MobileSidebar } from '@/components/MobileSidebar';
+import { DesktopSidebar } from '@/components/DesktopSidebar'
+
 import { MapBox } from '@/components/MapBox';
 
 export default function DashboardLayout({
