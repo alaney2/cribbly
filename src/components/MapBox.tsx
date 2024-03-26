@@ -109,7 +109,12 @@ export function MapBox() {
             mapStyle="mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd"
             reuseMaps={true}
             attributionControl={false}
-            style={{ borderRadius: '1rem', lineHeight: 1, zIndex: 0 }}
+            style={{
+              borderTopLeftRadius: '1rem',
+              borderTopRightRadius: '1rem',
+              lineHeight: 1,
+              zIndex: 0,
+            }}
             onLoad={() => setIsMapLoaded(true)}
           >
             {!isMapLoaded && <Skeleton containerClassName="flex-1" borderRadius="1rem" height="100%"/>}

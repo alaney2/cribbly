@@ -140,8 +140,8 @@ export function DesktopSidebar() {
               ))}
             </ul>
           </li>
-          <li className="fixed bottom-10 left-8 mx-auto text-sm font-semibold gap-x-4 px-6 py-3 min-w-64 leading-6 text-gray-900">
-            <Menu as="div" className="font-medium overscroll-auto overflow-hidden truncate min-w-64 ">
+          <li className="fixed bottom-10 left-8 text-sm font-semibold gap-x-4 px-6 py-3 leading-6 text-gray-900">
+            <Menu as="div" className="font-medium">
               <Menu.Button>
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
                   <span className="text-sm font-medium leading-none text-white">TC</span>

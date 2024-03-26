@@ -88,7 +88,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         `}
       </Script>
 
-      <body className="bg-gray-50 overflow-hidden">
+      <body className="h-full bg-gray-50">
         <Toaster position="top-center" />
         {children}
         <Analytics />

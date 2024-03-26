@@ -3,7 +3,7 @@ import { MapBox } from "@/components/MapBox";
 export default async function Home() {
   return (
     <>
-      <div className="" style={{ height: 'calc(100vh - 32)' }}>
+      <div className="" style={{ height: 'calc(100vh - 48px)' }}>
         <MapBox />
       </div>
     </>
