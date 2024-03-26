@@ -9,10 +9,8 @@ import {
   HomeIcon,
   UsersIcon,
   Cog6ToothIcon,
-  ArrowRightOnRectangleIcon,
+  ArrowRightStartOnRectangleIcon,
   QuestionMarkCircleIcon,
-  ArrowLeftIcon,
-  ArrowRightIcon,
 } from '@heroicons/react/24/outline'
 import {
   ChevronLeftIcon,
@@ -221,7 +219,7 @@ export function DesktopSidebar() {
                             'block w-full px-4 py-2 text-left text-sm'
                           )}
                         >
-                          <ArrowRightOnRectangleIcon className="inline-block h-4 w-4 mr-2" />
+                          <ArrowRightStartOnRectangleIcon className="inline-block h-4 w-4 mr-2" />
                           Sign out
                         </button>
                       )}

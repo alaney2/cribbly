@@ -1,6 +1,20 @@
 import { Fragment } from 'react'
 import { Transition, Menu } from '@headlessui/react'
-
+import {
+  CalendarIcon,
+  ChartPieIcon,
+  DocumentDuplicateIcon,
+  FolderIcon,
+  HomeIcon,
+  UsersIcon,
+  Cog6ToothIcon,
+  ArrowRightStartOnRectangleIcon,
+  QuestionMarkCircleIcon,
+} from '@heroicons/react/24/outline'
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from '@heroicons/react/16/solid'
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -34,7 +48,8 @@ export function ProfileButton() {
                   'block px-4 py-2 text-sm'
                 )}
               >
-                Account settings
+                <Cog6ToothIcon className="inline-block h-4 w-4 mr-2" />
+                Settings
               </a>
             )}
           </Menu.Item>
@@ -47,6 +62,7 @@ export function ProfileButton() {
                   'block px-4 py-2 text-sm'
                 )}
               >
+                <QuestionMarkCircleIcon className="inline-block h-4 w-4 mr-2" />
                 Support
               </a>
             )}
@@ -61,6 +77,7 @@ export function ProfileButton() {
                     'block w-full px-4 py-2 text-left text-sm'
                   )}
                 >
+                  <ArrowRightStartOnRectangleIcon className="inline-block h-4 w-4 mr-2" />
                   Sign out
                 </button>
               )}
