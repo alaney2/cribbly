@@ -26,23 +26,22 @@ function classNames(...classes: string[]) {
 }
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: true },
-  { name: 'Team', href: '/', icon: UsersIcon, current: false },
-  { name: 'Properties', href: '/dashboard/properties', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '/', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '/', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '', icon: ChartPieIcon, current: false },
+  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
+  { name: 'Team', href: '/', icon: UsersIcon },
+  { name: 'Properties', href: '/dashboard/properties', icon: FolderIcon },
+  { name: 'Calendar', href: '/', icon: CalendarIcon },
+  { name: 'Documents', href: '/', icon: DocumentDuplicateIcon },
+  { name: 'Reports', href: '', icon: ChartPieIcon },
 ]
 
 const teams = [
-  { id: 1, name: 'Heroicons', href: '/', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '/', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '/', initial: 'W', current: false },
+  { id: 1, name: 'Heroicons', href: '/', initial: 'H' },
+  { id: 2, name: 'Tailwind Labs', href: '/', initial: 'T' },
+  { id: 3, name: 'Workcation', href: '/', initial: 'W' },
 ]
 
 export function DesktopSidebar() {
   const pathname = usePathname()
-  const [currentNavItem, setCurrentNavItem] = useState('Dashboard');
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const toggleSidebar = () => {
@@ -105,16 +104,15 @@ export function DesktopSidebar() {
                   <Link
                     href={team.href}
                     className={classNames(
-                      team.name === currentNavItem
+                      team.href === pathname
                         ? ' text-blue-600'
                         : 'text-gray-700 hover:text-blue-600 ',
                       'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                     )}
-                    onClick={() => setCurrentNavItem(team.name)}
                   >
                     <span
                       className={classNames(
-                        team.name === currentNavItem
+                        team.href === pathname
                           ? 'text-blue-600 border-blue-600'
                           : 'text-gray-400 border-gray-200 group-hover:border-blue-600 group-hover:text-blue-600',
                         'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
