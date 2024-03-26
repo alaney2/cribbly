@@ -10,12 +10,14 @@ import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/componen
 import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckIcon } from '@heroicons/react/16/solid';
 import Fuse from 'fuse.js';
 import { Input } from '@/components/aceternity/Input'
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
 
 const fetcher = async () => {
   const supabase = createClient();
   let { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    return [];
+    redirect('/sign-in');
   }
   const { data, error } = await supabase
     .from('properties')
@@ -129,14 +131,11 @@ export function PropertiesGrid() {
           </div>
         ) : (
           sortedProperties?.map((property) => (
-            <div 
-              key={property.id} 
-              className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md cursor-default hover:ring-blue-400 hover:ring-2 transition duration-200 ease-in-out"
-            >
+            <Link key={property.id} href={`/dashboard/properties/${property.id}`} className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md cursor-default hover:ring-blue-400 hover:ring-2 transition duration-200 ease-in-out">
               <h3 className="text-lg font-semibold truncate">{property.street_address}</h3>
               <p>{property.apt}</p>
               <p>{property.city}, {property.state} {property.zip} </p>
-            </div>
+            </Link>
           ))
         )}
       </div>
