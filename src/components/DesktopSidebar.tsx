@@ -20,13 +20,15 @@ import Link from 'next/link';
 import { Logo } from '@/components/Logo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation'
+import { getURL } from './../utils/helpers';
+
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
+  { name: 'Dashboard', href: '/dashboard/properties', icon: HomeIcon },
   { name: 'Team', href: '/', icon: UsersIcon },
   { name: 'Properties', href: '/dashboard/properties', icon: FolderIcon },
   { name: 'Calendar', href: '/', icon: CalendarIcon },
@@ -48,6 +50,12 @@ export function DesktopSidebar() {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
+  const getDashboardURL = (href: string = '') => {
+    const match = pathname.match(/\/dashboard\/properties\/([^/]+)/);
+    const propertyId = match ? match[1] : '';
+    return `/dashboard/properties/${propertyId}/${href}`
+  }
+
   return (
     <motion.div
       className={`flex grow flex-col gap-y-5 overflow-hidden px-6 pb-2 min-h-full mt-24 overflow-y-auto`}
@@ -62,7 +70,7 @@ export function DesktopSidebar() {
               {navigation.map((item) => (
                 <li key={item.name}>
                   <Link
-                    href={item.href}
+                    href={getDashboardURL()}
                     className={classNames(
                       pathname === item.href
                         ? 'text-blue-600'
