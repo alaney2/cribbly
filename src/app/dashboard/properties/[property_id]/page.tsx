@@ -2,7 +2,6 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
 export default async function CurrentProperty({ params } : { params: { property_id: string } }) {
-  console.log(params.property_id)
   const supabase = createClient()
   let { data: { user } } = await supabase.auth.getUser()
   

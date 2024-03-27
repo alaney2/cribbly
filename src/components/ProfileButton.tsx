@@ -11,7 +11,6 @@ function classNames(...classes: string[]) {
 }
 
 export function ProfileButton({ user }: { user: any }) {
-  console.log('user', user)
   return (
     <Menu as="div" className="font-medium">
       <Menu.Button>

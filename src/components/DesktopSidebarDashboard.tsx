@@ -22,19 +22,16 @@ const account = [
 ]
 
 export function DesktopSidebarDashboard() {
-  const pathname = usePathname()
 
   return (
     <motion.div
-      className={`flex grow flex-col gap-y-5 overflow-hidden pb-4 min-h-full mt-24 overflow-y-auto`}
-      initial={{ width: 196 }}
+      className={`flex grow flex-col gap-y-5 overflow-hidden min-h-full mt-24 overflow-y-auto`}
+      initial={{ width: 160 }}
     >
       <nav className="flex flex-1 flex-col text-sm tracking-normal">
         <ul role="list" className="">
           <div className="p-4 border-b border-slate-300">
             <div className={`font-medium text-gray-400 whitespace-nowrap`}>Properties</div>
-            {/* <div className="text-xs font-semibold leading-6 text-gray-400">Properties</div> */}
-
             <li>
               <ul role="list" className="-mx-2">
                 {navigation.map((item) => (
@@ -42,13 +39,11 @@ export function DesktopSidebarDashboard() {
                     <Link
                       href={item.href}
                       className={classNames(
-                        pathname === item.href
-                          ? 'text-blue-500'
-                          : 'text-gray-500 hover:text-blue-500',
+                        'text-gray-500 hover:text-blue-500',
                         'group flex gap-x-3 rounded-md p-2 font-semibold'
                       )}
                     >
-                      <span>
+                      <span className="">
                         {item.name}
                       </span>
                     </Link>
@@ -69,10 +64,7 @@ export function DesktopSidebarDashboard() {
                     <Link
                       href={item.href}
                       className={classNames(
-                        item.href === pathname
-                          ? 'text-blue-500'
-                          : 'text-gray-500 hover:text-blue-600',
-                        'group flex gap-x-3 rounded-md p-2 font-semibold'
+                        'text-gray-500 hover:text-blue-500 group flex gap-x-3 rounded-md p-2 font-semibold'
                       )}
                     >
                       <span className="truncate">
@@ -89,10 +81,7 @@ export function DesktopSidebarDashboard() {
             <a
               href="/dashboard/support"
               className={classNames(
-                pathname === '/dashboard/support'
-                  ? 'text-blue-500'
-                  : 'text-gray-500 hover:text-blue-500',
-                'group flex items-center gap-x-3 rounded-md font-semibold'
+                'text-gray-500 hover:text-blue-500 group flex items-center gap-x-3 rounded-md font-semibold'
               )}
             >
               <QuestionMarkCircleIcon className="h-4 w-4" />
