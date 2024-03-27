@@ -63,7 +63,7 @@ export function DesktopSidebar() {
     <motion.div
       className={`flex grow flex-col gap-y-5 overflow-hidden min-h-full mt-24 overflow-y-auto`}
       initial={{ width: 160 }}
-      animate={{ width: isSidebarCollapsed ? 64 : 160 }}
+      animate={{ width: isSidebarCollapsed ? 60 : 160 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
       <nav className="flex flex-1 flex-col">
@@ -149,7 +149,7 @@ export function DesktopSidebar() {
               ))}
             </ul>
           </li> */}
-          <li className="fixed bottom-10 left-8 text-sm font-semibold px-6 py-3 leading-6 text-gray-900">
+          <li className="fixed bottom-10 left-7 text-sm font-semibold px-6 py-3 leading-6 text-gray-900">
             <Menu as="div" className="font-medium">
               <Menu.Button>
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
