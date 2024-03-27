@@ -1,24 +1,12 @@
 'use client'
-import { Fragment, useState } from 'react'
-import { Dialog, Transition, Menu } from '@headlessui/react'
 import {
-  CalendarIcon,
-  ChartPieIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
   HomeIcon,
-  UsersIcon,
-  Cog6ToothIcon,
   ArrowRightStartOnRectangleIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from '@heroicons/react/16/solid'
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation'
 
 function classNames(...classes: string[]) {
@@ -32,9 +20,9 @@ const navigation = [
 const account = [
   { id: 1, name: 'Settings', href: '/dashboard/settings' },
 ]
+
 export function DesktopSidebarDashboard() {
   const pathname = usePathname()
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
     <motion.div
@@ -43,10 +31,10 @@ export function DesktopSidebarDashboard() {
     >
       <nav className="flex flex-1 flex-col text-sm tracking-normal">
         <ul role="list" className="">
-          <div className="px-4 py-3 border-b border-slate-300">
-            <div className={`font-medium text-gray-400 whitespace-nowrap`}>
-              Properties
-            </div>
+          <div className="p-4 border-b border-slate-300">
+            <div className={`font-medium text-gray-400 whitespace-nowrap`}>Properties</div>
+            {/* <div className="text-xs font-semibold leading-6 text-gray-400">Properties</div> */}
+
             <li>
               <ul role="list" className="-mx-2">
                 {navigation.map((item) => (
@@ -71,7 +59,7 @@ export function DesktopSidebarDashboard() {
           </div>
 
           <li>
-            <div className="px-4 py-3 border-b border-slate-300">
+            <div className="p-4 border-b border-slate-300">
               <div className={`font-medium text-gray-400 whitespace-nowrap`}>
                 Account
               </div>
@@ -97,7 +85,7 @@ export function DesktopSidebarDashboard() {
             </div>
           </li>
  
-          <div className="px-4 py-3 border-b border-slate-300">
+          <div className="p-4 border-b border-slate-300">
             <a
               href="/dashboard/support"
               className={classNames(
@@ -112,7 +100,7 @@ export function DesktopSidebarDashboard() {
             </a>
           </div>
 
-          <div className="px-4 py-3 border-slate-300">
+          <div className="p-4 border-slate-300">
             <form method="POST" action="/auth/sign-out">
               <button
                 type="submit"

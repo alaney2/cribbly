@@ -1,20 +1,11 @@
 import { Fragment } from 'react'
 import { Transition, Menu } from '@headlessui/react'
 import {
-  CalendarIcon,
-  ChartPieIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
-  HomeIcon,
-  UsersIcon,
   Cog6ToothIcon,
   ArrowRightStartOnRectangleIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from '@heroicons/react/16/solid'
+
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -27,16 +18,15 @@ export function ProfileButton() {
           <span className="text-sm font-medium leading-none text-white">TC</span>
         </span>
         <span className="sr-only">Your profile</span>
-        {/* <span aria-hidden="true" className='p-2'>Profile</span> */}
       </Menu.Button>
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
+        enterFrom="transform opacity-0 scale-100"
         enterTo="transform opacity-100 scale-100"
         leave="transition ease-in duration-75"
         leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
+        leaveTo="transform opacity-0 scale-100"
       >
         <Menu.Items className="w-40 right-6 origin-top-right absolute z-10 mt-2 divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <Menu.Item>

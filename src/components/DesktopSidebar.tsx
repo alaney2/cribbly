@@ -73,14 +73,14 @@ export function DesktopSidebar() {
                     href={getDashboardURL()}
                     className={classNames(
                       pathname === item.href
-                        ? 'text-blue-600'
-                        : 'text-gray-700 hover:text-blue-600',
+                        ? 'text-blue-500'
+                        : 'text-gray-500 hover:text-blue-500',
                       'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                     )}
                   >
                     <item.icon
                       className={classNames(
-                        pathname === item.href ? 'text-blue-600' : 'text-gray-400 group-hover:text-blue-600',
+                        pathname === item.href ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-500',
                         'h-6 w-6 shrink-0'
                       )}
                       aria-hidden="true"

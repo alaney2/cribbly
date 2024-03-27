@@ -13,7 +13,6 @@ import {
 } from '@heroicons/react/24/outline'
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
-import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation'
 import { ProfileButton } from '@/components/ProfileButton'
 
@@ -23,7 +22,7 @@ function classNames(...classes: string[]) {
 }
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: true },
+  { name: 'All properties', href: '/dashboard', icon: HomeIcon, current: true },
   { name: 'Team', href: '/', icon: UsersIcon, current: false },
   { name: 'Properties', href: '/dashboard/properties', icon: FolderIcon, current: false },
   { name: 'Calendar', href: '/', icon: CalendarIcon, current: false },
@@ -39,7 +38,6 @@ const teams = [
 
 export function MobileSidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [currentNavItem, setCurrentNavItem] = useState('Dashboard');
   const pathname = usePathname()
 
   return (
@@ -118,16 +116,15 @@ export function MobileSidebar() {
                               <Link
                                 href={team.href}
                                 className={classNames(
-                                  team.name === currentNavItem
+                                  team.href === pathname
                                     ? 'text-blue-600'
                                     : 'text-gray-700 hover:text-blue-600',
                                   'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                 )}
-                                onClick={() => setCurrentNavItem(team.name)}
                               >
                                 <span
                                   className={classNames(
-                                    team.name === currentNavItem
+                                    team.href === pathname
                                       ? 'text-blue-600 border-blue-600'
                                       : 'text-gray-400 border-gray-200 group-hover:border-blue-600 group-hover:text-blue-600',
                                     'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
@@ -154,7 +151,7 @@ export function MobileSidebar() {
           <span className="sr-only">Open sidebar</span>
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
-        <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Dashboard</div>
+        <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Cribbly</div>
         <ProfileButton />
       </div>
     </>
