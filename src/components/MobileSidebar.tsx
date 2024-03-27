@@ -21,24 +21,27 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-const navigation = [
-  { name: 'All properties', href: '/dashboard', icon: HomeIcon, current: true },
-  { name: 'Team', href: '/', icon: UsersIcon, current: false },
-  { name: 'Properties', href: '/dashboard/properties', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '/', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '/', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '', icon: ChartPieIcon, current: false },
-]
-// const teams = [
-//   { id: 1, name: 'Heroicons', href: '/', initial: 'H', current: false },
-//   { id: 2, name: 'Tailwind Labs', href: '/', initial: 'T', current: false },
-//   { id: 3, name: 'Workcation', href: '/', initial: 'W', current: false },
-// ]
-
-
 export function MobileSidebar({ user }: { user: any }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname()
+
+  const getDashboardURL = (href: string = '') => {
+    const match = pathname.match(/\/dashboard\/properties\/([^/]+)/);
+    const propertyId = match ? match[1] : '';
+    let url = `/dashboard/properties/${propertyId}`
+    if (href !== '') {
+      url += `/${href}`
+    }
+    return url
+  }
+
+  const navigation = [
+    { name: 'Dashboard', href: getDashboardURL(), icon: HomeIcon },
+    { name: 'Team', href: '/', icon: UsersIcon },
+    { name: 'Calendar', href: '/', icon: CalendarIcon },
+    { name: 'Documents', href: '/', icon: DocumentDuplicateIcon },
+    { name: 'Reports', href: '', icon: ChartPieIcon },
+  ]
 
   return (
     <>
@@ -64,9 +67,8 @@ export function MobileSidebar({ user }: { user: any }) {
       <div className={`fixed inset-0 flex lg:hidden mt-16 z-40 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
         <div className="flex grow flex-col overflow-y-auto bg-gray-100 px-4">
           <nav className="flex flex-1 flex-col">
-            <ul role="list" className="flex flex-1 flex-col gap-y-7">
-              <li>
-                <ul role="list" className="space-y-1">
+            <ul role="list" className="flex flex-1 flex-col divide-y divide-gray-200">
+
                   {navigation.map((item) => (
                     <li key={item.name}>
                       <Link
@@ -75,7 +77,7 @@ export function MobileSidebar({ user }: { user: any }) {
                           pathname === item.href
                             ? 'text-blue-600'
                             : 'text-gray-700 hover:text-blue-600',
-                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                          'block w-full gap-x-3 rounded-md px-2 py-3 text-sm font-semibold'
                         )}
                       >
                         <item.icon
@@ -83,7 +85,7 @@ export function MobileSidebar({ user }: { user: any }) {
                             pathname === item.href
                               ? 'text-blue-600'
                               : 'text-gray-400 group-hover:text-blue-600',
-                            'h-6 w-6 shrink-0'
+                            'inline-block h-4 w-4 mr-3'
                           )}
                           aria-hidden="true"
                         />
@@ -91,8 +93,7 @@ export function MobileSidebar({ user }: { user: any }) {
                       </Link>
                     </li>
                   ))}
-                </ul>
-              </li>
+
               {/* <li>
                 <div className="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
                 <ul role="list" className="mt-2 space-y-1">

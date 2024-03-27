@@ -7,7 +7,6 @@ import {
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
 import Link from 'next/link';
-import { ProfileButton } from '@/components/ProfileButton'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -39,7 +38,6 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
           </div>
         </button>
         <div className="flex-1 text-md font-semibold text-gray-700 ">Cribbly</div>
-        {/* <ProfileButton /> */}
       </div>
       <div className={`fixed inset-0 flex lg:hidden mt-16 z-40 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
         <div className="flex grow flex-col overflow-y-auto bg-gray-100 px-4">
