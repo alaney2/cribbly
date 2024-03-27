@@ -132,7 +132,7 @@ export function PropertiesGrid() {
         ) : (
           sortedProperties?.map((property) => (
             <Link key={property.id} href={`/dashboard/properties/${property.id}`} className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md cursor-default hover:ring-blue-400 hover:ring-2 transition duration-200 ease-in-out">
-              <h3 className="text-lg font-semibold truncate">{property.street_address}</h3>
+              <h3 className="text-md font-semibold truncate">{property.street_address}</h3>
               <p>{property.apt}</p>
               <p>{property.city}, {property.state} {property.zip} </p>
             </Link>

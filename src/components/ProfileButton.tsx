@@ -14,8 +14,8 @@ export function ProfileButton() {
   return (
     <Menu as="div" className="font-medium">
       <Menu.Button>
-        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
-          <span className="text-sm font-medium leading-none text-white">TC</span>
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gray-500">
+          <span className="text-xs font-medium leading-none text-white">TC</span>
         </span>
         <span className="sr-only">Your profile</span>
       </Menu.Button>

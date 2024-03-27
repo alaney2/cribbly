@@ -2,15 +2,11 @@
 import { useState } from 'react'
 import {
   HomeIcon,
-  UsersIcon,
   Cog6ToothIcon,
   ArrowRightStartOnRectangleIcon,
   QuestionMarkCircleIcon,
-  PhoneIcon,
 } from '@heroicons/react/24/outline'
 import Link from 'next/link';
-import { Logo } from '@/components/Logo';
-import { usePathname } from 'next/navigation'
 import { ProfileButton } from '@/components/ProfileButton'
 
 function classNames(...classes: string[]) {
@@ -23,8 +19,8 @@ const navigation = [
 ]
 export function MobileSidebarDashboard(user: any) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const pathname = usePathname()
   const userEmail = user.user.email;
+
   return (
     <>
       <div className="sticky top-0 z-50 flex items-center gap-x-6 bg-gray-100 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
@@ -42,7 +38,7 @@ export function MobileSidebarDashboard(user: any) {
             </div>
           </div>
         </button>
-        <div className="flex-1 text-md font-semibold text-gray-700">Cribbly</div>
+        <div className="flex-1 text-md font-semibold text-gray-700 ">Cribbly</div>
         {/* <ProfileButton /> */}
       </div>
       <div className={`fixed inset-0 flex lg:hidden mt-16 z-40 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
