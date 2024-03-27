@@ -40,7 +40,7 @@ export function DesktopSidebarDashboard() {
                       href={item.href}
                       className={classNames(
                         'text-gray-500 hover:text-blue-500',
-                        'group flex gap-x-3 rounded-md p-2 font-semibold'
+                        'group flex gap-x-3 rounded-md p-2 font-semibold cursor-default'
                       )}
                     >
                       <span className="">
@@ -64,7 +64,7 @@ export function DesktopSidebarDashboard() {
                     <Link
                       href={item.href}
                       className={classNames(
-                        'text-gray-500 hover:text-blue-500 group flex gap-x-3 rounded-md p-2 font-semibold'
+                        'text-gray-500 hover:text-blue-500 group flex gap-x-3 rounded-md p-2 font-semibold cursor-default'
                       )}
                     >
                       <span className="truncate">
@@ -78,15 +78,15 @@ export function DesktopSidebarDashboard() {
           </li>
  
           <div className="p-4 border-b border-slate-300">
-            <a
+            <Link
               href="/dashboard/support"
               className={classNames(
-                'text-gray-500 hover:text-blue-500 group flex items-center gap-x-3 rounded-md font-semibold'
+                'text-gray-500 hover:text-blue-500 group flex items-center gap-x-3 rounded-md font-semibold cursor-default'
               )}
             >
               <QuestionMarkCircleIcon className="h-4 w-4" />
               <span>Support</span>
-            </a>
+            </Link>
           </div>
 
           <div className="p-4 border-slate-300">
@@ -95,7 +95,7 @@ export function DesktopSidebarDashboard() {
                 type="submit"
                 className={classNames(
                   'text-gray-500 hover:text-blue-500',
-                  'group flex items-center gap-x-3 rounded-md font-semibold'
+                  'group flex items-center gap-x-3 rounded-md font-semibold cursor-default'
                 )}
               >
                 <ArrowRightStartOnRectangleIcon className="h-4 w-4" />

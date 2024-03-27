@@ -17,7 +17,8 @@ import {
   ChevronRightIcon,
 } from '@heroicons/react/16/solid'
 import Link from 'next/link';
-import { Logo } from '@/components/Logo';
+import icon from '@/images/icon.png';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation'
 
@@ -61,12 +62,27 @@ export function DesktopSidebar() {
 
   return (
     <motion.div
-      className={`flex grow flex-col gap-y-5 overflow-hidden min-h-full mt-24 overflow-y-auto`}
+      className={`flex grow flex-col overflow-hidden divide-y divide-gray-200 min-h-full mt-12 overflow-y-auto`}
       initial={{ width: 160 }}
       animate={{ width: isSidebarCollapsed ? 60 : 160 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
-      <nav className="flex flex-1 flex-col">
+      <Link className="flex items-center gap-x-3 px-4 py-1.5 mb-3 rounded-md text-md font-semibold text-gray-400 cursor-default hover:bg-gray-200" href="/dashboard">
+        <Image src={icon} alt="logo" height={20} className="" />
+        <AnimatePresence>
+        {!isSidebarCollapsed && (
+        <motion.span
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        >
+          Cribbly
+        </motion.span>
+        )}
+        </AnimatePresence>
+      </Link>
+      <nav className="flex flex-1 flex-col mt-2">
         <ul role="list" className="gap-y-7">
           <li>
             <ul role="list" className="-mx-2 p-4 space-y-1">
@@ -78,7 +94,7 @@ export function DesktopSidebar() {
                       pathname === item.href
                         ? 'text-blue-500'
                         : 'text-gray-500 hover:text-blue-500',
-                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-default'
                     )}
                   >
                     <item.icon
@@ -149,10 +165,10 @@ export function DesktopSidebar() {
               ))}
             </ul>
           </li> */}
-          <li className="fixed bottom-10 left-7 text-sm font-semibold px-6 py-3 leading-6 text-gray-900">
+          <li className="fixed bottom-10 left-7 text-sm font-semibold px-6 py-3 leading-6 text-gray-800">
             <Menu as="div" className="font-medium">
               <Menu.Button>
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 cursor-default hover:bg-gray-600">
                   <span className="text-sm font-medium leading-none text-white">TC</span>
                 </span>
                 <span className="sr-only">Your profile</span>
@@ -173,7 +189,7 @@ export function DesktopSidebar() {
                         onClick={toggleSidebar}
                         className={classNames(
                           focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block w-full px-4 py-2 text-left text-sm'
+                          'block w-full px-4 py-2 text-left text-sm cursor-default'
                         )}
                       >
                         {isSidebarCollapsed ? (
@@ -192,30 +208,30 @@ export function DesktopSidebar() {
                   </Menu.Item>
                   <Menu.Item>
                     {({ focus }) => (
-                      <a
-                        href="#"
+                      <Link
+                        href="/"
                         className={classNames(
                           focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                          'block px-4 py-2 text-sm cursor-default'
                         )}
                       >
                         <Cog6ToothIcon className="inline-block h-4 w-4 mr-2" />
                         Settings
-                      </a>
+                      </Link>
                     )}
                   </Menu.Item>
                   <Menu.Item>
                     {({ focus }) => (
-                      <a
+                      <Link
                         href="#"
                         className={classNames(
                           focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                          'block px-4 py-2 text-sm'
+                          'block px-4 py-2 text-sm cursor-default'
                         )}
                       >
                         <QuestionMarkCircleIcon className="inline-block h-4 w-4 mr-2" />
                         Support
-                      </a>
+                      </Link>
                     )}
                   </Menu.Item>
                   <form method="POST" action="/auth/sign-out">
@@ -225,7 +241,7 @@ export function DesktopSidebar() {
                           type="submit"
                           className={classNames(
                             focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                            'block w-full px-4 py-2 text-left text-sm'
+                            'block w-full px-4 py-2 text-left text-sm cursor-default'
                           )}
                         >
                           <ArrowRightStartOnRectangleIcon className="inline-block h-4 w-4 mr-2" />

@@ -60,7 +60,9 @@ export function MobileSidebar({ user }: { user: any }) {
             </div>
           </div>
         </button>
-        <div className="flex-1 text-md font-semibold text-gray-700">Cribbly</div>
+        <Link href="/dashboard" className='flex-1'>
+          <div className="text-md font-semibold text-gray-700">Cribbly</div>
+        </Link>
         <ProfileButton user={user} />
       </div>
 
