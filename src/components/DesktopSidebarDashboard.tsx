@@ -18,7 +18,7 @@ const navigation = [
 ]
 
 const account = [
-  { id: 1, name: 'Settings', href: '/dashboard/settings' },
+  { id: 1, name: 'Settings', href: '/dashboard/account' },
 ]
 
 export function DesktopSidebarDashboard() {

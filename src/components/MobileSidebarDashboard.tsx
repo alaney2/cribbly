@@ -13,7 +13,7 @@ function classNames(...classes: string[]) {
 }
 const navigation = [
   { name: 'All properties', href: '/dashboard', icon: HomeIcon },
-  { name: 'Settings', href: '/dashboard/settings', icon: Cog6ToothIcon },
+  { name: 'Settings', href: '/dashboard/account', icon: Cog6ToothIcon },
   { name: 'Support', href: '/', icon: QuestionMarkCircleIcon },
 ]
 export function MobileSidebarDashboard({ user }: { user: any }) {
