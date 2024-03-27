@@ -17,9 +17,9 @@ const navigation = [
   { name: 'Settings', href: '/dashboard/settings', icon: Cog6ToothIcon },
   { name: 'Support', href: '/', icon: QuestionMarkCircleIcon },
 ]
-export function MobileSidebarDashboard(user: any) {
+export function MobileSidebarDashboard({ user }: { user: any }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const userEmail = user.user.email;
+  const userEmail = user.email;
 
   return (
     <>

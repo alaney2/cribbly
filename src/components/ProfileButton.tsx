@@ -10,7 +10,8 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function ProfileButton() {
+export function ProfileButton({ user }: { user: any }) {
+  console.log('user', user)
   return (
     <Menu as="div" className="font-medium">
       <Menu.Button>
@@ -28,7 +29,11 @@ export function ProfileButton() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-100"
       >
-        <Menu.Items className="w-40 right-6 origin-top-right absolute z-10 mt-2 divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="w-48 right-6 origin-top-right absolute z-10 mt-2 divide-y divide-gray-100 text-gray-700 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="px-4 py-3">
+            <p className="text-sm">Signed in as</p>
+            <p className="truncate text-sm font-medium ">{user.email}</p>
+          </div>
           <Menu.Item>
             {({ focus }) => (
               <a
