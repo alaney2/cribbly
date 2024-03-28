@@ -7,7 +7,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Button } from '@/components/catalyst/button';
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/catalyst/dropdown';
-import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckIcon } from '@heroicons/react/16/solid';
+import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckIcon, EllipsisVerticalIcon } from '@heroicons/react/16/solid';
 import Fuse from 'fuse.js';
 import { Input } from '@/components/aceternity/Input'
 import { redirect } from 'next/navigation';
@@ -131,11 +131,25 @@ export function PropertiesGrid() {
           </div>
         ) : (
           sortedProperties?.map((property) => (
-            <Link key={property.id} href={`/dashboard/properties/${property.id}`} className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md cursor-default hover:ring-blue-400 hover:ring-2 transition duration-200 ease-in-out">
-              <h3 className="text-md font-semibold truncate">{property.street_address}</h3>
-              <p>{property.apt}</p>
-              <p>{property.city}, {property.state} {property.zip} </p>
-            </Link>
+            <div key={property.id} className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md relative transition ease-in-out duration-200 hover:ring-2 hover:ring-gray-300">
+              <div className="absolute top-2 right-2">
+                <Dropdown>
+                  <DropdownButton outline className="h-7 w-6 p-0 bg-transparent transition ease-in-out duration-200 hover:bg-gray-300">
+                    <EllipsisVerticalIcon className="h-5 w-5 text-gray-500" />
+                  </DropdownButton>
+                  <DropdownMenu>
+                    <DropdownItem href={`/dashboard/properties/${property.id}/settings`}>
+                      Settings
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+              <Link href={`/dashboard/properties/${property.id}`} className="block w-full h-full cursor-default transition duration-200 ease-in-out">
+                <h3 className="text-md font-semibold truncate">{property.street_address}</h3>
+                <p>{property.apt}</p>
+                <p>{property.city}, {property.state} {property.zip}</p>
+              </Link>
+            </div>
           ))
         )}
       </div>
