@@ -22,13 +22,13 @@ export default function InformationSecurity() {
           <div className="space-y-8">
             <div className="space-y-2">
               <p>
-                At Cribbly, we are committed to protecting the confidentiality, integrity, and availability of our users' information. This Information Security Policy outlines our approach to identifying, mitigating, and monitoring information security risks associated with our real estate property management software.
+                At Cribbly, we are committed to protecting the confidentiality, integrity, and availability of our users&apos; information. This Information Security Policy outlines our approach to identifying, mitigating, and monitoring information security risks associated with our real estate property management software.
               </p>
             </div>
             <div className="space-y-2">
               <h2 className="text-lg font-bold">Scope</h2>
               <p>
-                This policy applies to all employees, contractors, and third-party vendors who have access to Cribbly's information assets, including our software, systems, and user data.
+                This policy applies to all employees, contractors, and third-party vendors who have access to Cribbly&apos;s information assets, including our software, systems, and user data.
               </p>
             </div>
             <div className="space-y-2">
