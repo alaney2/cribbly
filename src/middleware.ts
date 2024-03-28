@@ -37,7 +37,7 @@ export async function middleware(request: NextRequest) {
       }
     }
   } else {
-    const pathsWithoutAuth = ['/sign-in', '/get-started', '/privacy', '/terms', 'security']
+    const pathsWithoutAuth = ['/sign-in', '/get-started', '/privacy', '/terms', '/security']
     // Redirect to login if not authenticated
     if (
       pathname !== '/' &&

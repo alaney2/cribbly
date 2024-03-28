@@ -10,9 +10,6 @@ export const metadata: Metadata = {
 export default function InformationSecurity() {
   return (
     <>
-      <Head>
-        <title>Information Security Policy</title>
-      </Head>
       <div className="w-full py-6 space-y-6 md:py-12 justify-center flex">
         <div className="container grid max-w-3xl gap-6 px-4 text-sm md:gap-8 md:px-6">
           <div className="space-y-4">
