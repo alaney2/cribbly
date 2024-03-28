@@ -132,14 +132,17 @@ export function PropertiesGrid() {
         ) : (
           sortedProperties?.map((property) => (
             <div key={property.id} className="rounded-lg p-4 h-30 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md relative transition ease-in-out duration-200 hover:ring-2 hover:ring-gray-300">
-              <div className="absolute top-2 right-2">
+              <div className="absolute top-3 right-3">
                 <Dropdown>
-                  <DropdownButton outline className="h-7 w-6 p-0 bg-transparent transition ease-in-out duration-200 hover:bg-gray-300">
+                  <DropdownButton plain className="h-7 w-6 p-0 bg-transparent transition ease-in-out duration-200 hover:bg-gray-300">
                     <EllipsisVerticalIcon className="h-5 w-5 text-gray-500" />
                   </DropdownButton>
                   <DropdownMenu>
                     <DropdownItem href={`/dashboard/properties/${property.id}/settings`}>
                       Settings
+                    </DropdownItem>
+                    <DropdownItem href={`/dashboard/properties/${property.id}`}>
+                      Tenants
                     </DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
