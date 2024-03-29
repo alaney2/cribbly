@@ -26,7 +26,7 @@ export default async function Account() {
   }
 
   if (!user) {
-    return redirect('/signin');
+    return redirect('/sign-in');
   }
 
   return (
