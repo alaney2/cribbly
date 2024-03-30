@@ -10,12 +10,23 @@ import { Input } from '@/components/catalyst/input'
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { set } from 'lodash';
 import toast from 'react-hot-toast';
+import { useSearchParams } from 'next/navigation'
 
 export default function DashboardAccount() {
-  const [linkToken, setLinkToken] = useState(null);
+  const [linkToken, setLinkToken] = useState<string | null>(null);
   let [isBankDialogOpen, setIsBankDialogOpen] = useState(false)
+  const searchParams = useSearchParams()
 
   const generateToken = async () => {
+    if (searchParams.has('oauth_state_id')) {
+      const link_token = localStorage.getItem('link_token')
+      if (!link_token) {
+        console.error('Link token not found');
+        return;
+      }
+      setLinkToken(link_token);
+      return;
+    } 
     const response = await fetch('/api/plaid/create_link_token', {
       method: 'POST',
     });
@@ -64,6 +75,11 @@ export default function DashboardAccount() {
     },
   };
 
+  if (window && window.location.search.includes('oauth_state_id')) {
+    config.receivedRedirectUri = window.location.href;
+
+  }
+
   const { open, ready } = usePlaidLink(config);
 
   useEffect(() => {
@@ -102,7 +118,9 @@ export default function DashboardAccount() {
           <Button 
             color='blue'
             onClick={async () => {
-              await generateToken();
+              if (!linkToken) {
+                await generateToken();
+              }
               setIsBankDialogOpen(false);
             }}
           >
