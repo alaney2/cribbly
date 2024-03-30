@@ -64,7 +64,7 @@ export function PropertiesGrid() {
   }, [error, toastDisplayed]);
 
   return (
-    <div className="p-6 md:p-8" style={{ height: 'calc(100vh - 48px)' }}>
+    <div className="p-6 md:p-8" style={{ minHeight: 'calc(100vh - 48px)' }}>
       <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-center mb-4">
         <div className="relative sm:mr-2.5 w-full sm:w-auto mb-2.5 sm:mb-0">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

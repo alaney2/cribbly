@@ -1,19 +1,15 @@
 'use client'
 import { Fragment, useState } from 'react'
-import { Dialog, Transition, Menu } from '@headlessui/react'
+import { Dialog, Disclosure, Transition, Menu } from '@headlessui/react'
 import {
-  Bars3Icon,
   CalendarIcon,
   ChartPieIcon,
   DocumentDuplicateIcon,
-  FolderIcon,
   HomeIcon,
   UsersIcon,
-  XMarkIcon,
 } from '@heroicons/react/24/outline'
 import Link from 'next/link';
-import { Logo } from '@/components/Logo';
-import { usePathname } from 'next/navigation'
+import { redirect, usePathname } from 'next/navigation'
 import { ProfileButton } from '@/components/ProfileButton'
 
 
@@ -72,15 +68,18 @@ export function MobileSidebar({ user }: { user: any }) {
             <ul role="list" className="flex flex-1 flex-col divide-y divide-gray-200">
               {navigation.map((item) => (
                 <li key={item.name}>
-                  <Link
-                    href={item.href}
+                  <button
+                    onClick={() => {
+                      setSidebarOpen(false)
+                      redirect(item.href)
+                    }}
+                    // href={item.href}
                     className={classNames(
                       pathname === item.href
                         ? 'text-blue-600'
                         : 'text-gray-700 hover:text-blue-600',
                       'block w-full gap-x-3 rounded-md px-2 py-3 text-sm font-semibold'
                     )}
-                    onClick={() => setSidebarOpen(false)}
                   >
                     <item.icon
                       className={classNames(
@@ -92,40 +91,9 @@ export function MobileSidebar({ user }: { user: any }) {
                       aria-hidden="true"
                     />
                     {item.name}
-                  </Link>
+                  </button>
                 </li>
               ))}
-
-              {/* <li>
-                <div className="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
-                <ul role="list" className="mt-2 space-y-1">
-                  {teams.map((team) => (
-                    <li key={team.name}>
-                      <Link
-                        href={team.href}
-                        className={classNames(
-                          team.href === pathname
-                            ? 'text-blue-600'
-                            : 'text-gray-700 hover:text-blue-600',
-                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                        )}
-                      >
-                        <span
-                          className={classNames(
-                            team.href === pathname
-                              ? 'text-blue-600 border-blue-600'
-                              : 'text-gray-400 border-gray-200 group-hover:border-blue-600 group-hover:text-blue-600',
-                            'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
-                          )}
-                        >
-                          {team.initial}
-                        </span>
-                        <span className="truncate">{team.name}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </li> */}
             </ul>
           </nav>
         </div>

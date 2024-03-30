@@ -7,6 +7,7 @@ import {
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
 import Link from 'next/link';
+import { redirect, usePathname } from 'next/navigation'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -38,7 +39,7 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
           </div>
         </button>
         <Link href="/dashboard" className="flex-1">
-          <div className="text-md font-semibold text-gray-700 ">Cribbly</div>
+          <div className="text-md font-semibold text-gray-700">Cribbly</div>
         </Link>
       </div>
       <div className={`fixed inset-0 flex lg:hidden mt-16 z-40 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out`}>
@@ -50,14 +51,18 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
               </li>
               {navigation.map((item) => (
                 <li key={item.name} className="">
-                  <Link
-                    href={item.href}
+                  <button
+                    onClick={() => {
+                      setSidebarOpen(false)
+                      redirect(item.href)
+                    }}
+                    // href={item.href}
                     className={classNames('text-gray-700 block w-full gap-x-3 rounded-md px-2 py-3 text-sm font-semibold'
                     )}
                   >
                     <item.icon className="inline-block h-4 w-4 mr-3" />
                     {item.name}
-                  </Link>
+                  </button>
                 </li>
               ))}
 
