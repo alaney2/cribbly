@@ -183,28 +183,25 @@ export interface Database {
       }
       users: {
         Row: {
-          avatar_url: string | null
           billing_address: Json | null
           full_name: string | null
           welcome_screen: boolean | null
           id: string
-          payment_method: Json | null
+          email: string
         }
         Insert: {
-          avatar_url?: string | null
           billing_address?: Json | null
           full_name?: string | null
           welcome_screen?: boolean | null
           id: string
-          payment_method?: Json | null
+          email?: string
         }
         Update: {
-          avatar_url?: string | null
           billing_address?: Json | null
           full_name?: string | null
           welcome_screen?: boolean | null
           id?: string
-          payment_method?: Json | null
+          email?: string
         }
         Relationships: [
           {

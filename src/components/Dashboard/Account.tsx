@@ -118,7 +118,7 @@ export function Account() {
               <div className="pt-6 sm:flex">
                 <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Full name</dt>
                 <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                  <div className="text-gray-900">{!isLoading && user_data.full_name}</div>
+                  <div className="text-gray-900">{!isLoading && user_data && user_data.full_name}</div>
                   <Button type="button" className="text-blue-500 hover:text-blue-500" plain>
                     Update
                   </Button>
@@ -128,7 +128,7 @@ export function Account() {
                 <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
                   Email address</dt>
                 <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                  <div className="text-gray-900">{!isLoading && user_data.email}</div>
+                  <div className="text-gray-900">{!isLoading && user_data && user_data.email}</div>
                 </dd>
               </div>
             </dl>
