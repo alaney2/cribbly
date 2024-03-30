@@ -70,31 +70,31 @@ export function MobileSidebar({ user }: { user: any }) {
         <div className="flex grow flex-col overflow-y-auto bg-gray-100 px-4">
           <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col divide-y divide-gray-200">
-
-                  {navigation.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className={classNames(
-                          pathname === item.href
-                            ? 'text-blue-600'
-                            : 'text-gray-700 hover:text-blue-600',
-                          'block w-full gap-x-3 rounded-md px-2 py-3 text-sm font-semibold'
-                        )}
-                      >
-                        <item.icon
-                          className={classNames(
-                            pathname === item.href
-                              ? 'text-blue-600'
-                              : 'text-gray-400 group-hover:text-blue-600',
-                            'inline-block h-4 w-4 mr-3'
-                          )}
-                          aria-hidden="true"
-                        />
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
+              {navigation.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    className={classNames(
+                      pathname === item.href
+                        ? 'text-blue-600'
+                        : 'text-gray-700 hover:text-blue-600',
+                      'block w-full gap-x-3 rounded-md px-2 py-3 text-sm font-semibold'
+                    )}
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <item.icon
+                      className={classNames(
+                        pathname === item.href
+                          ? 'text-blue-600'
+                          : 'text-gray-400 group-hover:text-blue-600',
+                        'inline-block h-4 w-4 mr-3'
+                      )}
+                      aria-hidden="true"
+                    />
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
 
               {/* <li>
                 <div className="text-xs font-semibold leading-6 text-gray-400">Your teams</div>

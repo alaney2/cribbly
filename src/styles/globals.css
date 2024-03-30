@@ -61,6 +61,9 @@ input[type=number] {
   transform: translate(-100%, 0) rotate(-45deg);
 }
 
+body {
+  overscroll-behavior: none;
+}
 
 /* .mapboxgl-popup {
   background-color: blue;

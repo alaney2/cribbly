@@ -12,6 +12,7 @@ import { set } from 'lodash';
 import toast from 'react-hot-toast';
 import { useSearchParams, usePathname } from 'next/navigation'
 import useSWR from 'swr';
+import { Spinner } from '@/components/FuelSpinner'
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -110,6 +111,9 @@ export function Account() {
 
   return (
     <div className="p-6 md:p-8" style={{ height: 'calc(100vh - 48px)' }}>
+      {isLoading ? (
+        <Spinner />
+    ) : (
       <main className="px-4 py-4 sm:px-6 lg:flex-auto lg:px-4 lg:py-4">
         <div className="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
           <div>
@@ -156,7 +160,7 @@ export function Account() {
           </div>
         </div>
       </main>
-
+    )}
       <Button type="button" color="blue" onClick={() => setIsBankDialogOpen(true)}>
         Open dialog
       </Button>
