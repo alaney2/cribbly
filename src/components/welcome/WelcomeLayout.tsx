@@ -16,8 +16,6 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
     { name: 'Step 0' },
     { name: 'Step 1' },
     { name: 'Step 2' },
-    // { name: 'Step 3' },
-    // { name: 'Step 4' },
   ]
 
   const handleStepClick = (stepIndex: number) => {
@@ -58,7 +56,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
   return (
     <>
       <div className="flex flex-col min-h-screen w-full overscroll-none bg-gray-50">
-        <div className="flex-grow flex flex-col items-center justify-center">
+        <div className="flex-grow flex flex-col items-center justify-center ">
           {renderStepContent(currentStep)}
         </div>
 

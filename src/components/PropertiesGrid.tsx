@@ -34,11 +34,11 @@ export function PropertiesGrid() {
   const { data: properties, error, isLoading } = useSWR('properties', fetcher);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('');
+  const [toastDisplayed, setToastDisplayed] = useState(false);
 
   const fuse = new Fuse(properties || [], {    keys: ['street_address', 'city', 'state'],
     threshold: 0.4,
   });
-
 
   const filteredProperties = searchQuery
     ? fuse.search(searchQuery).map((result) => result.item)
@@ -55,9 +55,12 @@ export function PropertiesGrid() {
     return 0;
   });
 
-  if (error) {
-    toast.error('Error fetching properties');
-  }
+  useEffect(() => {
+    if (error && !toastDisplayed) {
+      toast.error('Error fetching properties');
+      setToastDisplayed(true);
+    }
+  }, [error, toastDisplayed]);
 
   return (
     <div className="p-6 md:p-8" style={{ height: 'calc(100vh - 48px)' }}>

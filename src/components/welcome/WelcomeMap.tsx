@@ -93,8 +93,12 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
 
   return (
     <>
+
       <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js' />
-      <div className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full w-full overscroll-none ${animationClass}`}>
+      <div 
+        className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full w-full overscroll-none ${animationClass}`}
+        style={{ height: '100%' }}
+      >
         <Text
           className='mb-4 text-center animate__animated animate__fadeIn'
           style={{ animationDelay: '0.2s' }}
@@ -103,6 +107,7 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
         </Text>
         <div
           className={`mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-5/6 transition-opacity appearance-none animate__animated animate__fadeIn`}
+          style={{ height: '100%' }}
         >
           <Map
             ref={mapRef}
@@ -115,7 +120,7 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
             mapStyle="mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd"
             reuseMaps={true}
             attributionControl={false}
-            style={{ borderRadius: '1rem', lineHeight: 1, zIndex: 0 }}
+            style={{ borderRadius: '1rem', lineHeight: 1, zIndex: 0, height: '600px', width: '100%' }}
             onLoad={() => setIsMapLoaded(true)}
           >
             {!isMapLoaded && <Skeleton containerClassName="flex-1" borderRadius="1rem" height="100%"/>}

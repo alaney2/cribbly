@@ -27,12 +27,6 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-// const teams = [
-//   { id: 1, name: 'Heroicons', href: '/', initial: 'H' },
-//   { id: 2, name: 'Tailwind Labs', href: '/', initial: 'T' },
-//   { id: 3, name: 'Workcation', href: '/', initial: 'W' },
-// ]
-
 export function DesktopSidebar() {
   const pathname = usePathname()
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -67,7 +61,7 @@ export function DesktopSidebar() {
       animate={{ width: isSidebarCollapsed ? 60 : 160 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
-      <Link className="flex items-center gap-x-3 px-4 py-1.5 mb-3 rounded-md text-md font-semibold text-gray-400 cursor-default hover:bg-gray-200" href="/dashboard">
+      <Link className="flex items-center gap-x-3 px-4 py-1.5 mb-12 rounded-md text-md font-semibold text-gray-400 cursor-default hover:bg-gray-200" href="/dashboard">
         <Image src={icon} alt="logo" height={20} className="" />
         <AnimatePresence>
         {!isSidebarCollapsed && (
@@ -82,7 +76,7 @@ export function DesktopSidebar() {
         )}
         </AnimatePresence>
       </Link>
-      <nav className="flex flex-1 flex-col mt-2">
+      <nav className="flex flex-1 flex-col">
         <ul role="list" className="gap-y-7">
           <li>
             <ul role="list" className="-mx-2 p-4 space-y-1">
