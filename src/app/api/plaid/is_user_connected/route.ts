@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from 'next/server';
-import { Configuration, PlaidApi, Products, PlaidEnvironments, LinkTokenCreateRequest, CountryCode } from 'plaid';
+import { Configuration, PlaidApi, Products, PlaidEnvironments, LinkTokenCreateRequest, CountryCode, InstitutionsGetByIdRequest } from 'plaid';
 import { getURL } from '@/utils/helpers';
 
 const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
@@ -39,6 +39,7 @@ const configuration = new Configuration({
 
 const client = new PlaidApi(configuration);
 
+
 export async function GET(request: Request) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -54,22 +55,8 @@ export async function GET(request: Request) {
     // const access_token = data[0].access_token
   // console.log(data)
   if (!data) {
-    return NextResponse.next()
-  }
-  if (data.length > 0) {
-    ACCESS_TOKEN = data[0].access_token
-    ITEM_ID = data[0].item_id
-  }
-  if (ACCESS_TOKEN) {
-    const authResponse = await client.authGet({
-      access_token: ACCESS_TOKEN,
-    });
-    console.log('AUTH RESPONSE:', authResponse.data)
-    console.log(authResponse.data.accounts[0].balances)
-    return NextResponse.json(authResponse.data)
-
+    return NextResponse.json({ connected: false })
   }
 
-  return NextResponse.next()
-
+  return NextResponse.json({ connected: true })
 }

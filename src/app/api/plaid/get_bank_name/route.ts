@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from 'next/server';
-import { Configuration, PlaidApi, Products, PlaidEnvironments, LinkTokenCreateRequest, CountryCode } from 'plaid';
+import { Configuration, PlaidApi, Products, PlaidEnvironments, LinkTokenCreateRequest, CountryCode, InstitutionsGetByIdRequest } from 'plaid';
 import { getURL } from '@/utils/helpers';
 
 const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
@@ -39,6 +39,7 @@ const configuration = new Configuration({
 
 const client = new PlaidApi(configuration);
 
+
 export async function GET(request: Request) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -60,16 +61,20 @@ export async function GET(request: Request) {
     ACCESS_TOKEN = data[0].access_token
     ITEM_ID = data[0].item_id
   }
-  if (ACCESS_TOKEN) {
-    const authResponse = await client.authGet({
-      access_token: ACCESS_TOKEN,
-    });
-    console.log('AUTH RESPONSE:', authResponse.data)
-    console.log(authResponse.data.accounts[0].balances)
-    return NextResponse.json(authResponse.data)
 
+  if (ACCESS_TOKEN) {
+    const itemResponse = await client.itemGet({ access_token: ACCESS_TOKEN });
+    const item = itemResponse.data.item;
+    const configs: InstitutionsGetByIdRequest = {
+      institution_id: item.institution_id || '',
+      country_codes: PLAID_COUNTRY_CODES,
+    }
+    const institutionResponse = await client.institutionsGetById(configs);
+    console.log('INSTITUTION RESPONSE:', institutionResponse.data)
+    const bankName = institutionResponse.data.institution.name
+    console.log('BANK NAME:', bankName)
+    return NextResponse.json({ bankName })
   }
 
   return NextResponse.next()
-
 }

@@ -70,7 +70,6 @@ export async function POST(request: Request) {
     })
   }
 
-  // Don't do this in production
   return NextResponse.json({ 
     success: 'Bank account linked successfully',
   });

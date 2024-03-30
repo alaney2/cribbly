@@ -2,7 +2,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/catalyst/button';
-import { usePlaidLink } from 'react-plaid-link';
+import { PlaidLinkError, PlaidLinkOnExitMetadata, PlaidLinkOptions, usePlaidLink } from 'react-plaid-link';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
 import { Field, Label } from '@/components/catalyst/fieldset'
@@ -25,6 +25,7 @@ export default function DashboardAccount() {
     }
     const data = await response.json();
     console.log('DATA RECEIVED Link Token:', data.link_token)
+    localStorage.setItem('link_token', data.link_token)
     setLinkToken(data.link_token);
   };
 
@@ -44,6 +45,7 @@ export default function DashboardAccount() {
       return;
     }
     const { error, success } = await response.json();
+    localStorage.removeItem('link_token');
     if (error) {
       toast.error(error);
       return;
@@ -51,9 +53,15 @@ export default function DashboardAccount() {
     toast.success(success);
   };
 
-  const config = {
+  const config: PlaidLinkOptions = {
     token: linkToken,
     onSuccess,
+    onExit: (error: PlaidLinkError | null, metadata: PlaidLinkOnExitMetadata) => {
+      if (error) {
+        toast.error('Bank account linking failed');
+      }
+      localStorage.removeItem('link_token');
+    },
   };
 
   const { open, ready } = usePlaidLink(config);
@@ -72,6 +80,9 @@ export default function DashboardAccount() {
       </Button>
       <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/auth') }}>
         Call Auth
+      </Button>
+      <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/get_bank_name') }}>
+        Bank name
       </Button>
       <Dialog open={isBankDialogOpen} onClose={setIsBankDialogOpen}>
         <div className="flex items-center gap-x-4 mb-4">
