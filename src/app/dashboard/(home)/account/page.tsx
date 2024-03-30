@@ -77,7 +77,6 @@ export default function DashboardAccount() {
 
   if (window && window.location.search.includes('oauth_state_id')) {
     config.receivedRedirectUri = window.location.href;
-
   }
 
   const { open, ready } = usePlaidLink(config);
