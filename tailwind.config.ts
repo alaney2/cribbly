@@ -39,6 +39,9 @@ export default {
         '2xl': '40rem',
       },
     },
+    future: {
+      hoverOnlyWhenSupported: true
+    },
   },
   plugins: [
     formsPlugin, 
