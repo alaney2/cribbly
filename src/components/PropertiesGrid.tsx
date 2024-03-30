@@ -41,19 +41,25 @@ export function PropertiesGrid() {
   });
 
   const filteredProperties = searchQuery
-    ? fuse.search(searchQuery).map((result) => result.item)
-    : properties;
+    ? Array.isArray(fuse.search(searchQuery))
+      ? fuse.search(searchQuery).map((result) => result.item)
+      : []
+    : Array.isArray(properties)
+    ? properties
+    : [];
 
-  const sortedProperties = filteredProperties?.sort((a, b) => {
-    if (sortBy === 'name') {
-      return a.street_address.localeCompare(b.street_address);
-    } else if (sortBy === 'city') {
-      return a.city.localeCompare(b.city);
-    } else if (sortBy === 'state') {
-      return a.state.localeCompare(b.state)
-    }
-    return 0;
-  });
+  const sortedProperties = Array.isArray(filteredProperties)
+    ? filteredProperties.sort((a, b) => {
+        if (sortBy === 'name') {
+          return a.street_address.localeCompare(b.street_address);
+        } else if (sortBy === 'city') {
+          return a.city.localeCompare(b.city);
+        } else if (sortBy === 'state') {
+          return a.state.localeCompare(b.state);
+        }
+        return 0;
+      })
+    : [];
 
   useEffect(() => {
     if (error && !toastDisplayed) {

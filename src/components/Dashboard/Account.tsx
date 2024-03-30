@@ -12,16 +12,17 @@ import { set } from 'lodash';
 import toast from 'react-hot-toast';
 import { useSearchParams, usePathname } from 'next/navigation'
 import useSWR from 'swr';
+import Skeleton from 'react-loading-skeleton'
 
 const fetcher = async () => {
   const supabase = createClient();
   let { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    redirect('/sign-in');
+    toast.error("User not found")
   }
   const { data, error } = await supabase.from('users')
     .select()
-    .eq('id', user?.id)
+    .eq('id', user!.id)
     .single()
 
   if (error) {
@@ -32,11 +33,12 @@ const fetcher = async () => {
 
 export function Account() {
   // console.log('user', user_data.full_name, user_data.email)
-  const { data: user_data, error, isLoading } = useSWR('properties', fetcher);
+  const { data: user_data, error, isLoading } = useSWR('user_data', fetcher);
   const [linkToken, setLinkToken] = useState<string | null>(null);
   let [isBankDialogOpen, setIsBankDialogOpen] = useState(false)
   const searchParams = useSearchParams()
   const pathname = usePathname()
+
 
   const generateToken = async () => {
     if (searchParams.has('oauth_state_id')) {
@@ -118,7 +120,7 @@ export function Account() {
               <div className="pt-6 sm:flex">
                 <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Full name</dt>
                 <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                  <div className="text-gray-900">{!isLoading && user_data && user_data.full_name}</div>
+                  <div className="text-gray-900">{user_data?.full_name}</div>
                   <Button type="button" className="text-blue-500 hover:text-blue-500" plain>
                     Update
                   </Button>
@@ -128,7 +130,7 @@ export function Account() {
                 <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
                   Email address</dt>
                 <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                  <div className="text-gray-900">{!isLoading && user_data && user_data.email}</div>
+                  <div className="text-gray-900">{user_data?.email}</div>
                 </dd>
               </div>
             </dl>
@@ -146,7 +148,6 @@ export function Account() {
                 </Button>
               </li>
             </ul>
-
             <div className="flex border-t border-gray-100 pt-6">
               <Button type="button" plain className="text-blue-600 hover:text-blue-500"
                 onClick={() => setIsBankDialogOpen(true)}
@@ -157,6 +158,7 @@ export function Account() {
           </div>
         </div>
       </main>
+
       <Button type="button" color="blue" onClick={() => setIsBankDialogOpen(true)}>
         Open dialog
       </Button>
