@@ -12,7 +12,6 @@ import { set } from 'lodash';
 import toast from 'react-hot-toast';
 import { useSearchParams, usePathname } from 'next/navigation'
 import useSWR from 'swr';
-import Skeleton from 'react-loading-skeleton'
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -38,7 +37,6 @@ export function Account() {
   let [isBankDialogOpen, setIsBankDialogOpen] = useState(false)
   const searchParams = useSearchParams()
   const pathname = usePathname()
-
 
   const generateToken = async () => {
     if (searchParams.has('oauth_state_id')) {

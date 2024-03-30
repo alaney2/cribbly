@@ -17,12 +17,13 @@ const fetcher = async () => {
   const supabase = createClient();
   let { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    redirect('/sign-in');
+    toast.error("User not found")
+    return
   }
   const { data, error } = await supabase
     .from('properties')
     .select('*')
-    .eq('user_id', user.id);
+    .eq('user_id', user!.id);
   if (error) {
     throw error;
   }
@@ -41,25 +42,19 @@ export function PropertiesGrid() {
   });
 
   const filteredProperties = searchQuery
-    ? Array.isArray(fuse.search(searchQuery))
-      ? fuse.search(searchQuery).map((result) => result.item)
-      : []
-    : Array.isArray(properties)
-    ? properties
-    : [];
+    ? fuse.search(searchQuery).map((result) => result.item)
+    : properties;
 
-  const sortedProperties = Array.isArray(filteredProperties)
-    ? filteredProperties.sort((a, b) => {
-        if (sortBy === 'name') {
-          return a.street_address.localeCompare(b.street_address);
-        } else if (sortBy === 'city') {
-          return a.city.localeCompare(b.city);
-        } else if (sortBy === 'state') {
-          return a.state.localeCompare(b.state);
-        }
-        return 0;
-      })
-    : [];
+  const sortedProperties = filteredProperties?.sort((a, b) => {
+    if (sortBy === 'name') {
+      return a.street_address.localeCompare(b.street_address);
+    } else if (sortBy === 'city') {
+      return a.city.localeCompare(b.city);
+    } else if (sortBy === 'state') {
+      return a.state.localeCompare(b.state)
+    }
+    return 0;
+  });
 
   useEffect(() => {
     if (error && !toastDisplayed) {
