@@ -68,12 +68,11 @@ export function MobileSidebar({ user }: { user: any }) {
             <ul role="list" className="flex flex-1 flex-col divide-y divide-gray-200">
               {navigation.map((item) => (
                 <li key={item.name}>
-                  <button
+                  <Link
                     onClick={() => {
                       setSidebarOpen(false)
-                      redirect(item.href)
                     }}
-                    // href={item.href}
+                    href={item.href}
                     className={classNames(
                       pathname === item.href
                         ? 'text-blue-600'
@@ -91,7 +90,7 @@ export function MobileSidebar({ user }: { user: any }) {
                       aria-hidden="true"
                     />
                     {item.name}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>

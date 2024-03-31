@@ -19,7 +19,7 @@ export default function NotFound() {
       <p className="mt-3 text-sm text-gray-700">
         Sorry, we couldn’t find the page you’re looking for.
       </p>
-      <Button href="/" className="mt-10">
+      <Button href="/dashboard" className="mt-10">
         Go back home
       </Button>
     </SlimLayout>

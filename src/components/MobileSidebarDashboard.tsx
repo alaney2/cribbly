@@ -52,10 +52,8 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
               {navigation.map((item) => (
                 <li key={item.name} className="">
                   <Link
-
                     onClick={() => {
                       setSidebarOpen(false)
-                      // redirect(item.href)
                     }}
                     href={item.href}
                     className={classNames('text-gray-700 text-left block w-full gap-x-3 rounded-md px-2 py-3 text-sm font-semibold'
