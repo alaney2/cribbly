@@ -51,18 +51,19 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
               </li>
               {navigation.map((item) => (
                 <li key={item.name} className="">
-                  <button
+                  <Link
+
                     onClick={() => {
                       setSidebarOpen(false)
-                      redirect(item.href)
+                      // redirect(item.href)
                     }}
-                    // href={item.href}
-                    className={classNames('text-gray-700 block w-full gap-x-3 rounded-md px-2 py-3 text-sm font-semibold'
+                    href={item.href}
+                    className={classNames('text-gray-700 text-left block w-full gap-x-3 rounded-md px-2 py-3 text-sm font-semibold'
                     )}
                   >
                     <item.icon className="inline-block h-4 w-4 mr-3" />
                     {item.name}
-                  </button>
+                  </Link>
                 </li>
               ))}
 

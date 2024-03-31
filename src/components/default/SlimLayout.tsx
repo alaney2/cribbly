@@ -14,7 +14,7 @@ import { getGPUTier } from 'detect-gpu';
 
 const Spline = React.lazy(() => import('@splinetool/react-spline'));
 
-export async function SlimLayout({ children, splineLink }: { children: React.ReactNode; splineLink?: string }) {
+export function SlimLayout({ children, splineLink }: { children: React.ReactNode; splineLink?: string }) {
   const isSplineLoaded = signal(false)
   const isLargeScreen = signal(true)
   const isHardwareAccelerated = signal(true)
@@ -39,14 +39,14 @@ export async function SlimLayout({ children, splineLink }: { children: React.Rea
     return () => window.removeEventListener('resize', checkSize);
   });
 
-  useEffect(() => {
-    const checkHardwareAcceleration = () => {
-      if (typeof window === 'undefined') return
-      const logicalProcessors = navigator.hardwareConcurrency || 0;
-      isHardwareAccelerated.value = logicalProcessors >= 9999;
-    };
-    checkHardwareAcceleration();
-  }, []);
+  // useEffect(() => {
+  //   const checkHardwareAcceleration = () => {
+  //     if (typeof window === 'undefined') return
+  //     const logicalProcessors = navigator.hardwareConcurrency || 0;
+  //     isHardwareAccelerated.value = logicalProcessors >= 9999;
+  //   };
+  //   checkHardwareAcceleration();
+  // }, []);
 
   return (
     <>
