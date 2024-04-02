@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import { useSearchParams, usePathname } from 'next/navigation'
 import useSWR from 'swr';
 import { Spinner } from '@/components/FuelSpinner'
+import { updateFullName } from '@/utils/supabase/actions'
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -37,10 +38,48 @@ export function Account() {
   let [isBankDialogOpen, setIsBankDialogOpen] = useState(false)
   const searchParams = useSearchParams()
   const pathname = usePathname()
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editedName, setEditedName] = useState(user_data?.full_name || '');
+
+  useEffect(() => {
+    setEditedName(user_data?.full_name || '')
+  }, [isLoading, user_data])
 
   if (error) {
     toast.error(error)
   }
+
+  const handleEditName = () => {
+    setIsEditingName(true);
+    setEditedName(user_data?.full_name || '');
+  };
+
+  const handleSaveName = async () => {
+    const supabase = createClient();
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return
+    }
+    if (editedName.trim() === '') {
+      return
+    }
+    const { error } = await supabase
+    .from('users')
+    .update({ full_name: editedName })
+    .eq('id', user.id);
+
+    if (error) {
+      console.error(error);
+    }
+    setIsEditingName(false);
+  };
+
+  const handleCancelEditName = () => { 
+    setIsEditingName(false);
+    setEditedName(user_data?.full_name || '');
+  };
 
   const generateToken = async () => {
     if (searchParams.has('oauth_state_id')) {
@@ -125,10 +164,36 @@ export function Account() {
               <div className="pt-6 sm:flex">
                 <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Full name</dt>
                 <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                  <div className="text-gray-900">{user_data?.full_name}</div>
-                  <Button type="button" className="text-blue-600 hover:text-blue-600" plain>
-                    Update
-                  </Button>
+                {isEditingName ? (
+                  <>
+                    <form className="flex justify-between gap-x-6 sm:mt-0 sm:flex-auto" 
+                      action={updateFullName}>
+                      <Input
+                        type="text"
+                        value={editedName}
+                        name="name"
+                        id="name"
+                        onChange={(e) => setEditedName(e.target.value)}
+                        className="w-full"
+                      />
+                      <div className="flex">
+                        <Button type="submit" color="blue" onClick={handleSaveName} >
+                          Save
+                        </Button>
+                        <Button type="button" plain onClick={handleCancelEditName} >
+                          Cancel
+                        </Button>
+                      </div>
+                    </form>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-gray-900">{editedName}</div>
+                    <button type="button" className="font-semibold text-blue-600 hover:text-blue-500" onClick={handleEditName}>
+                      Update
+                    </button>
+                  </>
+                )}
                 </dd>
               </div>
               <div className="pt-6 sm:flex">
@@ -148,9 +213,9 @@ export function Account() {
             <ul role="list" className="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
               <li className="flex justify-between gap-x-6 py-6">
                 <div className="font-medium text-gray-900">Chase</div>
-                <Button type="button" plain className="text-blue-600 hover:text-blue-600">
+                <button type="button" className="font-semibold text-blue-600 hover:text-blue-500">
                   Update
-                </Button>
+                </button>
               </li>
             </ul>
             <div className="flex border-t border-gray-100 pt-6">

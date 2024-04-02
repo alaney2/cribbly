@@ -71,6 +71,10 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+button {
+  cursor: default;
+}
+
 /* .mapboxgl-popup {
   background-color: blue;
   border-radius: 10px;

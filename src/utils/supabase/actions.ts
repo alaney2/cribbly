@@ -12,9 +12,11 @@ export async function getUser() {
 
 export async function updateFullName(formData: FormData) {
   const user = await getUser();
+  console.log('called function')
   if (!user) return;
   const supabase = createClient();
   const name = String(formData.get('name'));
+  console.log(name)
   if (!name) return;
   const { error } = await supabase
     .from('users')
