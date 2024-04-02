@@ -177,7 +177,7 @@ export function Account() {
                         className="w-full"
                       />
                       <div className="flex">
-                        <Button type="submit" color="blue" onClick={handleSaveName} >
+                        <Button type="submit" color="blue" onClick={handleSaveName} className="mr-3">
                           Save
                         </Button>
                         <Button type="button" plain onClick={handleCancelEditName} >
