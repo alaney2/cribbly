@@ -3,6 +3,7 @@ import {
   HomeIcon,
   ArrowRightStartOnRectangleIcon,
   QuestionMarkCircleIcon,
+  InboxIcon,
 } from '@heroicons/react/24/outline'
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
@@ -77,7 +78,7 @@ export function DesktopSidebarDashboard() {
             </div>
           </li>
  
-          <div className="p-4 border-b border-slate-300">
+          {/* <div className="p-4 border-b border-slate-300">
             <Link
               href="/dashboard/support"
               className={classNames(
@@ -86,6 +87,18 @@ export function DesktopSidebarDashboard() {
             >
               <QuestionMarkCircleIcon className="h-4 w-4" />
               <span>Support</span>
+            </Link>
+          </div> */}
+
+          <div className="p-4 border-b border-slate-300">
+            <Link
+              href="/dashboard"
+              className={classNames(
+                'text-gray-500 hover:text-blue-500 group flex items-center gap-x-3 rounded-md font-semibold cursor-default'
+              )}
+            >
+              <InboxIcon className="h-4 w-4" />
+              <span>Contact</span>
             </Link>
           </div>
 
