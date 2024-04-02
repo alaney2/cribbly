@@ -3,7 +3,7 @@ export function Spinner() {
   return (
     <div className="flex items-center justify-center h-full">
       <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" className="w-20 h-20">
-        <circle className="spin2" cx="400" cy="400" fill="none" r="200" strokeWidth="50" stroke="#E387FF" strokeDasharray="700 1400" strokeLinecap="round" />
+        <circle className="spin2" cx="400" cy="400" fill="none" r="200" strokeWidth="50" stroke="#3b82f6" strokeDasharray="700 1400" strokeLinecap="round" />
       </svg>
       <style jsx>{`
         @keyframes spin {
@@ -11,7 +11,6 @@ export function Spinner() {
             transform: rotate(360deg);
           }
         }
-
         @keyframes spin2 {
           0% {
             stroke-dasharray: 1, 800;
@@ -26,10 +25,9 @@ export function Spinner() {
             stroke-dashoffset: -800px;
           }
         }
-
         .spin2 {
           transform-origin: center;
-          animation: spin2 10s ease-in-out infinite, spin 10s linear infinite;
+          animation: spin2 1.5s ease-in-out infinite, spin 2s linear infinite;
           animation-direction: alternate;
         }
       `}</style>

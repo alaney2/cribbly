@@ -66,7 +66,7 @@ const styles = {
   ],
   plain: [
     // Base
-    'border-transparent text-zinc-950 data-[active]:bg-zinc-950/5 data-[hover]:bg-zinc-950/5',
+    'border-transparent data-[active]:bg-zinc-950/5 data-[hover]:bg-zinc-950/5',
 
     // Dark mode
     'dark:text-white dark:data-[active]:bg-white/10 dark:data-[hover]:bg-white/10',
@@ -187,9 +187,9 @@ export const Button = React.forwardRef(function Button(
   ref: React.ForwardedRef<HTMLElement>
 ) {
   let classes = clsx(
-    className,
     styles.base,
-    outline ? styles.outline : plain ? styles.plain : clsx(styles.solid, styles.colors[color ?? 'dark/zinc'])
+    outline ? styles.outline : plain ? styles.plain : clsx(styles.solid, styles.colors[color ?? 'dark/zinc']),
+    className,
   )
 
   return 'href' in props ? (
