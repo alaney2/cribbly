@@ -62,9 +62,9 @@ export function MobileSidebar({ user }: { user: any }) {
         <ProfileButton user={user} />
       </div>
 
-      <div className={`fixed inset-0 flex lg:hidden mt-16 z-40 ${sidebarOpen ? 'fixed w-full h-full translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out bg-gray-100`}>
-        <div className="flex grow flex-col overflow-y-auto bg-gray-100 px-4">
-          <nav className="flex flex-1 flex-col">
+      <div className={`fixed inset-0 flex lg:hidden z-40 ${sidebarOpen ? 'fixed w-full h-full translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out bg-gray-100`}>
+        <div className="flex grow flex-col overflow-y-auto bg-gray-100 px-4 mt-16">
+          <nav className="flex flex-1 flex-col ">
             <ul role="list" className="flex flex-1 flex-col divide-y divide-gray-200">
               {navigation.map((item) => (
                 <li key={item.name}>
