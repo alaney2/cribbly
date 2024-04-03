@@ -65,11 +65,11 @@ body {
   overscroll-behavior: none;
 }
 
-.disable-bounce {
+/* .disable-bounce {
   overscroll-behavior: none;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
-}
+} */
 
 button {
   cursor: default;
