@@ -64,7 +64,7 @@ export function PropertiesGrid() {
   }, [error, toastDisplayed]);
 
   return (
-    <div className="p-6 md:p-8 overflow-auto" style={{ minHeight: 'calc(100vh - 72px)' }}>
+    <div className="p-6 md:p-8 overflow-auto h-max" >
       <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-center mb-4">
         <div className="relative sm:mr-2.5 w-full sm:w-auto mb-2.5 sm:mb-0">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -115,7 +115,7 @@ export function PropertiesGrid() {
         </div>
       </div>
       <div className="max-w-screen-2xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 py-4 lg:py-8 2xl:p-16 justify-items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pt-4 pb-2 lg:pt-8 2xl:p-16 justify-items-center">
           {isLoading ? (
             Array.from({ length: 6 }).map((_, index) => (
               <div key={index} className="rounded-lg p-4 h-28 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md">

@@ -152,7 +152,7 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
                     Add property
                   </span>
                 </button>
-                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} buttonOnClick={buttonOnClick} setFadeOut={setFadeOut} />
+                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} setFadeOut={setFadeOut} />
               </Popup>
             )}
           </Map>

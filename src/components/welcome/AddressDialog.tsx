@@ -6,7 +6,7 @@ import { ICountry, IState, Country, State, City }  from 'country-state-city';
 import { Text } from '@/components/catalyst/text';
 import { Select } from '@/components/catalyst/select'
 import { useState, useEffect, useRef } from 'react'
-import { addProperty } from '@/utils/supabase/actions'
+import { addPropertyFromWelcome, addProperty } from '@/utils/supabase/actions'
 import { toast } from 'react-hot-toast';
 // @ts-expect-error
 import { useFormState } from 'react-dom'
@@ -16,12 +16,12 @@ interface AddressDialogProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   result: any;
-  buttonOnClick?: () => void;
   setFadeOut: (fadeOut: boolean) => void;
+  isWelcome?: boolean
 }
 
-export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFadeOut } : AddressDialogProps ) {
-  const [state, formAction] = useFormState(addProperty, { message: '' })
+export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome=true } : AddressDialogProps ) {
+  const [state, formAction] = useFormState(addPropertyFromWelcome, { message: '' })
   const address = result.place_name;
   const addressArray = address.split(',');
   for (let i = 0; i < addressArray.length; i++) {
@@ -115,21 +115,17 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
       city.current = addressArray[1].trim();
     }
   }
-
-  const handleClick = () => {
-    // toast.success('You did it!');
-    // event.preventDefault();
-    // setIsOpen(false);
-    // setFadeOut(true);
-    // setTimeout(buttonOnClick, 200);
-  }
   
   return (
     <Dialog open={isOpen} onClose={setIsOpen}>
       <form autoComplete='off' 
         action={async (formData) => {
           const loadingToast = toast.loading('Adding property');
-          const result = await addProperty(formData);
+          if (isWelcome) {
+            const result = await addPropertyFromWelcome(formData);
+          } else {
+            const result = await addProperty(formData);
+          }
           toast.dismiss(loadingToast);
           if (result && result.message) {
             toast.error(result.message);
@@ -246,7 +242,6 @@ export function AddressDialog({ isOpen, setIsOpen, result, buttonOnClick, setFad
           <Button 
             type="submit"
             color="blue"
-            onClick={handleClick}
           >
             Confirm
           </Button>

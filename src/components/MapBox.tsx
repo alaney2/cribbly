@@ -146,7 +146,7 @@ export function MapBox() {
                     Add property
                   </span>
                 </button>
-                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} setFadeOut={setFadeOut} />
+                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} setFadeOut={setFadeOut} isWelcome={false} />
               </Popup>
             )}
           </Map>

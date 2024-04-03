@@ -37,6 +37,7 @@ export async function middleware(request: NextRequest) {
       }
     }
   } else {
+    // No user is signed in
     const pathsWithoutAuth = ['/sign-in', '/get-started', '/privacy', '/terms', '/security']
     // Redirect to login if not authenticated
     if (
