@@ -16,12 +16,12 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+/* Sidebar */
 .menu div {
   width: 20px;
   height: 20px;
   position: relative;
 }
-
 .menu span {
   background: #777;
   width: 100%;
@@ -34,13 +34,11 @@ input[type=number] {
   transform: translate(-50%, -50%);
   transition: transform 0.3s, width 0.3s;
 }
-
 .menu .line-1 {
   width: 50%;
   transform: translate(-100%, -8px);
   transform-origin: 0 0;
 }
-
 .menu .line-3 {
   width: 50%;
   left: auto;
@@ -48,15 +46,12 @@ input[type=number] {
   transform: translate(0, 6px);
   transform-origin: 100% 0;
 }
-
 .openmenu .line-1 {
   transform: translate(0, 0) rotate(-45deg);
 }
-
 .openmenu .line-2 {
   transform: translate(-50%, -50%) rotate(45deg);
 }
-
 .openmenu .line-3 {
   transform: translate(-100%, 0) rotate(-45deg);
 }
