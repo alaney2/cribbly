@@ -13,7 +13,6 @@ import toast from 'react-hot-toast';
 import { useSearchParams, usePathname } from 'next/navigation'
 import useSWR from 'swr';
 import { Spinner } from '@/components/FuelSpinner'
-import { updateFullName } from '@/utils/supabase/actions'
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -161,37 +160,38 @@ export function Account() {
           <div>
             <h2 className="text-base font-semibold leading-7 text-gray-900">Profile</h2>
             <dl className="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
-              <div className="pt-6 sm:flex">
+              <div className="pt-6 sm:flex h-20 sm:h-14 sm:items-center">
                 <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Full name</dt>
-                <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
+                <dd className="flex-auto">
                 {isEditingName ? (
                   <>
-                    <form className="flex justify-between gap-x-6 sm:mt-0 sm:flex-auto" 
-                      action={updateFullName}>
-                      <Input
+                    <form className="mt-1.5 sm:mt-0 flex justify-between gap-x-6 sm:items-center">
+                      <input
                         type="text"
                         value={editedName}
                         name="name"
                         id="name"
                         onChange={(e) => setEditedName(e.target.value)}
-                        className="w-full"
+                        className="w-full rounded-lg h-8 text-sm p-0 -ml-2 px-2 ring-inset ring-1 ring-gray-300 border-none shadow-sm focus:ring-2 focus:ring-blue-500/90"
                       />
-                      <div className="flex">
-                        <Button type="submit" color="blue" onClick={handleSaveName} className="mr-3">
+                      <div className="flex gap-x-2">
+                        <button type="submit" onClick={handleSaveName} className="font-semibold text-gray-100 bg-blue-600 hover:bg-blue-500 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg">
                           Save
-                        </Button>
-                        <Button type="button" plain onClick={handleCancelEditName} >
+                        </button>
+                        <button type="button" onClick={handleCancelEditName} className="font-semibold text-gray-700 px-2 py-1 sm:py-1.5 hover:bg-gray-100 rounded-lg">
                           Cancel
-                        </Button>
+                        </button>
                       </div>
                     </form>
                   </>
                 ) : (
                   <>
-                    <div className="text-gray-900">{editedName}</div>
-                    <button type="button" className="font-semibold text-blue-600 hover:text-blue-500" onClick={handleEditName}>
-                      Update
-                    </button>
+                    <div className="mt-1.5 sm:mt-0 flex justify-between gap-x-6 sm:items-center">
+                      <div className="text-gray-900">{editedName}</div>
+                      <button type="button" className="font-semibold text-blue-600 hover:text-blue-500" onClick={handleEditName}>
+                        Update
+                      </button>
+                    </div>
                   </>
                 )}
                 </dd>
