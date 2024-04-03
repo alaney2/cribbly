@@ -62,7 +62,7 @@ export function DesktopSidebar() {
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
       <Link className="flex items-center gap-x-3 px-4 py-1.5 mb-12 rounded-md text-md font-semibold text-gray-400 cursor-default hover:bg-gray-200" href="/dashboard">
-        <Image src={icon} alt="logo" height={20} className="" />
+        <Image src={icon} alt="logo" height={24} className="" />
         <AnimatePresence>
         {!isSidebarCollapsed && (
         <motion.span
