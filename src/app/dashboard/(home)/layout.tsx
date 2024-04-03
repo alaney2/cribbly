@@ -19,7 +19,7 @@ export default async function DashboardLayout({
 
   return (
     <>
-      <div className='h-full overflow-hidden flex flex-col bg-gray-100 overscroll-none'>
+      <div className='h-full overflow-hidden flex flex-col bg-gray-100 overscroll-none lg:overscroll-auto'>
         <MobileSidebarDashboard user={user} />
         <div className="mx-auto flex w-full items-start gap-x-6 lg:gap-x-8 pt-4 px-4 sm:px-6 lg:px-10 lg:mt-8">
           <aside className={`lg:sticky top-16 left-4 flex-col overflow-y-auto absolute hidden lg:block`}>

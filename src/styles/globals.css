@@ -65,15 +65,11 @@ body {
   overscroll-behavior: none;
 }
 
-/* .disable-bounce {
-  overscroll-behavior: none;
-  overscroll-behavior-y: contain;
-  -webkit-overflow-scrolling: touch;
-} */
-
 button {
   cursor: default;
 }
+
+/*
 
 /* .mapboxgl-popup {
   background-color: blue;
