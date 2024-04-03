@@ -57,11 +57,11 @@ export function DesktopSidebar() {
   return (
     <motion.div
       className={`flex grow flex-col overflow-hidden mt-2 min-h-full overflow-y-auto`}
-      initial={{ width: 160 }}
-      animate={{ width: isSidebarCollapsed ? 60 : 160 }}
+      initial={{ width: 150 }}
+      animate={{ width: isSidebarCollapsed ? 50 : 150 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
-      <Link className="flex items-center gap-x-3 px-4 py-1.5 mb-4 rounded-md text-md tracking-tight font-semibold text-gray-400 cursor-default hover:bg-gray-200" href="/dashboard">
+      <Link className="flex items-center gap-x-3 -mx-2 px-4 py-1.5 mb-4 rounded-md text-md tracking-tight font-semibold text-gray-400 cursor-default hover:bg-gray-200" href="/dashboard">
         <Image src={icon} alt="logo" height={28} width={28} className="" />
         <AnimatePresence>
         {!isSidebarCollapsed && (
@@ -79,7 +79,7 @@ export function DesktopSidebar() {
       <nav className="flex flex-1 flex-col">
         <ul role="list" className="gap-y-0">
           <li>
-            <ul role="list" className="-mx-2 p-4 space-y-1">
+            <ul role="list" className="-mx-2 p-2 space-y-1">
               {navigation.map((item) => (
                 <li key={item.name} className="">
                   <Link

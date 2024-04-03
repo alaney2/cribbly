@@ -27,7 +27,7 @@ export function DesktopSidebarDashboard() {
   return (
     <motion.div
       className={`flex grow flex-col gap-y-5 overflow-hidden min-h-full mt-24 overflow-y-auto`}
-      initial={{ width: 160 }}
+      initial={{ width: 150 }}
     >
       <nav className="flex flex-1 flex-col text-sm tracking-normal">
         <ul role="list" className="">
