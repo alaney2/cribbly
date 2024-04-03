@@ -28,7 +28,7 @@ export default function Home() {
           <CallToAction />
         </FollowerPointerCard>
         <Testimonials />
-        <Pricing />
+        {/* <Pricing /> */}
         <Faqs />
       </main>
       <Footer />

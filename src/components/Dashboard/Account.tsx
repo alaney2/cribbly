@@ -6,9 +6,7 @@ import { PlaidLinkError, PlaidLinkOnExitMetadata, PlaidLinkOptions, usePlaidLink
 import { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
 import { Field, Label } from '@/components/catalyst/fieldset'
-import { Input } from '@/components/catalyst/input'
 import { LockClosedIcon } from '@heroicons/react/24/outline';
-import { set } from 'lodash';
 import toast from 'react-hot-toast';
 import { useSearchParams, usePathname } from 'next/navigation'
 import useSWR from 'swr';
@@ -31,8 +29,13 @@ const fetcher = async () => {
   return data;
 };
 
+const bankFetcher = async () => {
+  return fetch('/api/plaid/auth').then(response => response.json())
+}
+
 export function Account() {
   const { data: user_data, error, isLoading } = useSWR('user_data', fetcher);
+  const { data: bank_data, error: bankError, isLoading: bankIsLoading} = useSWR('bank_auth_data', bankFetcher)
   const [linkToken, setLinkToken] = useState<string | null>(null);
   let [isBankDialogOpen, setIsBankDialogOpen] = useState(false)
   const searchParams = useSearchParams()
@@ -40,6 +43,10 @@ export function Account() {
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState(user_data?.full_name || '');
 
+  useEffect(() => {
+    console.log('bank_data', bank_data)
+
+  }, [bankIsLoading, bank_data])
   useEffect(() => {
     setEditedName(user_data?.full_name || '')
   }, [isLoading, user_data])
@@ -165,20 +172,20 @@ export function Account() {
                 <dd className="flex-auto">
                 {isEditingName ? (
                   <>
-                    <form className="mt-1.5 sm:mt-0 flex justify-between gap-x-6 sm:items-center">
+                    <form className="mt-1.5 sm:mt-0 h-14 flex justify-between gap-x-6 sm:items-center">
                       <input
                         type="text"
                         value={editedName}
                         name="name"
                         id="name"
                         onChange={(e) => setEditedName(e.target.value)}
-                        className="w-full rounded-lg h-8 text-sm p-0 -ml-2 px-2 ring-inset ring-1 ring-gray-300 border-none shadow-sm focus:ring-2 focus:ring-blue-500/90"
+                        className="w-full rounded-lg h-2/3 text-sm p-0 sm:-ml-3 px-3 ring-inset ring-1 ring-gray-300 border-none shadow-sm focus:ring-2 focus:ring-blue-500/90"
                       />
                       <div className="flex gap-x-2">
-                        <button type="submit" onClick={handleSaveName} className="font-semibold text-gray-100 bg-blue-600 hover:bg-blue-500 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg">
+                        <button type="submit" onClick={handleSaveName} className="font-semibold text-gray-100 bg-blue-600 hover:bg-blue-500 h-2/3 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg">
                           Save
                         </button>
-                        <button type="button" onClick={handleCancelEditName} className="font-semibold text-gray-700 px-2 py-1 sm:py-1.5 hover:bg-gray-100 rounded-lg">
+                        <button type="button" onClick={handleCancelEditName} className="font-semibold text-gray-700 px-2 py-1 sm:py-1.5 h-2/3 hover:bg-gray-100 rounded-lg">
                           Cancel
                         </button>
                       </div>
@@ -188,7 +195,7 @@ export function Account() {
                   <>
                     <div className="mt-1.5 sm:mt-0 flex justify-between gap-x-6 sm:items-center">
                       <div className="text-gray-900">{editedName}</div>
-                      <button type="button" className="font-semibold text-blue-600 hover:text-blue-500" onClick={handleEditName}>
+                      <button type="button" className="font-semibold text-blue-600 hover:text-blue-500 px-2" onClick={handleEditName}>
                         Update
                       </button>
                     </div>
@@ -213,7 +220,7 @@ export function Account() {
             <ul role="list" className="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
               <li className="flex justify-between gap-x-6 py-6">
                 <div className="font-medium text-gray-900">Chase</div>
-                <button type="button" className="font-semibold text-blue-600 hover:text-blue-500">
+                <button type="button" className="px-2 font-semibold text-blue-600 hover:text-blue-500">
                   Update
                 </button>
               </li>
