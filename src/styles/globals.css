@@ -56,9 +56,9 @@ input[type=number] {
   transform: translate(-100%, 0) rotate(-45deg);
 }
 
-body {
+/* body {
   overscroll-behavior: none;
-}
+} */
 
 button {
   cursor: default;
