@@ -56,7 +56,7 @@ export function DesktopSidebar() {
 
   return (
     <motion.div
-      className={`flex grow flex-col overflow-hidden mt-2 min-h-full overflow-y-auto`}
+      className={`flex grow flex-col overflow-x-hidden mt-2 min-h-full overflow-y-auto`}
       initial={{ width: 150 }}
       animate={{ width: isSidebarCollapsed ? 50 : 150 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
