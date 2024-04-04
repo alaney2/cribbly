@@ -117,7 +117,7 @@ export function PropertiesGrid() {
       <div className="max-w-screen-2xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pt-4 pb-2 lg:pt-8 2xl:p-16 justify-items-center">
           {isLoading ? (
-            Array.from({ length: 6 }).map((_, index) => (
+            Array.from({ length: 3 }).map((_, index) => (
               <div key={index} className="rounded-lg p-4 h-28 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md">
                 <Skeleton height={24} width="80%" />
                 <Skeleton height={18} width="60%" />
