@@ -52,9 +52,9 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
 
   const handleButtonClick = () => {
     setShowEmailInput(true)
-    if (showEmailInput && emailInputRef && emailInputRef.current) {
-      emailInputRef.current.focus();
-    }
+    // if (showEmailInput && emailInputRef && emailInputRef.current) {
+    //   emailInputRef.current.focus();
+    // }
     setTimeout(() => {
       setButtonType('submit')
     }, 0)
