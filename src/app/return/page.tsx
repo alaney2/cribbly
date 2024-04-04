@@ -1,9 +1,10 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function Return() {
+  const router = useRouter()
   const [status, setStatus] = useState(null);
   const [customerEmail, setCustomerEmail] = useState('');
 
@@ -24,7 +25,7 @@ export default function Return() {
 
   if (status === 'open') {
     return (
-      redirect('/')
+      router.push('/')
     )
   }
 

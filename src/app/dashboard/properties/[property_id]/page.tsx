@@ -1,15 +1,14 @@
 "use client"
 import '@/styles/auth.css'
-import { createClient } from '@/utils/supabase/client'
 import { deleteProperty } from '@/utils/supabase/actions'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export default function CurrentProperty({ params } : { params: { property_id: string } }) {
-  
+  const router = useRouter()
+
   const handleDeleteProperty = async () => {
     await deleteProperty(params.property_id)
-    // Redirect or perform any other action after deleting the property
-    redirect('/dashboard')
+    router.push('/dashboard')
   }
 
   return (

@@ -41,7 +41,7 @@ export function MobileSidebar({ user }: { user: any }) {
 
   return (
     <>
-      <div className="sticky top-0 z-50 flex items-center gap-x-6 bg-gray-50 px-4 shadow-sm sm:px-6 lg:hidden h-16">
+      <div className="sticky top-0 z-50 flex items-center gap-x-6 bg-gray-50 px-4 py-4 shadow-sm sm:px-6 lg:hidden h-16">
         <button
           type="button"
           className={`-m-2.5 p-2.5 text-gray-700 lg:hidden z-50 ${sidebarOpen ? 'openmenu' : ''}`}

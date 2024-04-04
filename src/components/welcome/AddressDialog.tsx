@@ -1,3 +1,4 @@
+"use client"
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
 import { ErrorMessage, Field, Label, Fieldset, Legend, FieldGroup } from '@/components/catalyst/fieldset'
 import { Input } from '@/components/catalyst/input'
@@ -10,7 +11,7 @@ import { addPropertyFromWelcome, addProperty } from '@/utils/supabase/actions'
 import { toast } from 'react-hot-toast';
 // @ts-expect-error
 import { useFormState } from 'react-dom'
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface AddressDialogProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ interface AddressDialogProps {
 }
 
 export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome=true } : AddressDialogProps ) {
+  const router = useRouter()
   const [state, formAction] = useFormState(addPropertyFromWelcome, { message: '' })
   const address = result.place_name;
   const addressArray = address.split(',');
@@ -133,7 +135,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
             toast.success('Property added', { duration: 5000 });
             setIsOpen(false);
             setFadeOut(true);
-            redirect('/dashboard')
+            router.push('dashboard')
           }
         }}
       >

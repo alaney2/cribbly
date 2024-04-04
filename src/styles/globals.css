@@ -56,6 +56,10 @@ input[type=number] {
   transform: translate(-100%, 0) rotate(-45deg);
 }
 
+.content-container {
+  min-height: calc(100svh - theme('height.28'));
+}
+
 /* body {
   overscroll-behavior: none;
 } */
