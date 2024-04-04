@@ -50,7 +50,7 @@ export function SlimLayout({ children, splineLink }: { children: React.ReactNode
 
   return (
     <>
-      <div className="relative flex min-h-full justify-center md:px-12 lg:px-0 bg-gray-100">
+      <div className="relative flex min-h-full justify-center md:px-12 lg:px-0 bg-gray-50">
         <Suspense>
           <Notification />
         </Suspense>
