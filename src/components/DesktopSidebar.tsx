@@ -61,7 +61,7 @@ export function DesktopSidebar() {
       animate={{ width: isSidebarCollapsed ? 50 : 150 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
-      <Link className="flex items-center gap-x-3 -mx-2 px-4 py-1.5 mb-4 rounded-md text-md tracking-tight font-semibold text-gray-400 cursor-default hover:bg-gray-200" href="/dashboard">
+      <Link className="w-full mt-6 flex items-center gap-x-3 px-4 py-1.5 mb-4 text-md tracking-tight font-semibold text-gray-400 cursor-default hover:bg-gray-200 rounded-2xl" href="/dashboard">
         <Image src={icon} alt="logo" height={28} width={28} className="" />
         <AnimatePresence>
         {!isSidebarCollapsed && (
@@ -88,7 +88,7 @@ export function DesktopSidebar() {
                       pathname === item.href
                         ? 'text-blue-500'
                         : 'text-gray-500 hover:text-blue-500',
-                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-default'
+                      'group flex gap-x-3 rounded-md py-2 px-4 text-sm leading-6 font-semibold cursor-default'
                     )}
                   >
                     <item.icon

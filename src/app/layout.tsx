@@ -10,6 +10,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from 'next/script';
 import { PropsWithChildren, Suspense } from 'react';
 import { Toaster } from "react-hot-toast";
+import Head from 'next/head';
 
 export const metadata: Metadata = {
   title: {
@@ -63,6 +64,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
         lexend.variable,
       )}
     >
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
 
       {/* <meta property="twitter:image" content="../images/icon.png"></meta>
       <meta property="twitter:card" content="../images/icon.png"></meta>
