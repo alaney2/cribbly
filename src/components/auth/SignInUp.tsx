@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/catalyst/button'
 import { TextField } from '@/components/default/Fields'
 import logo from '@/images/icon.png'
@@ -30,7 +30,6 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
   const [fadeOut, setFadeOut] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [email, setEmail] = useState('');
-  const emailInputRef = useRef<HTMLInputElement>(null);
   const [showInvalidEmail, setShowInvalidEmail] = useState(false);
 
   useEffect(() => {
@@ -52,9 +51,6 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
 
   const handleButtonClick = () => {
     setShowEmailInput(true)
-    // if (showEmailInput && emailInputRef && emailInputRef.current) {
-    //   emailInputRef.current.focus();
-    // }
     setTimeout(() => {
       setButtonType('submit')
     }, 0)
@@ -101,7 +97,6 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
               <form className="" action={signInWithOtp}>
                 {showEmailInput && (
                   <input
-                    ref={emailInputRef}
                     // type="email"
                     name="email"
                     id="email"
@@ -110,7 +105,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
                     onChange={handleInputChange}
                     // required={true}
                     autoComplete='off'
-                    autoFocus
+                    // autoFocus
                   />
                 )}
                 {showInvalidEmail && (
