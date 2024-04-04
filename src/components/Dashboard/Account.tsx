@@ -181,7 +181,7 @@ export function Account() {
                         name="name"
                         id="name"
                         onChange={(e) => setEditedName(e.target.value)}
-                        className="w-full rounded-lg h-2/3 text-sm p-0 sm:-ml-3 px-3 ring-inset ring-1 ring-gray-300 border-none shadow-sm focus:ring-2 focus:ring-blue-500/90"
+                        className="w-full rounded-lg h-2/3 text-base md:text-sm p-0 sm:-ml-3 px-3 ring-inset ring-1 ring-gray-300 border-none shadow-sm focus:ring-2 focus:ring-blue-500/90"
                       />
                       <div className="flex gap-x-2">
                         <button type="submit" onClick={handleSaveName} className="font-semibold text-gray-100 bg-blue-600 hover:bg-blue-500 h-2/3 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg">
