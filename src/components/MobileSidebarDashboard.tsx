@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   HomeIcon,
   Cog6ToothIcon,
@@ -20,6 +20,14 @@ const navigation = [
 export function MobileSidebarDashboard({ user }: { user: any }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const userEmail = user.email;
+
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.classList.add("overflow-y-hidden")
+    } else {
+      document.body.classList.remove("overflow-y-hidden")
+    }
+  }, [sidebarOpen]);
 
   return (
     <>
@@ -42,7 +50,7 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
           <div className="text-md font-semibold text-gray-700">Cribbly</div>
         </Link>
       </div>
-      <div className={`fixed inset-0 flex lg:hidden z-40 ${sidebarOpen ? 'fixed w-full h-full translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out bg-gray-50`}>
+      <div className={`fixed inset-0 flex lg:hidden z-40 ${sidebarOpen ? 'fixed w-full h-full translate-x-0 ' : '-translate-x-full'} transition-transform duration-300 ease-in-out bg-gray-50`}>
         <div className="flex grow flex-col overflow-y-auto px-4 mt-16">
           <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col divide-y divide-gray-200">

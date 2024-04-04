@@ -1,6 +1,5 @@
 'use client'
-import { Fragment, useState } from 'react'
-import { Dialog, Disclosure, Transition, Menu } from '@headlessui/react'
+import { Fragment, useState, useEffect } from 'react'
 import {
   CalendarIcon,
   ChartPieIcon,
@@ -9,7 +8,7 @@ import {
   UsersIcon,
 } from '@heroicons/react/24/outline'
 import Link from 'next/link';
-import { redirect, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { ProfileButton } from '@/components/ProfileButton'
 
 
@@ -20,6 +19,14 @@ function classNames(...classes: string[]) {
 export function MobileSidebar({ user }: { user: any }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname()
+
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.classList.add("overflow-y-hidden")
+    } else {
+      document.body.classList.remove("overflow-y-hidden")
+    }
+  }, [sidebarOpen]);
 
   const getDashboardURL = (href: string = '') => {
     const match = pathname.match(/\/dashboard\/properties\/([^/]+)/);
