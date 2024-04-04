@@ -77,7 +77,7 @@ export function PropertiesGrid() {
             autoComplete='off'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full sm:w-72 md:w-96 border-0 py-1.5 pl-10 ring-1 ring-inset ring-zinc-950/10 placeholder:text-gray-400 focus:ring-2 bg-gray-50" 
+            className="w-full sm:w-72 text-base md:text-sm md:w-96 border-0 py-1.5 pl-10 ring-1 ring-inset ring-zinc-950/10 placeholder:text-gray-400 focus:ring-2 bg-gray-50" 
           />
         </div>
         <div className="flex items-center justify-end w-full sm:w-auto">
