@@ -105,7 +105,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
                     onChange={handleInputChange}
                     // required={true}
                     autoComplete='off'
-                    // autoFocus
+                    autoFocus
                   />
                 )}
                 {showInvalidEmail && (
