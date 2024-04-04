@@ -42,8 +42,8 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
           <div className="text-md font-semibold text-gray-700">Cribbly</div>
         </Link>
       </div>
-      <div className={`fixed inset-0 flex lg:hidden z-40 ${sidebarOpen ? 'fixed w-full h-full translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out bg-gray-100`}>
-        <div className="flex grow flex-col overflow-y-auto bg-gray-100 px-4 mt-16">
+      <div className={`fixed inset-0 flex lg:hidden z-40 ${sidebarOpen ? 'fixed w-full h-full translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out bg-gray-50`}>
+        <div className="flex grow flex-col overflow-y-auto px-4 mt-16">
           <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col divide-y divide-gray-200">
               <li>
