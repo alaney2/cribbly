@@ -24,7 +24,7 @@ export default async function DashboardLayout({
           <aside className={`lg:sticky top-0 left-4 flex-col overflow-y-auto absolute hidden lg:block`}>
             <DesktopSidebar />
           </aside>
-          <main className="flex-1 bg-white h-full rounded-t-3xl shadow-md lg:block lg:mr-8">
+          <main className="flex-1 bg-white rounded-3xl shadow-md lg:block lg:mr-8">
             {children}
           </main>
         </div>

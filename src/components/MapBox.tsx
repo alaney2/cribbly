@@ -110,10 +110,11 @@ export function MapBox() {
             reuseMaps={true}
             attributionControl={false}
             style={{
-              borderTopLeftRadius: '1rem',
-              borderTopRightRadius: '1rem',
+              borderRadius: '1rem',
               lineHeight: 1,
               zIndex: 0,
+              height: 'calc(100vh - 8rem)',
+              width: '100%',
             }}
             onLoad={() => setIsMapLoaded(true)}
           >

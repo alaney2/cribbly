@@ -35,7 +35,7 @@ const bankFetcher = async () => {
 
 export function Account() {
   const { data: user_data, error, isLoading } = useSWR('user_data', fetcher);
-  const { data: bank_data, error: bankError, isLoading: bankIsLoading} = useSWR('bank_auth_data', bankFetcher)
+  // const { data: bank_data, error: bankError, isLoading: bankIsLoading} = useSWR('bank_auth_data', bankFetcher)
   const [linkToken, setLinkToken] = useState<string | null>(null);
   let [isBankDialogOpen, setIsBankDialogOpen] = useState(false)
   const searchParams = useSearchParams()
@@ -43,11 +43,13 @@ export function Account() {
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState(user_data?.full_name || '');
 
-  useEffect(() => {
-    console.log('bank_data', bank_data)
+  // useEffect(() => {
+  //   console.log('bank_data', bank_data)
 
-  }, [bankIsLoading, bank_data])
+  // }, [bankIsLoading, bank_data])
+
   useEffect(() => {
+    console.log(user_data)
     setEditedName(user_data?.full_name || '')
   }, [isLoading, user_data])
 
@@ -158,7 +160,7 @@ export function Account() {
   }, [linkToken, ready, open]);
 
   return (
-    <div className="p-6 md:p-8" style={{ height: 'calc(100vh - 48px)' }}>
+    <div className="p-6 md:p-8 content-container">
       {isLoading ? (
         <Spinner />
     ) : (

@@ -134,8 +134,8 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
           } else {
             toast.success('Property added', { duration: 5000 });
             setIsOpen(false);
-            setFadeOut(true);
-            router.push('dashboard')
+            // setFadeOut(true);
+            router.push('/dashboard')
           }
         }}
       >

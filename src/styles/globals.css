@@ -57,7 +57,7 @@ input[type=number] {
 }
 
 .content-container {
-  min-height: calc(100svh - theme('height.28'));
+  min-height: calc(100svh - theme('height.32'));
 }
 
 
