@@ -52,6 +52,7 @@ export function Account() {
   const [linkToken, setLinkToken] = useState<string | null>(null);
   let [isBankDialogOpen, setIsBankDialogOpen] = useState(false)
   let [isRemoveBankDialogOpen, setIsRemoveBankDialogOpen] = useState(false)
+  const [isBankDetailsLoading, setIsBankDetailsLoading] = useState(false);
 
   const searchParams = useSearchParams()
   const pathname = usePathname()
@@ -127,6 +128,7 @@ export function Account() {
 
 
   const onSuccess = async (publicToken: string) => {
+    setIsBankDetailsLoading(true);
     // Send the public_token to your server to exchange for an access_token
     const response = await fetch('/api/plaid/set_access_token', {
       method: 'POST',
@@ -139,15 +141,17 @@ export function Account() {
     if (!response.ok) {
       // Handle error
       console.error('Failed to exchange public token for access token');
+      setIsBankDetailsLoading(false);
       return;
     }
     const { error, success } = await response.json();
     localStorage.removeItem('link_token');
+    setIsBankDetailsLoading(false);
     if (error) {
       toast.error(error);
-      return;
+    } else {
+      toast.success(success);
     }
-    toast.success(success);
   };
 
   const config: PlaidLinkOptions = {
@@ -234,6 +238,13 @@ export function Account() {
             <p className="mt-1 text-sm leading-6 text-gray-500">Connect bank accounts to your account.</p>
 
             <ul role="list" className="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
+              {isBankDetailsLoading ? (
+                <div className="animate-pulse">
+                <div className="h-4 bg-gray-200 rounded-md max-w-72 min-w-48 mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded-md max-w-60 min-w-40"></div>
+              </div>
+              ): null}
+              
               {bank_data?.map((bank_account) => 
                 <li key={bank_account.account_id} className="flex justify-between gap-x-6 py-6">
                   <div className="font-medium text-gray-700">
@@ -249,6 +260,7 @@ export function Account() {
                   </button>
                 </li>
               )}
+              
             </ul> 
             <RemoveBankDialog isOpen={isRemoveBankDialogOpen} setIsOpen={setIsRemoveBankDialogOpen} bank_details={bankDetails} account_id={accountId} />
             <div className="flex border-t border-gray-100 pt-6">
