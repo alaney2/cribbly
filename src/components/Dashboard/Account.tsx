@@ -253,7 +253,7 @@ export function Account() {
             </div>
           </div>
         </div>
-        <Button type="button" color="blue" onClick={() => setIsBankDialogOpen(true)}>
+        {/* <Button type="button" color="blue" onClick={() => setIsBankDialogOpen(true)}>
           Open dialog
         </Button>
         <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/auth') }}>
@@ -261,7 +261,7 @@ export function Account() {
         </Button>
         <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/get_bank_name') }}>
           Bank name
-        </Button>
+        </Button> */}
         <Dialog open={isBankDialogOpen} onClose={setIsBankDialogOpen}>
           <div className="flex items-center gap-x-4 mb-4">
             <LockClosedIcon className="w-6 text-gray-500" />
@@ -290,27 +290,6 @@ export function Account() {
             </Button>
           </DialogActions>
         </Dialog>
-
-        {/* <Dialog open={isRemoveBankDialogOpen} onClose={setIsRemoveBankDialogOpen}>
-          <DialogTitle>Remove linked account?</DialogTitle>
-          <DialogDescription className="mb-4">
-            Cribbly will no longer use data from accounts you remove. If you remove a linked account that is also used as your payout account, it may cause your payouts to be paused.
-          </DialogDescription>
-          <DialogActions>
-            <Button plain onClick={() => setIsRemoveBankDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button 
-              color='red'
-              onClick={async () => {
-
-                setIsRemoveBankDialogOpen(false);
-              }}
-            >
-              Yes, remove account
-            </Button>
-          </DialogActions>
-        </Dialog> */}
       </main>
     )}
     </div>
