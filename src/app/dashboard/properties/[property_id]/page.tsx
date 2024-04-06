@@ -10,6 +10,12 @@ import {
 } from "@tabler/icons-react";
 
 export default function CurrentProperty({ params } : { params: { property_id: string } }) {
+  const stats = [
+    { name: 'Rent price', stat: '$3250' },
+    { name: 'Lease expires in', stat: '7 months' },
+    { name: 'Current tenants', stat: '2' },
+    { name: 'This month\'s rent', stat: 'Paid' },
+  ]
 
   const Skeleton = () => (
     <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl   dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)]  border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
@@ -17,39 +23,74 @@ export default function CurrentProperty({ params } : { params: { property_id: st
 
   const items = [
     {
-      title: "The Dawn of Innovation",
-      description: "Explore the birth of groundbreaking ideas and inventions.",
+      title: "Utility costs",
+      description: "Utility costs (e.g., water, electricity, gas) over time",
       header: <Skeleton />,
-      className: "md:col-span-2",
+      className: "md:col-span-1",
       icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
     },
     {
-      title: "The Digital Revolution",
-      description: "Dive into the transformative power of technology.",
+      title: "Maintenance Costs",
+      description: "Maintenance costs by category",
       header: <Skeleton />,
       className: "md:col-span-1",
       icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
     },
     {
-      title: "The Art of Design",
-      description: "Discover the beauty of thoughtful and functional design.",
+      title: "Occupancy rate",
+      description: "Occupancy rate",
       header: <Skeleton />,
       className: "md:col-span-1",
       icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
     },
     {
-      title: "The Power of Communication",
+      title: "Net income",
       description:
-        "Understand the impact of effective communication in our lives.",
+        "Rent paid minus maintenance and utility costs",
       header: <Skeleton />,
       className: "md:col-span-2",
       icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
     },
+    {
+      title: "Rent price",
+      description:
+        "How much rent has change",
+      header: <Skeleton />,
+      className: "md:col-span-1",
+      icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+    },
+    // {
+    //   title: "Net income 3",
+    //   description:
+    //     "Understand the impact of effective communication in our lives.",
+    //   header: <Skeleton />,
+    //   className: "md:col-span-1",
+    //   icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+    // },
+    // {
+    //   title: "Net income 4",
+    //   description:
+    //     "Understand the impact of effective communication in our lives.",
+    //   header: <Skeleton />,
+    //   className: "md:col-span-2",
+    //   icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+    // },
   ];
 
   return (
     <>
-      <div className="" >
+      <div className="mb-4">
+        {/* <h3 className="text-base font-semibold leading-6 text-gray-900">Last 30 days</h3> */}
+        <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
+          {stats.map((item) => (
+            <div key={item.name} className="overflow-hidden rounded-lg bg-white px-4 py-5 ring-inset ring-1 ring-gray-200 sm:p-6">
+              <dt className="truncate text-sm font-medium text-gray-500">{item.name}</dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-emerald-600">{item.stat}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
       <BentoGrid className="w-full mx-auto md:auto-rows-[20rem]">
         {items.map((item, i) => (
           <BentoGridItem
@@ -62,7 +103,6 @@ export default function CurrentProperty({ params } : { params: { property_id: st
           />
         ))}
       </BentoGrid>
-      </div>
     </>
   )
 }
