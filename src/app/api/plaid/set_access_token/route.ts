@@ -39,38 +39,67 @@ const client = new PlaidApi(configuration);
 export async function POST(request: Request) {
   const json = await request.json();
   const PUBLIC_TOKEN = json.publicToken;
-  // const { publicToken } = PUBLIC_TOKEN;
 
-  const exchangeTokenResponse = await client.itemPublicTokenExchange({
-    public_token: PUBLIC_TOKEN,
-  });
+  try {
+    const exchangeTokenResponse = await client.itemPublicTokenExchange({
+      public_token: PUBLIC_TOKEN,
+    });
+    // Store in supabase
+    ACCESS_TOKEN = exchangeTokenResponse.data.access_token;
+    ITEM_ID = exchangeTokenResponse.data.item_id;
 
-  // Store in supabase
-  ACCESS_TOKEN = exchangeTokenResponse.data.access_token;
-  ITEM_ID = exchangeTokenResponse.data.item_id;
+    const supabase = createClient()
 
-  const supabase = createClient()
+    const { data: {user} } = await supabase.auth.getUser()
 
-  const { data: {user} } = await supabase.auth.getUser()
-
-  if (!user) {
-    return Response.redirect(getURL('/sign-in'))
-  }
-
-  const { error } = await supabase.from('plaid_item_ids').insert([
-    {
-      item_id: ITEM_ID,
-      access_token: ACCESS_TOKEN,
-      user_id: user.id,
+    if (!user) {
+      return Response.redirect(getURL('/sign-in'))
     }
-  ])
-  if (error) {
+
+    const authResponse = await client.authGet({
+      access_token: ACCESS_TOKEN,
+    });
+
+    const { accounts, item, numbers: { ach } } = authResponse.data;
+
+    if (!item.available_products.includes(Products.Transfer)) {
+      return NextResponse.json({
+        error: 'This institution does not have transfer capabilities',
+      })
+    }
+
+    for (let i = 0; i < accounts.length; i++) {
+      const { account_id, name, mask, official_name, type, subtype } = accounts[i]
+      const { account, routing, wire_routing } = ach[i]
+
+      const { error } = await supabase.from('plaid_accounts').insert([
+        {
+          account_id,
+          user_id: user.id,
+          access_token: ACCESS_TOKEN,
+          item_id: ITEM_ID,
+          account_number: account,
+          routing_number: routing,
+          wire_routing: wire_routing,
+          mask: mask,
+          name: name,
+        }
+      ])
+
+      if (error) {
+        return NextResponse.json({
+          error: error,
+        })
+      }
+    }
+  
+    return NextResponse.json({
+      success: 'Bank linked successfully',
+    });
+
+  } catch (error) {
     return NextResponse.json({
       error: error,
-    })
+    });
   }
-
-  return NextResponse.json({ 
-    success: 'Bank account linked successfully',
-  });
 }

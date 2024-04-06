@@ -65,9 +65,8 @@ export async function GET(request: Request) {
       access_token: ACCESS_TOKEN,
     });
     console.log('AUTH RESPONSE:', authResponse.data)
-    console.log(authResponse.data.accounts[0].balances)
+    // console.log(authResponse.data.accounts[0].balances)
     return NextResponse.json(authResponse.data)
-
   }
 
   return NextResponse.next()

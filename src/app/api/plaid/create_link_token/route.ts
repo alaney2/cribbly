@@ -43,7 +43,6 @@ export async function POST(request: Request) {
     products: PLAID_PRODUCTS,
     country_codes: PLAID_COUNTRY_CODES,
     language: 'en',
-    // redirect_uri: 'http://localhost:3000/dashboard',
   };
 
   if (PLAID_REDIRECT_URI !== '') {

@@ -39,15 +39,6 @@ export function SlimLayout({ children, splineLink }: { children: React.ReactNode
     return () => window.removeEventListener('resize', checkSize);
   });
 
-  // useEffect(() => {
-  //   const checkHardwareAcceleration = () => {
-  //     if (typeof window === 'undefined') return
-  //     const logicalProcessors = navigator.hardwareConcurrency || 0;
-  //     isHardwareAccelerated.value = logicalProcessors >= 9999;
-  //   };
-  //   checkHardwareAcceleration();
-  // }, []);
-
   return (
     <>
       <div className="relative flex min-h-full justify-center md:px-12 lg:px-0 bg-gray-50">

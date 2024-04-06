@@ -1,16 +1,16 @@
 "use client"
 import { createClient } from '@/utils/supabase/client';
-import { redirect } from 'next/navigation';
 import { Button } from '@/components/catalyst/button';
 import { PlaidLinkError, PlaidLinkOnExitMetadata, PlaidLinkOptions, usePlaidLink } from 'react-plaid-link';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
-import { Field, Label } from '@/components/catalyst/fieldset'
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { useSearchParams, usePathname } from 'next/navigation'
 import useSWR from 'swr';
 import { Spinner } from '@/components/FuelSpinner'
+import { RemoveBankDialog } from '@/components/Dashboard/RemoveBankDialog'
+import { set } from 'lodash';
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -30,32 +30,41 @@ const fetcher = async () => {
 };
 
 const bankFetcher = async () => {
-  return fetch('/api/plaid/auth').then(response => response.json())
+  const supabase = createClient();
+  let { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    toast.error("User not found")
+  }
+  const { data, error } = await supabase.from('plaid_accounts')
+    .select()
+    .eq('user_id', user?.id)
+
+  if (error) {
+    throw error;
+  }
+  console.log(data)
+  return data
 }
 
 export function Account() {
   const { data: user_data, error, isLoading } = useSWR('user_data', fetcher);
-  // const { data: bank_data, error: bankError, isLoading: bankIsLoading} = useSWR('bank_auth_data', bankFetcher)
+  const { data: bank_data, error: bankError, isLoading: bankIsLoading} = useSWR('bank_accounts_data', bankFetcher)
   const [linkToken, setLinkToken] = useState<string | null>(null);
   let [isBankDialogOpen, setIsBankDialogOpen] = useState(false)
+  let [isRemoveBankDialogOpen, setIsRemoveBankDialogOpen] = useState(false)
+
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState(user_data?.full_name || '');
-
-  // useEffect(() => {
-  //   console.log('bank_data', bank_data)
-
-  // }, [bankIsLoading, bank_data])
+  const [bankDetails, setBankDetails] = useState('')
 
   useEffect(() => {
-    console.log(user_data)
     setEditedName(user_data?.full_name || '')
   }, [isLoading, user_data])
 
-  if (error) {
-    toast.error(error)
-  }
+  if (error) toast.error(error)
+  if (bankError) toast.error(bankError)
 
   const handleEditName = () => {
     setIsEditingName(true);
@@ -107,7 +116,6 @@ export function Account() {
       return;
     }
     const data = await response.json();
-    console.log('DATA RECEIVED Link Token:', data.link_token)
     localStorage.setItem('link_token', data.link_token)
     setLinkToken(data.link_token);
   };
@@ -161,7 +169,7 @@ export function Account() {
 
   return (
     <div className="p-6 md:p-8 content-container">
-      {isLoading ? (
+      {(isLoading || bankIsLoading) ? (
         <Spinner />
     ) : (
       <main className="px-4 py-4 sm:px-6 lg:flex-auto lg:px-4 lg:py-4">
@@ -220,13 +228,22 @@ export function Account() {
             <p className="mt-1 text-sm leading-6 text-gray-500">Connect bank accounts to your account.</p>
 
             <ul role="list" className="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
-              <li className="flex justify-between gap-x-6 py-6">
-                <div className="font-medium text-gray-900">Chase</div>
-                <button type="button" className="px-2 font-semibold text-blue-600 hover:text-blue-500">
-                  Update
-                </button>
-              </li>
-            </ul>
+              {bank_data?.map((bank_account) => 
+                <li key={bank_account.account_id} className="flex justify-between gap-x-6 py-6">
+                  <div className="font-medium text-gray-700">
+                    {bank_account.name} ••••{bank_account.mask}
+                  </div>
+                  <button type="button" className="px-2 font-semibold text-red-600 hover:text-red-500" 
+                  onClick={() => {
+                    setBankDetails(`${bank_account.name} ••••${bank_account.mask}`)
+                    setIsRemoveBankDialogOpen(true)}
+                  }>
+                    Remove account
+                  </button>
+                </li>
+              )}
+            </ul> 
+            <RemoveBankDialog isOpen={isRemoveBankDialogOpen} setIsOpen={setIsRemoveBankDialogOpen} bank_details={bankDetails} />
             <div className="flex border-t border-gray-100 pt-6">
               <Button type="button" plain className="text-blue-600 hover:text-blue-500"
                 onClick={() => setIsBankDialogOpen(true)}
@@ -236,45 +253,66 @@ export function Account() {
             </div>
           </div>
         </div>
+        <Button type="button" color="blue" onClick={() => setIsBankDialogOpen(true)}>
+          Open dialog
+        </Button>
+        <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/auth') }}>
+          Call Auth
+        </Button>
+        <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/get_bank_name') }}>
+          Bank name
+        </Button>
+        <Dialog open={isBankDialogOpen} onClose={setIsBankDialogOpen}>
+          <div className="flex items-center gap-x-4 mb-4">
+            <LockClosedIcon className="w-6 text-gray-500" />
+            <DialogTitle className="text-xl font-semibold">Link Bank Account</DialogTitle>
+          </div>
+          <DialogDescription className="mb-4">
+            In order to verify your bank account information, you will be redirected to our third-party partner, Plaid.
+          </DialogDescription>
+          <DialogDescription>
+            The transfer of your data is encrypted end-to-end and your credentials will never be made accessible to Cribbly.
+          </DialogDescription>
+          <DialogActions>
+            <Button plain onClick={() => setIsBankDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button 
+              color='blue'
+              onClick={async () => {
+                if (!linkToken) {
+                  await generateToken();
+                }
+                setIsBankDialogOpen(false);
+              }}
+            >
+              Continue
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* <Dialog open={isRemoveBankDialogOpen} onClose={setIsRemoveBankDialogOpen}>
+          <DialogTitle>Remove linked account?</DialogTitle>
+          <DialogDescription className="mb-4">
+            Cribbly will no longer use data from accounts you remove. If you remove a linked account that is also used as your payout account, it may cause your payouts to be paused.
+          </DialogDescription>
+          <DialogActions>
+            <Button plain onClick={() => setIsRemoveBankDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button 
+              color='red'
+              onClick={async () => {
+
+                setIsRemoveBankDialogOpen(false);
+              }}
+            >
+              Yes, remove account
+            </Button>
+          </DialogActions>
+        </Dialog> */}
       </main>
     )}
-      {/* <Button type="button" color="blue" onClick={() => setIsBankDialogOpen(true)}>
-        Open dialog
-      </Button>
-      <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/auth') }}>
-        Call Auth
-      </Button>
-      <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/get_bank_name') }}>
-        Bank name
-      </Button> */}
-      <Dialog open={isBankDialogOpen} onClose={setIsBankDialogOpen}>
-        <div className="flex items-center gap-x-4 mb-4">
-          <LockClosedIcon className="w-6 text-gray-500" />
-          <DialogTitle className="text-xl font-semibold">Link Bank Account</DialogTitle>
-        </div>
-        <DialogDescription className="mb-4">
-          In order to verify your bank account information, you will be redirected to our third-party partner, Plaid.
-        </DialogDescription>
-        <DialogDescription>
-          The transfer of your data is encrypted end-to-end and your credentials will never be made accessible to Cribbly.
-        </DialogDescription>
-        <DialogActions>
-          <Button plain onClick={() => setIsBankDialogOpen(false)}>
-            Cancel
-          </Button>
-          <Button 
-            color='blue'
-            onClick={async () => {
-              if (!linkToken) {
-                await generateToken();
-              }
-              setIsBankDialogOpen(false);
-            }}
-          >
-            Continue
-          </Button>
-        </DialogActions>
-      </Dialog>
     </div>
   );
 }
