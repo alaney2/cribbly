@@ -72,7 +72,8 @@ export function Account() {
     setEditedName(user_data?.full_name || '');
   };
 
-  const handleSaveName = async () => {
+  const handleSaveName = async (e: any) => {
+    e.preventDefault()
     const supabase = createClient();
     const {
       data: { user }

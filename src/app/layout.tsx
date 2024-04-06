@@ -64,9 +64,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         lexend.variable,
       )}
     >
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
 
       {/* <meta property="twitter:image" content="../images/icon.png"></meta>
       <meta property="twitter:card" content="../images/icon.png"></meta>
