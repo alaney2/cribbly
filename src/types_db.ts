@@ -183,21 +183,18 @@ export interface Database {
       }
       users: {
         Row: {
-          billing_address: Json | null
-          full_name: string | null
-          welcome_screen: boolean | null
-          id: string
-          email: string
+          full_name?: string | null
+          welcome_screen?: boolean | null
+          id?: string
+          email?: string
         }
         Insert: {
-          billing_address?: Json | null
           full_name?: string | null
           welcome_screen?: boolean | null
           id: string
           email?: string
         }
         Update: {
-          billing_address?: Json | null
           full_name?: string | null
           welcome_screen?: boolean | null
           id?: string

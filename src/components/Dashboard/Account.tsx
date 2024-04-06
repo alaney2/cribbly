@@ -7,10 +7,9 @@ import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } fro
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { useSearchParams, usePathname } from 'next/navigation'
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import { Spinner } from '@/components/FuelSpinner'
 import { RemoveBankDialog } from '@/components/Dashboard/RemoveBankDialog'
-import { set } from 'lodash';
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -47,6 +46,7 @@ const bankFetcher = async () => {
 }
 
 export function Account() {
+  const { mutate } = useSWRConfig()
   const { data: user_data, error, isLoading } = useSWR('user_data', fetcher);
   const { data: bank_data, error: bankError, isLoading: bankIsLoading} = useSWR('bank_accounts_data', bankFetcher)
   const [linkToken, setLinkToken] = useState<string | null>(null);
@@ -58,6 +58,7 @@ export function Account() {
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState(user_data?.full_name || '');
   const [bankDetails, setBankDetails] = useState('')
+  const [accountId, setAccountId] = useState('')
 
   useEffect(() => {
     setEditedName(user_data?.full_name || '')
@@ -83,12 +84,15 @@ export function Account() {
       return
     }
     const { error } = await supabase
-    .from('users')
-    .update({ full_name: editedName })
-    .eq('id', user.id);
+      .from('users')
+      .update({ full_name: editedName })
+      .eq('id', user.id);
+
+    mutate('user_data')
 
     if (error) {
       console.error(error);
+      toast.error(error.message)
     }
     setIsEditingName(false);
   };
@@ -130,6 +134,7 @@ export function Account() {
       },
       body: JSON.stringify({ publicToken }),
     });
+    mutate('bank_accounts_data')
     if (!response.ok) {
       // Handle error
       console.error('Failed to exchange public token for access token');
@@ -236,6 +241,7 @@ export function Account() {
                   <button type="button" className="px-2 font-semibold text-red-600 hover:text-red-500" 
                   onClick={() => {
                     setBankDetails(`${bank_account.name} ••••${bank_account.mask}`)
+                    setAccountId(bank_account.account_id)
                     setIsRemoveBankDialogOpen(true)}
                   }>
                     Remove account
@@ -243,7 +249,7 @@ export function Account() {
                 </li>
               )}
             </ul> 
-            <RemoveBankDialog isOpen={isRemoveBankDialogOpen} setIsOpen={setIsRemoveBankDialogOpen} bank_details={bankDetails} />
+            <RemoveBankDialog isOpen={isRemoveBankDialogOpen} setIsOpen={setIsRemoveBankDialogOpen} bank_details={bankDetails} account_id={accountId} />
             <div className="flex border-t border-gray-100 pt-6">
               <Button type="button" plain className="text-blue-600 hover:text-blue-500"
                 onClick={() => setIsBankDialogOpen(true)}
@@ -253,13 +259,7 @@ export function Account() {
             </div>
           </div>
         </div>
-        {/* <Button type="button" color="blue" onClick={() => setIsBankDialogOpen(true)}>
-          Open dialog
-        </Button>
-        <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/auth') }}>
-          Call Auth
-        </Button>
-        <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/get_bank_name') }}>
+        {/* <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/get_bank_name') }}>
           Bank name
         </Button> */}
         <Dialog open={isBankDialogOpen} onClose={setIsBankDialogOpen}>
