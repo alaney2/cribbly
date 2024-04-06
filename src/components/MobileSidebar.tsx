@@ -3,7 +3,7 @@ import { Fragment, useState, useEffect } from 'react'
 import {
   CalendarIcon,
   ChartPieIcon,
-  DocumentDuplicateIcon,
+  Cog6ToothIcon,
   HomeIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline'
@@ -40,10 +40,9 @@ export function MobileSidebar({ user }: { user: any }) {
 
   const navigation = [
     { name: 'Dashboard', href: getDashboardURL(), icon: HomeIcon },
-    { name: 'Team', href: '/', icon: UsersIcon },
-    { name: 'Calendar', href: '/', icon: CalendarIcon },
-    { name: 'Documents', href: '/', icon: DocumentDuplicateIcon },
-    { name: 'Reports', href: '', icon: ChartPieIcon },
+    { name: 'Tenants', href: '/', icon: UsersIcon },
+    { name: 'Settings', href: getDashboardURL('settings'), icon: Cog6ToothIcon },
+    { name: 'Analytics', href: '', icon: ChartPieIcon },
   ]
 
   return (
@@ -80,17 +79,13 @@ export function MobileSidebar({ user }: { user: any }) {
                     }}
                     href={item.href}
                     className={classNames(
-                      pathname === item.href
-                        ? 'text-blue-600'
-                        : 'text-gray-700 hover:text-blue-600',
+                      'text-gray-700 hover:text-blue-600',
                       'block w-full gap-x-3 rounded-md px-2 py-3 text-sm font-semibold'
                     )}
                   >
                     <item.icon
                       className={classNames(
-                        pathname === item.href
-                          ? 'text-blue-600'
-                          : 'text-gray-400 group-hover:text-blue-600',
+                        'text-gray-400 group-hover:text-blue-600',
                         'inline-block h-4 w-4 mr-3'
                       )}
                       aria-hidden="true"

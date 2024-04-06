@@ -2,15 +2,13 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition, Menu } from '@headlessui/react'
 import {
-  CalendarIcon,
   ChartPieIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
   HomeIcon,
   UsersIcon,
   Cog6ToothIcon,
   ArrowRightStartOnRectangleIcon,
   QuestionMarkCircleIcon,
+  Cog8ToothIcon,
 } from '@heroicons/react/24/outline'
 import {
   ChevronLeftIcon,
@@ -42,16 +40,15 @@ export function DesktopSidebar() {
     if (href !== '') {
       url += `/${href}`
     }
+    console.log(url)
     return url
   }
 
   const navigation = [
     { name: 'Dashboard', href: getDashboardURL(), icon: HomeIcon },
-    { name: 'Team', href: '/', icon: UsersIcon },
-    // { name: 'Properties', href: '/dashboard/properties', icon: FolderIcon },
-    { name: 'Calendar', href: '/', icon: CalendarIcon },
-    { name: 'Documents', href: '/', icon: DocumentDuplicateIcon },
-    { name: 'Reports', href: '', icon: ChartPieIcon },
+    { name: 'Tenants', href: getDashboardURL('tenants'), icon: UsersIcon },
+    { name: 'Settings', href: getDashboardURL('settings'), icon: Cog8ToothIcon },
+    { name: 'Analytics', href: getDashboardURL('analytics'), icon: ChartPieIcon },
   ]
 
   return (
@@ -61,15 +58,16 @@ export function DesktopSidebar() {
       animate={{ width: isSidebarCollapsed ? 50 : 150 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
-      <Link className="w-full mt-6 flex items-center gap-x-3 px-4 py-1.5 mb-4 text-md tracking-tight font-semibold text-gray-400 cursor-default hover:bg-gray-200 rounded-2xl" href="/dashboard">
+      <Link 
+        className={`mt-6 flex items-center gap-x-3 px-4 py-1.5 mb-4 text-md tracking-tight font-semibold text-gray-400 cursor-default hover:bg-gray-200 rounded-2xl ${isSidebarCollapsed ? 'w-28' : 'w-full'}`}  href="/dashboard">
         <Image src={icon} alt="logo" height={28} width={28} className="" />
         <AnimatePresence>
         {!isSidebarCollapsed && (
         <motion.span
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
         >
           Cribbly
         </motion.span>
@@ -83,7 +81,7 @@ export function DesktopSidebar() {
               {navigation.map((item) => (
                 <li key={item.name} className="">
                   <Link
-                    href={getDashboardURL()}
+                    href={item.href}
                     className={classNames(
                       pathname === item.href
                         ? 'text-blue-500'
@@ -115,51 +113,8 @@ export function DesktopSidebar() {
               ))}
             </ul>
           </li>
-          {/* <li>
-            <div className={`text-xs font-semibold leading-6 text-gray-400 whitespace-nowrap ${isSidebarCollapsed ? 'hidden' : ''}`}>
-              Your teams
-            </div>
-            <ul role="list" className="flex flex-1 flex-col -mx-2 mt-2 space-y-1">
-              {teams.map((team) => (
-                <li key={team.name}>
-                  <Link
-                    href={team.href}
-                    className={classNames(
-                      team.href === pathname
-                        ? ' text-blue-600'
-                        : 'text-gray-700 hover:text-blue-600 ',
-                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                    )}
-                  >
-                    <span
-                      className={classNames(
-                        team.href === pathname
-                          ? 'text-blue-600 border-blue-600'
-                          : 'text-gray-400 border-gray-200 group-hover:border-blue-600 group-hover:text-blue-600',
-                        'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
-                      )}
-                    >
-                      {team.initial}
-                    </span>
-                    <AnimatePresence>
-                      {!isSidebarCollapsed && (
-                        <motion.span
-                          initial={{ opacity: 1 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="truncate"
-                        >
-                          {team.name}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </li> */}
-          <li className="fixed bottom-10 left-7 text-sm font-semibold px-6 py-3 leading-6 text-gray-800">
+        
+          <li className="fixed bottom-12 left-7 text-sm font-semibold px-6 py-3 leading-6 text-gray-800">
             <Menu as="div" className="font-medium">
               <Menu.Button>
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 cursor-default hover:bg-gray-600">
