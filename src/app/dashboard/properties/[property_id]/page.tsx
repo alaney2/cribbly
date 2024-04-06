@@ -1,24 +1,67 @@
 "use client"
 import { deleteProperty } from '@/utils/supabase/actions'
 import { useRouter } from 'next/navigation'
+import { BentoGrid, BentoGridItem } from "@/components/aceternity/bento-grid";
+import {
+  IconClipboardCopy,
+  IconFileBroken,
+  IconSignature,
+  IconTableColumn,
+} from "@tabler/icons-react";
 
 export default function CurrentProperty({ params } : { params: { property_id: string } }) {
-  const router = useRouter()
 
-  const handleDeleteProperty = async () => {
-    await deleteProperty(params.property_id)
-    router.push('/dashboard')
-  }
+  const Skeleton = () => (
+    <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl   dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)]  border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
+  );
+
+  const items = [
+    {
+      title: "The Dawn of Innovation",
+      description: "Explore the birth of groundbreaking ideas and inventions.",
+      header: <Skeleton />,
+      className: "md:col-span-2",
+      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+    },
+    {
+      title: "The Digital Revolution",
+      description: "Dive into the transformative power of technology.",
+      header: <Skeleton />,
+      className: "md:col-span-1",
+      icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
+    },
+    {
+      title: "The Art of Design",
+      description: "Discover the beauty of thoughtful and functional design.",
+      header: <Skeleton />,
+      className: "md:col-span-1",
+      icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
+    },
+    {
+      title: "The Power of Communication",
+      description:
+        "Understand the impact of effective communication in our lives.",
+      header: <Skeleton />,
+      className: "md:col-span-2",
+      icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+    },
+  ];
 
   return (
     <>
-      <div className="p-6 md:p-8" >
-        <div className='mr-8'>
-          {params.property_id}
-        </div>
-        <button onClick={handleDeleteProperty}>
-          Delete property
-        </button>
+      <div className="" >
+      <BentoGrid className="w-full mx-auto md:auto-rows-[20rem]">
+        {items.map((item, i) => (
+          <BentoGridItem
+            key={i}
+            title={item.title}
+            description={item.description}
+            header={item.header}
+            className={item.className}
+            icon={item.icon}
+          />
+        ))}
+      </BentoGrid>
       </div>
     </>
   )

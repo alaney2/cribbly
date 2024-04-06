@@ -40,7 +40,6 @@ export function DesktopSidebar() {
     if (href !== '') {
       url += `/${href}`
     }
-    console.log(url)
     return url
   }
 
