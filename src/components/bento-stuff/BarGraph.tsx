@@ -70,7 +70,7 @@ export function BarGraph() {
         <YAxis />
         <Tooltip />
         <ReferenceLine y={0} stroke="#000" />
-        <Brush dataKey="name" height={30} stroke="#8884d8" />
+        <Brush dataKey="name" height={30} stroke="#3b82f6" />
         <Bar dataKey="Pos" fill="#34d399" />
         <Bar dataKey="Neg" fill="#fda4af" />
       </BarChart>
