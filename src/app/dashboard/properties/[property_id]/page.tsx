@@ -1,6 +1,5 @@
 "use client"
 import { deleteProperty } from '@/utils/supabase/actions'
-import { useRouter } from 'next/navigation'
 import { BentoGrid, BentoGridItem } from "@/components/aceternity/bento-grid";
 import {
   IconClipboardCopy,
@@ -8,6 +7,7 @@ import {
   IconSignature,
   IconTableColumn,
 } from "@tabler/icons-react";
+import { IncomeGraph } from '@/components/visx/IncomeGraph'
 
 export default function CurrentProperty({ params } : { params: { property_id: string } }) {
   const stats = [
@@ -20,6 +20,12 @@ export default function CurrentProperty({ params } : { params: { property_id: st
   const Skeleton = () => (
     <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl   dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)]  border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
   );
+
+  const incomeData = [
+    { date: '2022-01-01', income: 1000 },
+    { date: '2022-02-01', income: 1200 },
+    { date: '2022-03-01', income: 1100 },
+  ];
 
   const items = [
     {
@@ -47,7 +53,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
       title: "Net income",
       description:
         "Rent paid minus maintenance and utility costs",
-      header: <Skeleton />,
+      header: <IncomeGraph />,
       className: "md:col-span-2",
       icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
     },
