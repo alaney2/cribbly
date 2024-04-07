@@ -11,7 +11,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation'
 import { ProfileButton } from '@/components/ProfileButton'
 
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }

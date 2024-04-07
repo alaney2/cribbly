@@ -6,6 +6,7 @@ import {
   IconFileBroken,
   IconSignature,
   IconTableColumn,
+  IconPigMoney,
 } from "@tabler/icons-react";
 import { IncomeGraph } from '@/components/visx/IncomeGraph'
 
@@ -30,24 +31,24 @@ export default function CurrentProperty({ params } : { params: { property_id: st
   const items = [
     {
       title: "Utility costs",
-      description: "Utility costs (e.g., water, electricity, gas) over time",
+      description: "Utility costs (e.g., water, electricity, gas)",
       header: <Skeleton />,
       className: "md:col-span-1",
-      icon: <IconClipboardCopy className="h-4 w-4 text-neutral-500" />,
+      icon: <IconClipboardCopy className="h-4 w-4 text-blue-500" />,
     },
     {
       title: "Maintenance Costs",
       description: "Maintenance costs by category",
       header: <Skeleton />,
       className: "md:col-span-1",
-      icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
+      icon: <IconFileBroken className="h-4 w-4 text-blue-500" />,
     },
     {
       title: "Occupancy rate",
       description: "Occupancy rate",
       header: <Skeleton />,
       className: "md:col-span-1",
-      icon: <IconSignature className="h-4 w-4 text-neutral-500" />,
+      icon: <IconSignature className="h-4 w-4 text-blue-500" />,
     },
     {
       title: "Net income",
@@ -55,12 +56,15 @@ export default function CurrentProperty({ params } : { params: { property_id: st
         "Rent paid minus maintenance and utility costs",
       header: <IncomeGraph />,
       className: "md:col-span-2",
-      icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+      icon: 
+        <IconPigMoney className="h-4 w-4 text-blue-500" />
+
+      ,
     },
     {
       title: "Rent price",
       description:
-        "How much rent has change",
+        "How much rent has changed",
       header: <Skeleton />,
       className: "md:col-span-1",
       icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,

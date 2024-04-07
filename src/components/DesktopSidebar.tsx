@@ -19,19 +19,22 @@ import icon from '@/images/icon.png';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation'
+import { getInitials } from '@/utils/helpers'
 
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function DesktopSidebar() {
+export function DesktopSidebar({ user }: { user: any }) {
   const pathname = usePathname()
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
+
+  const userInitials = getInitials(user?.full_name)
 
   const getDashboardURL = (href: string = '') => {
     const match = pathname.match(/\/dashboard\/properties\/([^/]+)/);
@@ -52,13 +55,13 @@ export function DesktopSidebar() {
 
   return (
     <motion.div
-      className={`flex grow flex-col overflow-x-hidden mt-2 min-h-full overflow-y-auto`}
+      className={`flex grow flex-col overflow-x-hidden mt-4 min-h-full overflow-y-auto`}
       initial={{ width: 150 }}
       animate={{ width: isSidebarCollapsed ? 50 : 150 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
       <Link 
-        className={`mt-6 flex items-center gap-x-3 px-4 py-1.5 mb-4 text-md tracking-tight font-semibold text-gray-400 cursor-default hover:bg-gray-200 rounded-2xl ${isSidebarCollapsed ? 'w-28' : 'w-full'}`}  href="/dashboard">
+        className={`mt-6 flex items-center gap-x-3 px-4 py-1.5 mb-24 text-md tracking-tight font-semibold text-gray-400 cursor-default hover:bg-gray-200 rounded-2xl ${isSidebarCollapsed ? 'w-28' : 'w-full'}`}  href="/dashboard">
         <Image src={icon} alt="logo" height={28} width={28} className="" />
         <AnimatePresence>
         {!isSidebarCollapsed && (
@@ -117,7 +120,7 @@ export function DesktopSidebar() {
             <Menu as="div" className="font-medium">
               <Menu.Button>
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 cursor-default hover:bg-gray-600">
-                  <span className="text-sm font-medium leading-none text-white">TC</span>
+                  <span className="text-sm font-medium leading-none text-white">{userInitials}</span>
                 </span>
                 <span className="sr-only">Your profile</span>
               </Menu.Button>
@@ -157,7 +160,7 @@ export function DesktopSidebar() {
                   <Menu.Item>
                     {({ focus }) => (
                       <Link
-                        href="/"
+                        href="/dashboard/account"
                         className={classNames(
                           focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                           'block px-4 py-2 text-sm cursor-default'

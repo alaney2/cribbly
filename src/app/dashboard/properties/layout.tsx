@@ -16,13 +16,17 @@ export default async function DashboardLayout({
     redirect('/sign-in')
   }
 
+  let { data } = await supabase.from('users').select()
+    .eq('id', user.id)
+    .single()
+
   return (
     <>
       <div className='h-full flex flex-col'>
-        <MobileSidebar user={user} />
+        <MobileSidebar user={data} />
         <div className="mx-auto flex w-full h-full items-start gap-x-6 lg:gap-x-8 py-4 lg:px-8 px-4 sm:px-6 lg:mt-8">
           <aside className={`lg:sticky top-0 left-4 flex-col overflow-y-auto absolute hidden lg:block`}>
-            <DesktopSidebar />
+            <DesktopSidebar user={data} />
           </aside>
           <main className="flex-1 bg-white rounded-3xl shadow-md lg:block lg:mr-8">
             {children}

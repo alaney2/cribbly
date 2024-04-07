@@ -2,6 +2,13 @@ import type { Tables } from '@/types_db';
 
 type Price = Tables<'prices'>;
 
+export const getInitials = (name: string) => {
+  console.log(name)
+  const initials = name.match(/\b\w/g) || [];
+  console.log(initials)
+  return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+}
+
 export const getURL = (path: string = '') => {
   // Check if NEXT_PUBLIC_SITE_URL is set and non-empty. Set this to your site URL in production env.
   let url =

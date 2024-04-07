@@ -90,7 +90,7 @@ export function IncomeGraph() {
           ticks={ticks}
         />
         <Tooltip contentStyle={{
-                  fontSize: '12px',
+                  fontSize: '13px',
                   fontWeight: 500,
                   backgroundColor: 'rgba(250, 250, 250, 0.9)', // Light background with a bit of transparency
                   border: 'none', // No border

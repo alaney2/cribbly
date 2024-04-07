@@ -5,17 +5,20 @@ import {
   ArrowRightStartOnRectangleIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
+import { getInitials } from '@/utils/helpers';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 export function ProfileButton({ user }: { user: any }) {
+  const initials = getInitials(user?.full_name)
+
   return (
     <Menu as="div" className="font-medium">
       <Menu.Button>
         <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gray-500">
-          <span className="text-xs font-medium leading-none text-white">TC</span>
+          <span className="text-xs font-medium leading-none text-white">{initials}</span>
         </span>
         <span className="sr-only">Your profile</span>
       </Menu.Button>
@@ -36,7 +39,7 @@ export function ProfileButton({ user }: { user: any }) {
           <Menu.Item>
             {({ focus }) => (
               <a
-                href="#"
+                href="/dashboard/account"
                 className={classNames(
                   focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                   'block px-4 py-2 text-sm'
