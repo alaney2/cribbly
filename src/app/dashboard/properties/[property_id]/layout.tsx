@@ -13,7 +13,7 @@ export default async function PropertyLayout({ params, children } : { params: { 
 
   return (
     <>
-      <div className="p-6 md:p-8 content-container">
+      <div className="p-2 md:p-8 content-container">
       {children}
       </div>
     </>
