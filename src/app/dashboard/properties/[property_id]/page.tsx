@@ -11,6 +11,7 @@ import {
 import { IncomeGraph } from '@/components/bento-stuff/IncomeGraph'
 import { UtilityPie } from '@/components/bento-stuff/UtilityPie'
 import { MaintenanceTable } from '@/components/bento-stuff/MaintenanceTable'
+import { BarGraph } from '@/components/bento-stuff/BarGraph'
 import { Button } from '@/components/catalyst/button'
 
 export default function CurrentProperty({ params } : { params: { property_id: string } }) {
@@ -27,7 +28,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
 
   const items = [
     {
-      title: "Net income",
+      title: "Total income",
       description:
         "Rent - (maintenance + utility costs)",
       header: <IncomeGraph />,
@@ -35,10 +36,10 @@ export default function CurrentProperty({ params } : { params: { property_id: st
       icon: <IconPigMoney className="h-4 w-4 text-blue-500" />
     },
     {
-      title: "Rent price",
+      title: "Net income",
       description:
-        "How much rent has changed",
-      header: <div />,
+        "+/- per month",
+      header: <BarGraph />,
       className: "md:col-span-1",
       icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
     },

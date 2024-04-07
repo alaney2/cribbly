@@ -10,10 +10,10 @@ const data = [
   { name: "Other", value: 21 }
 ];
 const COLORS = [
-  "rgba(59, 130, 246, 0.7)",  // #3b82f6 at 50% transparency
-  "rgba(16, 185, 129, 0.7)",  // #10b981 at 50% transparency
-  "rgba(250, 204, 21, 0.7)",  // #facc15 at 50% transparency
-  "rgba(232, 121, 249, 0.7)"  // #e879f9 at 50% transparency
+  "rgba(59, 130, 246, 0.7)",  // #3b82f6
+  "rgba(16, 185, 129, 0.7)",  // #10b981
+  "rgba(250, 204, 21, 0.7)",  // #facc15
+  "rgba(232, 121, 249, 0.7)"  // #e879f9
 ];
 
 export function UtilityPie() {
