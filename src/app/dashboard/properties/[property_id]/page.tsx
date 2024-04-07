@@ -9,6 +9,7 @@ import {
   IconPigMoney,
 } from "@tabler/icons-react";
 import { IncomeGraph } from '@/components/visx/IncomeGraph'
+import { Button } from '@/components/catalyst/button'
 
 export default function CurrentProperty({ params } : { params: { property_id: string } }) {
   const stats = [
@@ -30,6 +31,22 @@ export default function CurrentProperty({ params } : { params: { property_id: st
 
   const items = [
     {
+      title: "Net income",
+      description:
+        "Rent paid minus maintenance and utility costs",
+      header: <IncomeGraph />,
+      className: "md:col-span-2",
+      icon: <IconPigMoney className="h-4 w-4 text-blue-500" />
+    },
+    {
+      title: "Rent price",
+      description:
+        "How much rent has changed",
+      header: <Skeleton />,
+      className: "md:col-span-1",
+      icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+    },
+    {
       title: "Utility costs",
       description: "Utility costs (e.g., water, electricity, gas)",
       header: <Skeleton />,
@@ -50,25 +67,8 @@ export default function CurrentProperty({ params } : { params: { property_id: st
       className: "md:col-span-1",
       icon: <IconSignature className="h-4 w-4 text-blue-500" />,
     },
-    {
-      title: "Net income",
-      description:
-        "Rent paid minus maintenance and utility costs",
-      header: <IncomeGraph />,
-      className: "md:col-span-2",
-      icon: 
-        <IconPigMoney className="h-4 w-4 text-blue-500" />
-
-      ,
-    },
-    {
-      title: "Rent price",
-      description:
-        "How much rent has changed",
-      header: <Skeleton />,
-      className: "md:col-span-1",
-      icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
-    },
+    
+    
     // {
     //   title: "Net income 3",
     //   description:
@@ -90,8 +90,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
   return (
     <>
       <div className="mb-4">
-        {/* <h3 className="text-base font-semibold leading-6 text-gray-900">Last 30 days</h3> */}
-        <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
+        <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {stats.map((item) => (
             <div key={item.name} className="overflow-hidden rounded-lg bg-white px-4 py-5 ring-inset ring-1 ring-gray-200 sm:p-6">
               <dt className="truncate text-sm font-medium text-gray-500">{item.name}</dt>
@@ -101,7 +100,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
         </dl>
       </div>
 
-      <BentoGrid className="w-full mx-auto md:auto-rows-[20rem]">
+      <BentoGrid className="w-full mx-auto md:auto-rows-[20rem] xl:auto-rows-[24rem]">
         {items.map((item, i) => (
           <BentoGridItem
             key={i}
@@ -113,6 +112,9 @@ export default function CurrentProperty({ params } : { params: { property_id: st
           />
         ))}
       </BentoGrid>
+      <div className="flex justify-center mt-8">
+        <Button color="blue" className="">Randomize data</Button>
+      </div>
     </>
   )
 }
