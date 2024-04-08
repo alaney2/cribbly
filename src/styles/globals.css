@@ -61,45 +61,6 @@ input[type=number] {
   min-height: calc(100svh - theme('height.24'));
 }
 
-
-/* body {
-  overscroll-behavior: none;
-} */
-
 button {
   cursor: default;
 }
-
-/*
-
-/* .mapboxgl-popup {
-  background-color: blue;
-  border-radius: 10px;
-  font-family: Inter, sans-serif;
-} */
-
-/* .mapboxgl-popup-close-button {
-  display: none;
-  color: gray;
-  padding: 8px;
-  font-size: 36px;
-  cursor: default;
-  border: none;
-} */
-
-/* .mapboxgl-popup-content !important {
-  border-radius: 16px;
-} */
-
-/* .mapboxgl-popup-content div {
-  padding: 0px 2px;
-} */
-
-/* .mapboxgl-popup-content p {
-  margin-bottom: 14px;
-} */
-
-/* .mapboxgl-popup-tip {
-  border-color: red;
-  color: blue;
-} */

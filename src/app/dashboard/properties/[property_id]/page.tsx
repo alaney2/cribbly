@@ -38,7 +38,8 @@ export default function CurrentProperty({ params } : { params: { property_id: st
         "Rent - (maintenance + utility costs)",
       header: <IncomeGraph />,
       className: "md:col-span-2",
-      icon: <IconPigMoney className="h-4 w-4 text-blue-500" />
+      icon: <IconPigMoney className="h-4 w-4 text-blue-500" />,
+      edit: false,
     },
     {
       title: "Net income",
@@ -47,6 +48,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
       header: <BarGraph />,
       className: "md:col-span-1",
       icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+      edit: false,
     },
     {
       title: "Utility costs",
@@ -54,6 +56,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
       header: <UtilityPie />,
       className: "md:col-span-1",
       icon: <IconClipboardCopy className="h-4 w-4 text-blue-500" />,
+      edit: true,
     },
     {
       title: "Maintenance Costs",
@@ -61,6 +64,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
       header: <MaintenanceTable />,
       className: "md:col-span-2",
       icon: <IconFileBroken className="h-4 w-4 text-blue-500" />,
+      edit: true,
     },
   ];
 
@@ -75,10 +79,10 @@ export default function CurrentProperty({ params } : { params: { property_id: st
               </dt>
               <dd className="mt-1 text-3xl font-semibold tracking-tight text-emerald-600 flex">
                 {item.stat}
-                {item.icon ? 
-                  <div className="ml-3 group-hover:opacity-100 p-2 rounded-lg block opacity-0 transition-opacity duration-200 ease-in-out">
-                    {item.icon && item.icon}
-                  </div> : null } 
+                {item.icon && 
+                  <div className="ml-3 group-hover:opacity-100 p-2 rounded-lg block opacity-20 transition-opacity duration-200 ease-in-out">
+                    {item.icon}
+                  </div>}
               </dd>
             </Link>
           ))}
@@ -94,6 +98,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
             header={item.header}
             className={item.className}
             icon={item.icon}
+            edit={item.edit}
           />
         ))}
       </BentoGrid>

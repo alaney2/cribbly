@@ -17,7 +17,7 @@ const data = [
     Net: 4000,
   },
   {
-    name: "March 2, 2023",
+    name: "Mar 2, 2023",
     Net: 3000,
   },
   {
@@ -68,6 +68,23 @@ const getAxisYDomain = (from: number, to: number, ref: string, offset: number) =
   return [(bottom | 0) - offset, (top | 0) + offset];
 };
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-gray-50/75 shadow-sm ring-inset ring-blue-400 ring-2 rounded-lg">
+        <div className="px-5 py-3">
+          <p className="text-sm mb-1.5 font-semibold">{label}</p>
+          <div className="border-t-2 border-gray-300 mb-1.5" />
+          <div className="flex items-center">
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mr-2" />
+            <p className="font-medium text-sm">{`$${payload[0].value}`}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
 
 export function IncomeGraph() {
   const cumulativeData = getCumulativeData(data);
@@ -80,18 +97,11 @@ export function IncomeGraph() {
   const [top, setTop] = useState('dataMax');
 
   const zoom = () => {
-    let leftValue = refAreaLeft;
-    let rightValue = refAreaRight;
-
     if (refAreaLeft === refAreaRight || refAreaLeft === null || refAreaRight === null) {
       setRefAreaLeft(null);
       setRefAreaRight(null);
       return;
     }
-
-    // if (leftValue > rightValue) {
-    //   [leftValue, rightValue] = [rightValue, leftValue];
-    // }
 
     const leftIndex = Math.min(refAreaLeft, refAreaRight);
     const rightIndex = Math.max(refAreaLeft, refAreaRight);
@@ -141,22 +151,16 @@ export function IncomeGraph() {
           zoomOut()
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid strokeDasharray="0 0" />
         <XAxis dataKey="name" tickFormatter={formatXAxis} tick={{ fontSize: 12, fontWeight: 600 }} domain={[left, right]} />
         <YAxis orientation="right" type="number" tick={{ fontSize: 12, fontWeight: 600 }}
           domain={[bottom, top]}
           // tickFormatter={(tick) => (tick !== 0 ? tick : '')}
           ticks={ticks}
         />
-        <Tooltip contentStyle={{
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  backgroundColor: 'rgba(250, 250, 250, 0.9)', // Light background with a bit of transparency
-                  border: 'none', // No border
-                  borderRadius: '10px', // Rounded corners
-                  boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)', // Slight shadow for depth
-                  padding: '10px' // Inner spacing
-        }} />
+        <Tooltip content={<CustomTooltip />}
+          cursor={{ stroke: '#3b82f6', strokeWidth: 1.5 }}
+        />
         <Area type="monotone" connectNulls dataKey="Net" stroke="#2563eb" fill="#3b82f6"
           dot={{ stroke: '#2563eb', strokeWidth: 2, fill: '#fff' }}
         />
@@ -164,7 +168,9 @@ export function IncomeGraph() {
           <ReferenceArea 
             x1={zoomedData[refAreaLeft].name}
             x2={zoomedData[refAreaRight].name}
-            strokeOpacity={0.3} stroke="#2563eb" fill="#93c5fd" 
+            strokeOpacity={0.3} 
+            stroke="#2563eb"
+            fill="#93c5fd"
           />
         )}
       </AreaChart>
