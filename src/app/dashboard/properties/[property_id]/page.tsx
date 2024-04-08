@@ -8,22 +8,27 @@ import {
   IconTableColumn,
   IconPigMoney,
 } from "@tabler/icons-react";
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { IncomeGraph } from '@/components/bento-stuff/IncomeGraph'
 import { UtilityPie } from '@/components/bento-stuff/UtilityPie'
 import { MaintenanceTable } from '@/components/bento-stuff/MaintenanceTable'
 import { BarGraph } from '@/components/bento-stuff/BarGraph'
 import { Button } from '@/components/catalyst/button'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link';
 
 export default function CurrentProperty({ params } : { params: { property_id: string } }) {
+  const pathname = usePathname()
+
   const stats = [
-    { name: 'Rent price', stat: '$3250' },
+    { name: 'Rent price', stat: '$3250', icon: <PencilSquareIcon className="h-5 w-5 text-gray-500" />, href: `${pathname}/settings` },
     { name: 'Lease expires in', stat: '7 months' },
     { name: 'Current tenants', stat: '2' },
     { name: 'This month\'s rent', stat: 'Paid' },
   ]
 
   const Skeleton = () => (
-    <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl   dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)]  border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
+    <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)]  border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
   );
 
   const items = [
@@ -61,13 +66,21 @@ export default function CurrentProperty({ params } : { params: { property_id: st
 
   return (
     <>
-      <div className="mb-4">
+      <div className="mb-4 cursor-default">
         <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {stats.map((item) => (
-            <div key={item.name} className="overflow-hidden rounded-lg bg-white px-4 py-5 ring-inset ring-1 ring-gray-200 sm:p-6">
-              <dt className="truncate text-sm font-medium text-gray-500">{item.name}</dt>
-              <dd className="mt-1 text-3xl font-semibold tracking-tight text-emerald-600">{item.stat}</dd>
-            </div>
+            <Link href={item.href || '#'} key={item.name} className="group cursor-default overflow-hidden rounded-lg bg-white px-4 py-5 ring-inset ring-1 ring-gray-200 sm:p-6">
+              <dt className="truncate text-sm font-medium text-gray-500">
+                {item.name}
+              </dt>
+              <dd className="mt-1 text-3xl font-semibold tracking-tight text-emerald-600 flex">
+                {item.stat}
+                {item.icon ? 
+                  <div className="ml-3 group-hover:opacity-100 p-2 rounded-lg block opacity-0 transition-opacity duration-200 ease-in-out">
+                    {item.icon && item.icon}
+                  </div> : null } 
+              </dd>
+            </Link>
           ))}
         </dl>
       </div>
