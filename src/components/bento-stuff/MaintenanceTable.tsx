@@ -1,12 +1,11 @@
 const maintenances = [
   { name: 'Paint wall', description: 'Lorem ipsum dolor sit amet consectetur adipisicing adipisicing adipisicing adipisicing.', date: '7/31/2002', cost: 100 },
-  { name: 'Paint wall', description: 'Lorem ipsum dolor', date: '07/31/2002', cost: 100 },
-  { name: 'Paint wall', description: 'Lorem ipsum dolor', date: '7/30/2002', cost: 100 },
-  { name: 'Paint wall', description: 'Lorem ipsum dolor', date: '06/31/2003', cost: 100 },
-  { name: 'Paint wall', description: 'Lorem ipsum dolor', date: '7/31/2004', cost: 100 },
-  { name: 'Paint wall', description: 'Lorem ipsum dolor', date: '7/28/2003', cost: 100 },
-  { name: 'Paint wall', description: 'Lorem ipsum dolor', date: '08/01/2003', cost: 100 },
-
+  { name: 'Lorem', description: 'Lorem ipsum dolor', date: '07/31/2002', cost: 100 },
+  { name: 'Ipsum', description: 'Lorem ipsum dolor', date: '7/30/2002', cost: 100 },
+  { name: 'Fix table', description: 'Lorem ipsum dolor', date: '06/31/2003', cost: 100 },
+  { name: 'Swimming pool', description: 'Lorem ipsum dolor', date: '7/31/2004', cost: 100 },
+  { name: 'Laundry', description: 'Lorem ipsum dolor', date: '7/28/2003', cost: 100 },
+  { name: 'Dryer', description: 'Lorem ipsum dolor', date: '08/01/2003', cost: 100 },
 ]
 
 export function MaintenanceTable() {

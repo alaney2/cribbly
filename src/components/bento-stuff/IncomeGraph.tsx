@@ -72,12 +72,12 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-gray-50/75 shadow-sm ring-inset ring-blue-400 ring-2 rounded-lg">
-        <div className="px-5 py-3">
-          <p className="text-sm mb-1.5 font-semibold">{label}</p>
+        <div className="px-1">
+          <p className="text-sm mb-1.5 font-semibold px-3 pt-3">{label}</p>
           <div className="border-t-2 border-gray-300 mb-1.5" />
           <div className="flex items-center">
             <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mr-2" />
-            <p className="font-medium text-sm">{`$${payload[0].value}`}</p>
+            <p className="font-medium text-sm px-3 pb-3">{`$${payload[0].value}`}</p>
           </div>
         </div>
       </div>
@@ -144,7 +144,7 @@ export function IncomeGraph() {
           left: 10,
           bottom: 0
         }}
-        onMouseDown={(e) => setRefAreaLeft(e.activeTooltipIndex || 0)}
+        onMouseDown={(e) => setRefAreaLeft(e?.activeTooltipIndex || 0)}
         onMouseMove={(e) => refAreaLeft !== null && setRefAreaRight(e.activeTooltipIndex || cumulativeData.length - 1)}
         onMouseUp={zoom}
         onClick={() => {
