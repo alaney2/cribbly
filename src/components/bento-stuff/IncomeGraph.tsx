@@ -71,7 +71,7 @@ const getAxisYDomain = (from: number, to: number, ref: string, offset: number) =
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-gray-50/75 shadow-sm ring-inset ring-blue-400 ring-2 rounded-lg">
+      <div className="bg-gray-50/75 shadow-sm ring-inset ring-indigo-500/80 ring-2 rounded-lg">
         <div className="px-1">
           <p className="text-sm mb-1.5 font-semibold px-3 pt-3">{label}</p>
           <div className="border-t-2 border-gray-300 mb-1.5" />
