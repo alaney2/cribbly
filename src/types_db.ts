@@ -188,6 +188,7 @@ export interface Database {
           welcome_screen: boolean | null
           id: string
           email: string
+          is_sidebar_collapsed: boolean | null
         }
         Insert: {
           billing_address?: Json | null
@@ -195,6 +196,7 @@ export interface Database {
           welcome_screen?: boolean | null
           id: string
           email?: string
+          is_sidebar_collapsed?: boolean | null
         }
         Update: {
           billing_address?: Json | null
@@ -202,6 +204,7 @@ export interface Database {
           welcome_screen?: boolean | null
           id?: string
           email?: string
+          is_sidebar_collapsed?: boolean | null
         }
         Relationships: [
           {

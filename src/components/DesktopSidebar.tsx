@@ -1,4 +1,5 @@
 'use client'
+import { createClient } from '@/utils/supabase/client';
 import { Fragment, useState } from 'react'
 import { Dialog, Transition, Menu } from '@headlessui/react'
 import {
@@ -26,19 +27,28 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import useLocalStorage from '@/utils/useLocalStorage'
+import { useRouter } from 'next/navigation'
 
+const setSidebarSettings = async (isCollapsed: boolean) => {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return
+  }
+  await supabase.from('users').update({
+    is_sidebar_collapsed: isCollapsed
+  }).eq('id', user.id)
+}
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 export function DesktopSidebar({ user }: { user: any }) {
+  const router = useRouter()
   const pathname = usePathname()
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
-  };
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(user.is_sidebar_collapsed)
 
   const userInitials = getInitials(user?.full_name)
 
@@ -62,51 +72,47 @@ export function DesktopSidebar({ user }: { user: any }) {
   return (
     <motion.div
       className={`flex grow flex-col overflow-x-hidden mt-4 min-h-full overflow-y-auto`}
-      initial={{ width: 150 }}
+      initial={{ width: isSidebarCollapsed ? 50 : 150 }}
       animate={{ width: isSidebarCollapsed ? 50 : 150 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
-      <Link
-        className={`mt-6 flex items-center gap-x-3 px-4 py-1.5 mb-24 text-md tracking-tight font-semibold text-gray-400 cursor-default rounded-2xl ${isSidebarCollapsed ? 'w-28' : 'w-full hover:bg-gray-200'}`}
-        href="/dashboard"
-      >
-        {isSidebarCollapsed ? (
-          <TooltipProvider delayDuration={50}>
-            <Tooltip>
-              <TooltipTrigger>
-                <Image src={icon} alt="logo" height={28} width={28} className="" />
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                <p>Home</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        ) : (
-          <>
-            <Image src={icon} alt="logo" height={28} width={28} className="" />
-            <AnimatePresence>
-              {!isSidebarCollapsed && (
-                <motion.span
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  Cribbly
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </>
-        )}
-      </Link>
-      <nav className="flex flex-1 flex-col">
+      {isSidebarCollapsed ? (
+        <div onClick={() => { router.push('/dashboard') }} className="mt-6">
+        <TooltipProvider delayDuration={50}>
+          <Tooltip>
+            <TooltipTrigger>
+              <Image src={icon} alt="logo" height={28} width={28} className=" mx-4" />
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>Home</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        </div>
+      ) : (
+        <div onClick={() => { router.push('/dashboard') }} className="mt-6 mb-1.5 flex items-center gap-x-3 text-md tracking-tight font-semibold text-gray-400 cursor-default rounded-2xl w-full ">
+          <Image src={icon} alt="logo" height={28} width={28} className="mx-4" />
+          <AnimatePresence>
+            {!isSidebarCollapsed && (
+              <motion.span
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                Cribbly
+              </motion.span>       
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+      <nav className="flex flex-1 flex-col mt-24">
         <ul role="list" className="gap-y-0">
           <li>
             <ul role="list" className="-mx-2 p-2 space-y-1">
               {navigation.map((item) => (
                 <li key={item.name} className="">
                   {isSidebarCollapsed ? (
-
                   <TooltipProvider delayDuration={50}>
                     <Tooltip>
                       <Link
@@ -170,7 +176,7 @@ export function DesktopSidebar({ user }: { user: any }) {
             </ul>
           </li>
         
-          <li className="fixed bottom-12 left-7 text-sm font-semibold px-6 py-3 leading-6 text-gray-800">
+          <li className="fixed bottom-12 left-6 text-sm font-semibold px-6 py-3 leading-6 text-gray-800 z-50">
             <Menu as="div" className="font-medium">
               <Menu.Button>
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 cursor-default hover:bg-gray-600">
@@ -187,11 +193,14 @@ export function DesktopSidebar({ user }: { user: any }) {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="ml-4 w-40 origin-bottom-left absolute bottom-full left-0 z-10 mt-2 divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="ml-4 w-36 origin-bottom-left absolute bottom-full left-0 z-10 mt-2 divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <Menu.Item>
                     {({ focus }) => (
                       <button
-                        onClick={toggleSidebar}
+                        onClick={async() => {
+                          await setSidebarSettings(!isSidebarCollapsed)
+                          setIsSidebarCollapsed(!isSidebarCollapsed)
+                        }}
                         className={classNames(
                           focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                           'block w-full px-4 py-2 text-left text-sm cursor-default'
