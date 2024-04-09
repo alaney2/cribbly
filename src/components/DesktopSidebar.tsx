@@ -66,21 +66,38 @@ export function DesktopSidebar({ user }: { user: any }) {
       animate={{ width: isSidebarCollapsed ? 50 : 150 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
-      <Link 
-        className={`mt-6 flex items-center gap-x-3 px-4 py-1.5 mb-24 text-md tracking-tight font-semibold text-gray-400 cursor-default rounded-2xl ${isSidebarCollapsed ? 'w-28' : 'w-full hover:bg-gray-200'}`}  href="/dashboard">
-        <Image src={icon} alt="logo" height={28} width={28} className="" />
-        <AnimatePresence>
-        {!isSidebarCollapsed && (
-        <motion.span
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          Cribbly
-        </motion.span>
+      <Link
+        className={`mt-6 flex items-center gap-x-3 px-4 py-1.5 mb-24 text-md tracking-tight font-semibold text-gray-400 cursor-default rounded-2xl ${isSidebarCollapsed ? 'w-28' : 'w-full hover:bg-gray-200'}`}
+        href="/dashboard"
+      >
+        {isSidebarCollapsed ? (
+          <TooltipProvider delayDuration={50}>
+            <Tooltip>
+              <TooltipTrigger>
+                <Image src={icon} alt="logo" height={28} width={28} className="" />
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>Home</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          <>
+            <Image src={icon} alt="logo" height={28} width={28} className="" />
+            <AnimatePresence>
+              {!isSidebarCollapsed && (
+                <motion.span
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  Cribbly
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </>
         )}
-        </AnimatePresence>
       </Link>
       <nav className="flex flex-1 flex-col">
         <ul role="list" className="gap-y-0">
