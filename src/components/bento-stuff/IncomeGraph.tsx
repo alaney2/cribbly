@@ -145,7 +145,7 @@ export function IncomeGraph() {
           bottom: 0
         }}
         onMouseDown={(e) => setRefAreaLeft(e?.activeTooltipIndex || 0)}
-        onMouseMove={(e) => refAreaLeft !== null && setRefAreaRight(e.activeTooltipIndex || cumulativeData.length - 1)}
+        onMouseMove={(e) => refAreaLeft !== null && setRefAreaRight(e?.activeTooltipIndex || cumulativeData.length - 1)}
         onMouseUp={zoom}
         onClick={() => {
           zoomOut()
