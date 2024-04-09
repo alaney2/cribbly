@@ -20,6 +20,12 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation'
 import { getInitials } from '@/utils/helpers'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 
 function classNames(...classes: string[]) {
@@ -82,35 +88,66 @@ export function DesktopSidebar({ user }: { user: any }) {
             <ul role="list" className="-mx-2 p-2 space-y-1">
               {navigation.map((item) => (
                 <li key={item.name} className="">
-                  <Link
-                    href={item.href}
-                    className={classNames(
-                      pathname === item.href
-                        ? 'text-blue-500'
-                        : 'text-gray-500 hover:text-blue-500',
-                      'group flex gap-x-3 rounded-md py-2 px-4 text-sm leading-6 font-semibold cursor-default'
-                    )}
-                  >
-                    <item.icon
+                  {isSidebarCollapsed ? (
+
+                  <TooltipProvider delayDuration={50}>
+                    <Tooltip>
+                      <Link
+                        href={item.href}
+                        className={classNames(
+                          pathname === item.href
+                            ? 'text-blue-500'
+                            : 'text-gray-500 hover:text-blue-500',
+                          'group flex gap-x-3 rounded-md py-2 px-4 text-sm leading-6 font-semibold cursor-default'
+                        )}
+                      >
+                        <TooltipTrigger>
+                        <item.icon
+                          className={classNames(
+                            pathname === item.href ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-500',
+                            'h-6 w-6 shrink-0'
+                          )}
+                          aria-hidden="true"
+                        />
+                        </TooltipTrigger>
+                        <TooltipContent side="right">
+                          <p>{item.name}</p>
+                        </TooltipContent>
+                        <AnimatePresence>
+                          {!isSidebarCollapsed && (
+                            <motion.span
+                              initial={{ opacity: 1 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              {item.name}
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+                      </Link>
+                    </Tooltip>
+                  </TooltipProvider>
+                  ) : (
+                    <Link
+                      href={item.href}
                       className={classNames(
-                        pathname === item.href ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-500',
-                        'h-6 w-6 shrink-0'
+                        pathname === item.href
+                          ? 'text-blue-500'
+                          : 'text-gray-500 hover:text-blue-500',
+                        'group flex gap-x-3 rounded-md py-2 px-4 text-sm leading-6 font-semibold cursor-default'
                       )}
-                      aria-hidden="true"
-                    />
-                    <AnimatePresence>
-                      {!isSidebarCollapsed && (
-                        <motion.span
-                          initial={{ opacity: 1 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          {item.name}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </Link>
+                    >
+                      <item.icon
+                        className={classNames(
+                          pathname === item.href ? 'text-blue-500' : 'text-gray-400 group-hover:text-blue-500',
+                          'h-6 w-6 shrink-0'
+                        )}
+                        aria-hidden="true"
+                      />
+                      <span>{item.name}</span>
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

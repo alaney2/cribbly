@@ -59,7 +59,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html
       lang="en"
       className={clsx(
-        'h-full scroll-smooth bg-gray-50 antialiased',
+        'h-full scroll-smooth bg-gray-50',
         inter.variable,
         lexend.variable,
       )}
@@ -90,7 +90,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         `}
       </Script>
 
-      <body className="h-full bg-gray-50">
+      <body className="h-full bg-gray-50 subpixel-antialiased">
         <Toaster position="top-center" />
         {children}
         <Analytics />
