@@ -34,6 +34,7 @@
     "@heroicons/react": "^2.0.18",
     "@mapbox/mapbox-gl-geocoder": "^5.0.2",
     "@preact/signals": "^1.2.2",
+    "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@splinetool/react-spline": "^2.2.6",
     "@splinetool/runtime": "^1.0.67",

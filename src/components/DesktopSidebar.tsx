@@ -67,7 +67,7 @@ export function DesktopSidebar({ user }: { user: any }) {
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
       <Link 
-        className={`mt-6 flex items-center gap-x-3 px-4 py-1.5 mb-24 text-md tracking-tight font-semibold text-gray-400 cursor-default hover:bg-gray-200 rounded-2xl ${isSidebarCollapsed ? 'w-28' : 'w-full'}`}  href="/dashboard">
+        className={`mt-6 flex items-center gap-x-3 px-4 py-1.5 mb-24 text-md tracking-tight font-semibold text-gray-400 cursor-default rounded-2xl ${isSidebarCollapsed ? 'w-28' : 'w-full hover:bg-gray-200'}`}  href="/dashboard">
         <Image src={icon} alt="logo" height={28} width={28} className="" />
         <AnimatePresence>
         {!isSidebarCollapsed && (

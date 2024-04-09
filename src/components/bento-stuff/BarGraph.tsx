@@ -31,10 +31,10 @@ export function BarGraph() {
       <BarChart
         data={data}
         margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
+          top: 0,
+          right: 85,
+          left: 40,
+          bottom: 0,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
@@ -42,7 +42,9 @@ export function BarGraph() {
         <YAxis />
         <Tooltip />
         <ReferenceLine y={0} stroke="#000" />
-        <Brush dataKey="name" height={30} stroke="#3b82f6" />
+        <Brush dataKey="name" height={24} stroke="#3b82f6"
+          travellerWidth={10} 
+          />
         <Bar dataKey="Pos" fill="#34d399" />
         <Bar dataKey="Neg" fill="#fda4af" />
       </BarChart>

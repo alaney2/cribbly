@@ -2,6 +2,28 @@ import { PieChart, Pie, Sector, Cell,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+function SelectTime() {
+  return (
+    <Select defaultValue="month">
+      <SelectTrigger className="w-36">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="month">This month</SelectItem>
+        <SelectItem value="year">This year</SelectItem>
+        <SelectItem value="all">All time</SelectItem>
+      </SelectContent>
+    </Select>
+  );
+}
 
 const data = [
   { name: "Water", value: 52 },
@@ -18,6 +40,11 @@ const COLORS = [
 
 export function UtilityPie() {
   return (
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+
+    <div style={{ position: "absolute", top: 0, left: 0, zIndex: 1 }}>
+        <SelectTime />
+      </div>
     <ResponsiveContainer width='100%' height="100%">
     <PieChart>
       <Pie
@@ -47,5 +74,6 @@ export function UtilityPie() {
       }} />
     </PieChart>
     </ResponsiveContainer>
+    </div>
   );
 }
