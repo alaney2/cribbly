@@ -81,7 +81,7 @@ export function DesktopSidebar({ user }: { user: any }) {
         <TooltipProvider delayDuration={50}>
           <Tooltip>
             <TooltipTrigger>
-              <Image src={icon} alt="logo" height={28} width={28} className=" mx-4" />
+              <Image src={icon} alt="logo" height={28} width={28} className="mx-4" />
             </TooltipTrigger>
             <TooltipContent side="right">
               <p>Home</p>
@@ -90,8 +90,8 @@ export function DesktopSidebar({ user }: { user: any }) {
         </TooltipProvider>
         </div>
       ) : (
-        <div onClick={() => { router.push('/dashboard') }} className="mt-6 mb-1.5 flex items-center gap-x-3 text-md tracking-tight font-semibold text-gray-400 cursor-default rounded-2xl w-full ">
-          <Image src={icon} alt="logo" height={28} width={28} className="mx-4" />
+        <div onClick={() => { router.push('/dashboard') }} className="group mt-6 mb-1.5 flex items-center gap-x-3 text-md tracking-tight font-semibold text-gray-400 cursor-default rounded-2xl w-full ">
+          <Image src={icon} alt="logo" height={28} width={28} className="ml-4" />
           <AnimatePresence>
             {!isSidebarCollapsed && (
               <motion.span
@@ -99,6 +99,7 @@ export function DesktopSidebar({ user }: { user: any }) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
+                className="group-hover:text-blue-500"
               >
                 Cribbly
               </motion.span>       
