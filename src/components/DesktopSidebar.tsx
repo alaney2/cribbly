@@ -10,11 +10,17 @@ import {
   ArrowRightStartOnRectangleIcon,
   QuestionMarkCircleIcon,
   Cog8ToothIcon,
+  WrenchIcon,
+  BoltIcon,
 } from '@heroicons/react/24/outline'
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from '@heroicons/react/16/solid'
+import {
+  IconWavesElectricity,
+  IconSignature,
+} from "@tabler/icons-react";
 import Link from 'next/link';
 import icon from '@/images/icon.png';
 import Image from 'next/image';
@@ -65,8 +71,11 @@ export function DesktopSidebar({ user }: { user: any }) {
   const navigation = [
     { name: 'Dashboard', href: getDashboardURL(), icon: HomeIcon },
     { name: 'Tenants', href: getDashboardURL('tenants'), icon: UsersIcon },
+    // { name: 'Analytics', href: getDashboardURL('analytics'), icon: ChartPieIcon },
+    { name: 'Maintenance', href: getDashboardURL('maintenance'), icon: WrenchIcon },
+    { name: 'Utilities', href: getDashboardURL('utilities'), icon: IconWavesElectricity },
+    { name: 'Documents', href: getDashboardURL('documents'), icon: IconSignature },
     { name: 'Settings', href: getDashboardURL('settings'), icon: Cog8ToothIcon },
-    { name: 'Analytics', href: getDashboardURL('analytics'), icon: ChartPieIcon },
   ]
 
   return (
@@ -199,8 +208,8 @@ export function DesktopSidebar({ user }: { user: any }) {
                     {({ focus }) => (
                       <button
                         onClick={async() => {
-                          await setSidebarSettings(!isSidebarCollapsed)
                           setIsSidebarCollapsed(!isSidebarCollapsed)
+                          await setSidebarSettings(!isSidebarCollapsed)
                         }}
                         className={classNames(
                           focus ? 'bg-gray-100 text-gray-900' : 'text-gray-700',

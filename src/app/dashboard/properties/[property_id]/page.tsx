@@ -4,7 +4,7 @@ import { BentoGrid, BentoGridItem } from "@/components/aceternity/bento-grid";
 import {
   IconClipboardCopy,
   IconFileBroken,
-  IconSignature,
+  IconWavesElectricity,
   IconTableColumn,
   IconPigMoney,
 } from "@tabler/icons-react";

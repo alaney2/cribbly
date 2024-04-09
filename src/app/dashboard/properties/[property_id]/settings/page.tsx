@@ -1,8 +1,8 @@
-"use client"
+// "use client"
 import { deleteProperty } from '@/utils/supabase/actions'
 import { useRouter } from 'next/navigation'
 
-export default function CurrentProperty({ params } : { params: { property_id: string } }) {
+export default function CurrentPropertySettings({ params } : { params: { property_id: string } }) {
   const router = useRouter()
 
   const handleDeleteProperty = async () => {
