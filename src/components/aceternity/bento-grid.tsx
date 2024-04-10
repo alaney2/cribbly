@@ -1,5 +1,6 @@
 import { cn } from "@/utils/cn";
 import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation'
 
 export const BentoGrid = ({
   className,
@@ -27,6 +28,7 @@ export const BentoGridItem = ({
   header,
   icon,
   edit=false,
+  href,
 }: {
   className?: string;
   title?: string | React.ReactNode;
@@ -34,13 +36,17 @@ export const BentoGridItem = ({
   header?: React.ReactNode;
   icon?: React.ReactNode;
   edit?: boolean;
+  href?: string;
 }) => {
+  const router = useRouter()
+  
   return (
     <div
       className={cn(
         "row-span-1 rounded-xl group group/bento hover:shadow-xl transition duration-200 dark:shadow-none p-4 dark:bg-black dark:border-white/[0.2] bg-white ring-inset ring-1 ring-gray-200 hover:ring-0 justify-between flex flex-col space-y-4 overflow-y-auto select-none",
         className
       )}
+      onClick={() => { href && router.push(href) }}
     >
       <div className="h-full overflow-hidden">
         {header}

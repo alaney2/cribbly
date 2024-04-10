@@ -1,0 +1,36 @@
+import { pgTable } from "@/db/utils"
+import { sql } from "drizzle-orm"
+import { pgEnum, timestamp, varchar } from "drizzle-orm/pg-core"
+
+import { databasePrefix } from "@/lib/constants"
+import { generateId } from "@/lib/utils"
+
+export const statusEnum = pgEnum(`${databasePrefix}_status`, [
+  "todo",
+  "in-progress",
+  "done",
+  "canceled",
+])
+
+export const priorityEnum = pgEnum(`${databasePrefix}_priority`, [
+  "low",
+  "medium",
+  "high",
+])
+
+export const tasks = pgTable("tasks", {
+  id: varchar("id", { length: 30 })
+    .$defaultFn(() => generateId())
+    .primaryKey(),
+  user_id: varchar("user_id").notNull(),
+  code: varchar("code", { length: 256 }),
+  title: varchar("title", { length: 256 }).notNull(),
+  description: varchar("description"),
+  status: statusEnum("status").notNull().default("todo"),
+  priority: priorityEnum("priority").notNull().default("low"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").default(sql`current_timestamp`),
+})
+
+export type Task = typeof tasks.$inferSelect
+export type NewTask = typeof tasks.$inferInsert

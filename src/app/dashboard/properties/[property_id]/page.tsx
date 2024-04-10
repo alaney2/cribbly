@@ -65,6 +65,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
       className: "md:col-span-2",
       icon: <IconFileBroken className="h-4 w-4 text-blue-500" />,
       edit: true,
+      href: `${pathname}/maintenance`,
     },
   ];
 
@@ -99,6 +100,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
             className={item.className}
             icon={item.icon}
             edit={item.edit}
+            href={item.href}
           />
         ))}
       </BentoGrid>

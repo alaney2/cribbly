@@ -8,15 +8,16 @@ const maintenances = [
   { name: 'Dryer', description: 'Lorem ipsum dolor', date: '08/01/2003', cost: 100 },
 ]
 
+const sortedMaintenances = maintenances.sort((a, b) => {
+  const dateA = new Date(a.date).getTime();
+  const dateB = new Date(b.date).getTime();
+  return dateB - dateA;
+});
+
+const recentMaintenances = sortedMaintenances.slice(0, 3);
+
 export function MaintenanceTable() {
-  const sortedMaintenances = maintenances.sort((a, b) => {
-    const dateA = new Date(a.date).getTime();
-    const dateB = new Date(b.date).getTime();
-    return dateB - dateA;
-  });
-
-  const recentMaintenances = sortedMaintenances.slice(0, 3);
-
+  
   return (
     <div>
       <div className="mt-0 flow-root overflow-hidden">
@@ -25,7 +26,7 @@ export function MaintenanceTable() {
             <thead className="bg-white">
               <tr>
                 <th scope="col" className="relative isolate py-3.5 pr-3 text-left text-sm font-semibold text-gray-900">
-                  Name
+                  Task
                   <div className="absolute inset-y-0 right-full -z-10 w-screen border-b border-b-gray-200" />
                   <div className="absolute inset-y-0 left-0 -z-10 w-screen border-b border-b-gray-200" />
                 </th>
@@ -33,7 +34,7 @@ export function MaintenanceTable() {
                   scope="col"
                   className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
                 >
-                  Description
+                  Details
                 </th>
                 <th
                   scope="col"

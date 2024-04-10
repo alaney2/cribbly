@@ -3,7 +3,7 @@ import type { Tables } from '@/types_db';
 type Price = Tables<'prices'>;
 
 export const getInitials = (name: string) => {
-  const initials = name.match(/\b\w/g) || [];
+  const initials = name?.match(/\b\w/g) || [];
   return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
 }
 
