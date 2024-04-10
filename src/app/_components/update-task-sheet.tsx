@@ -59,6 +59,7 @@ export function UpdateTaskSheet({
       description: task.description ?? "",
       status: task.status,
       priority: task.priority,
+      cost: Number(task.cost) ?? 0.0,
     },
   })
 
@@ -194,6 +195,24 @@ export function UpdateTaskSheet({
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="cost"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cost</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="0.00"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

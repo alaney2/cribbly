@@ -35,6 +35,7 @@ export async function createTask(
       description: input.description,
       status: input.status,
       priority: input.priority,
+      cost: input.cost,
     })
 
     revalidatePath("/")
@@ -62,17 +63,10 @@ export async function updateTask(input: UpdateTaskSchema & { id: string }) {
       description: input.description,
       status: input.status,
       priority: input.priority,
+      cost: input.cost,
     }).eq('id', input.id)
       .eq('user_id', user.id)
-    // await db
-    //   .update(tasks)
-    //   .set({
-    //     title: input.title,
-    //     description: input.description,
-    //     status: input.status,
-    //     priority: input.priority,
-    //   })
-    //   .where(eq(tasks.id, input.id))
+
     revalidatePath("/")
 
     return {

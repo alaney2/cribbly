@@ -59,6 +59,7 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
     let anotherTaskId =
       prevTasks[Math.floor(Math.random() * prevTasks.length)]?.id
     if (!anotherTaskId) anotherTaskId = 'TASK-0000'
+  
     startCreateTransition(() => {
       toast.promise(
         createTask({
@@ -109,7 +110,7 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
                   <FormLabel>Task</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Remove weeds from the garden"
+                      placeholder="Do a kickflip"
                       className="resize-none"
                       {...field}
                     />
@@ -126,7 +127,7 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
                   <FormLabel>Details</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Hire gardener"
+                      placeholder="Do a kickflip on the halfpipe at the skatepark"
                       className="resize-none"
                       {...field}
                     />
@@ -135,39 +136,6 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
                 </FormItem>
               )}
             />
-            {/* <FormField
-              control={form.control}
-              name="label"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Label</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="capitalize">
-                        <SelectValue placeholder="Select a label" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectGroup>
-                        {tasks.label.enumValues.map((item) => (
-                          <SelectItem
-                            key={item}
-                            value={item}
-                            className="capitalize"
-                          >
-                            {item}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             <FormField
               control={form.control}
               name="status"
@@ -234,23 +202,29 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
                 </FormItem>
               )}
             />
-            {/* <FormField
+            <FormField
               control={form.control}
-              name="title"
+              name="cost"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Cost</FormLabel>
                   <FormControl>
+                    <div className="relative">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                      <span className="text-gray-500 sm:text-sm">$</span>
+                    </div>
                     <Input
-                      placeholder="$100"
-                      className="resize-none"
+                      type="number"
+                      placeholder="0.00"
+                      className="py-1.5 pl-7 pr-12 resize-none"
                       {...field}
                     />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            /> */}
+            />
             <DialogFooter className="gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
                 <Button type="button" variant="outline">

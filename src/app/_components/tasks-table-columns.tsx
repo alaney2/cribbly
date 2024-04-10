@@ -205,6 +205,12 @@ export function getColumns(): ColumnDef<Task>[] {
       },
     },
     {
+      accessorKey: "cost",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Cost" />
+      ),
+    },
+    {
       accessorKey: "createdAt",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Created At" />
@@ -215,10 +221,8 @@ export function getColumns(): ColumnDef<Task>[] {
       id: "actions",
       cell: function Cell({ row }) {
         const [isUpdatePending, startUpdateTransition] = React.useTransition()
-        const [showUpdateTaskSheet, setShowUpdateTaskSheet] =
-          React.useState(false)
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] =
-          React.useState(false)
+        const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false)
+        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false)
 
         return (
           <>
