@@ -34,13 +34,11 @@ export function deleteTasks({
 
 export function updateTasks({
   rows,
-  label,
   status,
   priority,
   onSuccess,
 }: {
   rows: Row<Task>[]
-  label?: Task["label"]
   status?: Task["status"]
   priority?: Task["priority"]
   onSuccess?: () => void
@@ -50,7 +48,6 @@ export function updateTasks({
       rows.map(async (row) =>
         updateTask({
           id: row.original.id,
-          label,
           status,
           priority,
         })
