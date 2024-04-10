@@ -27,7 +27,7 @@ export async function getTasks({
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
-      return;
+      return { data: [], pageCount: 0 }
     }
     // Offset to paginate the results
     const offset = (page - 1) * per_page

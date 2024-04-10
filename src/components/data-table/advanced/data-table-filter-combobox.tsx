@@ -84,7 +84,7 @@ export function DataTableFilterCombobox<TData>({
                     key={String(option.value)}
                     className="capitalize"
                     value={String(option.value)}
-                    onSelect={(currentValue) => {
+                    onSelect={(currentValue: React.SetStateAction<string>) => {
                       setValue(currentValue === value ? "" : currentValue)
                       setOpen(false)
                       setSelectedOption(option)

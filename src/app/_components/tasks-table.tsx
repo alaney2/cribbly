@@ -37,20 +37,12 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
 
   return (
     <div className="w-full space-y-2.5 overflow-auto">
-      {enableAdvancedFilter ? (
-        <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
-          <TasksTableToolbarActions table={table} />
-        </DataTableAdvancedToolbar>
-      ) : (
-        <DataTableToolbar table={table} filterFields={filterFields}>
-          <TasksTableToolbarActions table={table} />
-        </DataTableToolbar>
-      )}
+      <DataTableToolbar table={table} filterFields={filterFields}>
+        <TasksTableToolbarActions table={table} />
+      </DataTableToolbar>
+      
       <DataTable
         table={table}
-        floatingBar={
-          showFloatingBar ? <TasksTableFloatingBar table={table} /> : null
-        }
       />
     </div>
   )
