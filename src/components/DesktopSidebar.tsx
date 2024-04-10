@@ -86,7 +86,7 @@ export function DesktopSidebar({ user }: { user: any }) {
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
       {isSidebarCollapsed ? (
-        <div onClick={() => { router.push('/dashboard') }} className="mt-6">
+        <Link href="/dashboard" className="mt-6">
         <TooltipProvider delayDuration={50}>
           <Tooltip>
             <TooltipTrigger>
@@ -97,9 +97,9 @@ export function DesktopSidebar({ user }: { user: any }) {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        </div>
+        </Link>
       ) : (
-        <div onClick={() => { router.push('/dashboard') }} className="group mt-6 mb-1.5 flex items-center gap-x-3 text-md tracking-tight font-semibold text-gray-400 cursor-default rounded-2xl w-full ">
+        <Link href="/dashboard" className="group mt-6 mb-1.5 flex items-center gap-x-3 text-md tracking-tight font-semibold text-gray-400 cursor-default rounded-2xl w-full ">
           <Image src={icon} alt="logo" height={28} width={28} className="ml-4" />
           <AnimatePresence>
             {!isSidebarCollapsed && (
@@ -114,7 +114,7 @@ export function DesktopSidebar({ user }: { user: any }) {
               </motion.span>       
             )}
           </AnimatePresence>
-        </div>
+        </Link>
       )}
       <nav className="flex flex-1 flex-col mt-24">
         <ul role="list" className="gap-y-0">
