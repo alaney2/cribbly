@@ -9,7 +9,8 @@ import { type Metadata } from 'next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from 'next/script';
 import { PropsWithChildren, Suspense } from 'react';
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "@/components/ui/sonner"
+// import { Toaster } from "react-hot-toast";
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 
 export const metadata: Metadata = {
@@ -91,10 +92,11 @@ export default function RootLayout({ children }: PropsWithChildren) {
       </Script>
 
       <body className="h-full bg-gray-50 subpixel-antialiased">
-        <Toaster position="top-center" />
+        {/* <Toaster position="top-center" /> */}
         {children}
         <Analytics />
         <SpeedInsights />
+        <Toaster />
         <TailwindIndicator />
       </body>
     </html>

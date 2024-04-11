@@ -15,8 +15,8 @@ import {
   StopwatchIcon,
 } from "@radix-ui/react-icons"
 import { type ColumnDef } from "@tanstack/react-table"
-// import { toast } from "sonner"
-import toast from "react-hot-toast"
+import { toast } from "sonner"
+// import toast from "react-hot-toast"
 
 import { getErrorMessage } from "@/lib/handle-error"
 import { formatDate } from "@/lib/utils"
@@ -213,7 +213,14 @@ export function getColumns(): ColumnDef<Task>[] {
     {
       accessorKey: "createdAt",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Created At" />
+        <DataTableColumnHeader column={column} title="Created" />
+      ),
+      cell: ({ cell }) => formatDate(cell.getValue() as Date),
+    },
+    {
+      accessorKey: "updatedAt",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Updated" />
       ),
       cell: ({ cell }) => formatDate(cell.getValue() as Date),
     },

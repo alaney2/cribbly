@@ -11,6 +11,7 @@ import { getErrorMessage } from "@/lib/handle-error"
 import { generateId } from "@/lib/utils"
 
 import type { CreateTaskSchema, UpdateTaskSchema } from "./validations"
+import { update } from "lodash"
 
 
 export async function createTask(
@@ -64,6 +65,7 @@ export async function updateTask(input: UpdateTaskSchema & { id: string }) {
       status: input.status,
       priority: input.priority,
       cost: input.cost,
+      updated_at: new Date(),
     }).eq('id', input.id)
       .eq('user_id', user.id)
 

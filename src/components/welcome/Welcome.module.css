@@ -1,16 +1,9 @@
 
 /* WelcomeMap */
 
-.popupText {
-  font-size: 0.9rem;
-  font-weight: 500;
-  margin: 0;
-  color: #777;
-}
-
 .popupButton {
   font-size: 0.8125rem;
-  padding: 4px 10px;
+  padding: 8px 16px;
   margin-top: 8px;
   background-color: #2563EB;
   color: white;

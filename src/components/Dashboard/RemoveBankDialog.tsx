@@ -6,7 +6,9 @@ import { Button } from '@/components/catalyst/button'
 import { Checkbox, CheckboxField, CheckboxGroup } from '@/components/catalyst/checkbox'
 import { Description, Fieldset, Field, Label, Legend } from '@/components/catalyst/fieldset'
 import { useSWRConfig } from 'swr'
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
+import { toast } from 'sonner'
+
 
 type BankDialogProps = {
   isOpen: boolean

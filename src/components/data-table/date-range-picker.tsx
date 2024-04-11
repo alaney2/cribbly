@@ -131,7 +131,7 @@ export function DateRangePicker({
               triggerClassName
             )}
           >
-            <CalendarIcon className="mr-2 size-4" />
+            <CalendarIcon className="mr-2 size-4 text-blue-600" />
             {date?.from ? (
               date.to ? (
                 <>

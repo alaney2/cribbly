@@ -7,7 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { type Row } from "@tanstack/react-table"
 import { useForm } from "react-hook-form"
-import toast from "react-hot-toast"
+// import toast from "react-hot-toast"
+import { toast } from 'sonner'
 
 import { getErrorMessage } from "@/lib/handle-error"
 import { Button } from "@/components/ui/button"
@@ -85,8 +86,8 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <PlusIcon className="mr-2 size-4" aria-hidden="true" />
+        <Button variant="outline" size="sm" className="">
+          <PlusIcon className="mr-2 size-4 text-blue-600" aria-hidden="true" />
           New task
         </Button>
       </DialogTrigger>

@@ -2,15 +2,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import { Text, Strong } from '@/components/catalyst/text';
 import 'animate.css';
 import styles from '@/components/welcome/Welcome.module.css';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Script from 'next/script'
-import Map, { AttributionControl, FullscreenControl, NavigationControl, Popup } from 'react-map-gl';
+import Map, { AttributionControl, FullscreenControl, NavigationControl, Popup, Marker } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import type {MapRef} from 'react-map-gl';
+import type { MapRef } from 'react-map-gl';
 import { AddressDialog } from '@/components/welcome/AddressDialog'
 
 
@@ -119,6 +118,7 @@ export function MapBox() {
             onLoad={() => setIsMapLoaded(true)}
           >
             {!isMapLoaded && <Skeleton containerClassName="flex-1" borderRadius="1rem" height="100%"/>}
+            
             <AttributionControl compact={true} />
             <FullscreenControl />
             <NavigationControl />
@@ -130,24 +130,30 @@ export function MapBox() {
                 offset={50}
                 closeOnClick={false}
                 closeButton={false}
+                style={{
+                  borderRadius: '1rem',
+                  overflow: 'auto',
+                }}
               >
-                <p className={styles.popupText}>{popupText}</p>
-                <div className="relative my-2">
-                  <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                    <div className="w-full border-t border-gray-300" />
+                <div className="p-2">
+                  <p className="font-medium text-base text-gray-800 m-0">{popupText}</p>
+                  <div className="relative mt-2">
+                    <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                      <div className="w-full border-t border-gray-400" />
+                    </div>
                   </div>
+                  <button
+                    className='button mb-1 mt-4 bg-blue-500 rounded-md cursor-default select-none
+                    active:translate-y-1 active:[box-shadow:0_3px_0_0_#1b6ff8,0_4px_0_0_#1b70f841]
+                    transition-all duration-150 [box-shadow:0_5px_0_0_#1b6ff8,0_7px_0_0_#1b70f841] border-b-0 px-3 py-2' 
+                    onClick={popupClick}
+                  >
+                    <span className='flex flex-col justify-center items-center h-full text-white font-bold text-sm'>
+                      Add property
+                    </span>
+                  </button>
+                  <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} setFadeOut={setFadeOut} isWelcome={false} />
                 </div>
-                <button
-                  className='button mb-1 mt-3 bg-blue-500 rounded-md cursor-default select-none
-                  active:translate-y-1 active:[box-shadow:0_3px_0_0_#1b6ff8,0_4px_0_0_#1b70f841]
-                  transition-all duration-150 [box-shadow:0_5px_0_0_#1b6ff8,0_7px_0_0_#1b70f841] border-b-0 px-2 py-0.5' 
-                  onClick={popupClick}
-                >
-                  <span className='flex flex-col justify-center items-center h-full text-white font-bold text-sm'>
-                    Add property
-                  </span>
-                </button>
-                <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} setFadeOut={setFadeOut} isWelcome={false} />
               </Popup>
             )}
           </Map>

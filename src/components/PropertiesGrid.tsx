@@ -2,7 +2,8 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import useSWR from 'swr';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
+import { toast } from 'sonner'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Button } from '@/components/catalyst/button';
@@ -64,7 +65,7 @@ export function PropertiesGrid() {
   }, [error, toastDisplayed]);
 
   return (
-    <div className="" >
+    <div className="p-6 md:p-8 content-container">
       <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-center mb-4">
         <div className="relative sm:mr-2.5 w-full sm:w-auto mb-2.5 sm:mb-0">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
