@@ -8,7 +8,7 @@ import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { toast } from 'sonner'
 import { useSearchParams, usePathname } from 'next/navigation'
 import useSWR, { useSWRConfig } from 'swr';
-import { Spinner } from '@/components/FuelSpinner'
+import { Spinner } from '@/components/Spinners/FuelSpinner'
 import { RemoveBankDialog } from '@/components/Dashboard/RemoveBankDialog'
 
 const fetcher = async () => {

@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/default/Button'
-import { Spinner } from '@/components/Spinner'
+import { Spinner } from '@/components/Spinners/Spinner'
 import { verifyOtp } from '@/app/auth/otp/action'
 import { Input } from '@/components/ui/input'
 // @ts-expect-error

@@ -11,6 +11,7 @@ import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckIcon, EllipsisVert
 import Fuse from 'fuse.js';
 import { Input } from '@/components/aceternity/Input'
 import Link from 'next/link';
+import { Spinner } from '@/components/Spinners/Spinner'
 
 
 const fetcher = async () => {
@@ -35,6 +36,7 @@ export function PropertiesGrid() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('');
+  const [addPropertyClicked, setAddPropertyClicked] = useState(false);
 
 
   const fuse = new Fuse(properties || [], { keys: ['street_address', 'city', 'state'],
@@ -56,15 +58,9 @@ export function PropertiesGrid() {
     return 0;
   });
 
-  // useEffect(() => {
-  //   if (error && !toastDisplayed) {
-  //     toast.error('Error fetching properties');
-  //     setToastDisplayed(true);
-  //   }
-  // }, [error, toastDisplayed]);
-
   return (
     <div className="p-6 md:p-8 content-container">
+      <Spinner />
       <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-center mb-4">
         <div className="relative sm:mr-2.5 w-full sm:w-auto mb-2.5 sm:mb-0">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -106,11 +102,20 @@ export function PropertiesGrid() {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <Button color="blue" className="max-w-40 h-10 cursor-default" href="/dashboard/add-property">
-            <PlusIcon className="h-5 w-5 mr-2" />
-            <span className="text-sm block">
-              Add Property
-            </span>
+          <Button color={addPropertyClicked ? 'lightblue' : 'blue'} 
+            className="w-36 h-10 cursor-default"  href="/dashboard/add-property" onClick={() => { setAddPropertyClicked(true)}}
+          >
+            <div className="">
+            {addPropertyClicked ? (
+              <Spinner />
+            )
+            : (
+              <div className="flex">
+                <PlusIcon className="h-5 w-5 mr-2" />
+                <span className="text-sm block text-center "> Add Property </span>
+              </div>
+            )}
+            </div>
           </Button>
         </div>
       </div>

@@ -15,7 +15,7 @@ import type { Tables } from '@/types_db';
 import { User } from '@supabase/supabase-js';
 import 'animate.css';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Spinner } from '@/components/Spinner'
+import { Spinner } from '@/components/Spinners/Spinner'
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
 import { Input } from '@/components/catalyst/input'
 import { loadStripe } from "@stripe/stripe-js";
