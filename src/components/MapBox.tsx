@@ -112,7 +112,7 @@ export function MapBox() {
               borderRadius: '1rem',
               lineHeight: 1,
               zIndex: 0,
-              height: 'calc(100vh - 8rem)',
+              height: 'calc(100vh - 6rem)',
               width: '100%',
             }}
             onLoad={() => setIsMapLoaded(true)}
@@ -136,7 +136,7 @@ export function MapBox() {
                 }}
               >
                 <div className="p-2">
-                  <p className="font-medium text-base text-gray-800 m-0">{popupText}</p>
+                  <p className="font-semibold tracking-normal	text-base text-gray-700 m-0">{popupText}</p>
                   <div className="relative mt-2">
                     <div className="absolute inset-0 flex items-center" aria-hidden="true">
                       <div className="w-full border-t border-gray-400" />

@@ -241,8 +241,8 @@ export function Account() {
             <ul role="list" className="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
               {isBankDetailsLoading ? (
                 <div className="animate-pulse">
-                <div className="h-4 bg-gray-200 rounded-md max-w-72 min-w-48 mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded-md max-w-60 min-w-40"></div>
+                <div className="h-4 bg-gray-200 rounded-md w-48 mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded-md w-40"></div>
               </div>
               ): null}
               

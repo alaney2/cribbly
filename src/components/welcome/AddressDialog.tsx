@@ -8,7 +8,7 @@ import { Text } from '@/components/catalyst/text';
 import { Select } from '@/components/catalyst/select'
 import { useState, useEffect, useRef } from 'react'
 import { addPropertyFromWelcome, addProperty } from '@/utils/supabase/actions'
-import { toast } from 'react-hot-toast';
+import { toast } from 'sonner';
 // @ts-expect-error
 import { useFormState } from 'react-dom'
 import { useRouter } from 'next/navigation';
@@ -122,21 +122,26 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
     <Dialog open={isOpen} onClose={setIsOpen}>
       <form autoComplete='off' 
         action={async (formData) => {
-          const loadingToast = toast.loading('Adding property');
-          if (isWelcome) {
-            const result = await addPropertyFromWelcome(formData);
-          } else {
-            const result = await addProperty(formData);
-          }
-          toast.dismiss(loadingToast);
-          if (result && result.message) {
-            toast.error(result.message);
-          } else {
-            toast.success('Property added', { duration: 5000 });
-            setIsOpen(false);
-            // setFadeOut(true);
-            router.push('/dashboard')
-          }
+          toast.promise(new Promise(async (resolve, reject) => {
+            try {
+              if (isWelcome) {
+                await addPropertyFromWelcome(formData);
+              } else {
+                await addProperty(formData);
+              }
+              setIsOpen(false);
+              setFadeOut(true);
+              router.push('/dashboard');
+              resolve('Property added');
+            } catch (error) {
+              setIsOpen(false);
+              reject((error as Error).message);
+            }
+          }), {
+            loading: 'Adding property',
+            success: 'Property added',
+            error: (error) => error.message,
+          });
         }}
       >
         <DialogTitle>Confirm address</DialogTitle>
