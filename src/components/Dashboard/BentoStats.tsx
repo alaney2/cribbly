@@ -72,7 +72,7 @@ export function BentoStats() {
   return (
     <>
 
-      <BentoGrid className="w-full mx-auto auto-rows-[20rem] xl:auto-rows-[22rem]">
+      <BentoGrid className="w-full mx-auto auto-rows-[20rem] xl:auto-rows-[30vh]">
         {items.map((item, i) => (
           <BentoGridItem
             key={i}

@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import useSWR from 'swr';
 import { toast } from 'sonner'
@@ -12,7 +12,8 @@ import Fuse from 'fuse.js';
 import { Input } from '@/components/aceternity/Input'
 import Link from 'next/link';
 import { Spinner } from '@/components/Spinners/Spinner'
-
+import useSparks from '@/components/default/useSparks'
+import { useRouter } from 'next/navigation'
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -33,11 +34,12 @@ const fetcher = async () => {
 
 export function PropertiesGrid() {
   const { data: properties, error, isLoading } = useSWR('properties', fetcher);
-
+  const { makeBurst, sparks } = useSparks();
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [addPropertyClicked, setAddPropertyClicked] = useState(false);
-
+  const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const fuse = new Fuse(properties || [], { keys: ['street_address', 'city', 'state'],
     threshold: 0.4,
@@ -58,8 +60,20 @@ export function PropertiesGrid() {
     return 0;
   });
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    setAddPropertyClicked(true)
+    if (!containerRef.current) return;
+  
+    const clickX = e.pageX - window.scrollX;
+    const clickY = e.pageY - window.scrollY;
+  
+    makeBurst({ x: clickX, y: clickY });
+    setTimeout(() => router.push('/dashboard/add-property'), 150);
+  };
+
   return (
-    <div className="p-6 md:p-8 content-container">
+    <div ref={containerRef} className="p-6 md:p-8 content-container">
       <Spinner />
       <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-center mb-4">
         <div className="relative sm:mr-2.5 w-full sm:w-auto mb-2.5 sm:mb-0">
@@ -76,7 +90,7 @@ export function PropertiesGrid() {
             className="w-full sm:w-72 text-base md:text-sm md:w-96 border border-gray-200 py-1.5 pl-10  placeholder:text-gray-400 focus:ring-2 bg-gray-50"
           />
         </div>
-        <div className="flex items-center justify-end w-full sm:w-auto">
+        <div  className="flex items-center justify-end w-full sm:w-auto">
           <Dropdown>
             <DropdownButton outline className="mr-2.5 h-10 bg-gray-50">
               <span className="text-sm block">
@@ -103,7 +117,7 @@ export function PropertiesGrid() {
             </DropdownMenu>
           </Dropdown>
           <Button color={addPropertyClicked ? 'lightblue' : 'blue'} 
-            className="w-36 h-10 cursor-default"  href="/dashboard/add-property" onClick={() => { setAddPropertyClicked(true)}}
+            className="w-36 h-10 cursor-default" onClick={handleClick}
           >
             <div className="">
             {addPropertyClicked ? (
@@ -117,6 +131,17 @@ export function PropertiesGrid() {
             )}
             </div>
           </Button>
+          {sparks.map(spark => (
+              <div
+                key={spark.id}
+                className="absolute w-6 h-2 rounded-sm bg-purple-400/80 z-50 transform-none"
+                style={{
+                  left: `${spark.center.x}px`,
+                  top: `${spark.center.y}px`,
+                  animation: `${spark.aniName} 500ms ease-in-out both`
+                }}
+              />
+            ))}
         </div>
       </div>
       <div className="max-w-screen-2xl mx-auto">

@@ -11,6 +11,23 @@ import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/default/NavLink'
 import useSparks from '@/components/default/useSparks'
 
+const tailwindColors = [
+  'bg-red-400',
+  'bg-orange-400',
+  'bg-yellow-400',
+  'bg-green-400',
+  'bg-emerald-400',
+  'bg-cyan-400',
+  'bg-sky-400',
+  'bg-blue-400',
+  'bg-indigo-400',
+  'bg-purple-400',
+  'bg-fuchsia-400',
+  'bg-pink-400',
+  'bg-rose-400',
+];
+const randomColor = tailwindColors[Math.floor(Math.random() * tailwindColors.length)];
+
 function MobileNavLink({
   href,
   children,
@@ -144,7 +161,7 @@ export function Header() {
             {sparks.map(spark => (
               <div
                 key={spark.id}
-                className="absolute w-6 h-2 rounded-sm bg-purple-400 z-50 transform-none"
+                className={`absolute w-6 h-2 rounded-sm ${randomColor} z-50 transform-none`}
                 style={{
                   left: `${spark.center.x}px`,
                   top: `${spark.center.y}px`,
