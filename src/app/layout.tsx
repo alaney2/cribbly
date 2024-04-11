@@ -12,6 +12,7 @@ import { PropsWithChildren, Suspense } from 'react';
 import { Toaster } from "@/components/ui/sonner"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 
+
 export const metadata: Metadata = {
   title: {
     template: '%s | Cribbly',
@@ -92,6 +93,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 
       <body className="h-full bg-gray-50 subpixel-antialiased">
         {children}
+
         <Analytics />
         <SpeedInsights />
         <Toaster position="top-center" />

@@ -1,26 +1,38 @@
-"use client"
+"use server"
 import { deleteProperty } from '@/utils/supabase/actions'
 import { BentoGrid, BentoGridItem } from "@/components/aceternity/bento-grid";
-import {
-  IconFileBroken,
-  IconWavesElectricity,
-  IconTableColumn,
-  IconPigMoney,
-} from "@tabler/icons-react";
+import { createClient } from '@/utils/supabase/server'
 import { PencilSquareIcon, WrenchIcon } from '@heroicons/react/24/outline';
-import { IncomeGraph } from '@/components/bento-stuff/IncomeGraph'
-import { UtilityPie } from '@/components/bento-stuff/UtilityPie'
-import { MaintenanceTable } from '@/components/bento-stuff/MaintenanceTable'
-import { BarGraph } from '@/components/bento-stuff/BarGraph'
 import { Button } from '@/components/catalyst/button'
-import { usePathname } from 'next/navigation'
 import Link from 'next/link';
+import type { Metadata, ResolvingMetadata } from 'next'
+import { BentoStats } from '@/components/Dashboard/BentoStats'
+import { redirect } from 'next/navigation'
 
-export default function CurrentProperty({ params } : { params: { property_id: string } }) {
-  const pathname = usePathname()
+type Props = {
+  params: { property_id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const supabase = createClient()
+  const { data: propertyData, error } = await supabase.from('properties')
+    .select()
+    .eq('id', params.property_id)
+
+  if (error || propertyData.length === 0) redirect('/dashboard')
+
+  return {
+    title: propertyData[0]?.street_address,
+  }
+}
+
+export default async function CurrentProperty({ params } : { params: { property_id: string } }) {
 
   const stats = [
-    { name: 'Rent price', stat: '$3250', icon: <PencilSquareIcon className="h-5 w-5 text-gray-500" />, href: `${pathname}/settings` },
+    { name: 'Rent price', stat: '$3250', icon: <PencilSquareIcon className="h-5 w-5 text-gray-500" />, href: `/dashboard/${params.property_id}/settings` },
     { name: 'Lease expires in', stat: '7 months' },
     { name: 'Current tenants', stat: '2' },
     { name: 'This month\'s rent', stat: 'Paid' },
@@ -30,43 +42,6 @@ export default function CurrentProperty({ params } : { params: { property_id: st
     <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)]  border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
   );
 
-  const items = [
-    {
-      title: "Total income",
-      description:
-        "Rent - (maintenance + utility costs)",
-      header: <IncomeGraph />,
-      className: "md:col-span-2",
-      icon: <IconPigMoney className="h-4 w-4 text-blue-500" />,
-      edit: false,
-    },
-    {
-      title: "Net income",
-      description:
-        "+/- per month",
-      header: <BarGraph />,
-      className: "md:col-span-1",
-      icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
-      edit: false,
-    },
-    {
-      title: "Utility costs",
-      description: "(e.g., water, electricity, gas)",
-      header: <UtilityPie />,
-      className: "md:col-span-1",
-      icon: <IconWavesElectricity className="h-4 w-4 text-blue-500" />,
-      edit: true,
-    },
-    {
-      title: "Maintenance Costs",
-      description: "Most recent maintenance costs",
-      header: <MaintenanceTable />,
-      className: "md:col-span-2",
-      icon: <WrenchIcon className="h-4 w-4 text-blue-500" />,
-      edit: true,
-      href: `${pathname}/maintenance`,
-    },
-  ];
 
   return (
     <>
@@ -89,20 +64,8 @@ export default function CurrentProperty({ params } : { params: { property_id: st
         </dl>
       </div>
 
-      <BentoGrid className="w-full mx-auto auto-rows-[20rem] xl:auto-rows-[22rem]">
-        {items.map((item, i) => (
-          <BentoGridItem
-            key={i}
-            title={item.title}
-            description={item.description}
-            header={item.header}
-            className={item.className}
-            icon={item.icon}
-            edit={item.edit}
-            href={item.href}
-          />
-        ))}
-      </BentoGrid>
+      <BentoStats />
+
       <div className="flex justify-center mt-8">
         <Button color="blue" className="">Randomize data</Button>
       </div>

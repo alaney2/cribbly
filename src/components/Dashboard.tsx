@@ -6,7 +6,6 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* <MapBox /> */}
       <PropertiesGrid />
     </>
   )

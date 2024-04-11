@@ -188,7 +188,7 @@ export function Account() {
     <div className="p-6 md:p-8 content-container relative">
       {(isLoading || bankIsLoading) ? (
         <div className="absolute inset-x-1/2 inset-y-1/2">
-        <Spinner />
+          <Spinner />
         </div>
     ) : (
       <main className="px-4 py-4 sm:px-6 lg:flex-auto lg:px-4 lg:py-4">

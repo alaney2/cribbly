@@ -10,8 +10,8 @@ import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/componen
 import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckIcon, EllipsisVerticalIcon } from '@heroicons/react/16/solid';
 import Fuse from 'fuse.js';
 import { Input } from '@/components/aceternity/Input'
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
+
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -30,12 +30,12 @@ const fetcher = async () => {
   return data;
 };
 
-
 export function PropertiesGrid() {
   const { data: properties, error, isLoading } = useSWR('properties', fetcher);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('');
-  const [toastDisplayed, setToastDisplayed] = useState(false);
+
 
   const fuse = new Fuse(properties || [], { keys: ['street_address', 'city', 'state'],
     threshold: 0.4,
@@ -56,12 +56,12 @@ export function PropertiesGrid() {
     return 0;
   });
 
-  useEffect(() => {
-    if (error && !toastDisplayed) {
-      toast.error('Error fetching properties');
-      setToastDisplayed(true);
-    }
-  }, [error, toastDisplayed]);
+  // useEffect(() => {
+  //   if (error && !toastDisplayed) {
+  //     toast.error('Error fetching properties');
+  //     setToastDisplayed(true);
+  //   }
+  // }, [error, toastDisplayed]);
 
   return (
     <div className="p-6 md:p-8 content-container">
@@ -151,7 +151,15 @@ export function PropertiesGrid() {
                   </DropdownMenu>
                 </Dropdown>
               </div>
-              <Link href={`/dashboard/${property.id}`} className="block w-full h-full cursor-default transition duration-200 ease-in-out">
+              <Link 
+                href={{
+                  pathname: `/dashboard/${property.id}`,
+                  query: { 
+                    property_address: property.street_address,
+
+                  },
+                }}
+                className="block w-full h-full cursor-default transition duration-200 ease-in-out">
                 <h3 className="text-md font-semibold truncate">{property.street_address}</h3>
                 <p>{property.apt}</p>
                 <p>{property.city}, {property.state} {property.zip}</p>
