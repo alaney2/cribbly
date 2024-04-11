@@ -1,31 +1,29 @@
-// import '@/styles/auth.css'
-// import { createClient } from '@/utils/supabase/server'
-// import { redirect } from 'next/navigation'
-
-// export default async function PropertyLayout({ params, children } : { params: { property_id: string };  children: React.ReactNode }) {
-//   const supabase = createClient()
-//   const { data, error } = await supabase.from('properties').select()
-//     .eq('id', params.property_id)
-
-//   if (error) {
-//     redirect('/dashboard')
-//   }
-
-//   return (
-//     <>
-//       <div className="p-2 md:p-8 content-container">
-//       {children}
-//       </div>
-//     </>
-//   )
-// }
-
-
-import Link from 'next/link';
 import { MobileSidebar } from '@/components/MobileSidebar';
 import { DesktopSidebar } from '@/components/DesktopSidebar'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation';
+import type { Metadata, ResolvingMetadata } from 'next'
+
+type Props = {
+  params: { property_id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const supabase = createClient()
+  const { data: propertyData, error } = await supabase.from('properties')
+    .select()
+    .eq('id', params.property_id)
+
+  if (error || propertyData.length === 0) redirect('/dashboard')
+
+  return {
+    title: propertyData[0]?.street_address,
+  }
+}
 
 export default async function PropertyDashboardLayout({
   params,
@@ -34,18 +32,16 @@ export default async function PropertyDashboardLayout({
   params: { property_id: string };
   children: React.ReactNode;
 }) {
+
   const supabase = createClient()
   let { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    redirect('/sign-in')
-  }
+  if (!user) redirect('/sign-in')
 
-  const { data: propertyData, error } = await supabase.from('properties').select()
-    .eq('id', params.property_id)
+  // const { data: propertyData, error } = await supabase.from('properties')
+  //   .select()
+  //   .eq('id', params.property_id)
 
-  if (error || propertyData.length === 0) {
-    redirect('/dashboard')
-  }
+  // if (error || propertyData.length === 0) redirect('/dashboard')
 
   let { data } = await supabase.from('users').select()
     .eq('id', user.id)
