@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/default/Button'
 import { Spinner } from '@/components/Spinner'
 import { verifyOtp } from '@/app/auth/otp/action'
+import { Input } from '@/components/ui/input'
 // @ts-expect-error
 import { useFormState } from 'react-dom'
 
@@ -86,14 +87,14 @@ export function OtpInput({ email }: { email: string } ) {
     <form action={formAction} className="" autoComplete='off'>
       <div className="flex justify-center space-x-2 mt-10 mb-4" onPaste={handlePaste}>
         {[...Array(6)].map((_, index) => (
-          <input
+          <Input
             key={index}
             ref={el => {
               if (el) {
                 inputsRef.current[index] = el;
               }
             }}
-            className="w-10 h-12 border-1 border-gray-300 text-center rounded-md caret-transparent focus:border-blue-300"
+            className="w-10 h-12 ring-1 ring-inset ring-gray-100 focus:ring-blue-300 text-center text-lg rounded-md caret-transparent"
             type="number"
             pattern="[0-9]*"
             inputMode='numeric'

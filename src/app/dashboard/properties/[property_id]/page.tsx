@@ -2,13 +2,12 @@
 import { deleteProperty } from '@/utils/supabase/actions'
 import { BentoGrid, BentoGridItem } from "@/components/aceternity/bento-grid";
 import {
-  IconClipboardCopy,
   IconFileBroken,
   IconWavesElectricity,
   IconTableColumn,
   IconPigMoney,
 } from "@tabler/icons-react";
-import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import { PencilSquareIcon, WrenchIcon } from '@heroicons/react/24/outline';
 import { IncomeGraph } from '@/components/bento-stuff/IncomeGraph'
 import { UtilityPie } from '@/components/bento-stuff/UtilityPie'
 import { MaintenanceTable } from '@/components/bento-stuff/MaintenanceTable'
@@ -55,7 +54,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
       description: "(e.g., water, electricity, gas)",
       header: <UtilityPie />,
       className: "md:col-span-1",
-      icon: <IconClipboardCopy className="h-4 w-4 text-blue-500" />,
+      icon: <IconWavesElectricity className="h-4 w-4 text-blue-500" />,
       edit: true,
     },
     {
@@ -63,7 +62,7 @@ export default function CurrentProperty({ params } : { params: { property_id: st
       description: "Most recent maintenance costs",
       header: <MaintenanceTable />,
       className: "md:col-span-2",
-      icon: <IconFileBroken className="h-4 w-4 text-blue-500" />,
+      icon: <WrenchIcon className="h-4 w-4 text-blue-500" />,
       edit: true,
       href: `${pathname}/maintenance`,
     },
