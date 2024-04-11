@@ -33,7 +33,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import useLocalStorage from '@/utils/useLocalStorage'
 import { useRouter } from 'next/navigation'
 
 const setSidebarSettings = async (isCollapsed: boolean) => {
@@ -52,7 +51,6 @@ function classNames(...classes: string[]) {
 }
 
 export function DesktopSidebar({ user }: { user: any }) {
-  const router = useRouter()
   const pathname = usePathname()
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(user.is_sidebar_collapsed)
 
@@ -61,7 +59,7 @@ export function DesktopSidebar({ user }: { user: any }) {
   const getDashboardURL = (href: string = '') => {
     const match = pathname.match(/\/dashboard\/properties\/([^/]+)/);
     const propertyId = match ? match[1] : '';
-    let url = `/dashboard/properties/${propertyId}`
+    let url = `/dashboard/${propertyId}`
     if (href !== '') {
       url += `/${href}`
     }

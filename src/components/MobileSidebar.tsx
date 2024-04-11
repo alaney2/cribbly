@@ -30,7 +30,7 @@ export function MobileSidebar({ user }: { user: any }) {
   const getDashboardURL = (href: string = '') => {
     const match = pathname.match(/\/dashboard\/properties\/([^/]+)/);
     const propertyId = match ? match[1] : '';
-    let url = `/dashboard/properties/${propertyId}`
+    let url = `/dashboard/${propertyId}`
     if (href !== '') {
       url += `/${href}`
     }

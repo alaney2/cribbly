@@ -37,7 +37,7 @@ export function PropertiesGrid() {
   const [sortBy, setSortBy] = useState('');
   const [toastDisplayed, setToastDisplayed] = useState(false);
 
-  const fuse = new Fuse(properties || [], {    keys: ['street_address', 'city', 'state'],
+  const fuse = new Fuse(properties || [], { keys: ['street_address', 'city', 'state'],
     threshold: 0.4,
   });
 
@@ -64,7 +64,7 @@ export function PropertiesGrid() {
   }, [error, toastDisplayed]);
 
   return (
-    <div className="p-6 md:p-8 overflow-auto h-max content-container" >
+    <div className="" >
       <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-center mb-4">
         <div className="relative sm:mr-2.5 w-full sm:w-auto mb-2.5 sm:mb-0">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -106,7 +106,7 @@ export function PropertiesGrid() {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <Button color="blue" className="max-w-40 h-10 cursor-default" href="/dashboard/properties">
+          <Button color="blue" className="max-w-40 h-10 cursor-default" href="/dashboard/add-property">
             <PlusIcon className="h-5 w-5 mr-2" />
             <span className="text-sm block">
               Add Property
@@ -151,7 +151,7 @@ export function PropertiesGrid() {
                   </DropdownMenu>
                 </Dropdown>
               </div>
-              <Link href={`/dashboard/properties/${property.id}`} className="block w-full h-full cursor-default transition duration-200 ease-in-out">
+              <Link href={`/dashboard/${property.id}`} className="block w-full h-full cursor-default transition duration-200 ease-in-out">
                 <h3 className="text-md font-semibold truncate">{property.street_address}</h3>
                 <p>{property.apt}</p>
                 <p>{property.city}, {property.state} {property.zip}</p>
