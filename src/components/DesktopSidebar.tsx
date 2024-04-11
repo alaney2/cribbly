@@ -113,7 +113,7 @@ export function DesktopSidebar({ user }: { user: any }) {
           </AnimatePresence>
         </Link>
       )}
-      <nav className="flex flex-1 flex-col mt-24">
+      <nav className="flex flex-1 flex-col mt-20">
         <ul role="list" className="gap-y-0">
           <li>
             <ul role="list" className="-mx-2 p-2 space-y-1">
