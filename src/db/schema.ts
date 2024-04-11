@@ -21,9 +21,6 @@ export const priorityEnum = pgEnum(`${databasePrefix}_priority`, [
 
 export const tasks = pgTable("tasks", {
   id: uuid("id").primaryKey().defaultRandom(),
-  // id: varchar("id", { length: 30 })
-  //   .$defaultFn(() => generateId())
-  //   .primaryKey(),
   user_id: uuid("user_id").notNull(),
   code: varchar("code", { length: 256 }),
   title: varchar("title", { length: 256 }).notNull(),

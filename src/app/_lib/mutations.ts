@@ -1,6 +1,5 @@
 import { type Task } from "@/db/schema"
 import { type Row } from "@tanstack/react-table"
-// import toast from "react-hot-toast"
 import { toast } from 'sonner'
 
 import { getErrorMessage } from "@/lib/handle-error"

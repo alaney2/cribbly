@@ -7,9 +7,6 @@ export default async function Home() {
   return (
     <>
       <Dashboard />
-      {/* <Suspense>
-        <Notification />
-      </Suspense> */}
     </>
   )
 }

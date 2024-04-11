@@ -10,7 +10,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from 'next/script';
 import { PropsWithChildren, Suspense } from 'react';
 import { Toaster } from "@/components/ui/sonner"
-// import { Toaster } from "react-hot-toast";
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 
 export const metadata: Metadata = {

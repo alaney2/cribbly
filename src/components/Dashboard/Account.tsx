@@ -52,7 +52,6 @@ export function Account() {
   const [linkToken, setLinkToken] = useState<string | null>(null);
   let [isBankDialogOpen, setIsBankDialogOpen] = useState(false)
   let [isRemoveBankDialogOpen, setIsRemoveBankDialogOpen] = useState(false)
-  const [isBankDetailsLoading, setIsBankDetailsLoading] = useState(false);
 
   const searchParams = useSearchParams()
   const pathname = usePathname()
@@ -113,7 +112,7 @@ export function Account() {
       }
       setLinkToken(link_token);
       return;
-    } 
+    }
     const response = await fetch('/api/plaid/create_link_token', {
       method: 'POST',
     });
@@ -128,40 +127,48 @@ export function Account() {
 
 
   const onSuccess = async (publicToken: string) => {
-    setIsBankDetailsLoading(true);
-    // Send the public_token to your server to exchange for an access_token
-    const response = await fetch('/api/plaid/set_access_token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    toast.promise(
+      async () => {
+      // Send the public_token to server to exchange for an access_token
+        const response = await fetch('/api/plaid/set_access_token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ publicToken }),
+        });
+        mutate('bank_accounts_data')
+        if (!response.ok) {
+          // Handle error
+          console.error('Failed to exchange public token for access token');
+          throw new Error('Failed to exchange public token for access token');
+        }
+        const { error, success } = await response.json();
+        localStorage.removeItem('link_token');
+        setLinkToken(null);
+        if (error) {
+          throw new Error(error);
+        } else {
+          return success;
+        }
       },
-      body: JSON.stringify({ publicToken }),
-    });
-    mutate('bank_accounts_data')
-    if (!response.ok) {
-      // Handle error
-      console.error('Failed to exchange public token for access token');
-      setIsBankDetailsLoading(false);
-      return;
-    }
-    const { error, success } = await response.json();
-    localStorage.removeItem('link_token');
-    setIsBankDetailsLoading(false);
-    if (error) {
-      toast.error(error);
-    } else {
-      toast.success(success);
-    }
+      {
+        loading: 'Linking bank account...',
+        success: (success) => success,
+        error: (error) => error,
+      }
+    )
   };
 
   const config: PlaidLinkOptions = {
     token: linkToken,
     onSuccess,
     onExit: (error: PlaidLinkError | null, metadata: PlaidLinkOnExitMetadata) => {
+      localStorage.removeItem('link_token');
+      setLinkToken(null);
       if (error) {
         toast.error('Bank account linking failed');
       }
-      localStorage.removeItem('link_token');
     },
   };
 
@@ -238,13 +245,6 @@ export function Account() {
             <p className="mt-1 text-sm leading-6 text-gray-500">Connect bank accounts to your account.</p>
 
             <ul role="list" className="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
-              {isBankDetailsLoading ? (
-                <div className="animate-pulse">
-                <div className="h-4 bg-gray-200 rounded-md w-48 mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded-md w-40"></div>
-              </div>
-              ): null}
-              
               {bank_data?.map((bank_account) => 
                 <li key={bank_account.account_id} className="flex justify-between gap-x-6 py-6">
                   <div className="font-medium text-gray-700">
@@ -293,9 +293,7 @@ export function Account() {
             <Button 
               color='blue'
               onClick={async () => {
-                if (!linkToken) {
-                  await generateToken();
-                }
+                await generateToken();
                 setIsBankDialogOpen(false);
               }}
             >

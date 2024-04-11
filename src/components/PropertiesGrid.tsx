@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import useSWR from 'swr';
-// import toast from 'react-hot-toast';
 import { toast } from 'sonner'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
