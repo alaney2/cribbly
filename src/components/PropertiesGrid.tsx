@@ -184,10 +184,6 @@ export function PropertiesGrid() {
               <Link 
                 href={{
                   pathname: `/dashboard/${property.id}`,
-                  query: { 
-                    property_address: property.street_address,
-
-                  },
                 }}
                 className="block w-full h-full cursor-default transition duration-200 ease-in-out">
                 <h3 className="text-md font-semibold truncate">{property.street_address}</h3>

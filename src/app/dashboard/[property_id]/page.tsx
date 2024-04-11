@@ -30,6 +30,14 @@ export async function generateMetadata(
 }
 
 export default async function CurrentProperty({ params } : { params: { property_id: string } }) {
+  const supabase = createClient()
+  const { data: propertyData, error } = await supabase.from('properties')
+    .select()
+    .eq('id', params.property_id)
+
+  if (error || propertyData.length === 0) redirect('/dashboard')
+
+  const propertyAddress = propertyData[0]?.street_address
 
   const stats = [
     { name: 'Rent price', stat: '$3250', icon: <PencilSquareIcon className="h-5 w-5 text-gray-500" />, href: `/dashboard/${params.property_id}/settings` },
@@ -45,6 +53,8 @@ export default async function CurrentProperty({ params } : { params: { property_
 
   return (
     <>
+      <h1 className="text-2xl font-semibold mb-8 ml-4 tracking-tight">{propertyData[0]?.street_address}, {propertyData[0]?.city} {propertyData[0]?.state} {propertyData[0]?.apt}</h1>
+      
       <div className="mb-4 cursor-default">
         <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {stats.map((item) => (
