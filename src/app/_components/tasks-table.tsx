@@ -10,6 +10,7 @@ import { type getTasks } from "../_lib/queries"
 import { filterFields, getColumns } from "./tasks-table-columns"
 import { useTasksTable } from "./tasks-table-provider"
 import { TasksTableToolbarActions } from "./tasks-table-toolbar-actions"
+import { TasksTableFloatingBar } from "./tasks-table-floating-bar"
 
 interface TasksTableProps {
   tasksPromise: ReturnType<typeof getTasks>
@@ -41,6 +42,9 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
       
       <DataTable
         table={table}
+        floatingBar={
+          showFloatingBar ? <TasksTableFloatingBar table={table} /> : null
+        }
       />
     </div>
   )
