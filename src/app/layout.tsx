@@ -92,11 +92,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
       </Script>
 
       <body className="h-full bg-gray-50 subpixel-antialiased">
-        {/* <Toaster position="top-center" /> */}
         {children}
         <Analytics />
         <SpeedInsights />
-        <Toaster />
+        <Toaster position="top-center" />
         <TailwindIndicator />
       </body>
     </html>

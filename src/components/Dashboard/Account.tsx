@@ -5,7 +5,6 @@ import { PlaidLinkError, PlaidLinkOnExitMetadata, PlaidLinkOptions, usePlaidLink
 import { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
 import { LockClosedIcon } from '@heroicons/react/24/outline';
-// import toast from 'react-hot-toast';
 import { toast } from 'sonner'
 import { useSearchParams, usePathname } from 'next/navigation'
 import useSWR, { useSWRConfig } from 'swr';

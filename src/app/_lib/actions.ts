@@ -26,7 +26,6 @@ export async function createTask(
       error: "User not found",
     }
   }
-
   try {
     await supabase.from('shadcn_tasks').insert({
       id: generateId(),
