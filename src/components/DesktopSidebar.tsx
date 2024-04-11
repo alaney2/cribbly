@@ -11,7 +11,6 @@ import {
   QuestionMarkCircleIcon,
   Cog8ToothIcon,
   WrenchIcon,
-  BoltIcon,
 } from '@heroicons/react/24/outline'
 import {
   ChevronLeftIcon,
@@ -57,7 +56,7 @@ export function DesktopSidebar({ user }: { user: any }) {
   const userInitials = getInitials(user?.full_name)
 
   const getDashboardURL = (href: string = '') => {
-    const match = pathname.match(/\/dashboard\/properties\/([^/]+)/);
+    const match = pathname.match(/\/dashboard\/([^/]+)/);
     const propertyId = match ? match[1] : '';
     let url = `/dashboard/${propertyId}`
     if (href !== '') {

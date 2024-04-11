@@ -6,7 +6,13 @@ import {
   Cog6ToothIcon,
   HomeIcon,
   UsersIcon,
+  WrenchIcon,
+  Cog8ToothIcon,
 } from '@heroicons/react/24/outline'
+import {
+  IconWavesElectricity,
+  IconSignature,
+} from "@tabler/icons-react";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'
 import { ProfileButton } from '@/components/ProfileButton'
@@ -28,7 +34,7 @@ export function MobileSidebar({ user }: { user: any }) {
   }, [sidebarOpen]);
 
   const getDashboardURL = (href: string = '') => {
-    const match = pathname.match(/\/dashboard\/properties\/([^/]+)/);
+    const match = pathname.match(/\/dashboard\/([^/]+)/);
     const propertyId = match ? match[1] : '';
     let url = `/dashboard/${propertyId}`
     if (href !== '') {
@@ -39,9 +45,12 @@ export function MobileSidebar({ user }: { user: any }) {
 
   const navigation = [
     { name: 'Dashboard', href: getDashboardURL(), icon: HomeIcon },
-    { name: 'Tenants', href: '/', icon: UsersIcon },
-    { name: 'Settings', href: getDashboardURL('settings'), icon: Cog6ToothIcon },
-    { name: 'Analytics', href: '', icon: ChartPieIcon },
+    { name: 'Tenants', href: getDashboardURL('tenants'), icon: UsersIcon },
+    // { name: 'Analytics', href: getDashboardURL('analytics'), icon: ChartPieIcon },
+    { name: 'Maintenance', href: getDashboardURL('maintenance'), icon: WrenchIcon },
+    { name: 'Utilities', href: getDashboardURL('utilities'), icon: IconWavesElectricity },
+    { name: 'Documents', href: getDashboardURL('documents'), icon: IconSignature },
+    { name: 'Settings', href: getDashboardURL('settings'), icon: Cog8ToothIcon },
   ]
 
   return (

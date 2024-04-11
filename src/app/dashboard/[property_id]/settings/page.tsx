@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 import { deleteProperty } from '@/utils/supabase/actions'
 import { useRouter } from 'next/navigation'
 
