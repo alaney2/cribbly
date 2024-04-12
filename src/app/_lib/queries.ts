@@ -139,7 +139,6 @@ export async function getTasks({
     const pageCount = Math.ceil(total / per_page)
     return { data, pageCount }
   } catch (err) {
-    console.log('ERRO RHERE', err)
     return { data: [], pageCount: 0 }
   }
 }

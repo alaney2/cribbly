@@ -48,7 +48,7 @@ export async function GET(request: Request) {
     return Response.redirect(getURL('/sign-in'))
   }
 
-  const { data, error } = await supabase.from('plaid_item_ids')
+  const { data, error } = await supabase.from('plaid_accounts')
     .select()
     .eq('user_id', user.id)
 

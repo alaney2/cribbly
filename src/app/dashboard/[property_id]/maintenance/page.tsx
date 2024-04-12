@@ -15,14 +15,7 @@ export interface IndexPageProps {
 export default function Maintenance({ params, searchParams } : IndexPageProps ) {
   const search = searchParamsSchema.parse(searchParams)
 
-  // const tasksPromise = getTasks(search)
-  const tasksPromise = getTasks(search).then((tasks) => {
-    console.log('Fetched tasks:', tasks);
-    return tasks;
-  }).catch((error) => {
-    console.error('Error fetching tasks:', error);    throw error;
-  });
-
+  const tasksPromise = getTasks(search)
 
   return (
     <>

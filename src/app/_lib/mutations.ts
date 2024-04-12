@@ -1,10 +1,9 @@
 import { type Task } from "@/db/schema"
 import { type Row } from "@tanstack/react-table"
 import { toast } from 'sonner'
-
 import { getErrorMessage } from "@/lib/handle-error"
-
 import { deleteTask, updateTask } from "./actions"
+import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 
 export function deleteTasks({
   rows,
@@ -13,6 +12,7 @@ export function deleteTasks({
   rows: Row<Task>[]
   onSuccess?: () => void
 }) {
+  noStore()
   toast.promise(
     Promise.all(
       rows.map(async (row) =>
@@ -25,6 +25,7 @@ export function deleteTasks({
       loading: "Deleting...",
       success: () => {
         onSuccess?.()
+        revalidatePath("/")
         return "Tasks deleted"
       },
       error: (err) => getErrorMessage(err),
@@ -43,6 +44,7 @@ export function updateTasks({
   priority?: Task["priority"]
   onSuccess?: () => void
 }) {
+  noStore()
   toast.promise(
     Promise.all(
       rows.map(async (row) =>
@@ -57,6 +59,7 @@ export function updateTasks({
       loading: "Updating...",
       success: () => {
         onSuccess?.()
+        revalidatePath("/")
         return "Tasks updated"
       },
       error: (err) => getErrorMessage(err),
