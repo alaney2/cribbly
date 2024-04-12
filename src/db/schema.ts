@@ -18,7 +18,7 @@ export const priorityEnum = pgEnum(`${databasePrefix}_priority`, [
   "high",
 ])
 
-export const tasks = pgTable("shadcn_tasks", {
+export const tasks = pgTable(`${databasePrefix}_tasks`, {
   id: uuid("id").primaryKey().defaultRandom(),
   user_id: uuid("user_id").notNull(),
   code: varchar("code", { length: 256 }),

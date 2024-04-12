@@ -130,7 +130,6 @@ export async function getTasks({
         .execute()
         .then((res) => res[0]?.count ?? 0)
       
-      console.log('ADFASDASD', data)
       return {
         data,
         total,
@@ -140,6 +139,7 @@ export async function getTasks({
     const pageCount = Math.ceil(total / per_page)
     return { data, pageCount }
   } catch (err) {
+    console.log('ERRO RHERE', err)
     return { data: [], pageCount: 0 }
   }
 }
