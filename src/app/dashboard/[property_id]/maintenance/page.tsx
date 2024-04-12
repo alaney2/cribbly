@@ -5,7 +5,7 @@ import { TasksTable } from "@/app/_components/tasks-table"
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
 import * as React from "react"
 import { DateRangePicker } from '@/components/data-table/date-range-picker'
-
+import { TasksTableProvider } from "@/app/_components/tasks-table-provider"
 
 export interface IndexPageProps {
   params: { property_id: string }
@@ -14,7 +14,6 @@ export interface IndexPageProps {
 
 export default function Maintenance({ params, searchParams } : IndexPageProps ) {
   const search = searchParamsSchema.parse(searchParams)
-
   const tasksPromise = getTasks(search, params.property_id);
 
   return (
