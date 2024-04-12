@@ -1,3 +1,4 @@
+"use client"
 import { PieChart, Pie, Sector, Cell,
   Tooltip,
   ResponsiveContainer,
@@ -9,6 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useMediaQuery } from 'usehooks-ts'
+import { useState, useEffect } from 'react'
+
 
 function SelectTime() {
   return (
@@ -39,6 +43,16 @@ const COLORS = [
 ];
 
 export function UtilityPie() {
+  const [smallPie, setSmallPie] = useState(true)
+  const isDesktop = useMediaQuery('(min-width: 1536px)')
+  useEffect(() => {
+    if (isDesktop) {
+      setSmallPie(false)
+    } else {
+      setSmallPie(true)
+    }
+  }, [isDesktop])
+
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
 
@@ -53,8 +67,8 @@ export function UtilityPie() {
         cy='100%'
         startAngle={180}
         endAngle={0}
-        innerRadius={120}
-        outerRadius={160}
+        innerRadius={smallPie ? 100 : 120}
+        outerRadius={smallPie ? 140 : 160}
         fill="#8884d8"
         paddingAngle={5}
         dataKey="value"

@@ -40,13 +40,17 @@ const fetcher = async () => {
 
 export function MaintenanceTable() {
   const { data: tasks, error, isLoading } = useSWR('tasks', fetcher);
-  console.log(tasks)
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
   
   return (
     <div>
       <div className="mt-0 flow-root overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <table className="w-full text-left">
+          <table className="w-full text-left" suppressHydrationWarning>
             <thead className="bg-white">
               <tr>
                 <th scope="col" className="relative isolate py-3.5 pr-3 text-left text-sm font-semibold text-gray-900">
@@ -76,7 +80,12 @@ export function MaintenanceTable() {
             </thead>
             <tbody>
             {!tasks ? (
-              <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl   dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)]  border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
+              <tr>
+                <td colSpan={4}>
+                  <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)] border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
+                </td>
+              </tr>
+              // <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl   dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)]  border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
             )
             : (
               tasks.map((task) => (
@@ -87,7 +96,7 @@ export function MaintenanceTable() {
                     <div className="absolute bottom-0 left-0 h-px w-screen bg-gray-100" />
                   </td>
                   <td className="hidden max-w-xs px-3 py-4 text-sm text-gray-500 sm:table-cell truncate text-ellipsis overflow-hidden whitespace-nowrap">{task.description}</td>
-                  <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">{task.created_at}</td>
+                  <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">{formatDate(task.created_at)}</td>
                   <td className="px-3 py-4 text-sm text-gray-500">{task.cost}</td>
                 </tr>
               ))

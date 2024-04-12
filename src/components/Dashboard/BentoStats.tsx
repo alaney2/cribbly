@@ -14,7 +14,6 @@ import { MaintenanceTable } from '@/components/bento-stuff/MaintenanceTable'
 import { BarGraph } from '@/components/bento-stuff/BarGraph'
 import { Button } from '@/components/catalyst/button'
 import { usePathname, useRouter } from 'next/navigation'
-import Link from 'next/link';
 
 
 export function BentoStats() {
