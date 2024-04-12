@@ -96,7 +96,7 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
 
       <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js' />
       <div 
-        className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full w-full overscroll-none ${animationClass}`}
+        className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full w-full ${animationClass}`}
         style={{ height: '100%' }}
       >
         <Text

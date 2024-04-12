@@ -93,7 +93,7 @@ export function MapBox() {
   return (
     <>
       <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js' />
-      <div className={`flex flex-col justify-center items-center relative h-full w-full overscroll-none ${animationClass}`}>
+      <div className={`flex flex-col justify-center items-center relative h-full w-full ${animationClass}`}>
         <div
           className={`mx-auto text-center items-center w-full h-full transition-opacity appearance-none animate__animated animate__fadeIn`}
         >

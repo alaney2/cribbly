@@ -106,6 +106,7 @@ export function OtpInput({ email }: { email: string } ) {
             onPaste={handlePaste}
             autoComplete='off'
             required
+            autoFocus={index === 0}
           />
         ))}
       </div>

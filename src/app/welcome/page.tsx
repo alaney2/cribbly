@@ -1,3 +1,4 @@
+import '@/styles/no-overscroll.css'
 import WelcomeLayout from "@/components/welcome/WelcomeLayout";
 import { getUser, getSubscription, getProducts } from '@/utils/supabase/actions';
 
