@@ -76,7 +76,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
     switch(stepIndex) {
       case 0:
         return (
-          <div className={clsx('animate__animated touch-none', fadeOut ? `animate__fadeOut animate__fastest` : 'animate__fadeIn animate__fastest')}>
+          <div className={clsx('animate__animated touch-none mb-40', fadeOut ? `animate__fadeOut animate__fastest` : 'animate__fadeIn animate__fastest')}>
             <div className="sm:w-full sm:max-w-md">
               <Link href="/" className="cursor-default">
                 <Image

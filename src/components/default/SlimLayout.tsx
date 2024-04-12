@@ -42,7 +42,7 @@ export function SlimLayout({ children, splineLink }: { children: React.ReactNode
         <Suspense>
           <Notification />
         </Suspense>
-        <div className="relative z-10 flex flex-1 flex-col  px-4 py-10 justify-center md:flex-none md:px-28">
+        <div className="relative z-10 flex flex-1 flex-col px-4 py-10 justify-center md:flex-none md:px-28">
           <main className="mx-auto w-full max-w-md sm:px-4 md:w-96 md:max-w-sm md:px-0">
             {children}
           </main>
@@ -57,7 +57,7 @@ export function SlimLayout({ children, splineLink }: { children: React.ReactNode
                 <h1 className={"md:text-2xl xl:text-3xl text-xl text-white relative z-20"}>
                   Get started with Cribbly
                 </h1>
-                <p className="text-center mt-2 text-neutral-300 relative z-20">
+                <p className="text-center mt-2 text-neutral-300 relative z-20 mb-36">
                   Start managing your rental properties today!
                 </p>
               </div>

@@ -187,11 +187,11 @@ export function Account() {
 
   return (
     <div className="p-6 md:p-8 content-container relative">
-      {(isLoading || bankIsLoading) ? (
+      {/* {(isLoading || bankIsLoading) ? (
         <div className="absolute inset-x-1/2 inset-y-1/2">
           <Spinner />
         </div>
-    ) : (
+    ) : ( */}
       <main className="px-4 py-4 sm:px-6 lg:flex-auto lg:px-4 lg:py-4">
         <div className="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
           <div>
@@ -305,7 +305,7 @@ export function Account() {
           </DialogActions>
         </Dialog>
       </main>
-    )}
+    {/* )} */}
     </div>
   );
 }
