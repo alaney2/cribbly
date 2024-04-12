@@ -95,7 +95,7 @@ export function MaintenanceTable() {
                     <div className="absolute bottom-0 left-0 h-px w-screen bg-gray-100" />
                   </td>
                   <td className="hidden max-w-xs px-3 py-4 text-sm text-gray-500 sm:table-cell truncate text-ellipsis overflow-hidden whitespace-nowrap">{task.description}</td>
-                  <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">{formatDate(task.created_at)}</td>
+                  <td className="hidden px-3 py-4 text-sm text-gray-500 md:table-cell">{formatDate(String(task.created_at))}</td>
                   <td className="px-3 py-4 text-sm text-gray-500">{task.cost}</td>
                 </tr>
               ))

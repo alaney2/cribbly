@@ -89,11 +89,11 @@ export interface Database {
           code: string
           title: string
           description: string | null
-          label: string
+          status: string
           priority: string
           cost: number | null
-          created_at: string
-          updated_at: string
+          created_at: Date
+          updated_at: Date
         }
         Insert: {
           id: string
@@ -101,11 +101,11 @@ export interface Database {
           code: string
           title: string
           description?: string | null
-          label: string
+          status: string
           priority: string
           cost?: number | null
-          created_at?: string | null
-          updated_at?: string | null
+          created_at?: Date | null
+          updated_at?: Date | null
         }
         Update: {
           id?: string
@@ -113,11 +113,11 @@ export interface Database {
           code?: string
           title?: string
           description?: string | null
-          label?: string
+          status?: string
           priority?: string
           cost?: number | null
-          created_at?: string | null
-          updated_at?: string | null
+          created_at?: Date | null
+          updated_at?: Date | null
         }
       }
       customers: {

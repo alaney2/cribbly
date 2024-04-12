@@ -129,7 +129,8 @@ export async function getTasks({
         .where(where)
         .execute()
         .then((res) => res[0]?.count ?? 0)
-
+      
+      console.log('ADFASDASD', data)
       return {
         data,
         total,
