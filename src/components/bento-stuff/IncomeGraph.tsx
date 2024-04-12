@@ -164,10 +164,10 @@ export function IncomeGraph() {
         <Area type="monotone" connectNulls dataKey="Net" stroke="#2563eb" fill="#3b82f6"
           dot={{ stroke: '#2563eb', strokeWidth: 2, fill: '#fff' }}
         />
-        {refAreaLeft !== null && refAreaRight !== null && (
+        {zoomedData !== null && refAreaLeft !== null && refAreaRight !== null && (
           <ReferenceArea 
-            x1={zoomedData[refAreaLeft].name}
-            x2={zoomedData[refAreaRight].name}
+            x1={zoomedData[refAreaLeft]?.name}
+            x2={zoomedData[refAreaRight]?.name}
             strokeOpacity={0.3} 
             stroke="#2563eb"
             fill="#93c5fd"

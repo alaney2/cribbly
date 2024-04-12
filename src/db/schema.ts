@@ -4,7 +4,6 @@ import { numeric, pgEnum, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 
 import { databasePrefix } from "@/lib/constants"
 import { generateId } from "@/lib/utils"
-import { int } from "drizzle-orm/mysql-core"
 
 export const statusEnum = pgEnum(`${databasePrefix}_status`, [
   "todo",
@@ -19,7 +18,7 @@ export const priorityEnum = pgEnum(`${databasePrefix}_priority`, [
   "high",
 ])
 
-export const tasks = pgTable("tasks", {
+export const tasks = pgTable("shadcn_tasks", {
   id: uuid("id").primaryKey().defaultRandom(),
   user_id: uuid("user_id").notNull(),
   code: varchar("code", { length: 256 }),

@@ -166,6 +166,7 @@ export function useDataTable<TData, TValue>({
     React.useState<VisibilityState>({
       createdAt: false,
       updatedAt: false,
+      description: false,
     })
   const [columnFilters, setColumnFilters] =
     React.useState<ColumnFiltersState>(initialColumnFilters)

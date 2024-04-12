@@ -117,7 +117,7 @@ export function PropertiesGrid() {
             </DropdownMenu>
           </Dropdown>
           <Button color={addPropertyClicked ? 'lightblue' : 'blue'} 
-            className="w-36 h-10 cursor-default" onClick={handleClick}
+            className="w-40 h-10 cursor-default" onClick={handleClick}
           >
             <div className="">
             {addPropertyClicked ? (
