@@ -5,6 +5,7 @@ import * as React from "react"
 import { useDataTable } from "@/hooks/use-data-table"
 import { DataTable } from "@/components/data-table/data-table"
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar"
+import { DataTableAdvancedToolbar } from "@/components/data-table/advanced/data-table-advanced-toolbar"
 
 import { type getTasks } from "../_lib/queries"
 import { filterFields, getColumns } from "./tasks-table-columns"
@@ -18,7 +19,9 @@ interface TasksTableProps {
 
 export function TasksTable({ tasksPromise }: TasksTableProps) {
   // Flags for showcasing some additional features. Feel free to remove them.
-  const { enableAdvancedFilter, showFloatingBar } = useTasksTable()
+  // const { enableAdvancedFilter, showFloatingBar } = useTasksTable()
+  const enableAdvancedFilter = true
+
 
   // Learn more about React.use here: https://react.dev/reference/react/use
   const { data, pageCount } = React.use(tasksPromise)
@@ -36,15 +39,21 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
 
   return (
     <div className="w-full space-y-2.5 overflow-auto">
-      <DataTableToolbar table={table} filterFields={filterFields}>
-        <TasksTableToolbarActions table={table} />
-      </DataTableToolbar>
+      {enableAdvancedFilter ? (
+        <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
+          <TasksTableToolbarActions table={table} />
+        </DataTableAdvancedToolbar>
+      ) : (
+        <DataTableToolbar table={table} filterFields={filterFields}>
+          <TasksTableToolbarActions table={table} />
+        </DataTableToolbar>
+      )}
       
       <DataTable
         table={table}
-        floatingBar={
-          showFloatingBar ? <TasksTableFloatingBar table={table} /> : null
-        }
+        // floatingBar={
+        //   showFloatingBar ? <TasksTableFloatingBar table={table} /> : null
+        // }
       />
     </div>
   )
