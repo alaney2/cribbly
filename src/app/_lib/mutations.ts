@@ -25,7 +25,6 @@ export function deleteTasks({
       loading: "Deleting...",
       success: () => {
         onSuccess?.()
-        revalidatePath("/")
         return "Tasks deleted"
       },
       error: (err) => getErrorMessage(err),
@@ -59,7 +58,6 @@ export function updateTasks({
       loading: "Updating...",
       success: () => {
         onSuccess?.()
-        revalidatePath("/")
         return "Tasks updated"
       },
       error: (err) => getErrorMessage(err),

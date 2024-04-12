@@ -38,7 +38,7 @@ export async function createTask(
       cost: input.cost,
     })
 
-    revalidatePath("/")
+    revalidatePath("/dashboard/[property_id]/maintenance", "page")
 
     return {
       data: null,
@@ -68,7 +68,7 @@ export async function updateTask(input: UpdateTaskSchema & { id: string }) {
     }).eq('id', input.id)
       .eq('user_id', user.id)
 
-    revalidatePath("/")
+    revalidatePath("/dashboard/[property_id]/maintenance", "page")
 
     return {
       data: null,
