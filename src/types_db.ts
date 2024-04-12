@@ -22,7 +22,7 @@ export interface Database {
           created_at: Date
         }
         Insert: {
-          id: string
+          id?: string
           user_id: string
           street_address: string
           city: string
