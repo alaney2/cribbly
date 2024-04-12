@@ -19,7 +19,7 @@ export interface Database {
           zip: string
           apt: string | null
           country: string
-          created_at: string
+          created_at: Date
         }
         Insert: {
           id: string
@@ -30,7 +30,7 @@ export interface Database {
           zip: string
           apt?: string | null
           country: string
-          created_at?: string | null
+          created_at?: Date | null
         }
         Update: {
           id?: string
@@ -41,7 +41,7 @@ export interface Database {
           zip?: string
           apt?: string | null
           country?: string
-          created_at?: string | null
+          created_at?: Date | null
         }
       }
       plaid_accounts: {
@@ -55,19 +55,19 @@ export interface Database {
           wire_routing: string | null
           mask: string
           name: string
-          time_added: string
+          time_added: Date
         }
         Insert: {
           account_id: string
-          access_token?: string | null
-          item_id?: string | null
+          access_token?: string
+          item_id?: string
           user_id: string
           account_number: string
           routing_number: string
           wire_routing?: string | null
-          mask: string
-          name: string
-          time_added?: string | null
+          mask?: string | null
+          name?: string | null
+          time_added?: Date | null
         }
         Update: {
           account_id?: string
@@ -79,7 +79,7 @@ export interface Database {
           wire_routing?: string | null
           mask?: string
           name?: string
-          time_added?: string | null
+          time_added?: Date | null
         }
       }
       shadcn_tasks: {
