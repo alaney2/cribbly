@@ -33,6 +33,7 @@ const bankFetcher = async () => {
   let { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     toast.error("User not found")
+    return
   }
   const { data, error } = await supabase.from('plaid_accounts')
     .select()

@@ -9,6 +9,117 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      properties: {
+        Row: {
+          id: string
+          user_id: string
+          street_address: string
+          city: string
+          state: string
+          zip: string
+          apt: string | null
+          country: string
+          created_at: string
+        }
+        Insert: {
+          id: string
+          user_id: string
+          street_address: string
+          city: string
+          state: string
+          zip: string
+          apt?: string | null
+          country: string
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          street_address?: string
+          city?: string
+          state?: string
+          zip?: string
+          apt?: string | null
+          country?: string
+          created_at?: string | null
+        }
+      }
+      plaid_accounts: {
+        Row: {
+          account_id: string
+          access_token: string
+          item_id: string
+          user_id: string
+          account_number: string
+          routing_number: string
+          wire_routing: string | null
+          mask: string
+          name: string
+          time_added: string
+        }
+        Insert: {
+          account_id: string
+          access_token?: string | null
+          item_id?: string | null
+          user_id: string
+          account_number: string
+          routing_number: string
+          wire_routing?: string | null
+          mask: string
+          name: string
+          time_added?: string | null
+        }
+        Update: {
+          account_id?: string
+          access_token?: string | null
+          item_id?: string | null
+          user_id?: string
+          account_number?: string
+          routing_number?: string
+          wire_routing?: string | null
+          mask?: string
+          name?: string
+          time_added?: string | null
+        }
+      }
+      shadcn_tasks: {
+        Row: {
+          id: string
+          user_id: string
+          code: string
+          title: string
+          description: string | null
+          label: string
+          priority: string
+          cost: number | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          user_id: string
+          code: string
+          title: string
+          description?: string | null
+          label: string
+          priority: string
+          cost?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          code?: string
+          title?: string
+          description?: string | null
+          label?: string
+          priority?: string
+          cost?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
       customers: {
         Row: {
           id: string
