@@ -15,7 +15,7 @@ export interface IndexPageProps {
 export default function Maintenance({ params, searchParams } : IndexPageProps ) {
   const search = searchParamsSchema.parse(searchParams)
 
-  const tasksPromise = getTasks(search)
+  const tasksPromise = getTasks(search, params.property_id);
 
   return (
     <>

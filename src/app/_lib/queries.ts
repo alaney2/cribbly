@@ -21,7 +21,7 @@ export async function getTasks({
   operator,
   from,
   to,
-}: GetTasksSchema) {
+}: GetTasksSchema, propertyId: string) {
   noStore()
   try {
     const supabase = createClient()
@@ -29,6 +29,17 @@ export async function getTasks({
     if (!user) {
       return { data: [], pageCount: 0 }
     }
+    const { data: property } = await supabase
+      .from('properties')
+      .select()
+      .eq('user_id', user!.id)
+      .eq('id', propertyId)
+      .single()
+
+    if (!property) {
+      return { data: [], pageCount: 0 }
+    }
+
     // Offset to paginate the results
     const offset = (page - 1) * per_page
     // Column and order to sort by
@@ -45,6 +56,7 @@ export async function getTasks({
 
     const where: DrizzleWhere<Task> = and(
       eq(tasks.user_id, user.id),
+      eq(tasks.property_id, property.id),
       !operator || operator === "and"
         ? and(
             // Filter tasks by title

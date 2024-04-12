@@ -1,26 +1,11 @@
+"use client"
 import { createClient } from '@/utils/supabase/client'
 import useSWR from 'swr';
 import { toast } from 'sonner'
+import { useParams } from 'next/navigation'
 
-const maintenances = [
-  { name: 'Paint wall', description: 'Lorem ipsum dolor sit amet consectetur adipisicing adipisicing adipisicing adipisicing.', date: '7/31/2002', cost: 100 },
-  { name: 'Lorem', description: 'Lorem ipsum dolor', date: '07/31/2002', cost: 100 },
-  { name: 'Ipsum', description: 'Lorem ipsum dolor', date: '7/30/2002', cost: 100 },
-  { name: 'Fix table', description: 'Lorem ipsum dolor', date: '06/31/2003', cost: 100 },
-  { name: 'Swimming pool', description: 'Lorem ipsum dolor', date: '7/31/2004', cost: 100 },
-  { name: 'Laundry', description: 'Lorem ipsum dolor', date: '7/28/2003', cost: 100 },
-  { name: 'Dryer', description: 'Lorem ipsum dolor', date: '08/01/2003', cost: 100 },
-]
 
-const sortedMaintenances = maintenances.sort((a, b) => {
-  const dateA = new Date(a.date).getTime();
-  const dateB = new Date(b.date).getTime();
-  return dateB - dateA;
-});
-
-const recentMaintenances = sortedMaintenances.slice(0, 3);
-
-const fetcher = async () => {
+const fetcher = async (property_id: string) => {
   const supabase = createClient();
   let { data: { user } } = await supabase.auth.getUser();
   if (!user) {
@@ -31,6 +16,7 @@ const fetcher = async () => {
     .from('shadcn_tasks')
     .select('*')
     .eq('user_id', user!.id)
+    .eq('property_id', property_id)
     .order('created_at', { ascending: false })
     .limit(5);
 
@@ -39,8 +25,11 @@ const fetcher = async () => {
 };
 
 export function MaintenanceTable() {
-  const { data: tasks, error, isLoading } = useSWR('tasks', fetcher);
+  const params = useParams<{ property_id: string }>()
 
+  const { data: tasks, error, isLoading } = useSWR(['tasks', params.property_id], ([_, property_id]) =>
+    fetcher(property_id)
+  );
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -82,7 +71,11 @@ export function MaintenanceTable() {
             {!tasks ? (
               <tr>
                 <td colSpan={4}>
-                  <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl dark:bg-dot-white/[0.2] bg-dot-black/[0.2] [mask-image:radial-gradient(ellipse_at_center,white,transparent)] border border-transparent dark:border-white/[0.2] bg-neutral-100 dark:bg-black"></div>
+                  <div className="animate-pulse">
+                    <div className="h-8 bg-gray-200 rounded w-full my-4"></div>
+                    <div className="h-8 bg-gray-200 rounded w-full mb-4"></div>
+                    <div className="h-8 bg-gray-200 rounded w-full"></div>
+                  </div>
                 </td>
               </tr>
             )

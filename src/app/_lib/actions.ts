@@ -15,7 +15,7 @@ import { update } from "lodash"
 
 
 export async function createTask(
-  input: CreateTaskSchema & { anotherTaskId: string }
+  input: CreateTaskSchema & { anotherTaskId: string; propertyId: string }
 ) {
   noStore()
   const supabase = createClient()
@@ -26,9 +26,11 @@ export async function createTask(
       error: "User not found",
     }
   }
+
   try {
     await supabase.from('shadcn_tasks').insert({
       id: generateId(),
+      property_id: input.propertyId,
       user_id: user.id,
       code: `TASK-${customAlphabet("0123456789", 4)()}`,
       title: input.title,
@@ -90,6 +92,7 @@ export async function deleteTask(input: { id: string }) {
     await supabase.from('shadcn_tasks').delete()
       .eq('id', input.id)
       .eq('user_id', user.id)
+
     // await db.delete(tasks).where(eq(tasks.id, input.id))
 
     revalidatePath("/")

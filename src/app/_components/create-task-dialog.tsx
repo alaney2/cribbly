@@ -39,10 +39,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-
 import { createTask } from "../_lib/actions"
 import { createTaskSchema, type CreateTaskSchema } from "../_lib/validations"
 import { Input } from "@/components/ui/input"
+import { useParams } from 'next/navigation'
+
 
 interface CreateTaskDialogProps {
   prevTasks: Row<Task>[]
@@ -51,6 +52,7 @@ interface CreateTaskDialogProps {
 export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
   const [open, setOpen] = React.useState(false)
   const [isCreatePending, startCreateTransition] = React.useTransition()
+  const params = useParams<{ property_id: string }>()
 
   const form = useForm<CreateTaskSchema>({
     resolver: zodResolver(createTaskSchema),
@@ -66,6 +68,7 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
         createTask({
           ...input,
           anotherTaskId,
+          propertyId: params.property_id,
         }),
         {
           loading: "Creating task...",
