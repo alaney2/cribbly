@@ -10,6 +10,10 @@ import { useSearchParams, usePathname } from 'next/navigation'
 import useSWR, { useSWRConfig } from 'swr';
 import { Spinner } from '@/components/Spinners/FuelSpinner'
 import { RemoveBankDialog } from '@/components/Dashboard/RemoveBankDialog'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+import { Input } from '@/components/ui/input'
+import { Button as ShadButton } from '@/components/ui/button'
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -186,58 +190,55 @@ export function Account() {
   }, [linkToken, ready, open]);
 
   return (
-    <div className="p-6 md:p-8 content-container relative">
-      {/* {(isLoading || bankIsLoading) ? (
-        <div className="absolute inset-x-1/2 inset-y-1/2">
-          <Spinner />
-        </div>
-    ) : ( */}
-      <main className="px-4 py-4 sm:px-6 lg:flex-auto lg:px-4 lg:py-4">
-        <div className="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+    <div className="p-6 md:p-8 content-container relative justify-center flex">
+      <main className="px-4 py-4 sm:px-6 flex-auto lg:px-4 lg:py-4 max-w-7xl">
+        <div className="w-full max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
           <div>
             <h2 className="text-base font-semibold leading-7 text-gray-900">Profile</h2>
             <dl className="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
-              <div className="pt-6 sm:flex h-20 sm:h-14 sm:items-center">
+              <div className="pt-6 sm:flex">
                 <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">Full name</dt>
                 <dd className="flex-auto">
-                {isEditingName ? (
+                {isLoading ? (
+                  <div className="flex justify-between">
+                    <Skeleton height={18} width={140} />
+                  </div>
+                ) :
                   <>
-                    <form className="mt-1.5 sm:mt-0 h-14 flex justify-between gap-x-6 sm:items-center">
-                      <input
+                    <form className="mt-1.5 sm:mt-0 justify-between gap-x-6 sm:items-center">
+                      <Input
                         type="text"
                         value={editedName}
                         name="name"
                         id="name"
                         onChange={(e) => setEditedName(e.target.value)}
-                        className="w-full rounded-lg h-2/3 text-base md:text-sm p-0 sm:-ml-3 px-3 ring-inset ring-1 ring-gray-300 border-none shadow-sm focus:ring-2 focus:ring-blue-500/90"
+                        className="w-full rounded-lg"
                       />
-                      <div className="flex gap-x-2">
-                        <button type="submit" onClick={handleSaveName} className="font-semibold text-gray-100 bg-blue-600 hover:bg-blue-500 h-2/3 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg">
-                          Save
-                        </button>
-                        <button type="button" onClick={handleCancelEditName} className="font-semibold text-gray-700 px-2 py-1 sm:py-1.5 h-2/3 hover:bg-gray-100 rounded-lg">
+                      <div className="flex gap-x-2 justify-end my-4">
+                        <Button type="button" outline onClick={handleCancelEditName} className="text-sm" disabled={editedName === user_data?.full_name}>
                           Cancel
-                        </button>
+                        </Button>
+                        <Button type="submit" color="blue" onClick={handleSaveName} className="text-sm" disabled={editedName === user_data?.full_name}>
+                          Save
+                        </Button>
                       </div>
                     </form>
                   </>
-                ) : (
-                  <>
-                    <div className="mt-1.5 sm:mt-0 flex justify-between gap-x-6 sm:items-center">
-                      <div className="text-gray-900">{editedName}</div>
-                      <button type="button" className="font-semibold text-blue-600 hover:text-blue-500 px-2" onClick={handleEditName}>
-                        Update
-                      </button>
-                    </div>
-                  </>
-                )}
+                }
                 </dd>
               </div>
               <div className="pt-6 sm:flex">
                 <dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
-                  Email address</dt>
-                <dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-                  <div className="text-gray-900">{user_data?.email}</div>
+                  Email address
+                </dt>
+                <dd className="mt-1 flex sm:mt-0 sm:flex-auto">
+                {isLoading ? (
+                  <div className="flex justify-between">
+                    <Skeleton height={18} width={220} />
+                  </div>
+                ) :
+                  <Input className="text-gray-900 cursor-default pointer-events-none" placeholder={user_data?.email} />
+                }
                 </dd>
               </div>
             </dl>
@@ -248,7 +249,12 @@ export function Account() {
             <p className="mt-1 text-sm leading-6 text-gray-500">Connect bank accounts to your account.</p>
 
             <ul role="list" className="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
-              {bank_data?.map((bank_account) => 
+              {bankIsLoading ? (
+                <li className="gap-y-12 py-7">
+                  <Skeleton height={20} width={200} className="" />
+                </li>
+              ) :
+              bank_data?.map((bank_account) => 
                 <li key={bank_account.account_id} className="flex justify-between md:gap-x-6 py-6">
                   <div className="font-medium text-gray-700">
                     {bank_account.name} ••••{bank_account.mask}
@@ -305,7 +311,6 @@ export function Account() {
           </DialogActions>
         </Dialog>
       </main>
-    {/* )} */}
     </div>
   );
 }
