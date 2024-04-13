@@ -24,17 +24,19 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
   useEffect(() => {
     if (sidebarOpen) {
       document.body.classList.add("overflow-y-hidden")
+      // document.body.classList.add("fixed")
     } else {
       document.body.classList.remove("overflow-y-hidden")
+      // document.body.classList.remove("fixed")
     }
   }, [sidebarOpen]);
 
   return (
     <>
-      <div className="sticky top-0 z-50 flex items-center gap-x-6 bg-gray-50 px-4 py-4 shadow-sm sm:px-6 lg:hidden h-16">
+      <div className="sticky top-0 z-50 flex items-center gap-x-6 bg-gray-50 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
         <button
           type="button"
-          className={`-m-2.5 p-2.5 text-gray-700 lg:hidden z-50 ${sidebarOpen ? 'openmenu' : ''}`}
+          className={`fixed -m-2.5 p-2.5 text-gray-700 lg:hidden z-50 ${sidebarOpen ? 'openmenu' : ''}`}
           onClick={() => setSidebarOpen(!sidebarOpen)}
         >
           <span className="sr-only">Open sidebar</span>
@@ -46,8 +48,8 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
             </div>
           </div>
         </button>
-        <Link href="/dashboard" className="flex-1">
-          <div className="text-md font-semibold text-gray-700">Cribbly</div>
+        <Link href="/dashboard" className="flex-1 flex justify-center">
+          <div className="text-md text-gray-700 font-lexend font-medium">Cribbly</div>
         </Link>
       </div>
       <div className={`fixed inset-0 flex lg:hidden z-40 ${sidebarOpen ? 'fixed w-full h-lvh translate-x-0 ' : '-translate-x-full'} transition-transform duration-300 ease-in-out bg-gray-50`}>

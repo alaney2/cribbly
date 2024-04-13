@@ -57,7 +57,7 @@ export function MobileSidebar({ user }: { user: any }) {
 
   return (
     <>
-      <div className="sticky top-0 z-50 flex items-center gap-x-6 bg-gray-50 px-4 py-4 shadow-sm sm:px-6 lg:hidden h-16">
+      <div className="sticky top-0 z-50 flex items-center gap-x-6 bg-gray-50 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
         <button
           type="button"
           className={`-m-2.5 p-2.5 text-gray-700 lg:hidden z-50 ${sidebarOpen ? 'openmenu' : ''}`}
@@ -72,8 +72,8 @@ export function MobileSidebar({ user }: { user: any }) {
             </div>
           </div>
         </button>
-        <Link href="/dashboard" className='flex-1'>
-          <div className="text-md font-semibold text-gray-700">Cribbly</div>
+        <Link href="/dashboard" className='flex-1 flex justify-center'>
+          <div className="text-md font-medium font-lexend text-gray-700">Cribbly</div>
         </Link>
         <ProfileButton user={user} />
       </div>
