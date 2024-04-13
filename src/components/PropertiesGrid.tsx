@@ -73,7 +73,7 @@ export function PropertiesGrid() {
   };
 
   return (
-    <div ref={containerRef} className="p-6 md:p-8 content-container">
+    <div ref={containerRef} className="p-2 md:p-8 content-container">
       <Spinner />
       <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-center mb-4">
         <div className="relative sm:mr-2.5 w-full sm:w-auto mb-2.5 sm:mb-0">

@@ -53,31 +53,33 @@ export default async function CurrentProperty({ params } : { params: { property_
 
   return (
     <>
-      <h1 className="text-2xl font-semibold mb-8 ml-4 tracking-tight">{propertyData[0]?.street_address}, {propertyData[0]?.city} {propertyData[0]?.state} {propertyData[0]?.apt}</h1>
-      
-      <div className="mb-4 cursor-default">
-        <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {stats.map((item) => (
-            <Link href={item.href || '#'} key={item.name} className="group cursor-default overflow-hidden rounded-lg bg-white px-4 py-5 ring-inset ring-1 ring-gray-200 sm:p-6">
-              <dt className="truncate text-sm font-medium text-gray-500">
-                {item.name}
-              </dt>
-              <dd className="mt-1 text-3xl font-semibold tracking-tight text-emerald-600 flex">
-                {item.stat}
-                {item.icon && 
-                  <div className="ml-3 group-hover:opacity-100 p-2 rounded-lg block opacity-20 transition-opacity duration-200 ease-in-out">
-                    {item.icon}
-                  </div>}
-              </dd>
-            </Link>
-          ))}
-        </dl>
-      </div>
+      <div className="mb-8 lg:mb-0">
+        <h1 className="text-2xl font-semibold mb-8 ml-4 tracking-tight">{propertyData[0]?.street_address}, {propertyData[0]?.city} {propertyData[0]?.state} {propertyData[0]?.apt}</h1>
+        
+        <div className="mb-4 cursor-default">
+          <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            {stats.map((item) => (
+              <Link href={item.href || '#'} key={item.name} className="group cursor-default overflow-hidden rounded-lg bg-white px-4 py-5 ring-inset ring-1 ring-gray-200 sm:p-6">
+                <dt className="truncate text-sm font-medium text-gray-500">
+                  {item.name}
+                </dt>
+                <dd className="mt-1 text-3xl font-semibold tracking-tight text-emerald-600 flex">
+                  {item.stat}
+                  {item.icon && 
+                    <div className="ml-3 group-hover:opacity-100 p-2 rounded-lg block opacity-20 transition-opacity duration-200 ease-in-out">
+                      {item.icon}
+                    </div>}
+                </dd>
+              </Link>
+            ))}
+          </dl>
+        </div>
 
-      <BentoStats />
+        <BentoStats />
 
-      <div className="flex justify-center mt-8">
-        <Button color="blue" className="">Randomize data</Button>
+        <div className="flex justify-center mt-8">
+          <Button color="blue" className="">Randomize data</Button>
+        </div>
       </div>
     </>
   )
