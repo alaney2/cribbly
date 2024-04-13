@@ -33,10 +33,10 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
 
   return (
     <>
-      <div className="sticky top-0 z-50 flex items-center gap-x-6 bg-gray-50 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
+      <div className="sticky top-0 z-50 flex items-center justify-center gap-x-6 bg-gray-50 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
         <button
           type="button"
-          className={`fixed -m-2.5 p-2.5 text-gray-700 lg:hidden z-50 ${sidebarOpen ? 'openmenu' : ''}`}
+          className={`fixed left-2.5 p-2.5 text-gray-700 lg:hidden z-50 ${sidebarOpen ? 'openmenu' : ''}`}
           onClick={() => setSidebarOpen(!sidebarOpen)}
         >
           <span className="sr-only">Open sidebar</span>
@@ -48,7 +48,7 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
             </div>
           </div>
         </button>
-        <Link href="/dashboard" className="flex-1 flex justify-center">
+        <Link href="/dashboard" className=" mx-auto">
           <div className="text-md text-gray-700 font-lexend font-medium">Cribbly</div>
         </Link>
       </div>

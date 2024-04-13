@@ -15,7 +15,7 @@ export function ProfileButton({ user }: { user: any }) {
   const initials = getInitials(user?.full_name)
 
   return (
-    <Menu as="div" className="font-medium">
+    <Menu as="div" className="font-medium fixed right-5">
       <Menu.Button>
         <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gray-500">
           <span className="text-xs font-medium leading-none text-white">{initials}</span>
@@ -31,7 +31,7 @@ export function ProfileButton({ user }: { user: any }) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-100"
       >
-        <Menu.Items className="w-48 right-6 origin-top-right absolute z-10 mt-2 divide-y divide-gray-100 text-gray-700 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="w-48 right-0 origin-top-right absolute z-10 mt-2 divide-y divide-gray-100 text-gray-700 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-4 py-3">
             <p className="text-sm">Signed in as</p>
             <p className="truncate text-sm font-medium ">{user.email}</p>
