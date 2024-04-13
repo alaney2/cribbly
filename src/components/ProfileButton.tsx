@@ -15,7 +15,7 @@ export function ProfileButton({ user }: { user: any }) {
   const initials = getInitials(user?.full_name)
 
   return (
-    <Menu as="div" className="font-medium fixed right-5">
+    <Menu as="div" className="font-medium absolute right-5">
       <Menu.Button>
         <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gray-500">
           <span className="text-xs font-medium leading-none text-white">{initials}</span>
