@@ -18,7 +18,7 @@ export default function Maintenance({ params, searchParams } : IndexPageProps ) 
 
   return (
     <>
-      <div className="p-6 md:p-8" >
+      <div className="p-0 md:p-8" >
         <DateRangePicker
           triggerSize="sm"
           triggerClassName="ml-auto w-56 sm:w-60"

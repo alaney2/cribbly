@@ -32,8 +32,8 @@ export function BarGraph() {
         data={data}
         margin={{
           top: 0,
-          right: 85,
-          left: 40,
+          right: 20,
+          left: 0,
           bottom: 0,
         }}
       >
@@ -42,9 +42,11 @@ export function BarGraph() {
         <YAxis />
         <Tooltip />
         <ReferenceLine y={0} stroke="#000" />
-        <Brush dataKey="name" height={24} stroke="#3b82f6"
-          travellerWidth={10} 
-          />
+
+        <Brush dataKey="name" stroke="#3b82f6" height={24}
+          travellerWidth={16}
+        />
+
         <Bar dataKey="Pos" fill="#34d399" />
         <Bar dataKey="Neg" fill="#fda4af" />
       </BarChart>

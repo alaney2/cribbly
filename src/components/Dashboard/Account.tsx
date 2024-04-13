@@ -254,12 +254,13 @@ export function Account() {
                     {bank_account.name} ••••{bank_account.mask}
                   </div>
                   <button type="button" className="px-2 font-semibold text-red-600 hover:text-red-500" 
-                  onClick={() => {
-                    setBankDetails(`${bank_account.name} ••••${bank_account.mask}`)
-                    setAccountId(bank_account.account_id)
-                    setIsRemoveBankDialogOpen(true)}
-                  }>
-                    Remove account
+                    onClick={() => {
+                      setBankDetails(`${bank_account.name} ••••${bank_account.mask}`)
+                      setAccountId(bank_account.account_id)
+                      setIsRemoveBankDialogOpen(true)}
+                    }
+                  >
+                    Remove <span className="hidden sm:inline"> account</span>
                   </button>
                 </li>
               )}
