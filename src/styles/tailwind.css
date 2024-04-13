@@ -2,7 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
+  @font-face {
+    font-family: 'Lexend';
+    src: url('../fonts/Lexend-VariableFont_wght.ttf') format('truetype');
+  }
   :root {
     --background: 0 0% 100%;
     --foreground: 224 71.4% 4.1%;

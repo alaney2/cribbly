@@ -12,6 +12,22 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const supabase = createClient()
+  const { data: propertyData, error } = await supabase.from('properties')
+    .select()
+    .eq('id', params.property_id)
+
+  if (error || propertyData.length === 0) redirect('/dashboard')
+
+  return {
+    title: propertyData[0]?.street_address,
+  }
+}
+
 export default async function PropertyDashboardLayout({
   params,
   children,

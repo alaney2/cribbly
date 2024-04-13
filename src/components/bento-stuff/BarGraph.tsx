@@ -47,7 +47,7 @@ export function BarGraph() {
           travellerWidth={16}
         />
 
-        <Bar dataKey="Pos" fill="#34d399" />
+        <Bar dataKey="Pos" fill="#3b82f6" />
         <Bar dataKey="Neg" fill="#fda4af" />
       </BarChart>
     </ResponsiveContainer>
