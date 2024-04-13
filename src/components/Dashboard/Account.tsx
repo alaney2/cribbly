@@ -249,7 +249,7 @@ export function Account() {
 
             <ul role="list" className="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
               {bank_data?.map((bank_account) => 
-                <li key={bank_account.account_id} className="flex justify-between gap-x-6 py-6">
+                <li key={bank_account.account_id} className="flex justify-between md:gap-x-6 py-6">
                   <div className="font-medium text-gray-700">
                     {bank_account.name} ••••{bank_account.mask}
                   </div>
@@ -263,7 +263,6 @@ export function Account() {
                   </button>
                 </li>
               )}
-              
             </ul> 
             <RemoveBankDialog isOpen={isRemoveBankDialogOpen} setIsOpen={setIsRemoveBankDialogOpen} bank_details={bankDetails} account_id={accountId} />
             <div className="flex border-t border-gray-100 pt-6">

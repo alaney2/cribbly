@@ -7,7 +7,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Button } from '@/components/catalyst/button';
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/catalyst/dropdown';
-import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckIcon, EllipsisVerticalIcon } from '@heroicons/react/16/solid';
+import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckCircleIcon, XCircleIcon, EllipsisVerticalIcon } from '@heroicons/react/16/solid';
 import Fuse from 'fuse.js';
 import { Input } from '@/components/aceternity/Input'
 import Link from 'next/link';
@@ -101,7 +101,7 @@ export function PropertiesGrid() {
             <DropdownMenu className="min-w-32">
               <DropdownItem onClick={() => setSortBy('name')}>
                 <div className={`text-sm ${sortBy === 'name' && 'font-semibold'}`}>
-                  Name
+                  Address
                 </div>
               </DropdownItem>
               <DropdownItem onClick={() => setSortBy('city')}>
@@ -165,11 +165,11 @@ export function PropertiesGrid() {
           </div>
         ) : (
           sortedProperties?.map((property) => (
-            <div key={property.id} className="rounded-lg p-4 h-28 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md relative transition ease-in-out duration-200 hover:ring-2 hover:ring-gray-300">
+            <div key={property.id} className="rounded-lg p-4 h-28 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md relative transition ease-in-out duration-200 hover:ring-2 hover:ring-blue-300">
               <div className="absolute top-3 right-3">
                 <Dropdown>
-                  <DropdownButton plain className="h-7 w-6 p-0 bg-transparent transition ease-in-out duration-200 hover:bg-gray-300">
-                    <EllipsisVerticalIcon className="h-5 w-5 text-gray-500" />
+                  <DropdownButton plain className="h-7 w-6 p-0 bg-transparent transition ease-in-out duration-200">
+                    <EllipsisVerticalIcon className="h-5 w-5" />
                   </DropdownButton>
                   <DropdownMenu>
                     <DropdownItem href={`/dashboard/properties/${property.id}/settings`}>
@@ -189,6 +189,16 @@ export function PropertiesGrid() {
                 <h3 className="text-md font-semibold truncate">{property.street_address}</h3>
                 <p>{property.apt}</p>
                 <p>{property.city}, {property.state} {property.zip}</p>
+                <div className="absolute bottom-4 left-4 flex items-center gap-x-1">
+                  {/* <CheckCircleIcon className="h-4 w-4 text-blue-500" />
+                  <span className="text-gray-700 tracking-tight text-sm">Occupied</span> */}
+                  <XCircleIcon className="h-4 w-4 text-red-300" />
+                  <span className="text-gray-700 tracking-tight text-sm">Unoccupied</span>
+                </div>
+                <div className="absolute bottom-4 right-4 flex items-center gap-x-1">
+                  {/* <CheckIcon className="h-4 w-4 text-blue-500" /> */}
+                  <span className="text-gray-700 tracking-tight text-sm">0/4 complete</span>
+                </div>
               </Link>
             </div>
           ))
