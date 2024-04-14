@@ -237,7 +237,7 @@ export function Account() {
                     <Skeleton height={18} width={220} />
                   </div>
                 ) :
-                  <Input className="text-gray-900 cursor-default pointer-events-none" placeholder={user_data?.email} />
+                  <Input className="text-gray-900 bg-gray-50 cursor-default pointer-events-none" placeholder={user_data?.email} />
                 }
                 </dd>
               </div>
