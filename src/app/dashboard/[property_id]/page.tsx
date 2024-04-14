@@ -93,7 +93,7 @@ export default async function CurrentProperty({ params } : { params: { property_
   return (
     <>
       <div className="mb-8 lg:mb-0">
-        {/* <h1 className="text-2xl font-semibold mb-8 ml-4 tracking-tight">{propertyData[0]?.street_address}, {propertyData[0]?.city} {propertyData[0]?.state} {propertyData[0]?.apt}</h1> */}
+        <h1 className="lg:hidden text-xl font-semibold mb-8 ml-4 tracking-tight">{propertyData[0]?.street_address}, {propertyData[0]?.city} {propertyData[0]?.state} {propertyData[0]?.apt}</h1>
         <div className="mb-4 cursor-default">
           <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {stats.map((item) => (
