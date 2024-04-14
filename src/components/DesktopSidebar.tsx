@@ -76,7 +76,6 @@ export function DesktopSidebar({ user }: { user: any }) {
     { name: 'Settings', href: getDashboardURL('settings'), icon: Cog8ToothIcon },
   ]
 
-  
 
   return (
     <motion.div
@@ -99,7 +98,7 @@ export function DesktopSidebar({ user }: { user: any }) {
         </TooltipProvider>
         </Link>
       ) : (
-        <Link href="/dashboard" className="group mt-6 mb-1.5 flex items-center font-lexend gap-x-2 text-lg tracking-tight font-semibold cursor-default rounded-2xl w-full ">
+        <Link href="/dashboard" className="group mt-6 mb-1.5 flex items-center font-lexend gap-x-2 text-lg tracking-tight font-semibold cursor-default rounded-2xl w-full select-none">
           <Image src={icon} alt="logo" height={28} width={28} className="ml-4" />
           <AnimatePresence>
             {!isSidebarCollapsed && (

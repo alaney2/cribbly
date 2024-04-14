@@ -79,13 +79,13 @@ export function PropertyBreadcrumbs() {
               </BreadcrumbSeparator>
             }
             {index !== 1 ? (
-              <BreadcrumbItem className="tracking-tight font-lexend text-sm">
+              <BreadcrumbItem className="tracking-tight font-lexend text-sm select-none">
                 <BreadcrumbLink href={`/${segments.slice(0, index + 1).join('/')}`}>
                   {segment.charAt(0).toUpperCase() + segment.slice(1)}
                 </BreadcrumbLink>
               </BreadcrumbItem>
             ) : (
-              <BreadcrumbItem className="tracking-tight font-lexend text-sm">
+              <BreadcrumbItem className="tracking-tight font-lexend text-sm select-none">
               {(isLoading || otherProperties === (undefined || null)) ? <Skeleton height={18} width={80} /> : (
                 <>
                   <BreadcrumbLink href={`/${segments.slice(0, index + 1).join('/')}`}>{property?.street_address}</BreadcrumbLink>
