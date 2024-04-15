@@ -190,9 +190,9 @@ export function Account() {
   }, [linkToken, ready, open]);
 
   return (
-    <div className="p-6 md:p-8 content-container relative justify-center flex">
+    <div className="p-6 md:p-8 relative justify-center flex">
       <main className="px-4 py-4 sm:px-6 flex-auto lg:px-4 lg:py-4 max-w-7xl">
-        <div className="w-full max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
+        <div className="w-full space-y-16 sm:space-y-20">
           <div>
             <h2 className="text-base font-semibold leading-7 text-gray-900">Profile</h2>
             <dl className="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">

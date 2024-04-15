@@ -30,10 +30,10 @@ function SelectTime() {
 }
 
 const data = [
-  { name: "Water", value: 52 },
-  { name: "Gas", value: 28 },
-  { name: "Electricity", value: 37 },
-  { name: "Other", value: 21 }
+  { name: "Water", value: 0.001 },
+  { name: "Gas", value: 0.001 },
+  { name: "Electricity", value: 0.001 },
+  { name: "Other", value: 0.001 }
 ];
 const COLORS = [
   "rgba(59, 130, 246, 0.7)",  // #3b82f6
@@ -85,7 +85,9 @@ export function UtilityPie() {
                   borderRadius: '10px', // Rounded corners
                   boxShadow: '0 3px 6px rgba(0, 0, 0, 0.1)', // Slight shadow for depth
                   padding: '10px' // Inner spacing
-      }} />
+      }}
+        formatter={(value, name, props) => [Number(value).toFixed(2), name]}
+      />
     </PieChart>
     </ResponsiveContainer>
     </div>

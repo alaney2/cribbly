@@ -3,11 +3,9 @@
 import * as React from "react"
 import { tasks, type Task } from "@/db/schema"
 import { zodResolver } from "@hookform/resolvers/zod"
-// import { PlusIcon } from "@radix-ui/react-icons"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { type Row } from "@tanstack/react-table"
 import { useForm } from "react-hook-form"
-// import toast from "react-hot-toast"
 import { toast } from 'sonner'
 
 import { getErrorMessage } from "@/lib/handle-error"
@@ -214,15 +212,15 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
                   <FormLabel>Cost</FormLabel>
                   <FormControl>
                     <div className="relative">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                      <span className="text-gray-500 sm:text-sm">$</span>
-                    </div>
-                    <Input
-                      type="number"
-                      placeholder="0.00"
-                      className="py-1.5 pl-7 pr-12 resize-none"
-                      {...field}
-                    />
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                        <span className="text-gray-500 sm:text-sm">$</span>
+                      </div>
+                      <Input
+                        type="number"
+                        placeholder="0.00"
+                        className="py-1.5 pl-7 pr-12 resize-none"
+                        {...field}
+                      />
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -231,11 +229,11 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
             />
             <DialogFooter className="gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button type="button" variant="outline" size="sm">
                   Cancel
                 </Button>
               </DialogClose>
-              <Button disabled={isCreatePending}>Submit</Button>
+              <Button disabled={isCreatePending} size="sm">Submit</Button>
             </DialogFooter>
           </form>
         </Form>

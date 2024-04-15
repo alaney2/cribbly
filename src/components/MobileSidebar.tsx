@@ -46,7 +46,7 @@ export function MobileSidebar({ user }: { user: any }) {
   }
 
   const navigation = [
-    { name: 'Dashboard', href: getDashboardURL(), icon: HomeIcon },
+    { name: 'Analytics', href: getDashboardURL(), icon: ChartPieIcon },
     { name: 'Tenants', href: getDashboardURL('tenants'), icon: UsersIcon },
     // { name: 'Analytics', href: getDashboardURL('analytics'), icon: ChartPieIcon },
     { name: 'Maintenance', href: getDashboardURL('maintenance'), icon: WrenchIcon },

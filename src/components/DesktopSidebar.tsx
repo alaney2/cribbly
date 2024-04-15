@@ -67,9 +67,8 @@ export function DesktopSidebar({ user }: { user: any }) {
   }
 
   const navigation = [
-    { name: 'Dashboard', href: getDashboardURL(), icon: HomeIcon },
+    { name: 'Analytics', href: getDashboardURL(), icon: ChartPieIcon },
     { name: 'Tenants', href: getDashboardURL('tenants'), icon: UsersIcon },
-    // { name: 'Analytics', href: getDashboardURL('analytics'), icon: ChartPieIcon },
     { name: 'Maintenance', href: getDashboardURL('maintenance'), icon: WrenchIcon },
     { name: 'Utilities', href: getDashboardURL('utilities'), icon: IconWavesElectricity },
     { name: 'Documents', href: getDashboardURL('documents'), icon: IconSignature },
