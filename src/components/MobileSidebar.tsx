@@ -73,7 +73,10 @@ export function MobileSidebar({ user }: { user: any }) {
           </div>
         </button>
         <Link href="/dashboard" className=''>
-          <div className="text-md font-medium font-lexend text-gray-700">Cribbly</div>
+          <div className="text-md font-medium font-lexend text-gray-700 tracking-tight">
+            <span className={`text-gray-600`}>Crib</span>
+            <span className={`text-blue-500`}>bly</span>
+          </div>
         </Link>
         <ProfileButton user={user} />
       </div>
@@ -90,13 +93,13 @@ export function MobileSidebar({ user }: { user: any }) {
                     href={item.href}
                     className={classNames(
                       'text-gray-700 hover:text-blue-600',
-                      'block w-full gap-x-3 rounded-md px-2 py-3 text-sm font-semibold'
+                      'block w-full gap-x-3 rounded-md px-2 py-3 text-md font-semibold'
                     )}
                   >
                     <item.icon
                       className={classNames(
                         'text-gray-400 group-hover:text-blue-600',
-                        'inline-block h-4 w-4 mr-3'
+                        'inline-block h-5 w-5 mr-3'
                       )}
                       aria-hidden="true"
                     />

@@ -49,7 +49,10 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
           </div>
         </button>
         <Link href="/dashboard" className=" mx-auto">
-          <div className="text-md text-gray-700 font-lexend font-medium">Cribbly</div>
+          <div className="text-md text-gray-700 font-lexend font-medium tracking-tight">
+            <span className={`text-gray-600`}>Crib</span>
+            <span className={`text-blue-500`}>bly</span>
+          </div>
         </Link>
       </div>
       <div className={`fixed inset-0 flex lg:hidden z-40 ${sidebarOpen ? 'fixed w-full h-lvh translate-x-0 ' : '-translate-x-full'} transition-transform duration-300 ease-in-out bg-gray-50`}>
@@ -66,10 +69,10 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
                       setSidebarOpen(false)
                     }}
                     href={item.href}
-                    className={classNames('text-gray-700 text-left block w-full gap-x-3 rounded-md px-2 py-3 text-sm font-semibold'
+                    className={classNames('text-gray-700 text-left block w-full gap-x-3 rounded-md px-2 py-3 text-md font-semibold'
                     )}
                   >
-                    <item.icon className="inline-block h-4 w-4 mr-3" />
+                    <item.icon className="inline-block h-5 w-5 mr-3" />
                     {item.name}
                   </Link>
                 </li>
@@ -79,10 +82,10 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
                 <button
                   type="submit"
                   className={classNames(
-                    ' text-gray-700 block w-full px-2 py-3 text-left text-sm font-semibold'
+                    ' text-gray-700 block w-full px-2 py-3 text-left text-md font-semibold'
                   )}
                 >
-                  <ArrowRightStartOnRectangleIcon className="inline-block h-4 w-4 mr-3" />
+                  <ArrowRightStartOnRectangleIcon className="inline-block h-5 w-5 mr-3" />
                   Sign out
                 </button>
               </li>
@@ -90,7 +93,7 @@ export function MobileSidebarDashboard({ user }: { user: any }) {
                 <button
                   type="button"
                   className={classNames(
-                    'text-gray-700 block w-full px-2 py-2 text-center text-sm font-semibold ring-1 ring-gray-200 rounded-lg'
+                    'text-gray-700 block w-full px-2 py-2 text-center text-md font-semibold ring-1 ring-gray-200 rounded-lg'
                   )}
                 >
                   Contact
