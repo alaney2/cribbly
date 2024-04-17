@@ -11,7 +11,9 @@ import screenshotExpenses from '@/images/screenshots/expenses.png'
 import screenshotPayroll from '@/images/screenshots/payroll.png'
 import screenshotReporting from '@/images/screenshots/reporting.png'
 import screenshotVatReturns from '@/images/screenshots/vat-returns.png'
-import propertyDashboard from '@/images/screenshots/propertyDashboard.png'
+import propertyDashboard from '@/images/screenshots/propertyDashboardScreely.png'
+import maintenanceRequest from '@/images/screenshots/maintenanceRequestScreely.png'
+
 
 const features = [
   {
@@ -24,19 +26,19 @@ const features = [
     title: 'Wish you could see your earnings with just a glance?',
     description:
       "Cribbly's dashboard gives you real-time insights into your earnings and expenses. Stay informed, stay ahead. ",
-    image: screenshotPayroll,
+    image: propertyDashboard,
   },
   {
     title: 'Dreading the next maintenance emergency?',
     description:
       "Tenants can report issues directly through the platform, and Cribbly notifies you when they do — track and manage requests without lifting a phone.",
-    image: '',
+    image: maintenanceRequest,
   },
   {
     title: 'Still filling out tax forms manually?',
     description:
       'Forget the year-end tax scramble. Cribbly automates your tax reports, making it simple to track expenses and income for seamless tax filing.',
-    image: '',
+    image: maintenanceRequest,
   },
 ]
 

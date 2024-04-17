@@ -172,10 +172,10 @@ export function PropertiesGrid() {
                     <EllipsisVerticalIcon className="h-5 w-5" />
                   </DropdownButton>
                   <DropdownMenu>
-                    <DropdownItem href={`/dashboard/properties/${property.id}/settings`}>
+                    <DropdownItem href={`/dashboard/${property.id}/settings`}>
                       Settings
                     </DropdownItem>
-                    <DropdownItem href={`/dashboard/properties/${property.id}`}>
+                    <DropdownItem href={`/dashboard/${property.id}`}>
                       Tenants
                     </DropdownItem>
                   </DropdownMenu>
