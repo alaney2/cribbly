@@ -15,19 +15,19 @@ const faqs = [
       question: 
         'What is Cribbly, and who is it for?',
       answer:
-        '',
+        'Cribbly is property management software for small landlords managing homes, condos, and apartments. It automates rent collection, maintenance tracking, and financial reporting.',
     },
     {
       question:
         'Why use property management software at all?',
       answer:
-        '',
+        'Using property management software can significantly enhance the efficiency of managing rental properties by automating routine tasks like rent collection, tenant communications, and maintenance scheduling. This not only saves time but also reduces errors, improves tenant satisfaction, and provides real-time insights into property performance, leading to better decision-making and increased profitability.',
     },
     {
       question:
         'Is property management software suitable for individual landlords or just property management companies?',
       answer:
-        '',
+        'It’s suitable for both, scaling efficiently for any number of properties, from one to hundreds. No matter the portfolio size, everyone can benefit from the time and cost savings, improved organization, and enhanced tenant experience that property management software provides.',
     },
   ],
   [
@@ -35,19 +35,19 @@ const faqs = [
       question: 
         'What types of properties can be managed using property management software?',
       answer:
-        '',
+        'All types, including single-family homes, condos, apartments, commercial properties, and more. Cribbly is built for small landlords managing residential properties, but it can be adapted for other property types as well.',
     },
     {
       question: 
-        'What does Cribbly offer?',
-      answer: 
-        '',
+      'What does Cribbly offer?',
+      answer:
+      'Cribbly provides automated online rent payment, real-time financial analytics, maintenance request tracking, and tax report automation in a user-friendly platform. You can also use Cribbly on your phone to manage your properties on the go.', 
     },
     {
       question: 
         'How much does Cribbly cost?',
       answer:
-        'Cribbly is free for the first three months, and then min(0.35% rent, $10) per month per property.',
+        'Free for three months, then the lesser of 0.35% of rent or $10 per property per month. This pricing model makes Cribbly an affordable option for landlords looking to leverage the benefits of property management software without significant upfront costs.',
     },
   ],
 ]

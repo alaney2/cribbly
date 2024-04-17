@@ -12,6 +12,7 @@ import screenshotPayroll from '@/images/screenshots/payroll.png'
 import screenshotReporting from '@/images/screenshots/reporting.png'
 import screenshotVatReturns from '@/images/screenshots/vat-returns.png'
 import propertyDashboard from '@/images/screenshots/propertyDashboardScreely.png'
+import dashboard from '@/images/screenshots/dashboardScreely.png'
 import maintenanceRequest from '@/images/screenshots/maintenanceRequestScreely.png'
 
 
@@ -20,7 +21,7 @@ const features = [
     title: 'Rent payments',
     description:
       "Live in a world where rent collects itself. No more manual transfers or misplaced checks.",
-    image: propertyDashboard,
+    image: dashboard,
   },
   {
     title: 'Analytics',
@@ -38,7 +39,7 @@ const features = [
     title: 'Tax reports',
     description:
       'Forget the year-end tax scramble. Cribbly makes it simple to track expenses and income for seamless tax filing.',
-    image: maintenanceRequest,
+    image: propertyDashboard,
   },
 ]
 

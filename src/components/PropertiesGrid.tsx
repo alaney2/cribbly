@@ -164,7 +164,7 @@ export function PropertiesGrid() {
             <h2 className="text-sm sm:text-lg font-medium">Add your first property</h2>
           </div>
         ) : (
-          sortedProperties?.map((property) => (
+          sortedProperties?.map((property, index) => (
             <div key={property.id} className="rounded-lg p-4 h-28 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md relative transition ease-in-out duration-200 hover:ring-2 hover:ring-blue-300">
               <div className="absolute top-3 right-3">
                 <Dropdown>
@@ -190,10 +190,16 @@ export function PropertiesGrid() {
                 <p>{property.apt}</p>
                 <p>{property.city}, {property.state} {property.zip}</p>
                 <div className="absolute bottom-4 left-4 flex items-center gap-x-1">
-                  {/* <CheckCircleIcon className="h-4 w-4 text-blue-500" />
-                  <span className="text-gray-700 tracking-tight text-sm">Occupied</span> */}
-                  <XCircleIcon className="h-4 w-4 text-red-300" />
-                  <span className="text-gray-700 tracking-tight text-sm">Unoccupied</span>
+                  {index % 2 == 0 ? 
+                    <>
+                      <CheckCircleIcon className="h-4 w-4 text-blue-500" />
+                      <span className="text-gray-700 tracking-tight text-sm">Occupied</span>
+                    </> : 
+                    <>
+                      <XCircleIcon className="h-4 w-4 text-red-300" />
+                      <span className="text-gray-700 tracking-tight text-sm">Unoccupied</span>
+                    </>
+                }
                 </div>
               </Link>
             </div>
