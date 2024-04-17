@@ -17,27 +17,27 @@ import maintenanceRequest from '@/images/screenshots/maintenanceRequestScreely.p
 
 const features = [
   {
-    title: 'Tired of tracking down rent every month?',
+    title: 'Rent payments',
     description:
-      "Live in a world where rent collects itself, and paper checks are just a memory. No more manual transfers or misplaced checks.",
+      "Live in a world where rent collects itself. No more manual transfers or misplaced checks.",
     image: propertyDashboard,
   },
   {
-    title: 'Wish you could see your earnings with just a glance?',
+    title: 'Analytics',
     description:
-      "Cribbly's dashboard gives you real-time insights into your earnings and expenses. Stay informed, stay ahead. ",
+      "The analytics dashboard gives you real-time insights into your earnings and expenses. Stay informed, stay ahead. ",
     image: propertyDashboard,
   },
   {
-    title: 'Dreading the next maintenance emergency?',
+    title: 'Maintenance requests',
     description:
-      "Tenants can report issues directly through the platform, and Cribbly notifies you when they do — track and manage requests without lifting a phone.",
+      "Tenants can report issues directly through the platform — track and manage requests without lifting a phone.",
     image: maintenanceRequest,
   },
   {
-    title: 'Still filling out tax forms manually?',
+    title: 'Tax reports',
     description:
-      'Forget the year-end tax scramble. Cribbly automates your tax reports, making it simple to track expenses and income for seamless tax filing.',
+      'Forget the year-end tax scramble. Cribbly makes it simple to track expenses and income for seamless tax filing.',
     image: maintenanceRequest,
   },
 ]
@@ -79,7 +79,7 @@ export function PrimaryFeatures() {
       <Container className="relative">
         <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
-            Less time on Management, More time for You
+            Less time on Management, More time on You
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
             Experience the freedom of automation, where rent collection, maintenance handling, and financial oversight are simplified

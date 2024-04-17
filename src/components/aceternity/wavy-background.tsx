@@ -12,7 +12,7 @@ export const WavyBackground = ({
   waveWidth,
   backgroundFill,
   blur = 10,
-  speed = "fast",
+  speed = "slow",
   waveOpacity = 0.5,
   ...props
 }: {
@@ -42,9 +42,9 @@ export const WavyBackground = ({
   const getSpeed = () => {
     switch (speed) {
       case "slow":
-        return 0.005;
+        return 0.001;
       case "fast":
-        return 0.0007;
+        return 0.002;
       default:
         return 0.001;
     }
@@ -80,19 +80,23 @@ export const WavyBackground = ({
   const drawWave = (n: number, waveOffset=100) => {
     nt += getSpeed();
     for (let i = 0; i < n; i++) {
-      const wavePath = new Path2D();
+      ctx.beginPath();
+      ctx.lineWidth = waveWidth || 100;
+      ctx.strokeStyle = waveColors[i % waveColors.length];
+      // const wavePath = new Path2D();
       const stepSize = 5;
       for (let x = 0; x < w; x += stepSize) {
         const y = noise(x / 800, 0.3 * i, nt) * 160;
-        if (x === 0) {
-          wavePath.moveTo(x, y + h * 0.5 + waveOffset);
-        } else {
-          wavePath.lineTo(x, y + h * 0.5 + waveOffset);
-        }
+        // if (x === 0) {
+        //   wavePath.moveTo(x, y + h * 0.5 + waveOffset);
+        // } else {
+        //   wavePath.lineTo(x, y + h * 0.5 + waveOffset);
+        // }
+        ctx.lineTo(x, y + h * 0.5 + waveOffset);
       }
-      ctx.lineWidth = waveWidth || 100;
-      ctx.strokeStyle = waveColors[i % waveColors.length];
-      ctx.stroke(wavePath);
+      
+      ctx.stroke();
+      ctx.closePath()
     }
   };
 
@@ -105,6 +109,15 @@ export const WavyBackground = ({
     drawWave(6);
     animationId = requestAnimationFrame(render);
   };
+
+  const [isSafari, setIsSafari] = useState(false);
+  useEffect(() => {
+    setIsSafari(
+      typeof window !== "undefined" &&
+        navigator.userAgent.includes("Safari") &&
+        !navigator.userAgent.includes("Chrome")
+    );
+  }, []);
 
   useEffect(() => {
     setDimensions({ width: window.innerWidth, height: window.innerHeight });
@@ -127,6 +140,9 @@ export const WavyBackground = ({
         className="absolute top-0 left-0 w-full h-full z-0"
         ref={canvasRef}
         id="canvas"
+        style={{
+          ...(isSafari ? { filter: `blur(${blur}px)` } : {}),
+        }}
       ></canvas>
       <div className={cn("relative z-10", className)} {...props}>
         {children}

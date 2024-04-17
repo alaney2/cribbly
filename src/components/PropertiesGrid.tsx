@@ -195,11 +195,6 @@ export function PropertiesGrid() {
                   <XCircleIcon className="h-4 w-4 text-red-300" />
                   <span className="text-gray-700 tracking-tight text-sm">Unoccupied</span>
                 </div>
-                <div className="absolute bottom-4 right-4 flex items-center gap-x-1">
-                  {/* <CheckIcon className="h-4 w-4 text-blue-500" /> */}
-                  
-                  <span className="text-gray-700 tracking-tight text-sm">0/4 complete</span>
-                </div>
               </Link>
             </div>
           ))

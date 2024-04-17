@@ -12,37 +12,42 @@ import {
 const faqs = [
   [
     {
-      question: 'Does Cribbly handle VAT?',
+      question: 
+        'What is Cribbly, and who is it for?',
       answer:
-        'Well no, but if you move your company offshore you can probably ignore it.',
+        '',
     },
     {
       question:
-        'Cribbly sounds horrible but why do I still feel compelled to purchase?',
+        'Why use property management software at all?',
       answer:
-        'This is the power of excellent visual design. You just can’t resist it, no matter how poorly it actually functions.',
+        '',
     },
-    // {
-    //   question:
-    //     '',
-    //   answer:
-    //     '',
-    // },
+    {
+      question:
+        'Is property management software suitable for individual landlords or just property management companies?',
+      answer:
+        '',
+    },
   ],
   [
     {
-      question: 'How do you generate reports?',
+      question: 
+        'What types of properties can be managed using property management software?',
       answer:
-        'You just tell us what data you need a report for, and we get our kids to create beautiful charts for you using only the finest crayons.',
+        '',
     },
     {
-      question: 'Can we expect more inventory features?',
-      answer: 'In life it’s really better to never expect anything at all.',
+      question: 
+        'What does Cribbly offer?',
+      answer: 
+        '',
     },
     {
-      question: 'I lost my password, how do I get into my account?',
+      question: 
+        'How much does Cribbly cost?',
       answer:
-        'Send us an email and we will send you a copy of our latest password spreadsheet so you can find your information.',
+        'Cribbly is free for the first three months, and then min(0.35% rent, $10) per month per property.',
     },
   ],
 ]
@@ -72,7 +77,6 @@ export function Faqs() {
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
             We’ve got your questions covered!
-
           </p>
         </div>
         <ul
@@ -85,7 +89,7 @@ export function Faqs() {
                 {column.map((faq, faqIndex) => (
                   <Accordion key={faqIndex} type="single" collapsible className="">
                       <AccordionItem value={`item-${columnIndex}-${faqIndex}`}>
-                      <AccordionTrigger className="font-display text-lg leading-7 text-slate-900 cursor-pointer">
+                      <AccordionTrigger className="font-display text-lg leading-7 text-slate-900 cursor-pointer text-left	">
                       {faq.question}
                       </AccordionTrigger>
                       <AccordionContent className="mt-4 text-sm text-slate-700">
