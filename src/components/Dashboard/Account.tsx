@@ -212,7 +212,7 @@ export function Account() {
                         name="name"
                         id="name"
                         onChange={(e) => setEditedName(e.target.value)}
-                        className="w-full rounded-lg"
+                        className="w-full rounded-lg text-base sm:text-sm"
                       />
                       <div className="flex gap-x-2 justify-end my-4">
                         <Button type="button" outline onClick={handleCancelEditName} className="text-sm" disabled={editedName === user_data?.full_name}>

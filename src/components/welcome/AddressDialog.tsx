@@ -157,15 +157,15 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
         <DialogDescription>
           Please confirm the address details for your property
         </DialogDescription>
-        <DialogBody className='mt-8'>
+        <DialogBody className=''>
           <Fieldset aria-label="Confirm address">
             <FieldGroup>
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-4">
-                <Field className="sm:col-span-2">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <Field className="col-span-1 sm:col-span-2">
                   <Label>Street address</Label>
                   <Input name="street_address" defaultValue={streetAddress.current || ''} autoComplete='off' disabled />
                 </Field>
-                <Field className="sm:col-span-1">
+                <Field className="col-span-1 sm:col-span-1">
                   <Label>Apt/Suite</Label>
                   <Input 
                     name="apt" 
@@ -175,12 +175,12 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
                   />
                 </Field>
               </div>
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4 -mt-20">
-                <Field className="sm:col-span-1">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Field className="col-span-1 sm:col-span-1">
                   <Label>City</Label>
                   <Input name="city" defaultValue={city.current || ''} autoComplete='off' required disabled />
                 </Field>
-                <Field className="sm:col-span-1">
+                <Field className="col-span-1 sm:col-span-1">
                   <Label>{stateOrProvince}</Label>
                   <Select name="state" defaultValue={currentState.current || ''} required disabled>
                     <option value="" disabled>Select a {stateOrProvince === 'State' ? 'state' : 'province'}</option>
@@ -191,9 +191,9 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
                     ))}
                   </Select>                  
                 </Field>
-              </div>
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
-                <Field className="sm:col-span-1">
+              {/* </div>
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4"> */}
+                <Field className="col-span-1 sm:col-span-1">
                   <Label>{zipOrPostal}</Label>
                   <Input 
                     name="zip" 
@@ -203,7 +203,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
                     disabled
                   />
                 </Field>
-                <Field className="sm:col-span-1">
+                <Field className="col-span-1 sm:col-span-1">
                   <Label>Country</Label>
                   <Select
                     disabled
