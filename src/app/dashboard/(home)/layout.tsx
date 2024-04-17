@@ -2,7 +2,6 @@ import '@/styles/no-overscroll.css'
 import Link from 'next/link';
 import { MobileSidebarDashboard } from '@/components/MobileSidebarDashboard';
 import { DesktopSidebarDashboard } from '@/components/DesktopSidebarDashboard'
-import { MapBox } from '@/components/MapBox';
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation';
 import { type Metadata } from 'next'

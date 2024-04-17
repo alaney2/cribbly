@@ -25,7 +25,7 @@ const features: Array<Feature> = [
     summary: 'Stay on top of things with always up-to-date reporting features.',
     description:
       'We talked about reporting in the section above but we needed three items here, so mentioning it one more time for posterity.',
-    image: screenshotProfitLoss,
+    image: '',
     icon: function ReportingIcon() {
       let id = useId()
       return (
@@ -60,7 +60,7 @@ const features: Array<Feature> = [
       'Never lose track of what’s in stock with accurate inventory tracking.',
     description:
       'We don’t offer this as part of our software but that statement is inarguably true. Accurate inventory tracking would help you for sure.',
-    image: screenshotInventory,
+    image: '',
     icon: function InventoryIcon() {
       return (
         <>
@@ -88,7 +88,7 @@ const features: Array<Feature> = [
       'Organize all of your contacts, service providers, and invoices in one place.',
     description:
       'This also isn’t actually a feature, it’s just some friendly advice. We definitely recommend that you do this, you’ll feel really organized and professional.',
-    image: screenshotContacts,
+    image: '',
     icon: function ContactsIcon() {
       return (
         <>
@@ -186,7 +186,7 @@ function FeaturesDesktop() {
                 feature={{
                   ...feature,
                   name: (
-                    <Tab className="ui-not-focus-visible:outline-none">
+                    <Tab className="ui-not-focus-visible:outline-none outline-none cursor-pointer">
                       <span className="absolute inset-0" />
                       {feature.name}
                     </Tab>
@@ -241,7 +241,7 @@ export function SecondaryFeatures() {
       <Container>
         <div className="mx-auto max-w-2xl md:text-center">
           <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
-            Simplify everyday business tasks.
+            Simplify everyday tasks.
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
             Because you’d probably be a little confused if we suggested you

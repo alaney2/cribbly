@@ -2,6 +2,12 @@ import Image from 'next/image'
 
 import { Container } from '@/components/default/Container'
 import backgroundImage from '@/images/background-faqs.jpg'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 const faqs = [
   [
@@ -11,33 +17,17 @@ const faqs = [
         'Well no, but if you move your company offshore you can probably ignore it.',
     },
     {
-      question: 'Can I pay for my subscription via purchase order?',
-      answer: 'Absolutely, we are happy to take your money in all forms.',
-    },
-    {
-      question: 'How do I apply for a job at Cribbly?',
-      answer:
-        'We only hire our customers, so subscribe for a minimum of 6 months and then let’s talk.',
-    },
-  ],
-  [
-    {
-      question: 'What was that testimonial about tax fraud all about?',
-      answer:
-        'Cribbly is just a software application, ultimately your books are your responsibility.',
-    },
-    {
       question:
         'Cribbly sounds horrible but why do I still feel compelled to purchase?',
       answer:
         'This is the power of excellent visual design. You just can’t resist it, no matter how poorly it actually functions.',
     },
-    {
-      question:
-        'I found other companies called Cribbly, are you sure you can use this name?',
-      answer:
-        'Honestly not sure at all. We haven’t actually incorporated or anything, we just thought it sounded cool and made this website.',
-    },
+    // {
+    //   question:
+    //     '',
+    //   answer:
+    //     '',
+    // },
   ],
   [
     {
@@ -81,24 +71,28 @@ export function Faqs() {
             Frequently asked questions
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
-            If you can’t find what you’re looking for, email our support team
-            and if you’re lucky someone will get back to you.
+            We’ve got your questions covered!
+
           </p>
         </div>
         <ul
           role="list"
-          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3"
+          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-2"
         >
           {faqs.map((column, columnIndex) => (
             <li key={columnIndex}>
               <ul role="list" className="flex flex-col gap-y-8">
                 {column.map((faq, faqIndex) => (
-                  <li key={faqIndex}>
-                    <h3 className="font-display text-lg leading-7 text-slate-900">
+                  <Accordion key={faqIndex} type="single" collapsible className="">
+                      <AccordionItem value={`item-${columnIndex}-${faqIndex}`}>
+                      <AccordionTrigger className="font-display text-lg leading-7 text-slate-900 cursor-pointer">
                       {faq.question}
-                    </h3>
-                    <p className="mt-4 text-sm text-slate-700">{faq.answer}</p>
-                  </li>
+                      </AccordionTrigger>
+                      <AccordionContent className="mt-4 text-sm text-slate-700">
+                          {faq.answer}
+                        </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 ))}
               </ul>
             </li>

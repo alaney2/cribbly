@@ -11,32 +11,32 @@ import screenshotExpenses from '@/images/screenshots/expenses.png'
 import screenshotPayroll from '@/images/screenshots/payroll.png'
 import screenshotReporting from '@/images/screenshots/reporting.png'
 import screenshotVatReturns from '@/images/screenshots/vat-returns.png'
-
+import propertyDashboard from '@/images/screenshots/propertyDashboard.png'
 
 const features = [
   {
-    title: 'Collect Rent',
+    title: 'Tired of tracking down rent every month?',
     description:
-      "Keep track of everyone's salaries and whether or not they've been paid. Direct deposit not supported.",
+      "Live in a world where rent collects itself, and paper checks are just a memory. No more manual transfers or misplaced checks.",
+    image: propertyDashboard,
+  },
+  {
+    title: 'Wish you could see your earnings with just a glance?',
+    description:
+      "Cribbly's dashboard gives you real-time insights into your earnings and expenses. Stay informed, stay ahead. ",
     image: screenshotPayroll,
   },
   {
-    title: 'Track expenses',
+    title: 'Dreading the next maintenance emergency?',
     description:
-      "All of your receipts organized into one place, as long as you don't mind typing in the data by hand.",
-    image: screenshotExpenses,
+      "Tenants can report issues directly through the platform, and Cribbly notifies you when they do — track and manage requests without lifting a phone.",
+    image: '',
   },
   {
-    title: 'Analytics',
+    title: 'Still filling out tax forms manually?',
     description:
-      "We only sell our software to companies who don't deal with VAT at all, so technically we do all the VAT stuff they need.",
-    image: screenshotVatReturns,
-  },
-  {
-    title: 'Documents',
-    description:
-      'Easily export your data into an Excel spreadsheet where you can do whatever the hell you want with it.',
-    image: screenshotReporting,
+      'Forget the year-end tax scramble. Cribbly automates your tax reports, making it simple to track expenses and income for seamless tax filing.',
+    image: '',
   },
 ]
 
@@ -77,15 +77,15 @@ export function PrimaryFeatures() {
       <Container className="relative">
         <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
-            Our all-in-one solution is everything you need.
+            Less time on Management, More time for You
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
-            Managing multiple properties is complex. We make it as easy as calling the cops.
+            Experience the freedom of automation, where rent collection, maintenance handling, and financial oversight are simplified
           </p>
         </div>
         <Tab.Group
           as="div"
-          className="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-12 lg:pt-0"
+          className="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-12 lg:pt-0 cursor-pointer"
           vertical={tabOrientation === 'vertical'}
         >
           {({ selectedIndex }) => (
@@ -96,16 +96,16 @@ export function PrimaryFeatures() {
                     <div
                       key={feature.title}
                       className={clsx(
-                        'group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-6',
+                        'group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-6 select-none',
                         selectedIndex === featureIndex
-                          ? 'bg-white lg:bg-white/10 lg:ring-1 lg:ring-inset lg:ring-white/10'
+                          ? 'bg-white lg:bg-white/10 lg:ring-inset lg:ring-white/10'
                           : 'hover:bg-white/10 lg:hover:bg-white/5',
                       )}
                     >
                       <h3>
                         <Tab
                           className={clsx(
-                            'font-display text-lg ui-not-focus-visible:outline-none',
+                            'font-display text-lg ui-not-focus-visible:outline-none cursor-pointer select-none ring-0 outline-none ',
                             selectedIndex === featureIndex
                               ? 'text-blue-600 lg:text-white'
                               : 'text-blue-100 hover:text-white lg:text-white',

@@ -14,7 +14,7 @@ import type {MapRef} from 'react-map-gl';
 import { AddressDialog } from '@/components/welcome/AddressDialog'
 
 
-export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
+export function WelcomeMap({ buttonOnClick, setPropertyId }: { buttonOnClick: () => void; setPropertyId: (propertyId: string) => void }) {
   const [fadeOut, setFadeOut] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -93,7 +93,6 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
 
   return (
     <>
-
       <Script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v2.0.0/mapbox-gl-supported.js' />
       <div 
         className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full w-full ${animationClass}`}
@@ -101,12 +100,12 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
       >
         <Text
           className='mb-4 text-center animate__animated animate__fadeIn'
-          style={{ animationDelay: '0.2s' }}
+          style={{ animationDelay: '0.1s' }}
         >
-          Let&apos;s enter one rental property to start
+          Enter your rental property address to start
         </Text>
         <div
-          className={`mx-auto text-center items-center w-full sm:w-4/5 h-full sm:h-5/6 transition-opacity appearance-none animate__animated animate__fadeIn`}
+          className={`mx-auto text-center items-center w-full sm:w-4/5 h-full transition-opacity appearance-none animate__animated animate__fadeIn`}
           style={{ height: '100%' }}
         >
           <Map
@@ -120,7 +119,7 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
             mapStyle="mapbox://styles/alan3y2/clq361ynz002t01ql64d81csd"
             reuseMaps={true}
             attributionControl={false}
-            style={{ borderRadius: '1rem', lineHeight: 1, zIndex: 0, height: '600px', width: '100%' }}
+            style={{ borderRadius: '1rem', lineHeight: 1, zIndex: 0, height: 'calc(100vh - 16rem)', width: '100%' }}
             onLoad={() => setIsMapLoaded(true)}
           >
             {!isMapLoaded && <Skeleton containerClassName="flex-1" borderRadius="1rem" height="100%"/>}
@@ -157,7 +156,11 @@ export function WelcomeMap({ buttonOnClick }: { buttonOnClick: () => void }) {
                       Add property
                     </span>
                   </button>
-                  <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} setFadeOut={setFadeOut} isWelcome={false} />
+                  <AddressDialog isOpen={isOpen} setIsOpen={setIsOpen} result={result} setFadeOut={setFadeOut} 
+                    isWelcome={true} 
+                    nextPage={buttonOnClick} 
+                    setPropertyId={setPropertyId}
+                  />
                 </div>
               </Popup>
             )}

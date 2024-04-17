@@ -9,7 +9,7 @@ export default function CurrentPropertySettings({ params } : { params: { propert
   return (
     <>
       <div className="p-6 md:p-8 justify-center flex" >
-        <main className="px-4 py-4 sm:px-6 flex-auto lg:px-4 lg:py-4 max-w-5xl w-full space-y-16 sm:space-y-20">
+        <main className="px-4 py-4 sm:px-6 flex-auto lg:px-4 lg:py-4 max-w-2xl w-full space-y-16 sm:space-y-20">
 
           <RentCard />
           <DeleteCard propertyId={params.property_id}/>

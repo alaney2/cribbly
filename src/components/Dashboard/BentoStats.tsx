@@ -58,8 +58,8 @@ export function BentoStats() {
       edit: true,
     },
     {
-      title: "Maintenance Costs",
-      description: "Most recent maintenance costs",
+      title: "Maintenance requests",
+      description: "Most recent maintenance requests",
       header: <MaintenanceTable />,
       className: "md:col-span-2",
       icon: <WrenchIcon className="h-4 w-4 text-blue-500" />,

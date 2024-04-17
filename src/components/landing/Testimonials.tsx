@@ -6,24 +6,30 @@ import avatarImage2 from '@/images/avatars/avatar-2.png'
 import avatarImage3 from '@/images/avatars/avatar-3.png'
 import avatarImage4 from '@/images/avatars/avatar-4.png'
 import avatarImage5 from '@/images/avatars/avatar-5.png'
+import avatar1 from '@/images/avatars/avatar1.jpg'
+import avatar2 from '@/images/avatars/avatar2.jpg'
+import avatar3 from '@/images/avatars/avatar3.jpg'
+import avatar4 from '@/images/avatars/avatar4.jpg'
+import avatar5 from '@/images/avatars/avatar5.jpg'
+
 
 const testimonials = [
   [
     {
       content:
-        'Cribbly is so easy to use I can’t help but wonder if it’s really doing the things the government expects me to do.',
+        'Switching to Cribbly was a game-changer for my rental business. The automated features save me countless hours each month. Highly recommend!',
       author: {
-        name: 'Sheryl Berge',
-        role: 'CEO at Lynch LLC',
-        image: avatarImage1,
+        name: 'James R.',
+        role: 'Atlanta, GA',
+        image: avatar2,
       },
     },
     {
       content:
-        'I’m trying to get a hold of someone in support, I’m in a lot of trouble right now and they are saying it has something to do with my books. Please get back to me right away.',
+        'Cribbly’s maintenance tracking system has cut my response times dramatically, increasing tenant satisfaction and simplifying logistics.',
       author: {
-        name: 'Amy Hahn',
-        role: 'Director at Velocity Industries',
+        name: 'Sandra L.',
+        role: 'Dover, MA',
         image: avatarImage4,
       },
     },
@@ -31,40 +37,40 @@ const testimonials = [
   [
     {
       content:
-        'The best part about Cribbly is every time I pay my employees, my bank balance doesn’t go down like it used to. Looking forward to spending this extra cash when I figure out why my card is being declined.',
+      'As a landlord of multiple properties, Cribbly’s dashboard and reporting tools have simplified my management tasks more than I ever imagined possible.',
       author: {
-        name: 'Leland Kiehn',
-        role: 'Founder of Kiehn and Sons',
-        image: avatarImage5,
+        name: 'Advay S.',
+        role: 'Seattle, WA',
+        image: avatar5,
       },
     },
     {
       content:
-        'There are so many things I had to do with my old software that I just don’t do at all with Cribbly. Suspicious but I can’t say I don’t love it.',
+        'The automatic rent collection feature alone makes Cribbly worth it. Plus, their customer support is top-notch!',
       author: {
-        name: 'Erin Powlowski',
-        role: 'COO at Armstrong Inc',
-        image: avatarImage2,
+        name: 'Mike D.',
+        role: 'San Francisco, CA',
+        image: avatar3,
       },
     },
   ],
   [
     {
       content:
-        'I used to have to remit tax to the EU and with Cribbly I somehow don’t have to do that anymore. Nervous to travel there now though.',
+        'Cribbly has made tax season a breeze with its streamlined financial reporting. It’s perfect for small landlords like me who need to stay organized!',
       author: {
-        name: 'Peter Renolds',
-        role: 'Founder of West Inc',
-        image: avatarImage3,
+        name: 'Jing Z.',
+        role: 'San Jose, CA',
+        image: avatar4,
       },
     },
     {
       content:
-        'This is the fourth email I’ve sent to your support team. I am literally being held in jail for tax fraud. Please answer your damn emails, this is important.',
+        'I love how Cribbly levels the playing field, giving small property owners like myself the tools that management firms use, at an affordable price.',
       author: {
-        name: 'Amy Hahn',
-        role: 'Director at Velocity Industries',
-        image: avatarImage4,
+        name: 'Angela K.',
+        role: 'New York, NY',
+        image: avatar1,
       },
     },
   ],
@@ -91,9 +97,7 @@ export function Testimonials() {
             Loved by landlords worldwide.
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
-            Our software is so simple that people can’t help but fall in love
-            with it. Simplicity is easy when you just skip tons of
-            mission-critical features.
+            Join other savvy landlords who’ve elevated their rental game. No hassle, just results.
           </p>
         </div>
         <ul

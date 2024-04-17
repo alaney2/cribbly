@@ -18,10 +18,12 @@ interface AddressDialogProps {
   setIsOpen: (isOpen: boolean) => void;
   result: any;
   setFadeOut: (fadeOut: boolean) => void;
-  isWelcome?: boolean
+  isWelcome?: boolean;
+  nextPage?: () => void;
+  setPropertyId?: (propertyId: string) => void;
 }
 
-export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome=true } : AddressDialogProps ) {
+export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome=true, nextPage, setPropertyId } : AddressDialogProps ) {
   const router = useRouter()
   const [state, formAction] = useFormState(addPropertyFromWelcome, { message: '' })
   const address = result.place_name;
@@ -125,13 +127,20 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
           toast.promise(new Promise(async (resolve, reject) => {
             try {
               if (isWelcome) {
-                await addPropertyFromWelcome(formData);
+                const data = await addPropertyFromWelcome(formData);
+                if (data && 'id' in data) {
+                  setPropertyId && setPropertyId(data.id);
+                }
               } else {
                 await addProperty(formData);
               }
               setIsOpen(false);
               setFadeOut(true);
-              router.push('/dashboard');
+              if (isWelcome) {
+                nextPage && nextPage();
+              } else {
+                router.push('/dashboard');
+              }
               resolve('Property added');
             } catch (error) {
               setIsOpen(false);

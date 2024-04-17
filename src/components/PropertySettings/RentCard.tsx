@@ -21,7 +21,7 @@ export function RentCard() {
       </CardHeader>
       <CardContent>
         <p className="text-gray-500 text-sm mb-4">
-          Set the amount of rent to charge for this property per month. This is the total amount of rent that will be charged, split between each tenant.
+          Set the total amount of rent to charge for this property per month. If needed, tenants can decide to split this amount amongst themselves.
         </p>
         <form>
           <div className="relative">

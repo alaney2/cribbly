@@ -74,7 +74,7 @@ export default function InformationSecurity() {
               <h2 className="text-lg font-bold">Contact Us</h2>
               <p>If you have any questions or concerns about our Information Security Policy, please contact us at:</p>
               <p>
-                Email: security@cribbly.io
+                Email: support@cribbly.io
               </p>
             </div>
           </div>

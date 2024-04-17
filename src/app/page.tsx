@@ -23,11 +23,11 @@ export default function Home() {
           <Hero />
         </WavyBackground>
         <PrimaryFeatures />
-        <SecondaryFeatures />
+        <Testimonials />
+        {/* <SecondaryFeatures /> */}
         <FollowerPointerCard title="🏠 Future Property Manager">
           <CallToAction />
         </FollowerPointerCard>
-        <Testimonials />
         {/* <Pricing /> */}
         <Faqs />
       </main>

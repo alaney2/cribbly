@@ -58,7 +58,7 @@ export async function addPropertyFromWelcome(formData: FormData) {
     }
   }
 
-  const { error } = await supabase.from('properties').insert([
+  const { data, error } = await supabase.from('properties').insert(
     {
       user_id: user.id,
       street_address,
@@ -67,17 +67,31 @@ export async function addPropertyFromWelcome(formData: FormData) {
       city,
       state,
       country
-    }
-  ]);
+    })
+    .select()
+    .single()
 
   if (error) {
     console.error(error);
   }
 
+  return data;
+
   // update supabase user table with welcome_screen = true
+  // await supabase
+  //   .from('users')
+  //   .update({ welcome_screen: false })
+  //   .eq('id', user.id);
+}
+
+export async function setWelcomeScreen(value: boolean) {
+  const user = await getUser();
+  if (!user) return;
+  const supabase = createClient();
+
   await supabase
     .from('users')
-    .update({ welcome_screen: false })
+    .update({ welcome_screen: value })
     .eq('id', user.id);
 }
 

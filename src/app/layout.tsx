@@ -20,9 +20,9 @@ export const metadata: Metadata = {
   },
   description:
     'Cribbly is the all-in-one property management software designed for small landlords. Its powerful platform automates rent collection, maintenance requests, and more.',
-  metadataBase: new URL('https://www.cribbly.io'),
+  metadataBase: new URL('https://cribbly.io'),
   openGraph: {
-    title: 'Cribbly',
+    title: 'Cribbly.io',
     description: 'Property management software for small landlords',
     url: 'https://cribbly.io',
     siteName: 'Cribbly',
@@ -65,16 +65,6 @@ export default function RootLayout({ children }: PropsWithChildren) {
         lexend.variable,
       )}
     >
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-      {/* <meta property="twitter:image" content="../images/icon.png"></meta>
-      <meta property="twitter:card" content="../images/icon.png"></meta>
-      <meta property="twitter:title" content="Property Management Software for Small Landlords | Cribbly"></meta>
-      <meta property="twitter:description" content="Cribbly is the all-in-one property management software designed for small landlords. Its powerful platform automates rent collection, maintenance requests, and more."></meta>
-      <meta property="og:image" content="../images/icon.png"></meta>
-      <meta property="og:title" content="Property Management Software for Small Landlords | Cribbly"></meta>
-      <meta property="og:description" content="Cribbly is the all-in-one property management software designed for small landlords. Its powerful platform automates rent collection, maintenance requests, and more." />
-      <meta property="og:url" content="https://cribbly.io"></meta> */}
 
       <Script
         async
@@ -97,7 +87,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <Analytics />
         <SpeedInsights />
         <Toaster position="top-center" />
-        <TailwindIndicator />
+        {/* <TailwindIndicator /> */}
       </body>
     </html>
   )
