@@ -66,7 +66,7 @@ export function RentCard() {
         const result = (rentAmount || 0) + totalFees - softwareFee + (securityDeposit ? (securityDepositFee || 0) : 0)
         setNetIncome(parseFloat(result.toFixed(2)))
         setIsLoading(false)
-      }, 500)
+      }, Math.floor(Math.random() * 401) + 250)
     }
     calculateNetIncome()
   }, [securityDeposit, rentAmount, securityDepositFee, fees, ])

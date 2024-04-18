@@ -13,11 +13,7 @@ import {
 } from '@headlessui/react'
 import { Radio, RadioField, RadioGroup } from '@/components/catalyst/radio'
 import { useState } from 'react'
-// type Fee = {
-//   type: string
-//   name: string
-//   amount: number
-// }
+
 
 type EditFeeDialogProps = {
   isOpen: boolean
@@ -89,8 +85,8 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee }: EditFeeDialogProps) {
         </div>
         </DialogBody>
         <DialogActions>
-          <Button variant="ghost" type="button" onClick={() => {setIsOpen(false)}}>Cancel</Button>
-          <Button type="submit">Save</Button>
+          <Button variant="ghost" type="button" size="sm" onClick={() => {setIsOpen(false)}}>Cancel</Button>
+          <Button type="submit" size="sm" >Save</Button>
         </DialogActions>
       </Dialog>
     </>
