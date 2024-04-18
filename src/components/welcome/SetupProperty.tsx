@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { RentCard } from '@/components/PropertySettings/RentCard';
+import { FeeCard } from '@/components/PropertySettings/FeeCard';
 
 export function SetupProperty({ propertyId }: { propertyId: string }) {
   console.log(propertyId)
@@ -10,10 +11,10 @@ export function SetupProperty({ propertyId }: { propertyId: string }) {
   return (
     <>
       <div
-        className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full w-full ${animationClass}`}
+        className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full w-full gap-y-4 ${animationClass}`}
       >
         <RentCard />
-        <h1>SetupProperty</h1>
+        {/* <FeeCard /> */}
       </div>
     </>
   )
