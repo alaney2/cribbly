@@ -42,7 +42,7 @@ export const WavyBackground = ({
   const getSpeed = () => {
     switch (speed) {
       case "slow":
-        return 0.001;
+        return 0.0007;
       case "fast":
         return 0.002;
       default:
@@ -80,9 +80,6 @@ export const WavyBackground = ({
   const drawWave = (n: number, waveOffset=100) => {
     nt += getSpeed();
     for (let i = 0; i < n; i++) {
-      // ctx.beginPath();
-      ctx.lineWidth = waveWidth || 100;
-      ctx.strokeStyle = waveColors[i % waveColors.length];
       const wavePath = new Path2D();
       const stepSize = 5;
       for (let x = 0; x < w; x += stepSize) {
@@ -92,11 +89,10 @@ export const WavyBackground = ({
         } else {
           wavePath.lineTo(x, y + h * 0.5 + waveOffset);
         }
-        // ctx.lineTo(x, y + h * 0.5 + waveOffset);
       }
-      
-      ctx.stroke();
-      // ctx.closePath()
+      ctx.lineWidth = waveWidth || 100;
+      ctx.strokeStyle = waveColors[i % waveColors.length];
+      ctx.stroke(wavePath);
     }
   };
 
@@ -109,15 +105,6 @@ export const WavyBackground = ({
     drawWave(6);
     animationId = requestAnimationFrame(render);
   };
-
-  const [isSafari, setIsSafari] = useState(false);
-  useEffect(() => {
-    setIsSafari(
-      typeof window !== "undefined" &&
-        navigator.userAgent.includes("Safari") &&
-        !navigator.userAgent.includes("Chrome")
-    );
-  }, []);
 
   useEffect(() => {
     setDimensions({ width: window.innerWidth, height: window.innerHeight });
@@ -132,6 +119,15 @@ export const WavyBackground = ({
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationId);
     };
+  }, []);
+
+  const [isSafari, setIsSafari] = useState(false);
+  useEffect(() => {
+    setIsSafari(
+      typeof window !== "undefined" &&
+        navigator.userAgent.includes("Safari") &&
+        !navigator.userAgent.includes("Chrome")
+    );
   }, []);
 
   return (
@@ -150,3 +146,8 @@ export const WavyBackground = ({
     </div>
   );
 };
+
+
+
+
+
