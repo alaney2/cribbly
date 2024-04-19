@@ -15,13 +15,13 @@ const faqs = [
       question: 
         'What is Cribbly, and who is it for?',
       answer:
-        'Cribbly is property management software for small landlords managing homes, condos, and apartments. It automates rent collection, maintenance tracking, and financial reporting.',
+        'Cribbly is property management software for small landlords managing homes and apartments. It is the source of truth for all your property management needs, from rent collection to tax preparation. Keep all your data in one place and manage your properties from anywhere with Cribbly.',
     },
     {
       question:
-        'Why use property management software at all?',
+        'Is property management software really necessary?',
       answer:
-        'Using property management software can significantly enhance the efficiency of managing rental properties by automating routine tasks like rent collection, tenant communications, and maintenance scheduling. This not only saves time but also reduces errors, improves tenant satisfaction, and provides real-time insights into property performance, leading to better decision-making and increased profitability.',
+        'No. But using property management software saves you a lot of time managing rental properties by automating routine tasks like rent collection, taxes, and maintenance scheduling but. It also reduces human error and improves tenant satisfaction.',
     },
     {
       question:

@@ -27,13 +27,19 @@ export interface Fee {
   name: string
   amount: number
 }
+async function addPropertyFees(formData: FormData) {
+  // console.log('rentAmount', formData.get('rentAmount'))
+  for (const pair of formData.entries()) {
+    console.log(pair[0], pair[1]);
+  }
+}
 
 export function RentCard() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false)
-  const [rentAmount, setRentAmount] = React.useState<number>()
+  const [rentAmount, setRentAmount] = React.useState<string>("")
   const [securityDeposit, setSecurityDeposit] = React.useState(false)
-  const [securityDepositFee, setSecurityDepositFee] = React.useState<number>()
+  const [securityDepositFee, setSecurityDepositFee] = React.useState<string>("")
   const [feeType, setFeeType] = React.useState("one-time")
   const [feeName, setFeeName] = React.useState("")
   const [feeAmount, setFeeAmount] = React.useState("")
@@ -55,25 +61,30 @@ export function RentCard() {
     setFeeName("")
     setFeeAmount("")
   }
-
+  
   React.useEffect(() => {
     const calculateNetIncome = () => {
       setIsLoading(true)
+      const rentAmountNumber = Number(rentAmount)
+      const securityDepositNumber = Number(securityDepositFee)
       setTimeout(() => {
         const totalFees = fees.reduce((total, fee) => total + fee.amount, 0)
-        const softwareFee = Number((rentAmount ? (rentAmount < 10 ? 0 : Math.min(10, (rentAmount + totalFees) * 0.0035)) : 0).toFixed(2))
+        const softwareFee = Number((rentAmount ? (rentAmountNumber < 10 ? 0 : Math.min(10, (rentAmountNumber + totalFees) * 0.0035)) : 0).toFixed(2))
         setCribblyFee(softwareFee)
-        const result = (rentAmount || 0) + totalFees - softwareFee + (securityDeposit ? (securityDepositFee || 0) : 0)
+        const result = (rentAmountNumber || 0) + totalFees - softwareFee + (securityDeposit ? (securityDepositNumber || 0) : 0)
         setNetIncome(parseFloat(result.toFixed(2)))
         setIsLoading(false)
-      }, Math.floor(Math.random() * 401) + 250)
+      }, Math.floor(Math.random() * 501) + 200)
     }
     calculateNetIncome()
-  }, [securityDeposit, rentAmount, securityDepositFee, fees, ])
+  }, [securityDeposit, rentAmount, securityDepositFee, fees ])
+
+  
 
   return (
     <>
-    <Card className="w-[350px]">
+    <Card className="w-[350px] sm:w-[400px]">
+      <form action={addPropertyFees}>
       <CardHeader>
         <CardTitle>Rent amount</CardTitle>
       </CardHeader>
@@ -81,7 +92,6 @@ export function RentCard() {
         <p className="text-gray-500 text-sm mb-6">
           Set the amount of rent to charge for this property per month. Tenants can also decide to split this amount amongst themselves.
         </p>
-        <form>
           <div className="relative">
             <Label htmlFor="rentAmount">Total rent per month</Label>
             <>
@@ -90,24 +100,24 @@ export function RentCard() {
               </div>
               <Input
                 type="number"
-                id="rentAmount" 
+                id="rentAmount"
+                name="rentAmount"
                 placeholder="0"
-                className="py-1.5 px-7 resize-none font-semibold text-md max-w-xs"
+                className="py-1.5 px-7 resize-none font-semibold text-md"
                 autoComplete="off"
                 value={rentAmount}
-                onChange={(e) => setRentAmount(Number(parseFloat(e.target.value).toFixed(2)))}
+                onChange={(e) => setRentAmount(e.target.value)}
                 step=".01"
                 required
                 min="0"
                 pattern="^\d+(?:\.\d{1,2})?$"
-                // onBlur={() => calculateNetIncome()}
               />
             </>
           </div>
 
           <div className="flex items-center space-x-2 justify-between mt-4">
             <Label htmlFor="securityDeposit">Security deposit</Label>
-            <Switch id="securityDeposit" color="blue" checked={securityDeposit}
+            <Switch id="securityDeposit" name="securityDepositSwitch" color="blue" checked={securityDeposit}
               onChange={() => { 
                 setSecurityDeposit(!securityDeposit)
               }}
@@ -121,11 +131,12 @@ export function RentCard() {
               <input
                 type="number"
                 id="depositAmount"
+                name="depositAmount"
                 placeholder="0"
                 className="py-1.5 px-7 resize-none font-semibold text-md max-w-xs h-10 w-full rounded-md bg-background text-base sm:text-sm transition-all ease-in-out duration-150 border focus:ring-0 focus:outline-0 "
                 autoComplete="off"
                 value={securityDepositFee}
-                onChange={(e) => setSecurityDepositFee(Number(parseFloat(e.target.value).toFixed(2)))}
+                onChange={(e) => setSecurityDepositFee(e.target.value)}
                 step=".01"
                 min="0"
                 pattern="^\d+(?:\.\d{1,2})?$"
@@ -134,36 +145,39 @@ export function RentCard() {
             </div>
           </div>
           {fees.length > 0 && (
-          <div className="mt-4">
+          <div className="mt-3">
             <Table dense={true} className="">
               <TableHead>
-                <TableRow>
-                  <TableHeader>Fee name</TableHeader>
+                <TableRow className="text-card-foreground">
+                  <TableHeader className="">Fee name</TableHeader>
                   <TableHeader>Fee type</TableHeader>
                   <TableHeader className="text-right">Cost</TableHeader>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {fees.map((fee, index) => (
-                  <TableRow key={index} className="cursor-default" 
-                    onClick={() => {
-                      setFeeEdit(fee)
-                      setEditFeeOpen(true)
-                    }}
-                  >
-                    <TableCell className="max-w-[140px] truncate">{fee.name}</TableCell>
-                    <TableCell >{fee.type}</TableCell>
-                    <TableCell className="text-right">${fee.amount.toFixed(2)}</TableCell>
-                  </TableRow>
+                  <>
+                    <TableRow key={index} className="cursor-default" 
+                      onClick={() => {
+                        setFeeEdit(fee)
+                        setEditFeeOpen(true)
+                      }}
+                    >
+                      <TableCell className="max-w-[140px] truncate">{fee.name}</TableCell>
+                      <TableCell >{fee.type}</TableCell>
+                      <TableCell className="text-right">${fee.amount.toFixed(2)}</TableCell>
+                    </TableRow>
+                    <input className="hidden" name={`fee${index}`} id={`fee${index}`} value={JSON.stringify(fee)}>
+                    </input>
+                  </>
                 ))}
               </TableBody>
               </Table>
           </div>
         )}
-          <div className="mt-6 -mb-3">
+          <div className="mt-4 -mb-2">
             <Button type="button" variant="outline" size="sm" onClick={() => setIsDialogOpen(true)}>Add Fee</Button>
           </div>
-        </form>
       </CardContent>
       
       <Separator className="mt-0" />
@@ -197,13 +211,13 @@ export function RentCard() {
               <div className="text-sm">
                 <p className="flex justify-between">
                   <span>Rent: </span>
-                  <span>${rentAmount?.toFixed(2) || 0}</span>
+                  <span>${parseFloat(rentAmount)?.toFixed(2) || 0}</span>
                 </p>
                 {
                   securityDeposit && (
                     <p className="flex justify-between">
                       <span>Security deposit: </span>
-                      <span>${securityDepositFee?.toFixed(2) || 0}</span>
+                      <span>${Number(securityDepositFee)?.toFixed(2) || 0}</span>
                     </p>
                   )
                 }
@@ -227,9 +241,10 @@ export function RentCard() {
           </Popover>
         </div>
         <div className="flex gap-x-3">
-          <Button size="sm">Continue</Button>
+          <Button type="submit" size="sm">Continue</Button>
         </div>
       </CardFooter>
+      </form>
 
     </Card>
     <Dialog open={isDialogOpen} onClose={setIsDialogOpen}>
