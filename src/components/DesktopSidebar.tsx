@@ -225,7 +225,7 @@ export function DesktopSidebar({ user }: { user: any }) {
                         ) : (
                           <>
                             <ChevronLeftIcon className="inline-block h-4 w-4 mr-2" />
-                            Shrink
+                            Collapse
                           </>
                         )}
                       </button>

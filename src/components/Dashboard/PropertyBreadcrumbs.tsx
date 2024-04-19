@@ -81,7 +81,7 @@ export function PropertyBreadcrumbs() {
             {index !== 1 ? (
               <BreadcrumbItem className="tracking-tight font-lexend text-sm select-none">
                 <BreadcrumbLink href={`/${segments.slice(0, index + 1).join('/')}`}>
-                  {segment.charAt(0).toUpperCase() + segment.slice(1)}
+                  {segment === 'dashboard' ? 'Properties' : segment.charAt(0).toUpperCase() + segment.slice(1)}
                 </BreadcrumbLink>
               </BreadcrumbItem>
             ) : (
