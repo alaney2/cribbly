@@ -130,6 +130,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
                 const data = await addPropertyFromWelcome(formData);
                 if (data && 'id' in data) {
                   setPropertyId && setPropertyId(data.id);
+                  localStorage.setItem('propertyId', data.id);
                 }
               } else {
                 await addProperty(formData);

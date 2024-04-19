@@ -10,7 +10,7 @@ export default function CurrentPropertySettings({ params } : { params: { propert
       <div className="justify-center flex" >
         <main className="flex-auto lg:px-4 lg:py-4 max-w-2xl w-full space-y-4 sm:space-y-8">
 
-          <RentCard />
+          <RentCard propertyId={params.property_id} />
           <DeleteCard propertyId={params.property_id}/>
 
         </main>

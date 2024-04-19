@@ -25,9 +25,6 @@ const config = {
       },
     },
     fontFamily: {
-      // sans: ["Inter var", ...defaultTheme.fontFamily.sans],
-      // serif: ["Lexend var", ...defaultTheme.fontFamily.serif],
-      // mono: ["Poppins var", ...defaultTheme.fontFamily.mono],
       lexend: ["Lexend", ...defaultTheme.fontFamily.sans],
     },
     extend: {

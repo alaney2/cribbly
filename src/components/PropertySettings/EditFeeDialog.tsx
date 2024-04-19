@@ -19,12 +19,14 @@ type EditFeeDialogProps = {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   fee: Fee
+  fees: Fee[]
+  setFees: ( fees: Fee[] ) => void
 }
-export function EditFeeDialog({ isOpen, setIsOpen, fee }: EditFeeDialogProps) {
+export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees }: EditFeeDialogProps) {
   const [currentFee, setCurrentFee] = useState<Fee>(fee)
 
   const handleSaveFee = () => {
-    console.log(currentFee)
+    setFees(fees.map(f => f.id === currentFee.id ? currentFee : f))
     setIsOpen(false)
   }
 
@@ -32,16 +34,16 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee }: EditFeeDialogProps) {
     <>
       <Dialog open={isOpen} onClose={setIsOpen}>
         <DialogTitle>Edit fee</DialogTitle>
-        {/* <DialogDescription>
-          Edit the fee for this property.
-        </DialogDescription> */}
+        <form>
         <DialogBody>
         <div className="items-center">
           <HeadlessFieldset >
             <HeadlessLegend className="text-base/6 font-medium sm:text-sm/6">
               Fee type
             </HeadlessLegend>
-            <HeadlessRadioGroup name="feeType" defaultValue={fee.type} className="flex gap-x-3 items-center mt-1" onChange={(e) => setCurrentFee({ ...currentFee, type: e})}>
+            <HeadlessRadioGroup name="feeType" defaultValue={fee.type} className="flex gap-x-3 items-center mt-1" 
+              onChange={(feeType) => setCurrentFee({ ...currentFee, type: feeType})}
+            >
               <HeadlessRadioGroup.Option value="one-time" >
                 <HeadlessField className="outline outline-1 pr-6 outline-gray-200 rounded-lg flex items-center">
                   <Radio value="one-time" color="blue" className="px-3 py-2" />
@@ -75,19 +77,36 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee }: EditFeeDialogProps) {
             type="number"
             value={currentFee.amount}
             onChange={(e) => {
-              setCurrentFee({ ...currentFee, amount: Number(parseFloat(e.target.value).toFixed(2)) }
+              setCurrentFee({ ...currentFee, amount: (e.target.value) }
             )}}
             placeholder="Enter fee amount"
             autoComplete="off"
             required
             min="0"
+            pattern="^\d+(?:\.\d{1,2})?$"
+            step=".01"
           />
         </div>
         </DialogBody>
-        <DialogActions>
-          <Button variant="ghost" type="button" size="sm" onClick={() => {setIsOpen(false)}}>Cancel</Button>
-          <Button type="submit" size="sm" >Save</Button>
+        <DialogActions className="flex justify-between items-center w-full">
+          <Button variant="destructive" size="sm" 
+            onClick={() => {
+              setFees(fees.filter(f => f.id !== currentFee.id))
+              setIsOpen(false)
+            }}
+          >
+            Delete
+          </Button>
+          <div>
+            <Button variant="ghost" type="button" size="sm" onClick={() => {setIsOpen(false)}}>Cancel</Button>
+            <Button type="submit" size="sm" 
+              onClick={handleSaveFee}
+            >
+              Save
+            </Button>
+          </div>
         </DialogActions>
+        </form>
       </Dialog>
     </>
   )

@@ -9,6 +9,44 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      property_fees: {
+        Row: {
+          id: string
+          property_id: string
+          fee_name: string
+          fee_type: 'one-time' | 'recurring' | 'rent_price' | 'security_deposit'
+          fee_cost: number
+          months_left: number
+          created_at: Date
+        }
+        Insert: {
+          id?: string
+          property_id: string
+          fee_name: string
+          fee_type: 'one-time' | 'recurring' | 'rent_price' | 'security_deposit'
+          fee_cost: number
+          months_left: number
+          created_at?: Date | null
+        }
+        Update: {
+          id?: string
+          property_id?: string
+          fee_name?: string
+          fee_type?: 'one-time' | 'recurring' | 'rent_price' | 'security_deposit'
+          fee_cost?: number
+          months_left?: number
+          created_at?: Date | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'public_property_fees_property_id_fkey'
+            columns: ['property_id']
+            isOneToOne: false
+            referencedRelation: 'properties'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       properties: {
         Row: {
           id: string
@@ -300,6 +338,7 @@ export interface Database {
           id: string
           email: string
           is_sidebar_collapsed: boolean | null
+          free_months: number | null
         }
         Insert: {
           billing_address?: Json | null
@@ -308,6 +347,7 @@ export interface Database {
           id: string
           email?: string
           is_sidebar_collapsed?: boolean | null
+          free_months?: number | null
         }
         Update: {
           billing_address?: Json | null
@@ -316,6 +356,7 @@ export interface Database {
           id?: string
           email?: string
           is_sidebar_collapsed?: boolean | null
+          free_months?: number | null
         }
         Relationships: [
           {

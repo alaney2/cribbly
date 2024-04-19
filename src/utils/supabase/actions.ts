@@ -28,6 +28,73 @@ export async function updateFullName(formData: FormData) {
   }
 }
 
+export async function addPropertyFees(formData: FormData) {
+  const propertyId = formData.get('propertyId')
+  if (!propertyId) return;
+  const securityDepositSwitch = formData.get('securityDepositSwitch')
+  
+  const supabase = createClient();
+
+  for (const pair of formData.entries()) {
+    console.log(pair[0], pair[1])
+    if (pair[0] === 'propertyId' || pair[0] === 'securityDepositSwitch' || pair[0].startsWith('$')) continue;
+    if (pair[0] === 'rentAmount') {
+      const { error } = await supabase.from('property_fees')
+        .insert(
+          {
+            property_id: propertyId.toString(),
+            fee_name: 'rent_price',
+            fee_type: 'rent_price' as const,
+            fee_cost: Number(parseFloat(pair[1].toString()).toFixed(2)),
+            months_left: 12,
+          }
+        );
+      if (error) 
+        return {
+          message: 'Error adding rent amount'
+        }
+      continue;
+    }
+    if (pair[0] === 'depositAmount' && securityDepositSwitch === 'on') {
+      const { error } = await supabase.from('property_fees')
+        .insert(
+          {
+            property_id: propertyId.toString(),
+            fee_name: 'security_deposit',
+            fee_type: 'security_deposit' as const,
+            fee_cost: Number(parseFloat(pair[1].toString()).toFixed(2)),
+            months_left: 1,
+          }
+        );
+      if (error) 
+        return {
+          message: 'Error adding security deposit'
+        }
+      continue;
+    }
+    if (pair[0].startsWith('fee')) {
+      const fee = JSON.parse(pair[1].toString())
+      const { error } = await supabase.from('property_fees')
+        .insert(
+          {
+            property_id: propertyId.toString(),
+            fee_name: fee.name,
+            fee_type: fee.type,
+            fee_cost: Number(parseFloat(fee.amount).toFixed(2)),
+            months_left: fee.fee_type === 'recurring' ? 12 : 1,
+          }
+        );
+      if (error)
+        return {
+          message: 'Error adding fee'
+        }
+    }
+
+    console.log(pair[0], pair[1]);
+  }
+
+}
+
 export async function addPropertyFromWelcome(formData: FormData) {
   const user = await getUser();
   if (!user) return;

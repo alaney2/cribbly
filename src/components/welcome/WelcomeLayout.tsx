@@ -46,7 +46,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
         )
       case 3:
         return (
-          <SetupProperty propertyId={propertyId} />
+          <SetupProperty propertyId={propertyId} setPropertyId={setPropertyId} />
         )
       // case 3:
       //   return (
