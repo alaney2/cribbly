@@ -93,14 +93,18 @@ export function Testimonials() {
       aria-label="What our customers are saying"
       className="relative bg-slate-50 py-20 sm:py-32 overflow-hidden"
     >
-      <Image
-        className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%] z-0"
-        src={backgroundImage}
-        alt=""
-        width={1558}
-        height={946}
-        unoptimized
-      />
+      <svg
+        viewBox="0 0 1208 1024"
+        className="absolute left-1/2 top-7/12 -translate-y-7/12 z-0 h-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] "
+      >
+        <ellipse cx={604} cy={512} fill="url(#6d1bd035-0dd1-437e-93fa-59d316231eb0)" rx={604} ry={512} />
+        <defs>
+          <radialGradient id="6d1bd035-0dd1-437e-93fa-59d316231eb0">
+            <stop stopColor="rgb(65,115,236)" />
+            <stop offset={1} stopColor="#3b82f6" />
+          </radialGradient>
+        </defs>
+      </svg>
       <Container className="relative">
         <div className="mx-auto max-w-2xl md:text-center z-10">
           <h2 className="font-display text-3xl sm:text-4xl font-medium tracking-tight bg-gradient-to-r to-blue-600 from-[#60a4ff] via-indigo-400 inline-block text-transparent bg-clip-text">

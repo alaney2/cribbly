@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Container } from '@/components/default/Container'
 import { XMarkIcon, CheckIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'
+import backgroundImage from '@/images/background-faqs.jpg'
 
 const beforeBenefits = [
   'Spending time and energy keeping track of and collecting rent',
@@ -22,20 +23,16 @@ export function BeforeAfter() {
     <section
       id="benefits"
       aria-label="We make property management easy."
-      className="relative bg-slate-50 py-20 sm:py-32 overflow-hidden shadow-sm"
+      className="relative bg-slate-50 pt-20 pb-8 sm:pt-32 overflow-hidden shadow-sm"
     >
-      <svg
-        viewBox="0 0 1208 1024"
-        className="absolute left-1/2 z-0 h-[96rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] "
-      >
-        <ellipse cx={604} cy={512} fill="url(#6d1bd035-0dd1-437e-93fa-59d316231eb0)" rx={1208} ry={1024} />
-        <defs>
-          <radialGradient id="6d1bd035-0dd1-437e-93fa-59d316231eb0">
-            <stop stopColor="rgb(65,115,236)" />3b82f6
-            <stop offset={1} stopColor="#3b82f6" />
-          </radialGradient>
-        </defs>
-      </svg>
+      {/* <Image
+        className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%] z-0"
+        src={backgroundImage}
+        alt=""
+        width={1558}
+        height={946}
+        unoptimized
+      /> */}
       <Container>
         <div className="mx-auto md:max-w-4xl md:text-center z-20">
           <h2 className="font-display text-3xl sm:text-4xl font-medium tracking-tighter text-slate-800 bg-gradient-to-r to-blue-600 from-[#60a4ff] via-indigo-400 inline-block text-transparent bg-clip-text p-4">
@@ -43,7 +40,7 @@ export function BeforeAfter() {
           </h2>
         </div>
         <div className="mx-auto z-10 mt-8 lg:mt-12 flex justify-center max-w-4xl w-full">
-          <div className="w-full p-8 rounded-xl outline outline-gray-300 outline-1 z-10 bg-slate-100">
+          <div className="w-full p-8 rounded-xl outline outline-gray-300 outline-1 z-10 bg-slate-50">
             <div className="md:hidden">
               <div className="text-lg sm:text-xl mb-1 text-blue-300">From</div>
               <div className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-800 mb-2">Without Cribbly</div>
