@@ -11,6 +11,7 @@ import avatar2 from '@/images/avatars/avatar2.jpg'
 import avatar3 from '@/images/avatars/avatar3.jpg'
 import avatar4 from '@/images/avatars/avatar4.jpg'
 import avatar5 from '@/images/avatars/avatar5.jpg'
+import enterProperty from '@/images/screenshots/enterPropertyScreely.png'
 
 
 const testimonials = [
@@ -89,10 +90,10 @@ export function Testimonials() {
     <section
       id="testimonials"
       aria-label="What our customers are saying"
-      className="bg-slate-50 py-20 sm:py-32"
+      className="relative bg-slate-50 py-20 sm:py-32 overflow-hidden"
     >
       <Container>
-        <div className="mx-auto max-w-2xl md:text-center">
+        <div className="mx-auto max-w-2xl md:text-center z-10">
           <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
             Loved by landlords worldwide.
           </h2>

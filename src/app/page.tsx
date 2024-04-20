@@ -12,6 +12,7 @@ import { NavLink } from '@/components/default/NavLink'
 import { Container } from '@/components/default/Container'
 import { FollowerPointerCard } from '@/components/aceternity/following-pointer'
 import { WavyBackground } from '@/components/aceternity/wavy-background'
+import { BeforeAfter } from '@/components/landing/BeforeAfter'
 
 export default function Home() {
 
@@ -23,6 +24,7 @@ export default function Home() {
           <Hero />
         </WavyBackground>
         <PrimaryFeatures />
+        <BeforeAfter />
         <Testimonials />
         {/* <SecondaryFeatures /> */}
         <FollowerPointerCard title="🏠 Future Property Manager">
