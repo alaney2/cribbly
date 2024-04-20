@@ -25,11 +25,12 @@ export default function Home() {
         </WavyBackground>
         <PrimaryFeatures />
         <BeforeAfter />
-        <Testimonials />
-        {/* <SecondaryFeatures /> */}
         <FollowerPointerCard title="🏠 Future Property Manager">
           <CallToAction />
         </FollowerPointerCard>
+        <Testimonials />
+
+        {/* <SecondaryFeatures /> */}
         {/* <Pricing /> */}
         <Faqs />
       </main>

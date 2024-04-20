@@ -33,9 +33,9 @@ const faqs = [
   [
     {
       question: 
-        'What types of properties can be managed using property management software?',
+      'How much does Cribbly cost?',
       answer:
-        'All types, including single-family homes, condos, apartments, commercial properties, and more. Cribbly is built for small landlords managing residential properties, but it can be adapted for other property types as well.',
+      'Cribbly is free for the first three months, then the lesser of 0.35% of rent or $10 per property per month.',
     },
     {
       question: 
@@ -45,9 +45,9 @@ const faqs = [
     },
     {
       question: 
-        'How much does Cribbly cost?',
+        'What types of properties can be managed using property management software?',
       answer:
-        'Free for three months, then the lesser of 0.35% of rent or $10 per property per month. This pricing model makes Cribbly an affordable option for landlords looking to leverage the benefits of property management software without significant upfront costs.',
+        'All types, including single-family homes, condos, apartments, commercial properties, and more. Cribbly is built for small landlords managing residential properties, but it can be adapted for other property types as well.',
     },
   ],
 ]
@@ -57,21 +57,22 @@ export function Faqs() {
     <section
       id="faq"
       aria-labelledby="faq-title"
-      className="relative overflow-hidden bg-slate-50 py-20 sm:py-32"
+      className="relative overflow-hidden bg-slate-50 pt-8 pb-12 sm:pb-24 "
     >
-      <Image
+      {/* <Image
         className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%]"
         src={backgroundImage}
         alt=""
         width={1558}
         height={946}
         unoptimized
-      />
+      /> */}
+      
       <Container className="relative">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2
             id="faq-title"
-            className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl"
+            className="font-display text-3xl sm:text-4xl font-medium tracking-tight text-slate-800 bg-gradient-to-r to-blue-600 from-[#60a4ff] via-indigo-400 inline-block text-transparent bg-clip-text"
           >
             Frequently asked questions
           </h2>
@@ -85,16 +86,16 @@ export function Faqs() {
         >
           {faqs.map((column, columnIndex) => (
             <li key={columnIndex}>
-              <ul role="list" className="flex flex-col gap-y-8">
+              <ul role="list" className="flex flex-col gap-y-6">
                 {column.map((faq, faqIndex) => (
                   <Accordion key={faqIndex} type="single" collapsible className="">
-                      <AccordionItem value={`item-${columnIndex}-${faqIndex}`}>
-                      <AccordionTrigger className="font-display text-lg leading-7 text-slate-900 cursor-pointer text-left	">
-                      {faq.question}
+                    <AccordionItem value={`item-${columnIndex}-${faqIndex}`}>
+                      <AccordionTrigger className="font-display text-lg leading-7 text-slate-800 cursor-pointer text-left	">
+                        {faq.question}
                       </AccordionTrigger>
                       <AccordionContent className="mt-4 text-sm text-slate-700">
-                          {faq.answer}
-                        </AccordionContent>
+                        {faq.answer}
+                      </AccordionContent>
                     </AccordionItem>
                   </Accordion>
                 ))}

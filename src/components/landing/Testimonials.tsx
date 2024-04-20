@@ -12,6 +12,7 @@ import avatar3 from '@/images/avatars/avatar3.jpg'
 import avatar4 from '@/images/avatars/avatar4.jpg'
 import avatar5 from '@/images/avatars/avatar5.jpg'
 import enterProperty from '@/images/screenshots/enterPropertyScreely.png'
+import backgroundImage from '@/images/background-faqs.jpg'
 
 
 const testimonials = [
@@ -92,9 +93,17 @@ export function Testimonials() {
       aria-label="What our customers are saying"
       className="relative bg-slate-50 py-20 sm:py-32 overflow-hidden"
     >
-      <Container>
+      <Image
+        className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%] z-0"
+        src={backgroundImage}
+        alt=""
+        width={1558}
+        height={946}
+        unoptimized
+      />
+      <Container className="relative">
         <div className="mx-auto max-w-2xl md:text-center z-10">
-          <h2 className="font-display text-3xl tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="font-display text-3xl sm:text-4xl font-medium tracking-tight bg-gradient-to-r to-blue-600 from-[#60a4ff] via-indigo-400 inline-block text-transparent bg-clip-text">
             Loved by landlords worldwide.
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
