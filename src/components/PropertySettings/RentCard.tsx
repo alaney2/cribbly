@@ -26,6 +26,7 @@ import { addPropertyFees } from '@/utils/supabase/actions'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import MonthPicker from '@/components/PropertySettings/month-picker'
+import { Calendar as CalendarIcon } from "lucide-react"
 
 export interface Fee {
   id: string
@@ -113,7 +114,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
   return (
     <>
     <Card className="w-[350px] sm:w-[400px]">
-      <MonthPicker currentMonth={new Date()} onMonthChange={(month) => {setStartDate(month)}}/>
+      {/* <MonthPicker currentMonth={new Date()} onMonthChange={(month) => {setStartDate(month)}}/> */}
       <form action={addPropertyFees}>
       <CardHeader>
         <CardTitle>Property setup</CardTitle>
@@ -122,26 +123,42 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
         <p className="text-gray-500 text-sm mb-4">
           Set the rent and fees to charge for this property per month. 
         </p>
-        <div className="flex items-center gap-x-8 mb-3 justify-between">
-          <DatePicker
-            selected={startDate}
-            onSelect={(date) => {setStartDate(date)}}
-            onChange={(date) => {setStartDate(date)}}
-            dateFormat="MMM yyyy"
-            showMonthYearPicker
-            showTwoColumnMonthYearPicker
-            className="ring-2 text-center ring-gray-300 rounded-lg px-0 text-gray-600 font-medium w-36 sm:text-sm py-1.5 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:border-none"
-          />
-          <span>to</span>
-          <DatePicker
-            selected={startDate}
-            onSelect={(date) => {setStartDate(date)}}
-            onChange={(date) => {setStartDate(date)}}
-            dateFormat="MMM yyyy"
-            showMonthYearPicker
-            showTwoColumnMonthYearPicker
-            className="ring-2 text-center ring-gray-300 rounded-lg px-0 text-gray-600 font-medium w-36 sm:text-sm py-1.5 focus:ring-2 focus:ring-blue-500 focus:outline-none focus:border-none"
-          />
+        <div className="flex items-center gap-x-4 mb-3 justify-between">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                id="date"
+                variant={"outline"}
+                className={
+                  "w-[300px] justify-start text-left font-normal"
+                }
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                <span>Start month</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <MonthPicker currentMonth={new Date()} onMonthChange={(month) => {setStartDate(month)}}/>
+            </PopoverContent>
+          </Popover>
+          <div>to</div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                id="date"
+                variant={"outline"}
+                className={
+                  "w-[300px] justify-start text-left font-normal"
+                }
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                <span>End month</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <MonthPicker currentMonth={new Date()} onMonthChange={(month) => {setStartDate(month)}}/>
+            </PopoverContent>
+          </Popover>
         </div>
         <div className="relative">
           <Label htmlFor="rentAmount">Rent per month</Label>
