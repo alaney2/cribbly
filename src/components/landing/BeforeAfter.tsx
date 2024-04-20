@@ -26,7 +26,7 @@ export function BeforeAfter() {
     >
       <svg
         viewBox="0 0 1208 1024"
-        className="absolute left-1/2 z-0 h-[72rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] "
+        className="absolute left-1/2 z-0 h-[96rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] "
       >
         <ellipse cx={604} cy={512} fill="url(#6d1bd035-0dd1-437e-93fa-59d316231eb0)" rx={1208} ry={1024} />
         <defs>
