@@ -23,10 +23,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { EditFeeDialog } from '@/components/PropertySettings/EditFeeDialog'
 import { generateId } from "@/lib/utils"
 import { addPropertyFees } from '@/utils/supabase/actions'
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import MonthPicker from '@/components/PropertySettings/month-picker'
 import { Calendar as CalendarIcon } from "lucide-react"
+import { Calendar } from "@/components/ui/calendar"
+import { format, addYears, subDays } from "date-fns"
+import { cn } from "@/lib/utils"
 
 export interface Fee {
   id: string
@@ -66,7 +67,10 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
   const [isLoading, setIsLoading] = React.useState(false)
   const [editFeeOpen, setEditFeeOpen] = React.useState(false)
   const [feeEdit, setFeeEdit] = React.useState<Fee>()
-  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
+  const [startDate, setStartDate] = React.useState<Date | undefined>(new Date());
+  const [endDate, setEndDate] = React.useState<Date | undefined>(subDays(addYears(new Date(), 1), 1));
+
+  const [date, setDate] = React.useState<Date>()
 
   const handleAddFee = () => {
     const newFee = {
@@ -114,7 +118,6 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
   return (
     <>
     <Card className="w-[350px] sm:w-[400px]">
-      {/* <MonthPicker currentMonth={new Date()} onMonthChange={(month) => {setStartDate(month)}}/> */}
       <form action={addPropertyFees}>
       <CardHeader>
         <CardTitle>Property setup</CardTitle>
@@ -123,42 +126,54 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
         <p className="text-gray-500 text-sm mb-4">
           Set the rent and fees to charge for this property per month. 
         </p>
-        <div className="flex items-center gap-x-4 mb-3 justify-between">
+        <div className="flex items-center gap-x-2 mb-3 justify-between">
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                id="date"
                 variant={"outline"}
-                className={
-                  "w-[300px] justify-start text-left font-normal"
-                }
+                className={cn(
+                  "w-1/2 justify-start text-left font-normal",
+                  !startDate && "text-muted-foreground"
+                )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                <span>Start month</span>
+                {startDate ? format(startDate, "MM/dd/yyyy") : <span>Start date</span>}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <MonthPicker currentMonth={new Date()} onMonthChange={(month) => {setStartDate(month)}}/>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={startDate}
+                onSelect={setStartDate}
+                initialFocus
+              />
             </PopoverContent>
           </Popover>
-          <div>to</div>
+          <span>-</span>
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                id="date"
                 variant={"outline"}
-                className={
-                  "w-[300px] justify-start text-left font-normal"
-                }
+                className={cn(
+                  "w-1/2 justify-start text-left font-normal",
+                  !endDate && "text-muted-foreground"
+                )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                <span>End month</span>
+                {endDate ? format(endDate, "MM/dd/yyyy") : <span>End date</span>}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <MonthPicker currentMonth={new Date()} onMonthChange={(month) => {setStartDate(month)}}/>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={endDate}
+                onSelect={setEndDate}
+                initialFocus
+              />
             </PopoverContent>
           </Popover>
+          <input name="startDate" required value={String(startDate)} className="hidden"></input>
+          <input name="endDate" required value={String(endDate)} className="hidden"></input>
         </div>
         <div className="relative">
           <Label htmlFor="rentAmount">Rent per month</Label>

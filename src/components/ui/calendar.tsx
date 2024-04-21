@@ -1,13 +1,70 @@
 "use client"
 
 import * as React from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { DayPicker } from "react-day-picker"
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
+import { 
+  DayPicker,
+  useDayPicker,
+  useDayRender,
+  useNavigation,
+  type DayPickerRangeProps,
+  type DayPickerSingleProps,
+  type DayProps,
+  type Matcher,
+} from "react-day-picker"
+import { addYears, format, isSameMonth } from "date-fns"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
+interface NavigationButtonProps
+  extends React.HTMLAttributes<HTMLButtonElement> {
+  onClick: () => void
+  icon: React.ElementType
+  disabled?: boolean
+}
+
+const NavigationButton = React.forwardRef<
+  HTMLButtonElement,
+  NavigationButtonProps
+>(
+  (
+    { onClick, icon, disabled, ...props }: NavigationButtonProps,
+    forwardedRef,
+  ) => {
+    const Icon = icon
+    return (
+      <button
+        ref={forwardedRef}
+        type="button"
+        disabled={disabled}
+        className={cn(
+          "flex size-8 shrink-0 select-none items-center justify-center rounded border p-1 outline-none transition sm:size-[30px]",
+          // text color
+          "text-gray-600 hover:text-gray-800",
+          "dark:text-gray-400 hover:dark:text-gray-200",
+          // border color
+          "border-gray-300 dark:border-gray-700",
+          // background color
+          "hover:bg-gray-50 active:bg-gray-100",
+          "hover:dark:bg-gray-900 active:dark:bg-gray-800",
+          // disabled
+          "disabled:pointer-events-none",
+          "disabled:border-gray-200 disabled:dark:border-gray-800",
+          "disabled:text-gray-400 disabled:dark:text-gray-600",
+        )}
+        onClick={onClick}
+        {...props}
+      >
+        <Icon className="size-full shrink-0" />
+      </button>
+    )
+  },
+)
+
+NavigationButton.displayName = "NavigationButton"
+
 
 function Calendar({
   className,
@@ -56,6 +113,104 @@ function Calendar({
       components={{
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+        Caption: ({ ...props }) => {
+          const {
+            goToMonth,
+            nextMonth,
+            previousMonth,
+            currentMonth,
+            displayMonths,
+          } = useNavigation()
+          const { numberOfMonths, fromDate, toDate } = useDayPicker()
+
+          const displayIndex = displayMonths.findIndex((month) =>
+            isSameMonth(props.displayMonth, month),
+          )
+          const isFirst = displayIndex === 0
+          const isLast = displayIndex === displayMonths.length - 1
+
+          const hideNextButton = numberOfMonths > 1 && (isFirst || !isLast)
+          const hidePreviousButton = numberOfMonths > 1 && (isLast || !isFirst)
+
+          const goToPreviousYear = () => {
+            const targetMonth = addYears(currentMonth, -1)
+            if (
+              previousMonth &&
+              (!fromDate || targetMonth.getTime() >= fromDate.getTime())
+            ) {
+              goToMonth(targetMonth)
+            }
+          }
+
+          const goToNextYear = () => {
+            const targetMonth = addYears(currentMonth, 1)
+            if (
+              nextMonth &&
+              (!toDate || targetMonth.getTime() <= toDate.getTime())
+            ) {
+              goToMonth(targetMonth)
+            }
+          }
+
+          return (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                {!hidePreviousButton && (
+                  <NavigationButton
+                    disabled={
+                      !previousMonth ||
+                      (fromDate &&
+                        addYears(currentMonth, -1).getTime() <
+                          fromDate.getTime())
+                    }
+                    aria-label="Go to previous year"
+                    onClick={goToPreviousYear}
+                    icon={ChevronsLeft}
+                  />
+                )}
+                {!hidePreviousButton && (
+                  <NavigationButton
+                    disabled={!previousMonth}
+                    aria-label="Go to previous month"
+                    onClick={() => previousMonth && goToMonth(previousMonth)}
+                    icon={ChevronLeft}
+                  />
+                )}
+              </div>
+
+              <div
+                role="presentation"
+                aria-live="polite"
+                className="text-sm font-medium capitalize tabular-nums text-gray-900 dark:text-gray-50"
+              >
+                {format(props.displayMonth, "LLLL yyy")}
+              </div>
+
+              <div className="flex items-center gap-1">
+                {!hideNextButton && (
+                  <NavigationButton
+                    disabled={!nextMonth}
+                    aria-label="Go to next month"
+                    onClick={() => nextMonth && goToMonth(nextMonth)}
+                    icon={ChevronRight}
+                  />
+                )}
+                {!hideNextButton && (
+                  <NavigationButton
+                    disabled={
+                      !nextMonth ||
+                      (toDate &&
+                        addYears(currentMonth, 1).getTime() > toDate.getTime())
+                    }
+                    aria-label="Go to next year"
+                    onClick={goToNextYear}
+                    icon={ChevronsRight}
+                  />
+                )}
+              </div>
+            </div>
+          )
+        },
       }}
       {...props}
     />

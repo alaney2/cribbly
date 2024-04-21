@@ -92,7 +92,6 @@ export async function addPropertyFees(formData: FormData) {
         );
       if (error) {
         console.error(error);
-
         return {
           message: 'Error adding fee'
         }
