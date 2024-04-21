@@ -93,24 +93,22 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
     const calculateNetIncome = () => {
       setIsLoading(true)
       const rentAmountNumber = Number(rentAmount)
-      const securityDepositNumber = Number(securityDepositFee)
-      setTimeout(() => {
-        const totalFees = fees.reduce((total, fee) => total + Number(fee.amount), 0)
-        let softwareFee = 0
-        if (freeMonthsLeft) {
-          if (freeMonthsLeft <= 0 ) {
-            if (rentAmountNumber) {
-              if (rentAmountNumber >= 10) {
-                softwareFee = Number(Math.min(((rentAmountNumber + totalFees) * 0.0035), 10).toFixed(2))
-              }
+      // const securityDepositNumber = Number(securityDepositFee)
+      const totalFees = fees.reduce((total, fee) => total + Number(fee.amount), 0)
+      let softwareFee = 0
+      if (freeMonthsLeft) {
+        if (freeMonthsLeft <= 0 ) {
+          if (rentAmountNumber) {
+            if (rentAmountNumber >= 10) {
+              softwareFee = Number(Math.min(((rentAmountNumber + totalFees) * 0.0035), 10).toFixed(2))
             }
           }
         }
-        setCribblyFee(softwareFee)
-        const result = (rentAmountNumber || 0) + totalFees - softwareFee + (securityDeposit ? (securityDepositNumber || 0) : 0)
-        setNetIncome(parseFloat(result.toFixed(2)))
-        setIsLoading(false)
-      }, Math.floor(Math.random() * 501) + 200)
+      }
+      setCribblyFee(softwareFee)
+      const result = (rentAmountNumber || 0) + totalFees - softwareFee
+      setNetIncome(parseFloat(result.toFixed(2)))
+      setIsLoading(false)
     }
     calculateNetIncome()
   }, [securityDeposit, rentAmount, securityDepositFee, fees, freeMonthsLeft])
@@ -189,7 +187,13 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
               className="py-1.5 px-7 resize-none font-semibold text-md"
               autoComplete="off"
               value={rentAmount}
-              onChange={(e) => setRentAmount(e.target.value)}
+              onChange={(e) => {
+                setIsLoading(true)
+                setRentAmount(e.target.value)
+                setTimeout(() => {
+                  setIsLoading(false)
+                }, Math.floor(Math.random() * 501) + 200)
+              }}
               step=".01"
               required
               min="0"
@@ -220,7 +224,13 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
               autoComplete="off"
               value={securityDepositFee}
               required={securityDeposit}
-              onChange={(e) => setSecurityDepositFee(e.target.value)}
+              onChange={(e) => {
+                setIsLoading(true)
+                setSecurityDepositFee(e.target.value)
+                setTimeout(() => {
+                  setIsLoading(false)
+                }, Math.floor(Math.random() * 501) + 200)
+              }}
               step=".01"
               min="0"
               pattern="^\d+(?:\.\d{1,2})?$"
@@ -270,13 +280,13 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
       <CardFooter className="flex justify-between items-center">
         <div className="text-sm flex items-center">
           <span className="font-medium mr-2">
-            Net income:
+            Monthly income:
           </span>
           <span>
           {isLoading ? (
             <div className="w-12 h-4 bg-gray-200 rounded animate-pulse"></div>
           ) : (
-            `$${netIncome ? netIncome < 0 ? 0 : netIncome.toFixed(2) : 0}`
+            `$${netIncome ? netIncome < 0 ? 0 : netIncome : 0}`
           )}
           </span>
           <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
