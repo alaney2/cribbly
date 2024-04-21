@@ -36,3 +36,5 @@ Maintenance Request Summary: A table or bar graph showing the number of open, in
 payloadcms, strapi, sanity
 
 shottr, screen studio
+
+dots, silamoney, https://vopay.com/en-us/pricing/, https://www.payrix.com/embedded-payments/configurable-fees, https://developer.authorize.net/hello_world.html

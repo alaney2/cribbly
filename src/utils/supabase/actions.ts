@@ -1,5 +1,6 @@
 "use server"
 import { createClient } from '@/utils/supabase/server';
+import { generateId } from '@/lib/utils';
 
 export async function getUser() {
   const supabase = createClient();
@@ -38,14 +39,17 @@ export async function addPropertyFees(formData: FormData) {
   for (const pair of formData.entries()) {
     console.log(pair[0], pair[1])
     if (pair[0] === 'propertyId' || pair[0] === 'securityDepositSwitch' || pair[0].startsWith('$')) continue;
+
     if (pair[0] === 'rentAmount') {
-      const { error } = await supabase.from('property_fees')
+
+      const { error } = await supabase.from('property_rents')
         .insert(
           {
+            id: generateId(),
             property_id: propertyId.toString(),
-            fee_name: 'rent_price',
-            fee_type: 'rent_price' as const,
-            fee_cost: Number(parseFloat(pair[1].toString()).toFixed(2)),
+            rent_price: Number(parseFloat(pair[1].toString()).toFixed(2)),
+            rent_start: new Date(),
+            rent_end: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
             months_left: 12,
           }
         );
@@ -56,20 +60,21 @@ export async function addPropertyFees(formData: FormData) {
       continue;
     }
     if (pair[0] === 'depositAmount' && securityDepositSwitch === 'on') {
-      const { error } = await supabase.from('property_fees')
+      const { error } = await supabase.from('property_security_deposits')
         .insert(
           {
+            id: generateId(),
             property_id: propertyId.toString(),
-            fee_name: 'security_deposit',
-            fee_type: 'security_deposit' as const,
-            fee_cost: Number(parseFloat(pair[1].toString()).toFixed(2)),
-            months_left: 1,
+            deposit_amount: Number(parseFloat(pair[1].toString()).toFixed(2)),
+            status: 'unpaid',
           }
         );
-      if (error) 
+      if (error) {
+        console.error(error);
         return {
           message: 'Error adding security deposit'
         }
+      }
       continue;
     }
     if (pair[0].startsWith('fee')) {
@@ -77,6 +82,7 @@ export async function addPropertyFees(formData: FormData) {
       const { error } = await supabase.from('property_fees')
         .insert(
           {
+            id: generateId(),
             property_id: propertyId.toString(),
             fee_name: fee.name,
             fee_type: fee.type,
@@ -84,10 +90,13 @@ export async function addPropertyFees(formData: FormData) {
             months_left: fee.fee_type === 'recurring' ? 12 : 1,
           }
         );
-      if (error)
+      if (error) {
+        console.error(error);
+
         return {
           message: 'Error adding fee'
         }
+      }
     }
 
     console.log(pair[0], pair[1]);

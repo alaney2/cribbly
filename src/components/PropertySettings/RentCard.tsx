@@ -321,7 +321,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
     <Dialog open={isDialogOpen} onClose={setIsDialogOpen}>
       <DialogTitle>Add Fee</DialogTitle>
       <DialogDescription>
-        Add a one-time or recurring fee for the tenant, billed at the start of next month.
+        Add a one-time or recurring fee for the tenant, billed at the start of next month. Enter a negative amount to apply a discount.
       </DialogDescription>
       <form action={handleAddFee}>
       <DialogBody>
@@ -370,7 +370,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
             placeholder="Enter fee amount"
             autoComplete="off"
             required
-            min="0"
+            // min="0"
             pattern="^\d+(?:\.\d{1,2})?$"
             step=".01"
           />

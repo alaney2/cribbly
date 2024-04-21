@@ -9,18 +9,70 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      property_rents: {
+        Row: {
+          id: string
+          property_id: string
+          rent_price: number
+          rent_start: Date
+          rent_end: Date
+          months_left: number
+          created_at: Date
+        }
+        Insert: {
+          id: string
+          property_id: string
+          rent_price: number
+          rent_start: Date
+          rent_end: Date
+          months_left: number
+          created_at?: Date | null
+        }
+        Update: {
+          id?: string
+          property_id?: string
+          rent_price?: number
+          rent_start?: Date
+          rent_end?: Date
+          months_left?: number
+          created_at?: Date | null
+        }
+      }
+      property_security_deposits: {
+        Row: {
+          id: string
+          property_id: string
+          deposit_amount: number
+          status: Database['public']['Enums']['security_deposit_status']
+          created_at: Date
+        }
+        Insert: {
+          id: string
+          property_id: string
+          deposit_amount: number
+          status: Database['public']['Enums']['security_deposit_status']
+          created_at?: Date | null
+        }
+        Update: {
+          id?: string
+          property_id?: string
+          deposit_amount?: number
+          status?: Database['public']['Enums']['security_deposit_status']
+          created_at?: Date | null
+        }
+      }
       property_fees: {
         Row: {
           id: string
           property_id: string
           fee_name: string
-          fee_type: 'one-time' | 'recurring' | 'rent_price' | 'security_deposit'
+          fee_type: 'one-time' | 'recurring'
           fee_cost: number
           months_left: number
           created_at: Date
         }
         Insert: {
-          id?: string
+          id: string
           property_id: string
           fee_name: string
           fee_type: 'one-time' | 'recurring' | 'rent_price' | 'security_deposit'
@@ -378,6 +430,8 @@ export interface Database {
     Enums: {
       pricing_plan_interval: 'day' | 'week' | 'month' | 'year'
       pricing_type: 'one_time' | 'recurring'
+      fee_type: 'one_time' | 'recurring'
+      security_deposit_status: 'unpaid' | 'paid' | 'returned' | 'kept_full' | 'kept_partial'
       subscription_status:
         | 'trialing'
         | 'active'
