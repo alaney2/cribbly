@@ -35,7 +35,7 @@ const faqs = [
       question: 
       'How much does Cribbly cost?',
       answer:
-      'Cribbly is free for the first three months, then the lesser of 0.35% of rent or $10 per property per month.',
+      'Cribbly is free for the first three months, then $10 per property per month.',
     },
     {
       question: 

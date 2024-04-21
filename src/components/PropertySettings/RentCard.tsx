@@ -42,6 +42,8 @@ type RentCardProps = {
   freeMonthsLeft?: number
 }
 
+const CRIBBLY_FEE = 10
+
 export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCardProps ) {
 
   React.useEffect(() => {
@@ -100,7 +102,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
         if (freeMonthsLeft <= 0 ) {
           if (rentAmountNumber) {
             if (rentAmountNumber >= 10) {
-              softwareFee = Number(Math.min(((rentAmountNumber + totalFees) * 0.0035), 10).toFixed(2))
+              softwareFee = Number(CRIBBLY_FEE.toFixed(2))
             }
           }
         }
