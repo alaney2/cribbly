@@ -84,7 +84,7 @@ export function PrimaryFeatures() {
             Less time on Management, More time on You
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
-            Tired of tracking down rent every month? Wish you could see your earnings with just a glance? Dreading the next maintenance emergency? We’ve got your back.
+            Collect Rent, Handle Maintenance Requests, Analyze Performance, and Automate Tax Forms Effortlessly
           </p>
         </div>
         <Tab.Group
