@@ -5,12 +5,13 @@ import Image from 'next/image'
 import { Button } from '@/components/default/Button'
 import { Container } from '@/components/default/Container'
 import useSparks from '@/components/default/useSparks'
-import { motion } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 
 export function Hero() {
   const { makeBurst, sparks } = useSparks();
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const x = useMotionValue('100%');
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -51,34 +52,9 @@ export function Hero() {
       </p>
       </div>
       <div ref={containerRef} className="relative mt-10 flex justify-center gap-x-6">
-        <motion.button 
-          initial={{ "--x": "100%", scale: 1 }}
-          animate={{ "--x": "-100%" }}
-          whileTap={{ scale: 0.97 }}
-          transition={{
-            repeat: Infinity,
-            repeatType: "loop",
-            repeatDelay: 1,
-            type: "spring",
-            stiffness: 20,
-            damping: 15,
-            mass: 2,
-            scale: {
-              type: "spring",
-              stiffness: 10,
-              damping: 5,
-              mass: 0.1,
-            },
-          }}
-          onClick={handleClick} className="cursor-pointer px-6 py-2 rounded-lg relative radial-gradient">
-          <span className="text-neutral-100 h-full w-full block relative linear-mask">
-            Get started for free
-          </span>
-          <span className="block absolute inset-0 rounded-md p-px linear-overlay" />
-        </motion.button>
-        {/* <Button onClick={handleClick} className="cursor-pointer">
+        <Button onClick={handleClick} className="cursor-pointer">
           Get started for free
-        </Button> */}
+        </Button>
         {sparks.map(spark => (
           <div
             key={spark.id}
