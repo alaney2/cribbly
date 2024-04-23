@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Button } from '@/components/catalyst/button';
-import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/catalyst/dropdown';
+import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '../../dropdown';
 import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckCircleIcon, XCircleIcon, EllipsisVerticalIcon } from '@heroicons/react/16/solid';
 import Fuse from 'fuse.js';
 import { Input } from '@/components/aceternity/Input'
