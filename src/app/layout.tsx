@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: 'Cribbly',
     images: [
       {
-        url: '/src/images/logo.svg'
+        url: 'https://cribbly.io/images/opengraph-image.png',
       }
     ],
     locale: 'en_US',
