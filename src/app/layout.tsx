@@ -65,7 +65,6 @@ export default function RootLayout({ children }: PropsWithChildren) {
         lexend.variable,
       )}
     >
-
       <Script
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-MTXEMYC4EM"
