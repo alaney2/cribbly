@@ -94,7 +94,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
 
   React.useEffect(() => {
     const calculateNetIncome = () => {
-      setIsLoading(true)
+      // setIsLoading(true)
       const rentAmountNumber = Number(rentAmount)
       // const securityDepositNumber = Number(securityDepositFee)
       const totalFees = fees.reduce((total, fee) => total + Number(fee.amount), 0)
@@ -111,7 +111,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
       setCribblyFee(softwareFee)
       const result = (rentAmountNumber || 0) + totalFees - softwareFee
       setNetIncome(parseFloat(result.toFixed(2)))
-      setIsLoading(false)
+      // setIsLoading(false)
     }
     calculateNetIncome()
   }, [securityDeposit, rentAmount, securityDepositFee, fees, freeMonthsLeft])
@@ -425,7 +425,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
       </form>
     </Dialog>
     {editFeeOpen && feeEdit && <EditFeeDialog isOpen={editFeeOpen} setIsOpen={setEditFeeOpen} fee={feeEdit} fees={fees} setFees={setFees} />}
-    {startDate && endDate && <ScheduleDialog isOpen={isScheduleOpen} setIsOpen={setIsScheduleOpen} startDate={startDate} endDate={endDate} netIncome={netIncome} securityDeposit={securityDeposit}     securityDepositFee={securityDepositFee}/>}
+    {startDate && endDate && <ScheduleDialog isOpen={isScheduleOpen} setIsOpen={setIsScheduleOpen} startDate={startDate} endDate={endDate} netIncome={netIncome} securityDeposit={securityDeposit} securityDepositFee={securityDepositFee}/>}
     </>
   )
 }

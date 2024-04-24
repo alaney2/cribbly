@@ -68,7 +68,7 @@ const testimonials = [
     },
     {
       content:
-        'I love how Cribbly levels the playing field, giving small property owners like myself the tools that management firms use, at an affordable price.',
+        'I love how Cribbly levels the playing field, giving small property owners like myself the tools that management firms use at an affordable price.',
       author: {
         name: 'Angela K.',
         role: 'New York, NY',
@@ -139,7 +139,7 @@ export function Testimonials() {
                             {testimonial.author.role}
                           </div>
                         </div>
-                        <div className="overflow-hidden rounded-full bg-slate-50">
+                        {/* <div className="overflow-hidden rounded-full bg-slate-50">
                           <Image
                             className="h-14 w-14 object-cover"
                             src={testimonial.author.image}
@@ -147,7 +147,7 @@ export function Testimonials() {
                             width={56}
                             height={56}
                           />
-                        </div>
+                        </div> */}
                       </figcaption>
                     </figure>
                   </li>
