@@ -1,6 +1,7 @@
 "use server"
 import { createClient } from '@/utils/supabase/server';
 import { generateId } from '@/lib/utils';
+import { calculateRentDates } from '@/utils/helpers'
 
 export async function getUser() {
   const supabase = createClient();
@@ -29,16 +30,46 @@ export async function updateFullName(formData: FormData) {
   }
 }
 
+// export async function calculateRentDates(startDate: string, endDate: string) {
+//   const start = new Date(startDate);
+//   const end = new Date(endDate);
+//   const rentDates = [];
+//   rentDates.push(start)
+
+//   let monthsDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+//   if (start.getDay() !== 1) {
+//     monthsDiff -= 1;
+//   }
+
+//   for (let i = 1; i <= monthsDiff; i++) {
+//     const nextMonth = new Date(start.getFullYear(), start.getMonth() + i, 1);
+//     if (nextMonth.getTime() < end.getTime()) {
+//       rentDates.push(nextMonth);
+//     }
+//   }
+
+//   return {
+//     monthsOfRent: monthsDiff + 1,
+//     rentDates: rentDates
+//   };
+// }
+
+
 export async function addPropertyFees(formData: FormData) {
   const propertyId = formData.get('propertyId')
   if (!propertyId) return;
   const securityDepositSwitch = formData.get('securityDepositSwitch')
-  
+  let startDate = new Date(String(formData.get('startDate')))
+  let endDate = new Date(String(formData.get('endDate')))
+  // console.log(new Date(startDate), new Date(endDate))
+  const rentInfo = calculateRentDates(startDate, endDate);
+  const monthsOfRent = rentInfo.monthsOfRent;
+  const rentDates = rentInfo.rentDates;
+  console.log(monthsOfRent, rentDates)
   const supabase = createClient();
 
   for (const pair of formData.entries()) {
-    console.log(pair[0], pair[1])
-    if (pair[0] === 'propertyId' || pair[0] === 'securityDepositSwitch' || pair[0].startsWith('$')) continue;
+    // if (pair[0] === 'propertyId' || pair[0] === 'securityDepositSwitch' || pair[0].startsWith('$')) continue;
 
     if (pair[0] === 'rentAmount') {
 
@@ -48,8 +79,8 @@ export async function addPropertyFees(formData: FormData) {
             id: generateId(),
             property_id: propertyId.toString(),
             rent_price: Number(parseFloat(pair[1].toString()).toFixed(2)),
-            rent_start: new Date(),
-            rent_end: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+            rent_start: new Date(startDate),
+            rent_end: new Date(new Date(endDate)),
             months_left: 12,
           }
         );
@@ -98,9 +129,7 @@ export async function addPropertyFees(formData: FormData) {
       }
     }
 
-    console.log(pair[0], pair[1]);
   }
-
 }
 
 export async function addPropertyFromWelcome(formData: FormData) {

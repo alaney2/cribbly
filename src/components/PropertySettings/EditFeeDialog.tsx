@@ -34,6 +34,9 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees }: EditFee
     <>
       <Dialog open={isOpen} onClose={setIsOpen}>
         <DialogTitle>Edit fee</DialogTitle>
+        <DialogDescription>
+          Enter a negative amount to apply a discount.
+        </DialogDescription>
         <form>
         <DialogBody>
         <div className="items-center">
@@ -97,14 +100,14 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees }: EditFee
           >
             Delete
           </Button>
-          <div>
-            <Button variant="ghost" type="button" size="sm" onClick={() => {setIsOpen(false)}}>Cancel</Button>
+          {/* <div> */}
+            {/* <Button variant="ghost" type="button" size="sm" onClick={() => {setIsOpen(false)}}>Cancel</Button> */}
             <Button type="submit" size="sm" 
               onClick={handleSaveFee}
             >
               Save
             </Button>
-          </div>
+          {/* </div> */}
         </DialogActions>
         </form>
       </Dialog>

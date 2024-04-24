@@ -26,9 +26,9 @@ import { addPropertyFees } from '@/utils/supabase/actions'
 import "react-datepicker/dist/react-datepicker.css";
 import { Calendar as CalendarIcon } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
-import { format, addYears, subDays } from "date-fns"
+import { format, addYears, subDays, addDays } from "date-fns"
 import { cn } from "@/lib/utils"
-
+import { ScheduleDialog } from '@/components/PropertySettings/ScheduleDialog'
 export interface Fee {
   id: string
   type: string
@@ -53,6 +53,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
   }, [propertyId, setPropertyId])
 
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
+  const [isScheduleOpen, setIsScheduleOpen] = React.useState(false)
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false)
   const [rentAmount, setRentAmount] = React.useState<string>("")
   const [securityDeposit, setSecurityDeposit] = React.useState(false)
@@ -69,8 +70,8 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
   const [isLoading, setIsLoading] = React.useState(false)
   const [editFeeOpen, setEditFeeOpen] = React.useState(false)
   const [feeEdit, setFeeEdit] = React.useState<Fee>()
-  const [startDate, setStartDate] = React.useState<Date | undefined>(new Date());
-  const [endDate, setEndDate] = React.useState<Date | undefined>(subDays(addYears(new Date(), 1), 1));
+  const [startDate, setStartDate] = React.useState<Date | undefined>(addDays(new Date(), 1));
+  const [endDate, setEndDate] = React.useState<Date | undefined>((addYears(new Date(), 1)));
 
   const [date, setDate] = React.useState<Date>()
 
@@ -124,7 +125,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
       </CardHeader>
       <CardContent>
         <p className="text-gray-500 text-sm mb-4">
-          Set the rent and fees to charge for this property per month. 
+          Set the rent and fees to charge for this property per month. Rent is billed on the start date, and then the first of each month.
         </p>
         <div className="flex items-center gap-x-2 mb-3 justify-between">
           <Popover>
@@ -136,7 +137,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
                   !startDate && "text-muted-foreground"
                 )}
               >
-                <CalendarIcon className="mr-2 h-4 w-4" />
+                <CalendarIcon className="mx-2 h-4 w-4" />
                 {startDate ? format(startDate, "MM/dd/yyyy") : <span>Start date</span>}
               </Button>
             </PopoverTrigger>
@@ -146,6 +147,10 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
                 selected={startDate}
                 onSelect={setStartDate}
                 initialFocus
+                defaultMonth={startDate}
+                disabled={(date) =>
+                  date < new Date()
+                }
               />
             </PopoverContent>
           </Popover>
@@ -159,7 +164,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
                   !endDate && "text-muted-foreground"
                 )}
               >
-                <CalendarIcon className="mr-2 h-4 w-4" />
+                <CalendarIcon className="mx-2 h-4 w-4" />
                 {endDate ? format(endDate, "MM/dd/yyyy") : <span>End date</span>}
               </Button>
             </PopoverTrigger>
@@ -169,16 +174,20 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
                 selected={endDate}
                 onSelect={setEndDate}
                 initialFocus
+                defaultMonth={endDate}
+                disabled={(date) =>
+                  (startDate !== undefined) ? date < startDate : date < new Date()
+                }
               />
             </PopoverContent>
           </Popover>
-          <input name="startDate" required value={String(startDate)} className="hidden"></input>
-          <input name="endDate" required value={String(endDate)} className="hidden"></input>
+          <input name="startDate" required defaultValue={String(startDate)} className="hidden"></input>
+          <input name="endDate" required defaultValue={String(endDate)} className="hidden"></input>
         </div>
         <div className="relative">
           <Label htmlFor="rentAmount">Rent per month</Label>
           <>
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 mt-6">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 mt-7">
               <span className="text-gray-500 font-semibold text-md ">$</span>
             </div>
             <Input
@@ -186,7 +195,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
               id="rentAmount"
               name="rentAmount"
               placeholder="0"
-              className="py-1.5 px-7 resize-none font-semibold text-md"
+              className="py-1.5 px-7 resize-none font-semibold text-md mt-1"
               autoComplete="off"
               value={rentAmount}
               onChange={(e) => {
@@ -222,7 +231,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
               id="depositAmount"
               name="depositAmount"
               placeholder="0"
-              className="py-1.5 px-7 resize-none font-semibold text-md max-w-xs h-10 w-full rounded-md bg-background text-base sm:text-sm transition-all ease-in-out duration-150 border focus:ring-0 focus:outline-0 "
+              className="py-1.5 px-7 resize-none font-semibold text-md h-10 w-full rounded-md bg-background text-base sm:text-sm transition-all ease-in-out duration-150 border focus:ring-0 focus:outline-0 "
               autoComplete="off"
               value={securityDepositFee}
               required={securityDeposit}
@@ -273,8 +282,10 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
           <input key={fee.id} className="hidden" name={`fee${index}`} id={`fee${index}`} defaultValue={JSON.stringify(fee)} readOnly />
         ))}
         <input name='propertyId' defaultValue={propertyId} readOnly className="hidden" />
-        <div className="mt-4 -mb-2">
+        <div className="mt-4 -mb-2 flex justify-between">
           <Button type="button" variant="outline" size="sm" onClick={() => setIsDialogOpen(true)}>Add Fee</Button>
+          <Button type="button" variant="secondary" size="sm" onClick={() => setIsScheduleOpen(true)}>Billing Schedule</Button>
+
         </div>
       </CardContent>
       
@@ -407,13 +418,14 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
         <Button type="button" variant="ghost" size="sm" onClick={() => setIsDialogOpen(false)}>
           Cancel
         </Button>
-        <Button type="submit" size="sm" className="px-4 ml-3">
+        <Button type="submit" size="sm" className="px-4">
           Add
         </Button>
       </DialogActions>
       </form>
     </Dialog>
     {editFeeOpen && feeEdit && <EditFeeDialog isOpen={editFeeOpen} setIsOpen={setEditFeeOpen} fee={feeEdit} fees={fees} setFees={setFees} />}
+    <ScheduleDialog isOpen={isScheduleOpen} setIsOpen={setIsScheduleOpen} startDate={startDate} endDate={endDate} />
     </>
   )
 }
