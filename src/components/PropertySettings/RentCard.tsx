@@ -65,7 +65,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
     amount: "",
   })
   const [fees, setFees] = React.useState<Fee[]>([])
-  const [netIncome, setNetIncome] = React.useState<number>()
+  const [netIncome, setNetIncome] = React.useState<number>(0)
   const [cribblyFee, setCribblyFee] = React.useState<number>(0)
   const [isLoading, setIsLoading] = React.useState(false)
   const [editFeeOpen, setEditFeeOpen] = React.useState(false)
@@ -425,7 +425,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
       </form>
     </Dialog>
     {editFeeOpen && feeEdit && <EditFeeDialog isOpen={editFeeOpen} setIsOpen={setEditFeeOpen} fee={feeEdit} fees={fees} setFees={setFees} />}
-    <ScheduleDialog isOpen={isScheduleOpen} setIsOpen={setIsScheduleOpen} startDate={startDate} endDate={endDate} />
+    {startDate && endDate && <ScheduleDialog isOpen={isScheduleOpen} setIsOpen={setIsScheduleOpen} startDate={startDate} endDate={endDate} netIncome={netIncome} securityDeposit={securityDeposit}     securityDepositFee={securityDepositFee}/>}
     </>
   )
 }
