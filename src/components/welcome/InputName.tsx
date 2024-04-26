@@ -1,4 +1,4 @@
-import { SetStateAction, useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import logo from '@/images/icon.png'
 import Image from 'next/image';
 import styles from './Welcome.module.css';
@@ -15,29 +15,17 @@ const formClasses =
 
 export function InputName({ fullName, setFullName, buttonOnClick }: InputNameProps) {
   const [fadeOut, setFadeOut] = useState(false);
-  const [inputValue, setInputValue] = useState('');
   const animationClass = fadeOut ? 'animate__animated animate__fadeOut animate__faster' : '';
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setInputValue(localStorage.getItem('fullName') || '')
-      console.log(inputValue)
-    }
-  }, [inputValue, setInputValue])
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const fullName = inputValue.trim();
-    if (fullName === '') return;
-    if (typeof window !== "undefined") {
-      localStorage.setItem('fullName', fullName)
-    }
+    const fullNameTrimmed = fullName.trim();
+    if (fullNameTrimmed === '') return;
     setFadeOut(true);
     setTimeout(buttonOnClick, 300);
   };
 
-  const handleInputChange = (e: { target: { value: SetStateAction<string>; }; }) => {
-    setInputValue(e.target.value);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFullName(e.target.value);
   };
 
   return (
@@ -60,7 +48,6 @@ export function InputName({ fullName, setFullName, buttonOnClick }: InputNamePro
             Legal name
           </label>
           <input
-            ref={inputRef}
             type="name"
             name="name"
             id="name"
@@ -70,6 +57,7 @@ export function InputName({ fullName, setFullName, buttonOnClick }: InputNamePro
             required
             onChange={handleInputChange}
             autoFocus
+            defaultValue={fullName}
           />
           <Button
             type="submit"
