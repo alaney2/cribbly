@@ -142,11 +142,14 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
       >
       <CardHeader>
         <CardTitle>Property setup</CardTitle>
+        <CardDescription className="mt-2">
+        Set the rent and fees to charge for this property per month. Rent is billed on the start date, and then the first of each month.
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-gray-500 text-sm mb-4">
+        {/* <p className="text-gray-500 text-sm mb-4">
           Set the rent and fees to charge for this property per month. Rent is billed on the start date, and then the first of each month.
-        </p>
+        </p> */}
         <div className="flex items-center gap-x-2 mb-3 justify-between">
           <Popover>
             <PopoverTrigger asChild>

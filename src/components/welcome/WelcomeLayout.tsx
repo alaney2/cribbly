@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { Button } from "@/components/ui/button"
 import { Step0 } from '@/components/welcome/Step0'
 import { InputName } from '@/components/welcome/InputName'
 import { AutofilledProperty } from '@/components/welcome/AutofilledProperty'
@@ -53,7 +54,10 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
         )
       case 4:
         return (
-          <InviteCard />
+          <>
+          <InviteCard propertyId={propertyId} setPropertyId={setPropertyId} />
+          <Button size="sm" disabled className="mt-8">Finish setup</Button>
+          </>
         )
       // case 3:
       //   return (
