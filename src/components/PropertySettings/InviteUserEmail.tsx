@@ -29,8 +29,8 @@ interface InviteUserEmailProps {
   inviteFromLocation?: string;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
-  ? `https://${process.env.NEXT_PUBLIC_SITE_URL}`
+const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
   : "";
 
 export const InviteUserEmail = ({
@@ -53,20 +53,20 @@ export const InviteUserEmail = ({
       <Tailwind>
         <Body className="bg-white my-auto mx-auto font-sans px-2">
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] max-w-[465px]">
-            <Section className="mt-[32px]">
+            {/* <Section className="mt-[32px]">
               <Img
-                src={`${baseUrl}/images/opengraph-image.png`}
+                src={`../../images/icon.png`}
                 width="40"
-                height="37"
+                height="40"
                 alt="Cribbly"
                 className="my-0 mx-auto"
               />
-            </Section>
+            </Section> */}
             <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
               Join <strong>{teamName}</strong> on <strong>Cribbly</strong>
             </Heading>
             <Text className="text-black text-[14px] leading-[24px]">
-              Hello {username},
+              Hello {username}!
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
               <strong>{invitedByUsername}</strong> (
@@ -76,37 +76,12 @@ export const InviteUserEmail = ({
               >
                 {invitedByEmail}
               </Link>
-              ) has invited you to the <strong>{teamName}</strong> address on{" "}
-              <strong>Cribbly</strong>.
+              ) has invited you to join <strong>{teamName}</strong> on{" "}
+              Cribbly. 
             </Text>
-            {/* <Section>
-              <Row>
-                <Column align="right">
-                  <Img
-                    className="rounded-full"
-                    src={userImage}
-                    width="64"
-                    height="64"
-                  />
-                </Column>
-                <Column align="center">
-                  <Img
-                    src={`${baseUrl}/static/vercel-arrow.png`}
-                    width="12"
-                    height="9"
-                    alt="invited you to"
-                  />
-                </Column>
-                <Column align="left">
-                  <Img
-                    className="rounded-full"
-                    src={teamImage}
-                    width="64"
-                    height="64"
-                  />
-                </Column>
-              </Row>
-            </Section> */}
+            <Text className="text-black text-[14px] leading-[24px]">
+              Cribbly is a property management platform that helps you pay rent and fees, track expenses, and communicate with your landlord.
+            </Text>
             <Section className="text-center mt-[32px] mb-[32px]">
               <Button
                 className="bg-blue-500 rounded text-white text-[12px] font-semibold no-underline text-center px-5 py-3"

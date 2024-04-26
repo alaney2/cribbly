@@ -16,6 +16,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
   const [currentStep, setCurrentStep] = useState(4)
   const [propertyId, setPropertyId] = useState("")
   const [fullName, setFullName] = useState('');
+  const [finishWelcome, setFinishWelcome] = useState(false)
 
   const steps = [
     { name: 'Step 0' },
@@ -55,8 +56,8 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
       case 4:
         return (
           <>
-          <InviteCard propertyId={propertyId} setPropertyId={setPropertyId} />
-          <Button size="sm" disabled className="mt-8">Finish setup</Button>
+          <InviteCard propertyId={propertyId} setPropertyId={setPropertyId} setFinishWelcome={setFinishWelcome} />
+          <Button size="sm" disabled={finishWelcome} className="mt-8">Finish setup</Button>
           </>
         )
       // case 3:
@@ -89,7 +90,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
                     <span className="sr-only">{step.name}</span>
                   </a>
                 ) : (
-                  <a className="block h-2.5 w-2.5 rounded-full bg-zinc-300 transition duration-300 ease-in-out hover:bg-zinc-400">
+                  <a className="block h-2.5 w-2.5 rounded-full bg-zinc-300 transition duration-300 ease-in-out">
                     <span className="sr-only">{step.name}</span>
                   </a>
                 )}

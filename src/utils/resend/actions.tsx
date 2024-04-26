@@ -23,26 +23,22 @@ export async function sendInviteEmail(formData: FormData) {
     .select()
     .eq('id', propertyId)
     .single()
-  console.log('PROPERTY', property)
   const resend = new Resend(process.env.RESEND_API_KEY)
   const { data: id, error } = await resend.emails.send({
-    from: 'support@cribbly.io',
+    from: 'Cribbly <support@cribbly.io>',
+    reply_to: 'support@cribbly.io',
     to: email,
-    subject: 'Your Invite to Cribbly',
+    subject: 'Property Invite - ' + property?.street_address,
     react: <InviteUserEmail 
       invitedByUsername={user_data.full_name || ''}
       invitedByEmail={user_data.email}
       username={fullName}
       teamName={property?.street_address}
+      inviteLink={`https://cribbly.io/invite/${propertyId}`}
     />,
   });
   if (error) {
     console.error(error);
-    return {
-      message: 'Error sending email'
-    }
+    throw new Error('Error sending email')
   }
-  console.log(id)
-  console.log('Email sent!')
-  console.log(email, fullName)
 }

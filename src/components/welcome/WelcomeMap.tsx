@@ -15,6 +15,7 @@ import { AddressDialog } from '@/components/welcome/AddressDialog'
 
 
 export function WelcomeMap({ buttonOnClick, setPropertyId }: { buttonOnClick: () => void; setPropertyId: (propertyId: string) => void }) {
+  
   const [fadeOut, setFadeOut] = useState(false);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -27,6 +28,15 @@ export function WelcomeMap({ buttonOnClick, setPropertyId }: { buttonOnClick: ()
   const popupRef = useRef<mapboxgl.Popup>(null);
   let [isOpen, setIsOpen] = useState(false)
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && setPropertyId !== undefined) {
+      if (localStorage.getItem('propertyId')) {
+        setFadeOut(true)
+        console.log('propertyId', localStorage.getItem('propertyId'))
+        setTimeout(buttonOnClick, 300)
+      }
+    }
+  }, [setPropertyId, buttonOnClick])
 
   const popupClick = () => {
     if (typeof window !== "undefined") {

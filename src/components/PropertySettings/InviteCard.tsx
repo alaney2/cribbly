@@ -16,9 +16,10 @@ import { sendInviteEmail } from '@/utils/resend/actions';
 type InviteCardProps = {
   propertyId: string
   setPropertyId?: (propertyId: string) => void
+  setFinishWelcome?: (finishWelcome: boolean) => void
 }
 
-export function InviteCard({ propertyId, setPropertyId }: InviteCardProps) {
+export function InviteCard({ propertyId, setPropertyId, setFinishWelcome }: InviteCardProps) {
   useEffect(() => {
     if (typeof window !== "undefined" && setPropertyId && !propertyId) {
       setPropertyId(localStorage.getItem('propertyId') || '')
@@ -44,18 +45,11 @@ export function InviteCard({ propertyId, setPropertyId }: InviteCardProps) {
         action={async (formData) => {
           toast.promise(new Promise(async (resolve, reject) => {
             try {
-              console.log('Email awaiting')
-              // await resend.emails.send({
-              //   from: 'alanyao.training@gmail.com',
-              //   to: 'alanyao2002@gmail.com',
-              //   subject: 'Your Invite to Cribbly',
-              //   react: <InviteUserEmail />,
-              // });
               await sendInviteEmail(formData)
-              console.log('Email sent!')
               setEmail('');
               setFullName('');
               resolve('Email sent!')
+              setFinishWelcome && setFinishWelcome(true)
               // const data = await addPropertyFees(formData)
               // resolve('Rent and fees added!')
               // buttonOnClick && setFadeOut(true)
@@ -65,8 +59,8 @@ export function InviteCard({ propertyId, setPropertyId }: InviteCardProps) {
               reject(error)
             }
           }), {
-            loading: 'Adding...',
-            success: 'Rent and fees added!',
+            loading: 'Inviting...',
+            success: 'Tenant has been invited!',
             error: 'An error occurred, please check the form and try again.'
           })
         }}
