@@ -46,16 +46,15 @@ export async function addPropertyFees(formData: FormData) {
   for (const pair of formData.entries()) {
 
     if (pair[0] === 'rentAmount') {
-
       const { error } = await supabase.from('property_rents')
         .insert(
           {
             id: generateId(),
             property_id: propertyId.toString(),
             rent_price: Number(parseFloat(pair[1].toString()).toFixed(2)),
-            rent_start: new Date(startDate),
-            rent_end: new Date(new Date(endDate)),
-            months_left: 12,
+            rent_start: startDate,
+            rent_end: endDate,
+            months_left: monthsOfRent,
           }
         );
       if (error) 
@@ -92,7 +91,9 @@ export async function addPropertyFees(formData: FormData) {
             fee_name: fee.name,
             fee_type: fee.type,
             fee_cost: Number(parseFloat(fee.amount).toFixed(2)),
-            months_left: fee.fee_type === 'recurring' ? 12 : 1,
+            months_left: fee.fee_type === 'recurring' ? monthsOfRent : 1,
+            start_date: startDate,
+            end_date: endDate,
           }
         );
       if (error) {
