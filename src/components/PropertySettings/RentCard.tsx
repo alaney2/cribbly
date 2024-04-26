@@ -29,6 +29,8 @@ import { Calendar } from "@/components/ui/calendar"
 import { format, addYears, subDays, addDays } from "date-fns"
 import { cn } from "@/lib/utils"
 import { ScheduleDialog } from '@/components/PropertySettings/ScheduleDialog'
+import { toast } from 'sonner';
+
 export interface Fee {
   id: string
   type: string
@@ -40,11 +42,13 @@ type RentCardProps = {
   propertyId: string
   setPropertyId?: (propertyId: string) => void
   freeMonthsLeft?: number
+  buttonOnClick: () => void
 }
 
 const CRIBBLY_FEE = 10
 
-export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCardProps ) {
+
+export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnClick }: RentCardProps ) {
 
   React.useEffect(() => {
     if (typeof window !== "undefined" && setPropertyId && !propertyId) {
@@ -72,8 +76,8 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
   const [feeEdit, setFeeEdit] = React.useState<Fee>()
   const [startDate, setStartDate] = React.useState<Date | undefined>(addDays(new Date(), 1));
   const [endDate, setEndDate] = React.useState<Date | undefined>((addYears(new Date(), 1)));
-
-  const [date, setDate] = React.useState<Date>()
+  const [fadeOut, setFadeOut] = React.useState(false);
+  const animationClass = fadeOut ? ' animate__fadeOut' : 'animate__fadeIn';
 
   const handleAddFee = () => {
     const newFee = {
@@ -118,8 +122,25 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
 
   return (
     <>
-    <Card className="w-[350px] sm:w-[400px]">
-      <form action={addPropertyFees}>
+    <Card className={`w-[350px] sm:w-[400px] animate__animated animate__faster ${animationClass}`}>
+      <form 
+        action={async (formData) => {
+          toast.promise(new Promise(async (resolve, reject) => {
+            try {
+              const data = await addPropertyFees(formData)
+              resolve('Rent and fees added!')
+              setFadeOut(true)
+              setTimeout(buttonOnClick, 300);
+            } catch (error) {
+              reject(error)
+            }
+          }), {
+            loading: 'Adding...',
+            success: 'Rent and fees added!',
+            error: 'An error occurred, please check the form and try again.'
+          })
+        }}
+      >
       <CardHeader>
         <CardTitle>Property setup</CardTitle>
       </CardHeader>
@@ -358,7 +379,6 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
         </div>
       </CardFooter>
       </form>
-
     </Card>
     <Dialog open={isDialogOpen} onClose={setIsDialogOpen}>
       <DialogTitle>Add Fee</DialogTitle>
@@ -367,7 +387,6 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
       </DialogDescription>
       <form action={handleAddFee}>
       <DialogBody>
-
         <div className="items-center">
           <HeadlessFieldset >
             <HeadlessLegend className="text-base/6 font-medium sm:text-sm/6">

@@ -131,6 +131,8 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
                 if (data && 'id' in data) {
                   setPropertyId && setPropertyId(data.id);
                   localStorage.setItem('propertyId', data.id);
+                } else {
+                  throw new Error(data?.message);
                 }
               } else {
                 await addProperty(formData);

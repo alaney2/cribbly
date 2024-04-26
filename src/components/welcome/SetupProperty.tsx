@@ -10,6 +10,7 @@ import useSWR from 'swr';
 type SetupPropertyProps = {
   propertyId: string;
   setPropertyId: (propertyId: string) => void;
+  buttonOnClick: () => void;
 }
 
 const fetcher = async () => {
@@ -27,7 +28,7 @@ const fetcher = async () => {
   return data?.free_months || 0
 }
 
-export function SetupProperty({ propertyId, setPropertyId }: SetupPropertyProps ) {
+export function SetupProperty({ propertyId, setPropertyId, buttonOnClick }: SetupPropertyProps ) {
   // const [fadeOut, setFadeOut] = useState(false);
   
   // const animationClass = fadeOut ? 'animate__animated animate__fadeOut animate__faster' : '';
@@ -38,7 +39,7 @@ export function SetupProperty({ propertyId, setPropertyId }: SetupPropertyProps 
       <div
         className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full w-full gap-y-4 `}
       >
-        <RentCard propertyId={propertyId} setPropertyId={setPropertyId} freeMonthsLeft={data} />
+        <RentCard propertyId={propertyId} setPropertyId={setPropertyId} freeMonthsLeft={data} buttonOnClick={buttonOnClick} />
         {/* <FeeCard /> */}
       </div>
     </>

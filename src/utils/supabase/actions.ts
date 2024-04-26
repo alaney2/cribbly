@@ -102,7 +102,6 @@ export async function addPropertyFees(formData: FormData) {
         }
       }
     }
-
   }
 }
 

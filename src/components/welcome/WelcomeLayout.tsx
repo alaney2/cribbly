@@ -19,6 +19,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
     { name: 'Step 1' },
     { name: 'Step 2' },
     { name: 'Step 3' },
+    { name: 'Step 4' },
   ]
 
   const handleStepClick = (stepIndex: number) => {
@@ -46,7 +47,11 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
         )
       case 3:
         return (
-          <SetupProperty propertyId={propertyId} setPropertyId={setPropertyId} />
+          <SetupProperty propertyId={propertyId} setPropertyId={setPropertyId} buttonOnClick={() => setCurrentStep(currentStep + 1)} />
+        )
+      case 4:
+        return (
+          <div>Case 4</div>
         )
       // case 3:
       //   return (
