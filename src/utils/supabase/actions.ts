@@ -40,7 +40,6 @@ export async function addPropertyFees(formData: FormData) {
   const rentInfo = calculateRentDates(startDate, endDate);
   const monthsOfRent = rentInfo.monthsOfRent;
   const rentDates = rentInfo.rentDates;
-  console.log(monthsOfRent, rentDates)
   const supabase = createClient();
 
   for (const pair of formData.entries()) {

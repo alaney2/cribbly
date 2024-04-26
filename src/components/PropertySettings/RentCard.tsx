@@ -261,18 +261,16 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
               </TableHead>
               <TableBody>
                 {fees.map((fee, index) => (
-                  <>
-                    <TableRow key={fee.id} className="cursor-default" 
-                      onClick={() => {
-                        setFeeEdit(fee)
-                        setEditFeeOpen(true)
-                      }}
-                    >
-                      <TableCell className="max-w-[140px] truncate">{fee.name}</TableCell>
-                      <TableCell >{fee.type}</TableCell>
-                      <TableCell className="text-right">${fee.amount}</TableCell>
-                    </TableRow>
-                  </>
+                  <TableRow key={fee.id} className="cursor-default" 
+                    onClick={() => {
+                      setFeeEdit(fee)
+                      setEditFeeOpen(true)
+                    }}
+                  >
+                    <TableCell className="max-w-[140px] truncate">{fee.name}</TableCell>
+                    <TableCell >{fee.type}</TableCell>
+                    <TableCell className="text-right">${fee.amount}</TableCell>
+                  </TableRow>
                 ))}
               </TableBody>
             </Table>
