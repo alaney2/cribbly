@@ -1,5 +1,4 @@
 "use client"
-// import React, { useEffect, useState, useRef } from 'react';
 import { RentCard } from '@/components/PropertySettings/RentCard';
 import { FeeCard } from '@/components/PropertySettings/FeeCard';
 import { getUser } from '@/utils/supabase/actions'

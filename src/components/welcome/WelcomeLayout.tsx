@@ -9,9 +9,10 @@ import Payment from '@/components/welcome/Payment'
 import { Pricing } from '@/components/landing/Pricing'
 import { Checkout2 } from '@/components/welcome/Checkout2'
 import { SetupProperty } from '@/components/welcome/SetupProperty'
+import { InviteCard } from '@/components/PropertySettings/InviteCard';
 
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
-  const [currentStep, setCurrentStep] = useState(3)
+  const [currentStep, setCurrentStep] = useState(4)
   const [propertyId, setPropertyId] = useState("")
   const [fullName, setFullName] = useState('');
 
@@ -52,7 +53,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
         )
       case 4:
         return (
-          <div>Case 4</div>
+          <InviteCard />
         )
       // case 3:
       //   return (

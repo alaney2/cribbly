@@ -122,7 +122,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
   return (
     <>
     <Card className={`w-[350px] sm:w-[400px] animate__animated animate__faster ${animationClass}`}>
-      <form 
+      <form
         action={async (formData) => {
           toast.promise(new Promise(async (resolve, reject) => {
             try {
