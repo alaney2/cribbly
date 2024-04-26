@@ -336,7 +336,13 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft }: RentCard
                 ))}
                 <p className="flex justify-between">
                   <span>Cribbly fee: </span>
-                  <span>${cribblyFee}</span>
+                  {cribblyFee === 0 ? (
+                    <span>
+                      <s>$10</s> $0
+                    </span>
+                  ) : (
+                    <span>${cribblyFee}</span>
+                  )}
                 </p>
                 <Separator className="my-2"/>
                 <p className="flex justify-between">
