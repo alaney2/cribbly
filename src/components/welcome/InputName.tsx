@@ -5,19 +5,33 @@ import styles from './Welcome.module.css';
 import { Button } from '@/components/catalyst/button'
 import { updateFullName } from '@/utils/supabase/actions';
 
+type InputNameProps = {
+  fullName: string
+  setFullName: (fullName: string) => void
+  buttonOnClick: () => void
+}
 const formClasses =
   'block text-base w-80 h-10 appearance-none bg-gray-50 rounded-md border-1 border-gray-200 bg-white px-3 py-1.5 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 text-center animate__animated animate__fadeIn animate__fast'
 
-
-export function InputName({ buttonOnClick }: { buttonOnClick: () => void }) {
+export function InputName({ fullName, setFullName, buttonOnClick }: InputNameProps) {
   const [fadeOut, setFadeOut] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const animationClass = fadeOut ? 'animate__animated animate__fadeOut animate__faster' : '';
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setInputValue(localStorage.getItem('fullName') || '')
+      console.log(inputValue)
+    }
+  }, [inputValue, setInputValue])
+
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const fullName = inputValue.trim();
     if (fullName === '') return;
+    if (typeof window !== "undefined") {
+      localStorage.setItem('fullName', fullName)
+    }
     setFadeOut(true);
     setTimeout(buttonOnClick, 300);
   };

@@ -42,7 +42,7 @@ type RentCardProps = {
   propertyId: string
   setPropertyId?: (propertyId: string) => void
   freeMonthsLeft?: number
-  buttonOnClick: () => void
+  buttonOnClick?: () => void
 }
 
 const CRIBBLY_FEE = 10
@@ -115,7 +115,6 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
       setCribblyFee(softwareFee)
       const result = (rentAmountNumber || 0) + totalFees - softwareFee
       setNetIncome(parseFloat(result.toFixed(2)))
-      // setIsLoading(false)
     }
     calculateNetIncome()
   }, [securityDeposit, rentAmount, securityDepositFee, fees, freeMonthsLeft])
@@ -129,8 +128,8 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
             try {
               const data = await addPropertyFees(formData)
               resolve('Rent and fees added!')
-              setFadeOut(true)
-              setTimeout(buttonOnClick, 300);
+              buttonOnClick && setFadeOut(true)
+              buttonOnClick && setTimeout(buttonOnClick, 300)
             } catch (error) {
               reject(error)
             }

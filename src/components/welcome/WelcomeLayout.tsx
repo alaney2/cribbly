@@ -13,6 +13,7 @@ import { SetupProperty } from '@/components/welcome/SetupProperty'
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
   const [currentStep, setCurrentStep] = useState(3)
   const [propertyId, setPropertyId] = useState("")
+  const [fullName, setFullName] = useState('');
 
   const steps = [
     { name: 'Step 0' },
@@ -36,7 +37,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
         )
       case 1:
         return (
-          <InputName buttonOnClick={() => setCurrentStep(currentStep + 1)} />
+          <InputName fullName={fullName} setFullName={setFullName} buttonOnClick={() => setCurrentStep(currentStep + 1)} />
         )
       case 2:
         return (
