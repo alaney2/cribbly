@@ -20,6 +20,18 @@ import { TrashIcon } from "@heroicons/react/24/outline"
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
+const fetcher = async (propertyId: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('property_invites')
+    .select('*')
+    .eq('property_id', propertyId);
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
 type InviteCardProps = {
   propertyId: string
   setPropertyId?: (propertyId: string) => void
@@ -34,19 +46,9 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
     }
   }, [propertyId, setPropertyId])
 
-  const fetcher = async () => {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from('property_invites')
-      .select('*')
-      .eq('property_id', propertyId);
-    if (error) {
-      throw error;
-    }
-    return data;
-  };
+  
 
-  const { data: invites, error, isLoading, mutate } = useSWR('invitesSent', fetcher);
+  const { data: invites, error, isLoading, mutate } = useSWR(propertyId ? ['invitesSent', propertyId] : null, ([_, propertyId]) => fetcher(propertyId));
 
   useEffect(() => {
     if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
@@ -132,6 +134,11 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
           </div>
         </div>
         <input name='propertyId' defaultValue={propertyId} readOnly className="hidden" />
+        {isLoading && !invites && (
+          <div className="mt-6">
+            <Skeleton count={2} />
+          </div>
+        )}
         {invites && invites.length > 0 && (
           <div className="mt-6">
             <h3 className="text-md font-semibold mb-2">Invites Sent</h3>
