@@ -27,13 +27,19 @@ export async function sendInviteEmail(formData: FormData) {
   if (!property) throw new Error('Property not found')
 
   const token = generateId({ length: 12 })
-  const { error: tokenError } = await supabase.from('property_invites').insert({
-    token,
-    full_name: fullName,
-    email,
-    property_id: propertyId,
-    // user_id: user.id,
-  })
+  const { error: tokenError } = await supabase
+    .from('property_invites')
+    .upsert({
+      token,
+      full_name: fullName,
+      email,
+      property_id: propertyId,
+    })
+
+  if (tokenError) {
+    console.error(tokenError)
+    throw new Error('Error creating invite')
+  }
 
   const resend = new Resend(process.env.RESEND_API_KEY)
   const { data: id, error } = await resend.emails.send({
@@ -45,7 +51,7 @@ export async function sendInviteEmail(formData: FormData) {
       invitedByUsername={user_data.full_name || ''}
       invitedByEmail={user_data.email}
       username={fullName}
-      teamName={property?.street_address}
+      teamName={property?.street_address + (property?.apt ? ` ${property.apt}` : '')}
       inviteLink={`https://cribbly.io/invite/${propertyId}`}
     />,
   });

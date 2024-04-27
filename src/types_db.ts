@@ -24,6 +24,13 @@ export interface Database {
           property_id: string
           created_at?: Date | null
         }
+        Upsert: {
+          token: string
+          full_name: string
+          email: string
+          property_id: string
+          created_at?: Date | null
+        }
         Update: {
           token?: string
           full_name?: string

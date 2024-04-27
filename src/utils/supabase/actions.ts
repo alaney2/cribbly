@@ -3,6 +3,17 @@ import { createClient } from '@/utils/supabase/server';
 import { generateId } from '@/lib/utils';
 import { calculateRentDates } from '@/utils/helpers'
 
+export async function deleteInvite(token: string) {
+  const supabase = createClient();
+  const { error } = await supabase
+    .from('property_invites')
+    .delete()
+    .eq('token', token);
+  if (error) {
+    throw new Error('Error deleting invite');
+  }
+}
+
 export async function getUser() {
   const supabase = createClient();
   const {

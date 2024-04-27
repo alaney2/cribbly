@@ -10,9 +10,15 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from 'sonner';
 import { sendInviteEmail } from '@/utils/resend/actions';
-import { setWelcomeScreen } from '@/utils/supabase/actions'
+import { setWelcomeScreen, deleteInvite } from '@/utils/supabase/actions'
 import { useRouter } from 'next/navigation'
 import { InviteUserEmail } from '@/components/PropertySettings/InviteUserEmail';
+import useSWR from 'swr';
+import { createClient } from '@/utils/supabase/client';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'
+import { TrashIcon } from "@heroicons/react/24/outline"
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 type InviteCardProps = {
   propertyId: string
@@ -28,11 +34,40 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
     }
   }, [propertyId, setPropertyId])
 
+  const fetcher = async () => {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from('property_invites')
+      .select('*')
+      .eq('property_id', propertyId);
+    if (error) {
+      throw error;
+    }
+    return data;
+  };
+
+  const { data: invites, error, isLoading, mutate } = useSWR('invitesSent', fetcher);
+
+  useEffect(() => {
+    if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
+      setFinishWelcome(true)
+    }
+    console.log('invites', invites)
+  }, [finishWelcome, invites, isLoading, setFinishWelcome])
+
   const [fadeOut, setFadeOut] = useState(false);
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const animationClass = fadeOut ? ' animate__fadeOut' : 'animate__fadeIn';
-  const router = useRouter()
+
+  const handleDeleteInvite = async (token: string) => {
+    try {
+      await deleteInvite(token)
+      mutate()
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <>
@@ -48,10 +83,11 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
           toast.promise(new Promise(async (resolve, reject) => {
             try {
               await sendInviteEmail(formData)
+              mutate()
               setEmail('');
               setFullName('');
               resolve('Email sent!')
-              setFinishWelcome && setFinishWelcome(true)
+              // setFinishWelcome && setFinishWelcome(true)
               // const data = await addPropertyFees(formData)
               // resolve('Rent and fees added!')
               // buttonOnClick && setFadeOut(true)
@@ -96,6 +132,33 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
           </div>
         </div>
         <input name='propertyId' defaultValue={propertyId} readOnly className="hidden" />
+        {invites && invites.length > 0 && (
+          <div className="mt-6">
+            <h3 className="text-md font-semibold mb-2">Invites Sent</h3>
+            <Table striped>
+              <TableHead>
+                <TableRow>
+                  <TableHeader>Name</TableHeader>
+                  <TableHeader>Email</TableHeader>
+                  <TableHeader></TableHeader>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {invites.map((invite) => (
+                  <TableRow key={invite.token}>
+                    <TableCell>{invite.full_name || '-'}</TableCell>
+                    <TableCell>{invite.email}</TableCell>
+                    <TableCell>
+                      <button type="button" onClick={() => {handleDeleteInvite(invite.token)}}>
+                      <TrashIcon className="size-5 text-red-600 hover:text-red-500" />
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </CardContent>
       <Separator className="mt-0" />
 
