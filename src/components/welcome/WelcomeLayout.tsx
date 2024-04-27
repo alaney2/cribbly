@@ -11,12 +11,15 @@ import { Pricing } from '@/components/landing/Pricing'
 import { Checkout2 } from '@/components/welcome/Checkout2'
 import { SetupProperty } from '@/components/welcome/SetupProperty'
 import { InviteCard } from '@/components/PropertySettings/InviteCard';
+import { setWelcomeScreen } from '@/utils/supabase/actions'
+import { useRouter } from 'next/navigation'
 
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
   const [currentStep, setCurrentStep] = useState(4)
   const [propertyId, setPropertyId] = useState("")
   const [fullName, setFullName] = useState('');
   const [finishWelcome, setFinishWelcome] = useState(false)
+  const router = useRouter()
 
   const steps = [
     { name: 'Step 0' },
@@ -55,10 +58,21 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
         )
       case 4:
         return (
-          <>
-          <InviteCard propertyId={propertyId} setPropertyId={setPropertyId} setFinishWelcome={setFinishWelcome} />
-          <Button size="sm" disabled={finishWelcome} className="mt-8">Finish setup</Button>
-          </>
+          <div className="flex flex-col justify-center">
+            <InviteCard propertyId={propertyId} setPropertyId={setPropertyId} finishWelcome={finishWelcome} setFinishWelcome={setFinishWelcome} />
+            <Button disabled={!finishWelcome} className="mt-8 " 
+              onClick={async () => {
+                // setFadeOut(true)
+                localStorage.removeItem('propertyId')
+                localStorage.removeItem('fullName')
+                localStorage.removeItem('email')
+                await setWelcomeScreen(false)
+                router.push('/dashboard')
+              }}
+            >
+              Finish setup
+            </Button>
+          </div>
         )
       // case 3:
       //   return (

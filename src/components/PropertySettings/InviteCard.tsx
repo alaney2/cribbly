@@ -9,17 +9,19 @@ import { useState, useEffect } from 'react'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from 'sonner';
-import InviteUserEmail from '@/components/PropertySettings/InviteUserEmail';
-import { Resend } from 'resend';
 import { sendInviteEmail } from '@/utils/resend/actions';
+import { setWelcomeScreen } from '@/utils/supabase/actions'
+import { useRouter } from 'next/navigation'
+import { InviteUserEmail } from '@/components/PropertySettings/InviteUserEmail';
 
 type InviteCardProps = {
   propertyId: string
   setPropertyId?: (propertyId: string) => void
+  finishWelcome?: boolean
   setFinishWelcome?: (finishWelcome: boolean) => void
 }
 
-export function InviteCard({ propertyId, setPropertyId, setFinishWelcome }: InviteCardProps) {
+export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinishWelcome }: InviteCardProps) {
   useEffect(() => {
     if (typeof window !== "undefined" && setPropertyId && !propertyId) {
       setPropertyId(localStorage.getItem('propertyId') || '')
@@ -30,11 +32,11 @@ export function InviteCard({ propertyId, setPropertyId, setFinishWelcome }: Invi
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const animationClass = fadeOut ? ' animate__fadeOut' : 'animate__fadeIn';
-  // const resend = new Resend('re_GMbJz3MW_K175ScDJdkrMMWNanGZWB8PH')
+  const router = useRouter()
 
   return (
     <>
-    <Card className={`w-[350px] sm:w-[400px] animate__animated animate__faster ${animationClass}`}>
+    <Card className={`w-[350px] sm:w-[400px] animate__animated animate__faster} ${animationClass}`}>
       <CardHeader>
         <CardTitle>Invite tenants</CardTitle>
         <CardDescription className="text-gray-500 text-sm mb-4">
@@ -98,14 +100,23 @@ export function InviteCard({ propertyId, setPropertyId, setFinishWelcome }: Invi
       <Separator className="mt-0" />
 
       <CardFooter className="flex justify-end">
-        {/* <div className="flex justify-end items-end gap-x-3"> */}
         <Button type="submit" size="sm" className="">
           Send email
         </Button>
-        {/* </div> */}
       </CardFooter>
       </form>
     </Card>
+    {/* <Button disabled={!finishWelcome} className="mt-8" 
+      onClick={async () => {
+        setFadeOut(true)
+        localStorage.removeItem('propertyId')
+        localStorage.removeItem('fullName')
+        localStorage.removeItem('email')
+        await setWelcomeScreen(false)
+        router.push('/dashboard')
+      }}
+    >Finish setup
+    </Button> */}
     </>
   )
 }

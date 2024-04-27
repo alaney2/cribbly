@@ -27,7 +27,8 @@ export function DeleteCard({ propertyId }: { propertyId: string }) {
   const [deleteInput, setDeleteInput] = React.useState('')
   let [isOpen, setIsOpen] = React.useState(false)
 
-  const handleDeleteProperty = async () => {
+  const handleDeleteProperty = async (e: { preventDefault: () => void }) => {
+    e.preventDefault()
     if (deleteInput !== 'delete my property') return;
     await deleteProperty(propertyId)
     router.push('/dashboard')
