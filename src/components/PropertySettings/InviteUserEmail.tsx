@@ -57,7 +57,7 @@ export const InviteUserEmail = ({
               <Img
                 src={'https://www.cribbly.io/images/logo-text.png'}
                 width="100"
-                height="50"
+                height="60"
                 alt="Cribbly"
                 className="my-0 mx-auto"
               />

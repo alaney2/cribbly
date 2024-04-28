@@ -54,7 +54,6 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
     if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
       setFinishWelcome(true)
     }
-    console.log('invites', invites)
   }, [finishWelcome, invites, isLoading, setFinishWelcome])
 
   const [fadeOut, setFadeOut] = useState(false);

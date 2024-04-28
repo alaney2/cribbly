@@ -45,40 +45,50 @@ export async function addPropertyFees(formData: FormData) {
   const securityDepositSwitch = formData.get('securityDepositSwitch')
   let startDate = new Date(String(formData.get('startDate')))
   let endDate = new Date(String(formData.get('endDate')))
+  const rent_id = String(formData.get('rent_id'))
+  // console.log("RENTID", rent_id)
   // console.log(new Date(startDate), new Date(endDate))
   const rentInfo = calculateRentDates(startDate, endDate);
   const monthsOfRent = rentInfo.monthsOfRent;
   const rentDates = rentInfo.rentDates;
   const supabase = createClient();
-
+  // console.log(rentDates)
   for (const pair of formData.entries()) {
-
     if (pair[0] === 'rentAmount') {
+      console.log('startDate', startDate, 'endDate', endDate, 'monthsOfRent', monthsOfRent)
       const { error } = await supabase.from('property_rents')
-        .insert(
+        .upsert(
           {
-            id: generateId(),
+            id: rent_id ? rent_id : generateId(),
             property_id: propertyId.toString(),
             rent_price: Number(parseFloat(pair[1].toString()).toFixed(2)),
             rent_start: startDate,
             rent_end: endDate,
             months_left: monthsOfRent,
+          }, {
+            onConflict: 'property_id',
+            ignoreDuplicates: false,
           }
         );
-      if (error) 
+      if (error) {
+        console.error(error);
         return {
           message: 'Error adding rent amount'
         }
+      }
       continue;
     }
     if (pair[0] === 'depositAmount' && securityDepositSwitch === 'on') {
       const { error } = await supabase.from('property_security_deposits')
-        .insert(
+        .upsert(
           {
             id: generateId(),
             property_id: propertyId.toString(),
             deposit_amount: Number(parseFloat(pair[1].toString()).toFixed(2)),
             status: 'unpaid',
+          }, {
+            onConflict: 'property_id',
+            ignoreDuplicates: false,
           }
         );
       if (error) {
@@ -92,7 +102,7 @@ export async function addPropertyFees(formData: FormData) {
     if (pair[0].startsWith('fee')) {
       const fee = JSON.parse(pair[1].toString())
       const { error } = await supabase.from('property_fees')
-        .insert(
+        .upsert(
           {
             id: generateId(),
             property_id: propertyId.toString(),

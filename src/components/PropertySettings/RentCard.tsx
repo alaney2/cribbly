@@ -30,12 +30,53 @@ import { format, addYears, subDays, addDays } from "date-fns"
 import { cn } from "@/lib/utils"
 import { ScheduleDialog } from '@/components/PropertySettings/ScheduleDialog'
 import { toast } from 'sonner';
+import useSWR from 'swr';
+import { createClient } from '@/utils/supabase/client';
+
+const fetcher = async (propertyId: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('property_rents')
+    .select('*')
+    .eq('property_id', propertyId)
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const sd_fetcher = async (propertyId: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('property_security_deposits')
+    .select('*')
+    .eq('property_id', propertyId)
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
+const fees_fetcher = async (propertyId: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('property_fees')
+    .select('*')
+    .eq('property_id', propertyId)
+  if (error) {
+    throw error;
+  }
+  return data;
+};
 
 export interface Fee {
   id: string
-  type: string
-  name: string
-  amount: string
+  property_id?: string
+  fee_type: "one-time" | "recurring"
+  fee_name: string
+  fee_cost: number | undefined
+  months_left?: number;
+  created_at?: Date;
 }
 
 type RentCardProps = {
@@ -47,7 +88,6 @@ type RentCardProps = {
 
 const CRIBBLY_FEE = 10
 
-
 export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnClick }: RentCardProps ) {
 
   React.useEffect(() => {
@@ -56,6 +96,13 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
     }
   }, [propertyId, setPropertyId])
 
+  const { data: property_rent, error, isLoading: isRentLoading, mutate } = useSWR(propertyId ? ['rentPrice', propertyId] : null, ([_, propertyId]) => fetcher(propertyId));
+  const { data: sd_data, error: sd_error, isLoading: isSdLoading } = useSWR(propertyId ? ['securityDeposit', propertyId] : null, ([_, propertyId]) => sd_fetcher(propertyId));
+  const { data: property_fees, error: fees_error, isLoading: isFeesLoading } = useSWR(propertyId ? ['fees', propertyId] : null, ([_, propertyId]) => fees_fetcher(propertyId));
+
+  if (fees_error) {
+    console.error(sd_error)
+  }
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [isScheduleOpen, setIsScheduleOpen] = React.useState(false)
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false)
@@ -64,9 +111,10 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
   const [securityDepositFee, setSecurityDepositFee] = React.useState<string>("")
   const [dialogFee, setDialogFee] = React.useState<Fee>({
     id: "",
-    type: "one-time",
-    name: "",
-    amount: "",
+    property_id: propertyId,
+    fee_type: "one-time",
+    fee_name: "",
+    fee_cost: undefined,
   })
   const [fees, setFees] = React.useState<Fee[]>([])
   const [netIncome, setNetIncome] = React.useState<number>(0)
@@ -79,20 +127,37 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
   const [fadeOut, setFadeOut] = React.useState(false);
   const animationClass = fadeOut ? ' animate__fadeOut' : 'animate__fadeIn';
 
+  React.useEffect(() => {
+    if (property_rent && property_rent.length > 0) {
+      setRentAmount(String(property_rent[0].rent_price))
+      setStartDate(new Date(property_rent[0].rent_start))
+      setEndDate(new Date(property_rent[0].rent_end))
+    }
+    if (sd_data && sd_data.length > 0) {
+      setSecurityDeposit(true)
+      setSecurityDepositFee(String(sd_data[0].deposit_amount))
+    }
+    if (property_fees && property_fees.length > 0) {
+      setFees(property_fees)
+    }
+  }, [property_rent, sd_data, property_fees])
+
   const handleAddFee = () => {
     const newFee = {
       id: generateId(),
-      type: dialogFee.type,
-      name: dialogFee.name,
-      amount: dialogFee.amount,
+      property_id: propertyId,
+      fee_type: dialogFee.fee_type,
+      fee_name: dialogFee.fee_name,
+      fee_cost: dialogFee.fee_cost,
     }
     setFees([...fees, newFee])
     setIsDialogOpen(false)
     setDialogFee({
       id: "",
-      type: "one-time",
-      name: "",
-      amount: "",
+      property_id: propertyId,
+      fee_type: "one-time",
+      fee_name: "",
+      fee_cost: undefined,
     })
   }
 
@@ -101,7 +166,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
       // setIsLoading(true)
       const rentAmountNumber = Number(rentAmount)
       // const securityDepositNumber = Number(securityDepositFee)
-      const totalFees = fees.reduce((total, fee) => total + Number(fee.amount), 0)
+      const totalFees = fees.reduce((total, fee) => total + Number(fee.fee_cost), 0)
       let softwareFee = 0
       if (freeMonthsLeft) {
         if (freeMonthsLeft <= 0 ) {
@@ -204,8 +269,9 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
               />
             </PopoverContent>
           </Popover>
-          <input name="startDate" required defaultValue={String(startDate)} className="hidden"></input>
-          <input name="endDate" required defaultValue={String(endDate)} className="hidden"></input>
+          <input name="rent_id" required defaultValue={property_rent?.[0]?.id ?? ''} className="hidden"></input>
+          <input name="startDate" required value={startDate ? format(startDate, "MM/dd/yyyy") : ""} readOnly className="hidden"></input>
+          <input name="endDate" required value={endDate ? format(endDate, "MM/dd/yyyy") : ""} readOnly className="hidden"></input>
         </div>
         <div className="relative">
           <Label htmlFor="rentAmount">Rent per month</Label>
@@ -290,9 +356,9 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
                       setEditFeeOpen(true)
                     }}
                   >
-                    <TableCell className="max-w-[140px] truncate">{fee.name}</TableCell>
-                    <TableCell >{fee.type}</TableCell>
-                    <TableCell className="text-right">${fee.amount}</TableCell>
+                    <TableCell className="max-w-[140px] truncate">{fee.fee_name}</TableCell>
+                    <TableCell >{fee.fee_type}</TableCell>
+                    <TableCell className="text-right">${fee.fee_cost}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -353,8 +419,8 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
                 }
                 {fees.map((fee, index) => (
                   <p key={index} className="flex justify-between">
-                    <span>{fee.name}: </span>
-                    <span>${fee.amount}</span>
+                    <span>{fee.fee_name}: </span>
+                    <span>${fee.fee_cost}</span>
                   </p>
                 ))}
                 <p className="flex justify-between">
@@ -395,7 +461,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
               Fee type
             </HeadlessLegend>
             <HeadlessRadioGroup name="feeType" defaultValue="one-time" className="flex gap-x-3 items-center mt-1"
-              onChange={(feeType) => setDialogFee({ ...dialogFee, type: feeType})}
+              onChange={(feeType: "one-time" | "recurring") => setDialogFee({ ...dialogFee, fee_type: feeType})}
             >
               <HeadlessRadioGroup.Option value="one-time" >
                 <HeadlessField className="outline outline-1 pr-6 outline-gray-200 rounded-lg flex items-center">
@@ -416,8 +482,8 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
           <Label htmlFor="feeName">Fee Name</Label>
           <Input
             id="feeName"
-            value={dialogFee.name}
-            onChange={(e) => setDialogFee({ ...dialogFee, name: e.target.value })}
+            value={dialogFee.fee_name}
+            onChange={(e) => setDialogFee({ ...dialogFee, fee_name: e.target.value })}
             placeholder="Enter fee name"
             autoComplete="off"
             required
@@ -428,8 +494,8 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
           <Input
             id="feeAmount"
             type="number"
-            value={dialogFee.amount}
-            onChange={(e) => setDialogFee({ ...dialogFee, amount: e.target.value })}
+            value={dialogFee.fee_cost}
+            onChange={(e) => setDialogFee({ ...dialogFee, fee_cost: Number(e.target.value) })}
             placeholder="Enter fee amount"
             autoComplete="off"
             required

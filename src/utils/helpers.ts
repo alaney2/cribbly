@@ -3,25 +3,22 @@ import type { Tables } from '@/types_db';
 type Price = Tables<'prices'>;
 
 export function calculateRentDates(start: Date, end: Date) {
-  // const start = new Date(startDate);
-  // const end = new Date(endDate);
   const rentDates = [];
-  rentDates.push(start)
+  rentDates.push(start);
 
   let monthsDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-  if (start.getDay() !== 1) {
-    monthsDiff -= 1;
-  }
 
   for (let i = 1; i <= monthsDiff; i++) {
     const nextMonth = new Date(start.getFullYear(), start.getMonth() + i, 1);
-    if (nextMonth.getTime() < end.getTime()) {
+    if (nextMonth < end) {
       rentDates.push(nextMonth);
+    } else if (nextMonth.getTime() === end.getTime() && start.getDate() === 1) {
+      rentDates.push(nextMonth)
     }
   }
 
   return {
-    monthsOfRent: monthsDiff + 1,
+    monthsOfRent: rentDates.length,
     rentDates: rentDates
   };
 }

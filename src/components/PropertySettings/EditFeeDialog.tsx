@@ -44,8 +44,8 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees }: EditFee
             <HeadlessLegend className="text-base/6 font-medium sm:text-sm/6">
               Fee type
             </HeadlessLegend>
-            <HeadlessRadioGroup name="feeType" defaultValue={fee.type} className="flex gap-x-3 items-center mt-1" 
-              onChange={(feeType) => setCurrentFee({ ...currentFee, type: feeType})}
+            <HeadlessRadioGroup name="feeType" defaultValue={fee.fee_type} className="flex gap-x-3 items-center mt-1" 
+              onChange={(feeType) => setCurrentFee({ ...currentFee, fee_type: feeType})}
             >
               <HeadlessRadioGroup.Option value="one-time" >
                 <HeadlessField className="outline outline-1 pr-6 outline-gray-200 rounded-lg flex items-center">
@@ -66,8 +66,8 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees }: EditFee
           <Label htmlFor="feeName">Fee Name</Label>
           <Input
             id="feeName"
-            value={currentFee.name}
-            onChange={(e) => setCurrentFee({ ...currentFee, name: e.target.value })}
+            value={currentFee.fee_name}
+            onChange={(e) => setCurrentFee({ ...currentFee, fee_name: e.target.value })}
             placeholder="Enter fee name"
             autoComplete="off"
             required
@@ -78,9 +78,9 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees }: EditFee
           <Input
             id="feeAmount"
             type="number"
-            value={currentFee.amount}
+            value={currentFee.fee_cost}
             onChange={(e) => {
-              setCurrentFee({ ...currentFee, amount: (e.target.value) }
+              setCurrentFee({ ...currentFee, fee_cost: Number(e.target.value) }
             )}}
             placeholder="Enter fee amount"
             autoComplete="off"
