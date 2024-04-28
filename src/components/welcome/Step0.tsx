@@ -16,7 +16,7 @@ export function Step0( { buttonOnClick }: { buttonOnClick: () => void } ) {
 
   return (
     <>
-      <div className={` ${animationClass}`}>
+      <div className={`p-2 ${animationClass}`}>
         <div className="text-center">
           <Image 
             src={logo}

@@ -89,7 +89,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
 
   return (
     <>
-      <div className="flex flex-col min-h-screen w-full bg-gray-50">
+      <div className="flex flex-col h-full w-full bg-gray-50">
         <div className="flex-grow flex flex-col items-center justify-center ">
           {renderStepContent(currentStep)}
         </div>

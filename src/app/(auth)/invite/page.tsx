@@ -1,7 +1,7 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
-
+import { Input } from '@/components/ui/input'
 
 export default function InvitePage() {
   const searchParams = useSearchParams()
@@ -10,11 +10,12 @@ export default function InvitePage() {
   const email = searchParams.get('email')
   const name = searchParams.get('name')
   console.log(propertyId, token, email, name)
+
   return (
-    <>
-      <Suspense fallback={<div>Loading...</div>}>
-        <div>Invite</div>
-      </Suspense>
-    </>
+    <Suspense>
+      <div className="w-full h-full flex justify-center items-center">
+        Invite
+</div>
+    </Suspense>
   )
 }
