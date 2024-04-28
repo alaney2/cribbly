@@ -13,7 +13,14 @@ import { cn } from '@/utils/cn'
 
 const Spline = React.lazy(() => import('@splinetool/react-spline'));
 
-export function SlimLayout({ children, splineLink }: { children: React.ReactNode; splineLink?: string }) {
+type SlimLayoutProps = {
+  children: React.ReactNode; 
+  splineLink?: string
+  heading?: string
+  subHeading?: string
+}
+
+export function SlimLayout({ children, splineLink, heading, subHeading }: SlimLayoutProps ) {
   const isSplineLoaded = signal(false)
   const isLargeScreen = signal(true)
 
@@ -55,10 +62,10 @@ export function SlimLayout({ children, splineLink }: { children: React.ReactNode
                 <Image src={backgroundDefault} alt="" className="absolute inset-0 h-full w-full object-cover z-0 " />
                 <Boxes/>
                 <h1 className={"md:text-2xl xl:text-3xl text-xl text-white relative z-20"}>
-                  Get started with Cribbly
+                  {heading ? heading : 'Get started with Cribbly'}
                 </h1>
                 <p className="text-center mt-2 text-neutral-300 relative z-20 mb-36">
-                  Start managing your rental properties today!
+                  {subHeading ? subHeading : 'Start managing your rental properties today!'}
                 </p>
               </div>
             </>

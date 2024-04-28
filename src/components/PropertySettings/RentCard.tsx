@@ -225,7 +225,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
                   !startDate && "text-muted-foreground"
                 )}
               >
-                <CalendarIcon className="mx-2 h-4 w-4" />
+                <CalendarIcon className="mr-2 h-4 w-4" />
                 {startDate ? format(startDate, "MM/dd/yyyy") : <span>Start date</span>}
               </Button>
             </PopoverTrigger>
@@ -252,7 +252,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
                   !endDate && "text-muted-foreground"
                 )}
               >
-                <CalendarIcon className="mx-2 h-4 w-4" />
+                <CalendarIcon className="mr-2 h-4 w-4" />
                 {endDate ? format(endDate, "MM/dd/yyyy") : <span>End date</span>}
               </Button>
             </PopoverTrigger>

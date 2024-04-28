@@ -23,7 +23,6 @@ const formClasses = `
     text-center animate__animated animate__fadeIn animate__fast
     transition-colors duration-300 box-border	`;
 
-
 export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink? : string; }) {
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [buttonType, setButtonType] = useState<'submit' | 'button' | 'reset'>('button');
@@ -146,7 +145,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
   }
 
   return (
-    <SlimLayout splineLink={splineLink}>
+    <SlimLayout splineLink={splineLink} heading={signIn ? 'Sign in to Cribbly' : undefined}>
       {renderStepContent(currentStep)}
     </SlimLayout>
   )
