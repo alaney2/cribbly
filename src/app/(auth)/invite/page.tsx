@@ -3,7 +3,7 @@ import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { Input } from '@/components/ui/input'
 
-export default function InvitePage() {
+function Invite() {
   const searchParams = useSearchParams()
   const propertyId = searchParams.get('propertyId')
   const token = searchParams.get('token')
@@ -12,10 +12,18 @@ export default function InvitePage() {
   console.log(propertyId, token, email, name)
 
   return (
-    <Suspense>
+    <>
       <div className="w-full h-full flex justify-center items-center">
         Invite
-</div>
+      </div>
+    </>
+  )
+}
+
+export default function InvitePage() {
+  return (
+    <Suspense>
+      <Invite />
     </Suspense>
   )
 }
