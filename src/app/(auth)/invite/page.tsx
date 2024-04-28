@@ -1,5 +1,6 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 
 
 export default function InvitePage() {
@@ -11,7 +12,9 @@ export default function InvitePage() {
   console.log(propertyId, token, email, name)
   return (
     <>
-      <div>Invite</div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <div>Invite</div>
+      </Suspense>
     </>
   )
 }
