@@ -56,8 +56,8 @@ export const InviteUserEmail = ({
             <Section className="mt-[32px]">
               <Img
                 src={'https://www.cribbly.io/images/logo-text.png'}
-                width="100"
-                height="60"
+                width="200"
+                height="110"
                 alt="Cribbly"
                 className="my-0 mx-auto"
               />
@@ -109,16 +109,16 @@ export const InviteUserEmail = ({
   );
 };
 
-InviteUserEmail.PreviewProps = {
-  username: "alanturing",
-  userImage: `${baseUrl}/static/vercel-user.png`,
-  invitedByUsername: "Alan",
-  invitedByEmail: "alan.turing@example.com",
-  teamName: "Enigma",
-  teamImage: `${baseUrl}/static/vercel-team.png`,
-  inviteLink: "https://vercel.com/teams/invite/foo",
-  inviteFromIp: "204.13.186.218",
-  inviteFromLocation: "São Paulo, Brazil",
-} as InviteUserEmailProps;
+// InviteUserEmail.PreviewProps = {
+//   username: "alanturing",
+//   userImage: `${baseUrl}/static/vercel-user.png`,
+//   invitedByUsername: "Alan",
+//   invitedByEmail: "alan.turing@example.com",
+//   teamName: "Enigma",
+//   teamImage: `${baseUrl}/static/vercel-team.png`,
+//   inviteLink: "https://vercel.com/teams/invite/foo",
+//   inviteFromIp: "204.13.186.218",
+//   inviteFromLocation: "São Paulo, Brazil",
+// } as InviteUserEmailProps;
 
 export default InviteUserEmail;

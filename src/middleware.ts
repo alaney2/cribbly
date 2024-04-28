@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
     }
 
     if (!welcome_screen) {
-      const unavailableRoutes = ['/sign-in', '/get-started', '/welcome']
+      const unavailableRoutes = ['/sign-in', '/get-started', '/welcome', '/invite']
       // Can't sign in or sign up if already logged in
       if (
         pathname === '/' ||
@@ -38,7 +38,7 @@ export async function middleware(request: NextRequest) {
     }
   } else {
     // No user is signed in
-    const pathsWithoutAuth = ['/sign-in', '/get-started', '/privacy', '/terms', '/security']
+    const pathsWithoutAuth = ['/sign-in', '/get-started', '/invite', '/privacy', '/terms', '/security']
     // Redirect to login if not authenticated
     if (
       pathname !== '/' &&
