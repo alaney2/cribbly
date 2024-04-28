@@ -13,6 +13,8 @@ import {
 } from '@headlessui/react'
 import { Radio, RadioField, RadioGroup } from '@/components/catalyst/radio'
 import { useState } from 'react'
+import { editFee, deleteFee } from '@/utils/supabase/actions'
+import { useSWRConfig } from "swr"
 
 
 type EditFeeDialogProps = {
@@ -21,14 +23,12 @@ type EditFeeDialogProps = {
   fee: Fee
   fees: Fee[]
   setFees: ( fees: Fee[] ) => void
+  mutateFees: () => void
 }
-export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees }: EditFeeDialogProps) {
-  const [currentFee, setCurrentFee] = useState<Fee>(fee)
 
-  const handleSaveFee = () => {
-    setFees(fees.map(f => f.id === currentFee.id ? currentFee : f))
-    setIsOpen(false)
-  }
+export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees, mutateFees }: EditFeeDialogProps) {
+  const [currentFee, setCurrentFee] = useState<Fee>(fee)
+  const { mutate } = useSWRConfig()
 
   return (
     <>
@@ -37,7 +37,13 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees }: EditFee
         <DialogDescription>
           Enter a negative amount to apply a discount.
         </DialogDescription>
-        <form>
+        <form 
+          action={async (formData) => {
+            await editFee(formData)
+            mutateFees()
+            setIsOpen(false)
+          }}
+        >
         <DialogBody>
         <div className="items-center">
           <HeadlessFieldset >
@@ -66,48 +72,45 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees }: EditFee
           <Label htmlFor="feeName">Fee Name</Label>
           <Input
             id="feeName"
+            name="feeName"
             value={currentFee.fee_name}
             onChange={(e) => setCurrentFee({ ...currentFee, fee_name: e.target.value })}
-            placeholder="Enter fee name"
+            placeholder=""
             autoComplete="off"
             required
           />
         </div>
         <div className="mt-2">
-          <Label htmlFor="feeAmount">Fee Amount</Label>
+          <Label htmlFor="feeCost">Fee Amount</Label>
           <Input
-            id="feeAmount"
+            id="feeCost"
+            name="feeCost"
             type="number"
-            value={currentFee.fee_cost}
-            onChange={(e) => {
-              setCurrentFee({ ...currentFee, fee_cost: Number(e.target.value) }
-            )}}
-            placeholder="Enter fee amount"
+            value={currentFee.fee_cost === 0 ? '' : currentFee.fee_cost}
+            onChange={(e) => setCurrentFee({ ...currentFee, fee_cost: Number(e.target.value) })}
+            placeholder="0"
             autoComplete="off"
             required
-            min="0"
+            // min="0"
             pattern="^\d+(?:\.\d{1,2})?$"
             step=".01"
           />
         </div>
+        <input name="feeId" value={currentFee.id} readOnly className="hidden" />
         </DialogBody>
         <DialogActions className="flex justify-between items-center w-full">
           <Button variant="destructive" size="sm" 
-            onClick={() => {
+            onClick={async () => {
+              await deleteFee(currentFee.id)
               setFees(fees.filter(f => f.id !== currentFee.id))
               setIsOpen(false)
             }}
           >
             Delete
           </Button>
-          {/* <div> */}
-            {/* <Button variant="ghost" type="button" size="sm" onClick={() => {setIsOpen(false)}}>Cancel</Button> */}
-            <Button type="submit" size="sm" 
-              onClick={handleSaveFee}
-            >
-              Save
-            </Button>
-          {/* </div> */}
+          <Button type="submit" size="sm" >
+            Save
+          </Button>
         </DialogActions>
         </form>
       </Dialog>

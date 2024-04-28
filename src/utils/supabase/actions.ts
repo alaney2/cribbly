@@ -39,6 +39,41 @@ export async function updateFullName(formData: FormData) {
   }
 }
 
+export async function editFee(formData: FormData) {
+  const supabase = createClient();
+  const feeType = String(formData.get('feeType'));
+  const fee_type: "one-time" | "recurring" | undefined = feeType === "one-time" || feeType === "recurring" ? feeType : undefined;
+  const fee_id = String(formData.get('feeId'))
+  const fee_name = String(formData.get('feeName'))
+  const fee_cost = String(formData.get('feeCost'))
+  const { error } = await supabase.from('property_fees')
+    .update({
+      fee_name,
+      fee_type,
+      fee_cost: Number(parseFloat(fee_cost).toFixed(2))
+    })
+    .eq('id', fee_id)
+  if (error) {
+    console.error(error)
+    throw new Error()
+  }
+}
+
+export async function deleteFee(feeId: string) {
+  const supabase = createClient();
+  // const fee_type = String(formData.get('feeType'))
+  // const fee_id = String(formData.get('feeId'))
+  // const fee_name = String(formData.get('feeName'))
+  // const fee_cost = String(formData.get('feeCost'))
+  const { error } = await supabase.from('property_fees')
+    .delete()
+    .eq('id', feeId)
+  if (error) {
+    console.error(error)
+    throw new Error()
+  }
+}
+
 export async function addPropertyFees(formData: FormData) {
   const propertyId = formData.get('propertyId')
   if (!propertyId) return;
@@ -46,16 +81,13 @@ export async function addPropertyFees(formData: FormData) {
   let startDate = new Date(String(formData.get('startDate')))
   let endDate = new Date(String(formData.get('endDate')))
   const rent_id = String(formData.get('rent_id'))
-  // console.log("RENTID", rent_id)
-  // console.log(new Date(startDate), new Date(endDate))
   const rentInfo = calculateRentDates(startDate, endDate);
   const monthsOfRent = rentInfo.monthsOfRent;
   const rentDates = rentInfo.rentDates;
   const supabase = createClient();
-  // console.log(rentDates)
   for (const pair of formData.entries()) {
+    console.log(pair)
     if (pair[0] === 'rentAmount') {
-      console.log('startDate', startDate, 'endDate', endDate, 'monthsOfRent', monthsOfRent)
       const { error } = await supabase.from('property_rents')
         .upsert(
           {
@@ -104,14 +136,17 @@ export async function addPropertyFees(formData: FormData) {
       const { error } = await supabase.from('property_fees')
         .upsert(
           {
-            id: generateId(),
+            id: fee.id ? fee.id : generateId(),
             property_id: propertyId.toString(),
-            fee_name: fee.name,
-            fee_type: fee.type,
-            fee_cost: Number(parseFloat(fee.amount).toFixed(2)),
+            fee_name: fee.fee_name,
+            fee_type: fee.fee_type,
+            fee_cost: Number(parseFloat(fee.fee_cost).toFixed(2)),
             months_left: fee.fee_type === 'recurring' ? monthsOfRent : 1,
             start_date: startDate,
             end_date: endDate,
+          }, {
+            onConflict: 'id, property_id, fee_name, fee_type, fee_cost, start_date, end_date',
+            ignoreDuplicates: false,
           }
         );
       if (error) {

@@ -98,7 +98,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
 
   const { data: property_rent, error, isLoading: isRentLoading, mutate } = useSWR(propertyId ? ['rentPrice', propertyId] : null, ([_, propertyId]) => fetcher(propertyId));
   const { data: sd_data, error: sd_error, isLoading: isSdLoading } = useSWR(propertyId ? ['securityDeposit', propertyId] : null, ([_, propertyId]) => sd_fetcher(propertyId));
-  const { data: property_fees, error: fees_error, isLoading: isFeesLoading } = useSWR(propertyId ? ['fees', propertyId] : null, ([_, propertyId]) => fees_fetcher(propertyId));
+  const { data: property_fees, error: fees_error, isLoading: isFeesLoading, mutate: mutateFees } = useSWR(propertyId ? ['fees', propertyId] : null, ([_, propertyId]) => fees_fetcher(propertyId));
 
   if (fees_error) {
     console.error(sd_error)
@@ -114,7 +114,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
     property_id: propertyId,
     fee_type: "one-time",
     fee_name: "",
-    fee_cost: undefined,
+    fee_cost: 0,
   })
   const [fees, setFees] = React.useState<Fee[]>([])
   const [netIncome, setNetIncome] = React.useState<number>(0)
@@ -142,7 +142,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
     }
   }, [property_rent, sd_data, property_fees])
 
-  const handleAddFee = () => {
+  const handleAddFee = async () => {
     const newFee = {
       id: generateId(),
       property_id: propertyId,
@@ -157,7 +157,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
       property_id: propertyId,
       fee_type: "one-time",
       fee_name: "",
-      fee_cost: undefined,
+      fee_cost: 0,
     })
   }
 
@@ -409,14 +409,14 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
                   <span>Rent: </span>
                   <span>${Number(rentAmount) || 0}</span>
                 </p>
-                {
+                {/* {
                   securityDeposit && (
                     <p className="flex justify-between">
                       <span>Security deposit: </span>
                       <span>${Number(securityDepositFee) || 0}</span>
                     </p>
                   )
-                }
+                } */}
                 {fees.map((fee, index) => (
                   <p key={index} className="flex justify-between">
                     <span>{fee.fee_name}: </span>
@@ -479,24 +479,24 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
           </HeadlessFieldset>
         </div>
         <div className="mt-2">
-          <Label htmlFor="feeName">Fee Name</Label>
+          <Label htmlFor="feeName">Fee name</Label>
           <Input
             id="feeName"
             value={dialogFee.fee_name}
             onChange={(e) => setDialogFee({ ...dialogFee, fee_name: e.target.value })}
-            placeholder="Enter fee name"
+            // placeholder="Enter fee name"
             autoComplete="off"
             required
           />
         </div>
         <div className="mt-2">
-          <Label htmlFor="feeAmount">Fee Amount</Label>
+          <Label htmlFor="feeAmount ">Fee amount</Label>
           <Input
             id="feeAmount"
             type="number"
-            value={dialogFee.fee_cost}
+            value={dialogFee.fee_cost || ''}
             onChange={(e) => setDialogFee({ ...dialogFee, fee_cost: Number(e.target.value) })}
-            placeholder="Enter fee amount"
+            placeholder="0"
             autoComplete="off"
             required
             // min="0"
@@ -515,7 +515,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
       </DialogActions>
       </form>
     </Dialog>
-    {editFeeOpen && feeEdit && <EditFeeDialog isOpen={editFeeOpen} setIsOpen={setEditFeeOpen} fee={feeEdit} fees={fees} setFees={setFees} />}
+    {editFeeOpen && feeEdit && <EditFeeDialog isOpen={editFeeOpen} setIsOpen={setEditFeeOpen} fee={feeEdit} fees={fees} setFees={setFees} mutateFees={mutateFees} />}
     {startDate && endDate && <ScheduleDialog isOpen={isScheduleOpen} setIsOpen={setIsScheduleOpen} startDate={startDate} endDate={endDate} netIncome={netIncome} securityDeposit={securityDeposit} securityDepositFee={securityDepositFee}/>}
     </>
   )

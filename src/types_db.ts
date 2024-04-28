@@ -105,7 +105,7 @@ export interface Database {
           id: string
           property_id: string
           fee_name: string
-          fee_type: 'one-time' | 'recurring' | 'rent_price' | 'security_deposit'
+          fee_type: 'one-time' | 'recurring'
           fee_cost: number
           months_left: number
           created_at?: Date | null
@@ -114,7 +114,7 @@ export interface Database {
           id?: string
           property_id?: string
           fee_name?: string
-          fee_type?: 'one-time' | 'recurring' | 'rent_price' | 'security_deposit'
+          fee_type?: 'one-time' | 'recurring'
           fee_cost?: number
           months_left?: number
           created_at?: Date | null
