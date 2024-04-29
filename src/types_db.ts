@@ -9,6 +9,23 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      tenants: {
+        Row: {
+          user_id: string
+          property_id: string
+          created_at: Date
+        }
+        Insert: {
+          user_id: string
+          property_id: string
+          created_at?: Date | null
+        }
+        Update: {
+          property_id?: string
+          user_id?: string
+          created_at?: Date | null
+        }
+      }
       property_invites: {
         Row: {
           token: string

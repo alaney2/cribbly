@@ -14,7 +14,8 @@ import { useState, useEffect } from 'react'
 import { signInWithOtp } from '@/app/auth/action'
 import { OtpForm } from '@/components/otp/OtpForm'
 import clsx from 'clsx'
-
+import { insertNewTenant, deleteInvite } from '@/utils/supabase/tenant'
+import { toast } from 'sonner';
 
 function Invite() {
   const searchParams = useSearchParams()
@@ -57,7 +58,17 @@ function Invite() {
                 {address}
               </h2>
             </div>
-            <form action={signInWithOtp}>
+            <form 
+              action={async (formData) => {
+                try {
+                  await deleteInvite(formData)
+                  await signInWithOtp(formData)
+                  await insertNewTenant(formData)
+                } catch (error) {
+
+                }
+              }}
+            >
               <div className="flex flex-col gap-y-4">
                 <FloatingLabelInput id="floating-demo" label="Full name"
                   className={`${styles.inputCenterText}`}
@@ -72,6 +83,8 @@ function Invite() {
                   readOnly
                 />
                 <input className="hidden" name="role" value="tenant" readOnly />
+                <input className="hidden" name="token" value={token!} readOnly />
+                <input className="hidden" name="propertyId" value={propertyId!} readOnly />
                 <Button className="mt-2" onClick={handleButtonSubmit}>Continue with email</Button>
               </div>
             </form>

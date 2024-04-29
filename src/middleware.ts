@@ -10,32 +10,43 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   if (user) {
-    const show_welcome = await supabase
+    if (user.user_metadata.role === 'tenant') {
+      const unavailableRoutes = ['/sign-in', '/get-started', '/welcome', '/invite', '/dashboard']
+
+      if (pathname === '/' || unavailableRoutes.some((path) => url.pathname.startsWith(path))) {
+        return NextResponse.redirect(new URL('/tenant-dashboard', request.url))
+      } else {
+        return NextResponse.next()
+      }
+    } else {
+      const { data: show_welcome_data } = await supabase
       .from('users')
       .select('welcome_screen')
       .eq('id', user?.id)
       .single()
 
-    const welcome_screen = show_welcome?.data?.welcome_screen
+      const welcome_screen = show_welcome_data?.welcome_screen
 
-    if (welcome_screen && pathname !== '/welcome') {
-      return NextResponse.redirect(new URL('/welcome', request.url))
-    } else if (!welcome_screen && pathname === '/welcome') {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
-    }
-
-    if (!welcome_screen) {
-      const unavailableRoutes = ['/sign-in', '/get-started', '/welcome', '/invite']
-      // Can't sign in or sign up if already logged in
-      if (
-        pathname === '/' ||
-        unavailableRoutes.some((path) => url.pathname.startsWith(path))
-      ) {
+      if (welcome_screen && pathname !== '/welcome') {
+        return NextResponse.redirect(new URL('/welcome', request.url))
+      } else if (!welcome_screen && pathname === '/welcome') {
         return NextResponse.redirect(new URL('/dashboard', request.url))
-      } else {
-        return NextResponse.next()
+      }
+
+      if (!welcome_screen) {
+        const unavailableRoutes = ['/sign-in', '/get-started', '/welcome', '/invite', '/tenant-dashboard']
+        // Can't sign in or sign up if already logged in
+        if (
+          pathname === '/' ||
+          unavailableRoutes.some((path) => url.pathname.startsWith(path))
+        ) {
+          return NextResponse.redirect(new URL('/dashboard', request.url))
+        } else {
+          return NextResponse.next()
+        }
       }
     }
+    
   } else {
     // No user is signed in
     const pathsWithoutAuth = ['/sign-in', '/get-started', '/invite', '/privacy', '/terms', '/security']
