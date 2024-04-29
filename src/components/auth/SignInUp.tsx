@@ -109,6 +109,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
                     autoFocus
                   />
                 )}
+                <input className="hidden" name="role" value="landlord" readOnly />
                 {showInvalidEmail && (
                   <p className="text-red-500 text-xs mt-1 -mb-1 text-center">
                     Please enter a valid email address

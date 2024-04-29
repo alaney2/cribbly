@@ -15,16 +15,26 @@ export async function GET(request: NextRequest) {
 
     const { data: { session, user }, error } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (!error) {
-      return NextResponse.redirect(`${requestUrl.origin}${next}`)
+    console.log('USER', user)
+    if (!user || error) {
+      return NextResponse.redirect(
+        `${requestUrl.origin}/sign-in`,
+        {
+          status: 301,
+        }
+      );
     }
 
-    return NextResponse.redirect(
-      `${requestUrl.origin}/sign-in`,
+    await supabase.from('users').upsert([
       {
-        status: 301,
+        id: user.id,
+        email: user.email,
+        full_name: user.user_metadata.full_name,
+        role: 'landlord',
       }
-    );
+    ]);
+
+    return NextResponse.redirect(`${requestUrl.origin}${next}`)
   }
 
   // URL to redirect to after sign in process completes

@@ -8,7 +8,7 @@ import 'animate.css'
 
 interface OtpFormProps {
   email: string;
-  backToSignIn: () => void;
+  backToSignIn?: () => void;
 }
 
 export function OtpForm( { email, backToSignIn }: OtpFormProps ) {
@@ -17,7 +17,7 @@ export function OtpForm( { email, backToSignIn }: OtpFormProps ) {
   const handleButtonSubmit = () => {
     setFadeOut(true)
     setTimeout(() => {
-      backToSignIn();
+      backToSignIn && backToSignIn();
     }, 400);
   }
 
@@ -30,9 +30,9 @@ export function OtpForm( { email, backToSignIn }: OtpFormProps ) {
       <div className="flex flex-col">
         <OtpInput email={email} />
         <OtpResend email={email} />
-        <button onClick={handleButtonSubmit} className="mt-16 text-sm tracking-tight font-medium text-center leading-6 text-gray-400 active:text-gray-500 cursor-default">
+        {backToSignIn && <button onClick={handleButtonSubmit} className="mt-16 text-sm tracking-tight font-medium text-center leading-6 text-gray-400 active:text-gray-500 cursor-default">
           Back to sign-in
-        </button>
+        </button>}
       </div>
     </div>
   )

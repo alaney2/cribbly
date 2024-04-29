@@ -52,7 +52,7 @@ export async function sendInviteEmail(formData: FormData) {
       invitedByEmail={user_data.email}
       username={fullName}
       teamName={property?.street_address + (property?.apt ? ` ${property.apt}` : '')}
-      inviteLink={`https://cribbly.io/invite?property=${propertyId}&token=${token}&email=${email}&name=${fullName}`}
+      inviteLink={`https://cribbly.io/invite?property=${propertyId}&token=${token}&email=${email}&name=${fullName}&address=${property.street_address} ${property.apt}`}
     />,
   });
   if (error) {
