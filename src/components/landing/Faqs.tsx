@@ -29,13 +29,25 @@ const faqs = [
       answer:
         'It’s suitable for both, scaling efficiently for any number of properties, from one to hundreds. No matter the portfolio size, everyone can benefit from the time and cost savings, improved organization, and enhanced tenant experience that property management software provides.',
     },
+    {
+      question:
+        'What if I have a question that isn’t answered here?',
+      answer:
+        'We’re here to help! Contact us at support@cribbly.io',
+    }
   ],
   [
     {
       question: 
       'How much does Cribbly cost?',
       answer:
-      'Cribbly is free for the first three months, then $10 per property per month.',
+      'Cribbly is free for the first three months, then $10 per property per month. This fee is billed when tenants pay rent and is deducted from the rent payment before it is deposited into the landlord’s bank account. There are no hidden fees or additional charges. We also offer a 30-day money-back guarantee if you are not satisfied with the service.',
+    },
+    {
+      question: 
+      'How do I get started with Cribbly?',
+      answer:
+      'Simply sign up for a free account, add your properties, and invite your tenants to start collecting rent and tracking expenses. Cribbly is designed to be intuitive and easy to use, so you can get started right away.',
     },
     {
       question: 
