@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/Logo.jsx", "src/components/Logo.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/Logo.jsx", "src/components/Logo.jsx", "src/app/tenant-dashboard"],
   "exclude": ["node_modules"]
 }

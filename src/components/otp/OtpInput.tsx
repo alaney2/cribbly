@@ -1,17 +1,26 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, Suspense } from 'react'
 import { Button } from '@/components/default/Button'
 import { Spinner } from '@/components/Spinners/Spinner'
 import { verifyOtp } from '@/app/auth/otp/action'
 import { Input } from '@/components/ui/input'
 // @ts-expect-error
 import { useFormState } from 'react-dom'
+import { useSearchParams } from 'next/navigation'
+import { insertNewTenant, deleteInvite } from '@/utils/supabase/tenant'
 
-export function OtpInput({ email }: { email: string } ) {
+
+function OtpInputWithParams({ email }: { email: string } ) {
   const inputsRef = useRef<HTMLInputElement[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const verifyOtpWithEmail = verifyOtp.bind(null, email)
   const [state, formAction] = useFormState(verifyOtpWithEmail, { message: '' })
+  const searchParams = useSearchParams()
+  const propertyId = searchParams.get('property')
+  const token = searchParams.get('token')
+  // const email = searchParams.get('email')
+  const name = searchParams.get('name')
+  const address = searchParams.get('address')
 
   useEffect(() => {
     setIsSubmitting(false);
@@ -84,7 +93,18 @@ export function OtpInput({ email }: { email: string } ) {
 
   return (
     <>
-    <form action={formAction} className="" autoComplete='off'>
+    <form 
+      action={async (formData) => {
+        try {
+          await deleteInvite(formData)
+          await formAction(formData)
+          await insertNewTenant(formData)
+        } catch (error) {
+          console.error(error)
+        }
+      }} 
+      className="" autoComplete='off'
+    >
       <div className="flex justify-center space-x-2 mt-10 mb-4" onPaste={handlePaste}>
         {[...Array(6)].map((_, index) => (
           <Input
@@ -127,5 +147,13 @@ export function OtpInput({ email }: { email: string } ) {
       </Button>
     </form>
     </>
+  )
+}
+
+export function OtpInput({ email }: { email: string }) {
+  return (
+    <Suspense>
+      <OtpInputWithParams email={email}/>
+    </Suspense>
   )
 }

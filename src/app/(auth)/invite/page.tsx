@@ -1,6 +1,5 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
-import { Suspense } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
@@ -10,7 +9,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import styles from '@/components/welcome/Welcome.module.css';
 import { FloatingLabelInput } from '@/components/ui/floating-label-input';
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { signInWithOtp } from '@/app/auth/action'
 import { OtpForm } from '@/components/otp/OtpForm'
 import clsx from 'clsx'
@@ -46,14 +45,14 @@ function Invite() {
         return (
           <>
             <div className="sm:w-full sm:max-w-md">
-              <Link href="/" className="cursor-default">
+              {/* <Link href="/" className="cursor-default"> */}
                 <Image
                   className='h-16 w-auto mx-auto'
                   src={logo}
                   alt=""
                   priority={false}
                 />
-              </Link>
+              {/* </Link> */}
               <h2 className="text-center my-6 text-lg font-semibold text-zinc-600 cursor-default">
                 {address}
               </h2>
@@ -61,9 +60,9 @@ function Invite() {
             <form 
               action={async (formData) => {
                 try {
-                  await deleteInvite(formData)
+                  // await deleteInvite(formData)
                   await signInWithOtp(formData)
-                  await insertNewTenant(formData)
+                  // await insertNewTenant(formData)
                 } catch (error) {
 
                 }

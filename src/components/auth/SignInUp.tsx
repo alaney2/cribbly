@@ -77,14 +77,14 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
         return (
           <div className={clsx('animate__animated touch-none mb-40', fadeOut ? `animate__fadeOut animate__fastest` : 'animate__fadeIn animate__fastest')}>
             <div className="sm:w-full sm:max-w-md">
-              <Link href="/" className="cursor-default">
-                <Image
-                  className='h-16 w-auto mx-auto'
-                  src={logo}
-                  alt=""
-                  priority={false}
-                />
-              </Link>
+              {/* <Link href="/" className="cursor-default"> */}
+              <Image
+                className='h-16 w-auto mx-auto'
+                src={logo}
+                alt=""
+                priority={false}
+              />
+              {/* </Link> */}
               <h2 className="text-center my-6 text-lg font-semibold text-zinc-600 cursor-default">
                 {signIn ? ' Sign in to Cribbly' : 'Create your account'}
               </h2>
@@ -146,7 +146,7 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
   }
 
   return (
-    <SlimLayout splineLink={splineLink} heading={signIn ? 'Sign in to Cribbly' : undefined}>
+    <SlimLayout splineLink={splineLink} heading={signIn ? 'Sign in to Cribbly' : undefined} subHeading={signIn ? 'Sign in to your account, whether you are a tenant or landlord' : undefined}>
       {renderStepContent(currentStep)}
     </SlimLayout>
   )
