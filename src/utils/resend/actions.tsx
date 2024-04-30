@@ -43,10 +43,10 @@ export async function sendInviteEmail(formData: FormData) {
 
   const resend = new Resend(process.env.RESEND_API_KEY)
   const { data: id, error } = await resend.emails.send({
-    from: 'Cribbly <support@cribbly.io>',
+    from: 'Cribbly.io <support@cribbly.io>',
     reply_to: 'support@cribbly.io',
     to: email,
-    subject: 'Property Invite - ' + property?.street_address,
+    subject: property?.street_address + (property?.apt ? ` ${property.apt}` : '') + ' Invitation',
     react: <InviteUserEmail 
       invitedByUsername={user_data.full_name || ''}
       invitedByEmail={user_data.email}
