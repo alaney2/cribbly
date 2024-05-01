@@ -12,7 +12,7 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export async function generateMetadata(
+/* export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
@@ -27,8 +27,9 @@ export async function generateMetadata(
     title: propertyData[0]?.street_address,
   }
 }
+*/
 
-export default async function PropertyDashboardLayout({
+export default async function TenantDashboardLayout({
   params,
   children,
 }: {
@@ -49,7 +50,6 @@ export default async function PropertyDashboardLayout({
       <div className='h-full flex flex-col'>
         <MobileSidebar userEmail={data?.email} fullName={data?.full_name} />
         <div className="absolute left-64 top-4 overflow-hidden hidden lg:block">
-          <PropertyBreadcrumbs />
         </div>
         <div className="mx-auto flex w-full h-full items-start gap-x-6 lg:gap-x-8 py-4 lg:px-8 px-4 sm:px-6 lg:mt-8">
           <aside className={`lg:sticky top-0 left-4 flex-col overflow-y-auto absolute hidden lg:block`}>

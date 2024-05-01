@@ -11,18 +11,21 @@ export interface Database {
     Tables: {
       tenants: {
         Row: {
-          user_id: string
+          id: string
+          email: string
           property_id: string
           created_at: Date
         }
         Insert: {
-          user_id: string
+          id?: string
+          email: string
           property_id: string
           created_at?: Date | null
         }
         Update: {
+          id?: string
           property_id?: string
-          user_id?: string
+          email?: string
           created_at?: Date | null
         }
       }

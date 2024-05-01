@@ -12,7 +12,6 @@ import { toast } from 'sonner';
 import { sendInviteEmail } from '@/utils/resend/actions';
 import { setWelcomeScreen, deleteInvite } from '@/utils/supabase/actions'
 import { useRouter } from 'next/navigation'
-import { InviteUserEmail } from '@/components/PropertySettings/InviteUserEmail';
 import useSWR from 'swr';
 import { createClient } from '@/utils/supabase/client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'

@@ -8,17 +8,15 @@ export async function middleware(request: NextRequest) {
   const { supabase, response } = createClient(request)
   let { data: {user}, error } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
-
   if (user) {
     if (user.user_metadata.role === 'tenant') {
       const unavailableRoutes = ['/sign-in', '/get-started', '/welcome', '/invite', '/dashboard']
-
       if (pathname === '/' || unavailableRoutes.some((path) => url.pathname.startsWith(path))) {
         return NextResponse.redirect(new URL('/tenant-dashboard', request.url))
       } else {
         return NextResponse.next()
       }
-    } else {
+    } else if (user.user_metadata.role && user.user_metadata.role !== 'tenant') {
       const { data: show_welcome_data } = await supabase
       .from('users')
       .select('welcome_screen')
@@ -27,7 +25,7 @@ export async function middleware(request: NextRequest) {
 
       const welcome_screen = show_welcome_data?.welcome_screen
 
-      if (welcome_screen && pathname !== '/welcome') {
+      if (welcome_screen === true && pathname !== '/welcome') {
         return NextResponse.redirect(new URL('/welcome', request.url))
       } else if (!welcome_screen && pathname === '/welcome') {
         return NextResponse.redirect(new URL('/dashboard', request.url))
@@ -46,7 +44,6 @@ export async function middleware(request: NextRequest) {
         }
       }
     }
-    
   } else {
     // No user is signed in
     const pathsWithoutAuth = ['/sign-in', '/get-started', '/invite', '/privacy', '/terms', '/security']

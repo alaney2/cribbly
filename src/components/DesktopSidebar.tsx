@@ -50,11 +50,19 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function DesktopSidebar({ user }: { user: any }) {
-  const pathname = usePathname()
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(user.is_sidebar_collapsed)
+type DesktopSidebarProps = {
+  fullName: string | undefined | null
+  sidebarCollapsed: boolean | null | undefined
+}
 
-  const userInitials = getInitials(user?.full_name)
+export function DesktopSidebar({ fullName, sidebarCollapsed }: DesktopSidebarProps) {
+  const pathname = usePathname()
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(sidebarCollapsed)
+
+  let userInitials = ''
+  if (fullName) {
+    userInitials = getInitials(fullName)
+  }
 
   const getDashboardURL = (href: string = '') => {
     const match = pathname.match(/\/dashboard\/([^/]+)/);

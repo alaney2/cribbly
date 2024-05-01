@@ -11,8 +11,16 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function ProfileButton({ user }: { user: any }) {
-  const initials = getInitials(user?.full_name)
+type ProfileButtonProps = {
+  userEmail: string | undefined
+  fullName: string | undefined | null
+}
+
+export function ProfileButton({ userEmail, fullName }: ProfileButtonProps) {
+  let initials = ''
+  if (fullName) {
+    initials = getInitials(fullName)
+  }
 
   return (
     <Menu as="div" className="font-medium absolute right-5">
@@ -34,7 +42,7 @@ export function ProfileButton({ user }: { user: any }) {
         <Menu.Items className="w-48 right-0 origin-top-right absolute z-10 mt-2 divide-y divide-gray-100 text-gray-700 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-4 py-3">
             <p className="text-sm">Signed in as</p>
-            <p className="truncate text-sm font-medium ">{user.email}</p>
+            <p className="truncate text-sm font-medium ">{userEmail}</p>
           </div>
           <Menu.Item>
             {({ focus }) => (

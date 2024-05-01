@@ -21,7 +21,12 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function MobileSidebar({ user }: { user: any }) {
+type MobileSidebarProps = {
+  userEmail: string | undefined
+  fullName: string | undefined | null
+}
+
+export function MobileSidebar({ userEmail, fullName }: MobileSidebarProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname()
 
@@ -78,7 +83,7 @@ export function MobileSidebar({ user }: { user: any }) {
             <span className={`text-blue-500`}>bly</span>
           </div>
         </Link>
-        <ProfileButton user={user} />
+        <ProfileButton userEmail={userEmail} fullName={fullName} />
       </div>
       <div className={`fixed inset-0 flex lg:hidden z-40 ${sidebarOpen ? 'fixed w-full h-lvh translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out bg-gray-50`}>
         <div className="flex grow flex-col overflow-y-auto px-4 mt-16">

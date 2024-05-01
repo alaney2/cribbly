@@ -5,8 +5,8 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 
-export async function verifyOtp(email: string, prevState: any, formData: FormData) {
-
+export async function verifyOtp(formData: FormData) {
+  const email = String(formData.get('email'))
   let token = '';
   for (let i = 0; i < 6; i++) {
     const otpPart = String(formData.get(`otp${i}`));
@@ -17,7 +17,7 @@ export async function verifyOtp(email: string, prevState: any, formData: FormDat
 
   if (token && email) {
     const supabase = createClient()
-    const { data: {user}, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
+    const { data: { user }, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
 
     if (error) {
       return {
@@ -27,22 +27,27 @@ export async function verifyOtp(email: string, prevState: any, formData: FormDat
 
     // Handle successful verification
     if (user) {
-      const show_welcome = await supabase
-        .from('users')
-        .select('welcome_screen')
-        .eq('id', user?.id)
-        .single()
+      if (user.user_metadata.role && user.user_metadata.role === 'tenant') {
+        redirect('/tenant-dashboard')
+      } else {
+        const { data: show_welcome } = await supabase
+          .from('users')
+          .select('welcome_screen')
+          .eq('id', user?.id)
+          .single()
 
-      const welcome_screen = show_welcome?.data?.welcome_screen
+        const welcome_screen = show_welcome?.welcome_screen
 
-      if (welcome_screen) {
-        redirect('/welcome')
+        if (welcome_screen) {
+          redirect('/welcome')
+        }
+
+        redirect('/dashboard')
       }
-
-      redirect('/dashboard')
     }
-  }
-  return {
-    message: 'Invalid email or verification code'
+  } else {
+    return {
+      message: 'Invalid email or verification code'
+    }
   }
 }

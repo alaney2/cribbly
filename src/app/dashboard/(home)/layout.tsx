@@ -25,7 +25,7 @@ export default async function DashboardLayout({
   return (
     <>
       <div className='h-full flex flex-col'>
-        <MobileSidebarDashboard user={user} />
+        <MobileSidebarDashboard userEmail={user.email} />
         {/* <div className="absolute left-64 top-4">
           <HomeBreadcrumbs />
         </div> */}

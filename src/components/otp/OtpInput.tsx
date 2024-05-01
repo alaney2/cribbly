@@ -7,29 +7,32 @@ import { Input } from '@/components/ui/input'
 // @ts-expect-error
 import { useFormState } from 'react-dom'
 import { useSearchParams } from 'next/navigation'
-import { insertNewTenant, deleteInvite } from '@/utils/supabase/tenant'
-
+import { insertNewTenant, deleteInvite } from '@/utils/supabase/tenant/actions'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 function OtpInputWithParams({ email }: { email: string } ) {
   const inputsRef = useRef<HTMLInputElement[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const verifyOtpWithEmail = verifyOtp.bind(null, email)
-  const [state, formAction] = useFormState(verifyOtpWithEmail, { message: '' })
+  // const [state, formAction] = useFormState(verifyOtp, { message: '' })
   const searchParams = useSearchParams()
   const propertyId = searchParams.get('property')
   const token = searchParams.get('token')
+  const [hasError, setHasError] = useState(false)
+  const router = useRouter()
   // const email = searchParams.get('email')
-  const name = searchParams.get('name')
-  const address = searchParams.get('address')
+  // const name = searchParams.get('name')
+  // const address = searchParams.get('address')
 
-  useEffect(() => {
-    setIsSubmitting(false);
-  }, [state]);
+  // useEffect(() => {
+  //   setIsSubmitting(false);
+  // }, [state]);
 
   const checkAndSubmit = () => {
-    if (state?.message !== '') {
-      return;
-    }
+    // if (state?.message !== '') {
+    //   return;
+    // }
+    if (hasError) return;
     const allFilled = inputsRef.current.every(input => input.value !== '');
     if (allFilled) {
       document.getElementById('submitButton')?.click();
@@ -96,11 +99,16 @@ function OtpInputWithParams({ email }: { email: string } ) {
     <form 
       action={async (formData) => {
         try {
-          await deleteInvite(formData)
-          await formAction(formData)
-          await insertNewTenant(formData)
+          if (token && email && propertyId) {
+            await deleteInvite(formData)
+            await insertNewTenant(formData)
+          }
+          await verifyOtp(formData)
         } catch (error) {
-          console.error(error)
+          setIsSubmitting(false)
+          setHasError(true)
+          toast.error('An error occurred, please check the form and try again.')
+          return;
         }
       }} 
       className="" autoComplete='off'
@@ -130,7 +138,10 @@ function OtpInputWithParams({ email }: { email: string } ) {
           />
         ))}
       </div>
-      {state?.message && <p className="text-red-500 text-xs text-center">{state.message}</p>}
+      {/* {state?.message && <p className="text-red-500 text-xs text-center">{state.message}</p>} */}
+      {propertyId && <input className="hidden" name="propertyId" value={propertyId} />}
+      {token && <input className="hidden" name="token" value={token} />}
+      {email && <input className="hidden" name="email" value={email} />}
       <Button
         id="submitButton"
         type="submit"

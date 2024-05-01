@@ -23,10 +23,5 @@ export async function POST(request: Request) {
     )
   }
 
-  return NextResponse.redirect(
-    `${requestUrl.origin}/dashboard`,
-    {
-      status: 301,
-    }
-  )
+  return NextResponse.next()
 }

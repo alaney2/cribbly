@@ -13,7 +13,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { signInWithOtp } from '@/app/auth/action'
 import { OtpForm } from '@/components/otp/OtpForm'
 import clsx from 'clsx'
-import { insertNewTenant, deleteInvite } from '@/utils/supabase/tenant'
+import { insertNewTenant, deleteInvite } from '@/utils/supabase/tenant/actions'
 import { toast } from 'sonner';
 
 function Invite() {
