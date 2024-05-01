@@ -11,7 +11,9 @@ export async function middleware(request: NextRequest) {
   if (user) {
     if (user.user_metadata.role === 'tenant') {
       const unavailableRoutes = ['/sign-in', '/get-started', '/welcome', '/invite', '/dashboard']
-      if (pathname === '/' || unavailableRoutes.some((path) => url.pathname.startsWith(path))) {
+      if (pathname !== '/tenant-dashboard' && (pathname === '/' || unavailableRoutes.some((path) => url.pathname.startsWith(path)))) {
+        console.log(url.pathname)
+        console.log('am i here')
         return NextResponse.redirect(new URL('/tenant-dashboard', request.url))
       } else {
         return NextResponse.next()

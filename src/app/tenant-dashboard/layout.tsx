@@ -1,40 +1,18 @@
-"use server"
 import '@/styles/no-overscroll.css'
 import { MobileSidebar } from '@/components/MobileSidebar';
 import { DesktopSidebar } from '@/components/DesktopSidebar'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation';
-import type { Metadata, ResolvingMetadata } from 'next'
-import { PropertyBreadcrumbs } from '@/components/Dashboard/PropertyBreadcrumbs'
+import type { Metadata } from 'next'
 
-type Props = {
-  params: { property_id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+
+export const metadata: Metadata = {
+  title: 'Tenant Dashboard',
 }
-
-/* export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  const supabase = createClient()
-  const { data: propertyData, error } = await supabase.from('properties')
-    .select()
-    .eq('id', params.property_id)
-
-  if (error || propertyData.length === 0) redirect('/dashboard')
-
-  return {
-    title: propertyData[0]?.street_address,
-  }
-}
-*/
 
 export default async function TenantDashboardLayout({
-  params,
   children,
 }: {
-  params: { property_id: string };
-  searchParams: any,
   children: React.ReactNode;
 }) {
   const supabase = createClient()
