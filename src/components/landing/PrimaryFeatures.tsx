@@ -69,22 +69,19 @@ export function PrimaryFeatures() {
       id="features"
       aria-label="Features for running your books"
       className="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32"
+      style={{
+        backgroundImage: `url(${backgroundImage.src})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
     >
-      <Image
-        className="absolute left-1/2 top-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]"
-        src={backgroundImage}
-        alt=""
-        width={2245}
-        height={1636}
-        unoptimized
-      />
       <Container className="relative">
         <div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
           <h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
             Less time on Management, More time on You
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
-            Collect Rent, Handle Maintenance Requests, Analyze Performance, and Automate Tax Forms Effortlessly
+            Collect rent, handle maintenance requests, analyze performance, and automate tax forms effortlessly
           </p>
         </div>
         <Tab.Group
@@ -115,8 +112,7 @@ export function PrimaryFeatures() {
                               : 'text-blue-100 hover:text-white lg:text-white',
                           )}
                         >
-                          <span className="absolute inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none" />
-                          {feature.title}
+                          <span className="absolute inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none" />                        {feature.title}
                         </Tab>
                       </h3>
                       <p
@@ -143,27 +139,20 @@ export function PrimaryFeatures() {
                       </p>
                     </div>
                     <div className="mt-10 w-[45rem] overflow-hidden rounded-xl bg-gray-100 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
-                      {/* <CardContainer className=""> */}
-                        {/* <CardBody className="bg-gray-100 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:border-white/[0.2] border-black/[0.1] w-auto h-auto rounded-xl border p-0"> */}
-                        {/* <CardItem translateZ="40" className="w-full mt-0"> */}
-                          <Image
-                            className="w-full rounded-2xl"
-                            src={feature.image}
-                            alt=""
-                            priority
-                            sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
-                          />
-                        {/* </CardItem>
-                        </CardBody>
-                      </CardContainer> */}
+                      <Image
+                        className="w-full rounded-2xl"
+                        src={feature.image}
+                        alt=""
+                        priority
+                        sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
+                      />
                     </div>
                   </Tab.Panel>
-                ))}
-              </Tab.Panels>
+                ))}            </Tab.Panels>
             </>
           )}
         </Tab.Group>
       </Container>
     </section>
-  )
+  );
 }
