@@ -16,7 +16,7 @@ import { TailwindIndicator } from "@/components/tailwind-indicator"
 export const metadata: Metadata = {
   title: {
     template: '%s - Cribbly',
-    default: 'Property Management Software - Cribbly',
+    default: 'Property Management Software for Small Landlords - Cribbly',
   },
   description:
     'Cribbly is the all-in-one property management software designed for small landlords. Its powerful platform automates rent collection, maintenance requests, and more.',
