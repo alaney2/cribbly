@@ -10,6 +10,8 @@ import { Container } from '@/components/default/Container'
 import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/default/NavLink'
 import useSparks from '@/components/default/useSparks'
+import icon from '@/images/icon.png';
+import Image from 'next/image';
 
 const tailwindColors = [
   'bg-red-400',
@@ -140,8 +142,13 @@ export function Header() {
       <Container>
         <nav className="relative z-50 flex justify-between">
           <div className="flex items-center md:gap-x-12">
-            <Link href="#" aria-label="Home">
-              <Logo className="h-8 mb-2 w-auto" />
+            <Link href="/" aria-label="Cribbly" className="flex items-center font-lexend text-lg tracking-tight font-medium select-none w-full">
+              {/* <Logo className="h-8 mb-2 w-auto" /> */}
+              <Image src={icon} alt="logo" height={32} width={32} className="mr-2" />
+              <>
+                <span className={`text-gray-600`}>Crib</span>
+                <span className={`text-blue-500`}>bly</span>
+              </>
             </Link>
             <div className="hidden md:flex md:gap-x-4">
               <NavLink href="#features">Features</NavLink>
