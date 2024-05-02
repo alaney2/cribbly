@@ -239,24 +239,24 @@ export async function addProperty(formData: FormData) {
 
   if (!street_address || !zip || !city || !state || !country) return;
   // Check if the property already exists
-  const { data: properties } = await supabase
-    .from('properties')
-    .select('id')
-    .eq('user_id', user.id)
-    .eq('street_address', street_address)
-    .eq('zip', zip)
-    .eq('apt', apt)
-    .eq('city', city)
-    .eq('state', state)
-    .eq('country', country);
+  // const { data: properties } = await supabase
+  //   .from('properties')
+  //   .select('id')
+  //   .eq('user_id', user.id)
+  //   .eq('street_address', street_address)
+  //   .eq('zip', zip)
+  //   .eq('apt', apt)
+  //   .eq('city', city)
+  //   .eq('state', state)
+  //   .eq('country', country);
   
-  if (properties && properties.length > 0) {
-    return {
-      message: 'Property already exists'
-    }
-  }
+  // if (properties && properties.length > 0) {
+  //   return {
+  //     message: 'Property already exists'
+  //   }
+  // }
 
-  const { error } = await supabase.from('properties').insert([
+  const { error } = await supabase.from('properties').upsert(
     {
       user_id: user.id,
       street_address,
@@ -265,8 +265,11 @@ export async function addProperty(formData: FormData) {
       city,
       state,
       country
+    }, {
+      onConflict: 'user_id, street_address, zip, apt, city, state, country',
+      ignoreDuplicates: false,
     }
-  ]);
+  );
 
   if (error) {
     console.error(error);

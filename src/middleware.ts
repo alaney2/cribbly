@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
       } else {
         return NextResponse.next()
       }
-    } else if (user.user_metadata.role && user.user_metadata.role !== 'tenant') {
+    } else if (!user.user_metadata.role || user.user_metadata.role !== 'tenant') {
       const { data: show_welcome_data } = await supabase
       .from('users')
       .select('welcome_screen')
