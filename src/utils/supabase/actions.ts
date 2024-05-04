@@ -2,6 +2,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { generateId } from '@/lib/utils';
 import { calculateRentDates } from '@/utils/helpers'
+import { redirect } from 'next/navigation'
 
 export async function deleteInvite(token: string) {
   const supabase = createClient();
@@ -189,7 +190,7 @@ export async function addPropertyFromWelcome(formData: FormData) {
     }
   }
 
-  const { data, error } = await supabase.from('properties').insert(
+  const { data, error } = await supabase.from('properties').upsert(
     {
       user_id: user.id,
       street_address,
@@ -198,21 +199,19 @@ export async function addPropertyFromWelcome(formData: FormData) {
       city,
       state,
       country
+    }, {
+      onConflict: 'user_id, street_address, zip, apt, city, state, country',
+      ignoreDuplicates: false,
     })
     .select()
     .single()
 
   if (error) {
     console.error(error);
+    throw new Error('Unable to add property')
   }
 
   return data;
-
-  // update supabase user table with welcome_screen = true
-  // await supabase
-  //   .from('users')
-  //   .update({ welcome_screen: false })
-  //   .eq('id', user.id);
 }
 
 export async function setWelcomeScreen(value: boolean) {
@@ -238,25 +237,8 @@ export async function addProperty(formData: FormData) {
   const country = String(formData.get('country_hidden'));
 
   if (!street_address || !zip || !city || !state || !country) return;
-  // Check if the property already exists
-  // const { data: properties } = await supabase
-  //   .from('properties')
-  //   .select('id')
-  //   .eq('user_id', user.id)
-  //   .eq('street_address', street_address)
-  //   .eq('zip', zip)
-  //   .eq('apt', apt)
-  //   .eq('city', city)
-  //   .eq('state', state)
-  //   .eq('country', country);
-  
-  // if (properties && properties.length > 0) {
-  //   return {
-  //     message: 'Property already exists'
-  //   }
-  // }
 
-  const { error } = await supabase.from('properties').upsert(
+  const { data, error } = await supabase.from('properties').upsert(
     {
       user_id: user.id,
       street_address,
@@ -268,12 +250,17 @@ export async function addProperty(formData: FormData) {
     }, {
       onConflict: 'user_id, street_address, zip, apt, city, state, country',
       ignoreDuplicates: false,
-    }
-  );
+    })
+    .select()
+    .single()
 
   if (error) {
     console.error(error);
+    throw new Error(error.message)
   }
+
+  redirect(`/dashboard/${data.id}/settings`);
+  return data
 }
 
 export async function deleteProperty(propertyId: string) {

@@ -126,6 +126,7 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
         action={async (formData) => {
           toast.promise(new Promise(async (resolve, reject) => {
             try {
+              let data
               if (isWelcome) {
                 const data = await addPropertyFromWelcome(formData);
                 if (data && 'id' in data) {
@@ -135,14 +136,17 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
                   throw new Error(data?.message);
                 }
               } else {
-                await addProperty(formData);
+                data = await addProperty(formData);
+              }
+              if (!data) {
+                reject('Failed to add property')
+                return
               }
               setIsOpen(false);
               setFadeOut(true);
               if (isWelcome) {
+                console.log('is welcome if statement')
                 nextPage && nextPage();
-              } else {
-                router.push('/dashboard');
               }
               resolve('Property added');
             } catch (error) {
