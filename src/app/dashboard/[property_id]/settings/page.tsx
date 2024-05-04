@@ -1,18 +1,23 @@
-
+// "use client"
 import { RentCard } from '@/components/PropertySettings/RentCard'
+import { InviteCard } from '@/components/PropertySettings/InviteCard'
 import { DeleteCard } from '@/components/PropertySettings/DeleteCard'
 
 export default function CurrentPropertySettings({ params } : { params: { property_id: string } }) {
-
 
   return (
     <>
       <div className="justify-center flex" >
         <main className="flex-auto lg:px-4 lg:py-4 max-w-2xl w-full space-y-4 sm:space-y-8">
-
-          <RentCard propertyId={params.property_id} />
-          <DeleteCard propertyId={params.property_id}/>
-
+          <div className="grid grid-cols-2 gap-['50px']">
+            <div>
+              <RentCard propertyId={params.property_id} />
+            </div>
+            <div className="space-y-4">
+              <InviteCard propertyId={params.property_id} />
+              <DeleteCard propertyId={params.property_id}/>
+            </div>
+          </div>
         </main>
       </div>
     </>

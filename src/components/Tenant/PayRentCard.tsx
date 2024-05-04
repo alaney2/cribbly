@@ -3,6 +3,8 @@ import { createClient } from '@/utils/supabase/client';
 import { toast } from 'sonner';
 import useSWR from 'swr';
 import { useEffect } from 'react'
+import { RentCard } from '@/components/PropertySettings/RentCard';
+import { Button } from '@/components/ui/button'
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -21,7 +23,13 @@ const fetcher = async () => {
   if (combinedError) {
     throw combinedError;
   }
-  return combinedData;
+
+  const { data: rentData, error: rentError } = await supabase
+    .from('property_rents')
+    .select('*')
+    .eq('property_id', combinedData.property_id)
+    
+  return rentData;
 };
 
 export function PayRentCard() {
@@ -31,7 +39,12 @@ export function PayRentCard() {
   // }, [data])
   return (
     <>
-
+      <div className="text-center flex items-center justify-center flex-col h-full">
+        <h1 className="text-5xl font-semibold mb-6">
+          ${data && data[0]?.rent_price ? data[0].rent_price : 0}
+        </h1>
+        <Button>Make a payment</Button>
+      </div>
     </>
   )
 }

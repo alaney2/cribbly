@@ -72,7 +72,7 @@ export function PropertyBreadcrumbs() {
     <Breadcrumb>
       <BreadcrumbList>
         {segments.map((segment, index) => (
-          <>
+          <div key={index} className="flex">
             {index !== 0 && 
               <BreadcrumbSeparator className="mx-2">
                 <Slash />
@@ -123,7 +123,7 @@ export function PropertyBreadcrumbs() {
               )}
               </BreadcrumbItem>
             )}
-          </>
+          </div>
         ))}
       </BreadcrumbList>
     </Breadcrumb>
