@@ -10,13 +10,13 @@ import {
 import { PencilSquareIcon, WrenchIcon } from '@heroicons/react/24/outline';
 import { IncomeGraph } from '@/components/bento-stuff/IncomeGraph'
 import { UtilityPie } from '@/components/bento-stuff/UtilityPie'
-import { MaintenanceTable } from '@/components/bento-stuff/MaintenanceTable'
+import { MaintenanceTable } from '@/components/Tenant/MaintenanceTable'
 import { BarGraph } from '@/components/bento-stuff/BarGraph'
 import { Button } from '@/components/catalyst/button'
 import { usePathname, useRouter } from 'next/navigation'
+import { PayRentCard } from '@/components/Tenant/PayRentCard'
 
-
-export function BentoStats() {
+export function TenantBento() {
   const pathname = usePathname()
 
   const Skeleton = () => (
@@ -25,11 +25,11 @@ export function BentoStats() {
 
   const items = [
     {
-      title: "Total income",
+      title: "Balance due",
       description:
         "Rent - (maintenance + utility costs)",
-      header: <IncomeGraph />,
-      className: "md:col-span-2",
+      header: <PayRentCard />,
+      className: "md:col-span-1",
       icon: <IconPigMoney className="h-4 w-4 text-blue-500" />,
       edit: false,
     },
@@ -37,16 +37,16 @@ export function BentoStats() {
       title: "Net income",
       description:
         "+/- per month",
-      header: <BarGraph />,
-      className: "md:col-span-1",
+      header: <Skeleton />,
+      className: "md:col-span-2",
       icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
       edit: false,
     },
     {
       title: "Utility costs",
       description: "(e.g., water, electricity, gas)",
-      header: <UtilityPie />,
-      className: "md:col-span-1",
+      header: <Skeleton />,
+      className: "md:col-span-2",
       icon: <IconWavesElectricity className="h-4 w-4 text-blue-500" />,
       edit: true,
     },
@@ -54,7 +54,7 @@ export function BentoStats() {
       title: "Maintenance requests",
       description: "Most recent maintenance requests",
       header: <MaintenanceTable />,
-      className: "md:col-span-2",
+      className: "md:col-span-1",
       icon: <WrenchIcon className="h-4 w-4 text-blue-500" />,
       edit: true,
       href: `${pathname}/maintenance`,

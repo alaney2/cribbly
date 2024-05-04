@@ -54,6 +54,13 @@ export function CreateTaskDialog({ prevTasks }: CreateTaskDialogProps) {
 
   const form = useForm<CreateTaskSchema>({
     resolver: zodResolver(createTaskSchema),
+    defaultValues: {
+      title: '',
+      description: '',
+      status: 'todo',
+      priority: 'low',
+      cost: 0 ,
+    },
   })
 
   function onSubmit(input: CreateTaskSchema) {
