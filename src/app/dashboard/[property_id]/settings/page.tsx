@@ -7,10 +7,10 @@ export default function CurrentPropertySettings({ params } : { params: { propert
 
   return (
     <>
-      <div className="justify-center flex" >
-        <main className="flex-auto lg:px-4 lg:py-4 max-w-2xl w-full space-y-4 sm:space-y-8">
-          <div className="grid grid-cols-2 gap-['50px']">
-            <div>
+      <div className="justify-around flex" >
+        <main className="flex-auto lg:px-4 lg:py-4 w-full space-y-4 sm:space-y-8 flex justify-center">
+          <div className="grid xl:grid-cols-2 gap-8">
+            <div className="">
               <RentCard propertyId={params.property_id} />
             </div>
             <div className="space-y-4">
