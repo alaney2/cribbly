@@ -15,7 +15,7 @@ import { setWelcomeScreen } from '@/utils/supabase/actions'
 import { useRouter } from 'next/navigation'
 
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
-  const [currentStep, setCurrentStep] = useState(4)
+  const [currentStep, setCurrentStep] = useState(0)
   const [propertyId, setPropertyId] = useState("")
   const [fullName, setFullName] = useState('');
   const [finishWelcome, setFinishWelcome] = useState(false)
