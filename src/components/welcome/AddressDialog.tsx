@@ -138,18 +138,18 @@ export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome
               } else {
                 data = await addProperty(formData);
               }
-              if (!data) {
-                reject('Failed to add property')
-                return
-              }
+              // if (!data) {
+              //   reject('Failed to add property')
+              //   return
+              // }
               setIsOpen(false);
               setFadeOut(true);
               if (isWelcome) {
-                console.log('is welcome if statement')
                 nextPage && nextPage();
               }
               resolve('Property added');
             } catch (error) {
+              console.error(error)
               setIsOpen(false);
               reject((error as Error).message);
             }

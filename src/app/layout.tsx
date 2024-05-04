@@ -1,10 +1,10 @@
+import '@/styles/globals.css'
 import { Inter, Lexend, Poppins } from 'next/font/google'
 import clsx from 'clsx'
 import { Analytics } from '@vercel/analytics/react';
 // import '@/styles/mapbox-gl.css';
 import '@/styles/geoencoder.css';
 import '@/styles/tailwind.css'
-import '@/styles/globals.css'
 import { type Metadata } from 'next'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from 'next/script';
