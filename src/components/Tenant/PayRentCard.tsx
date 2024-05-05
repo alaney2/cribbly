@@ -2,9 +2,10 @@
 import { createClient } from '@/utils/supabase/client';
 import { toast } from 'sonner';
 import useSWR from 'swr';
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { RentCard } from '@/components/PropertySettings/RentCard';
 import { Button } from '@/components/ui/button'
+import { PaymentDialog } from '@/components/Tenant/PaymentDialog'
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -34,6 +35,7 @@ const fetcher = async () => {
 
 export function PayRentCard() {
   const { data, error, isLoading } = useSWR('tenantProperty', fetcher);
+  const [isOpen, setIsOpen] = useState(false)
   // useEffect(() => {
   //   console.log(data)
   // }, [data])
@@ -43,8 +45,9 @@ export function PayRentCard() {
         <h1 className="text-5xl font-semibold mb-6">
           ${data && data[0]?.rent_price ? data[0].rent_price : 0}
         </h1>
-        <Button>Make a payment</Button>
+        <Button onClick={() => {setIsOpen(true)}}>Make a payment</Button>
       </div>
+      {data && data.length > 0 && <PaymentDialog isOpen={isOpen} setIsOpen={setIsOpen} rentAmount={data[0].rent_price} />}
     </>
   )
 }

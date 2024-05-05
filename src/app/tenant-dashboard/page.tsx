@@ -1,7 +1,6 @@
 
 import { TenantBento } from '@/components/Tenant/TenantBento';
 
-
 export default function TenantDashboardPage() {
   
   return (
