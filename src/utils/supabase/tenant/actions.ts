@@ -71,3 +71,20 @@ export async function deleteInvite(formData: FormData) {
     throw new Error(error.message)
   } 
 }
+
+export async function submitPayment(formData: FormData) {
+  const supabaseAdmin = createAdminClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+  );
+  const supabase = createClient()
+  const user = await getUser()
+  if (!user) return
+  const propertyId = String(formData.get('propertyId'))
+  const rentAmount = Number(formData.get('rentAmount'))
+  // const { data: tenantData, error: tenantError } = await supabase.from('tenants')
+  //   .select('*')
+  //   .eq('email', user.email)
+  //   .eq('property_id', propertyId)
+  //   .single()
+}
