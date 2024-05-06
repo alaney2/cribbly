@@ -189,9 +189,12 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
     <Card className={`w-[350px] sm:w-[400px] animate__animated animate__faster ${animationClass}`}>
       <form
         action={async (formData) => {
+          console.log('HEREERERE')
           toast.promise(new Promise(async (resolve, reject) => {
             try {
+              console.log('im here')
               const data = await addPropertyFees(formData)
+              console.log(data)
               resolve('Rent and fees added!')
               buttonOnClick && setFadeOut(true)
               buttonOnClick && setTimeout(buttonOnClick, 300)
@@ -269,9 +272,9 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
               />
             </PopoverContent>
           </Popover>
-          <input name="rent_id" required defaultValue={property_rent?.[0]?.id ?? ''} className="hidden"></input>
-          <input name="startDate" required value={startDate ? format(startDate, "MM/dd/yyyy") : ""} readOnly className="hidden"></input>
-          <input name="endDate" required value={endDate ? format(endDate, "MM/dd/yyyy") : ""} readOnly className="hidden"></input>
+          <input name="rent_id" required value={property_rent?.[0]?.id ?? ''} readOnly type="hidden"></input>
+          <input name="startDate" required value={startDate ? format(startDate, "MM/dd/yyyy") : ""} readOnly type="hidden"></input>
+          <input name="endDate" required value={endDate ? format(endDate, "MM/dd/yyyy") : ""} readOnly type="hidden"></input>
         </div>
         <div className="relative">
           <Label htmlFor="rentAmount">Rent per month</Label>
@@ -288,6 +291,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
               autoComplete="off"
               value={rentAmount}
               onChange={(e) => {
+                console.log(e)
                 setIsLoading(true)
                 setRentAmount(e.target.value)
                 setTimeout(() => {
@@ -443,7 +447,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
           </Popover>
         </div>
         <div className="flex gap-x-3">
-          <Button type="submit" size="sm">Continue</Button>
+          <Button type="submit" size="sm">Save</Button>
         </div>
       </CardFooter>
       </form>

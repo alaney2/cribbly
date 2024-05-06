@@ -4,17 +4,23 @@ import InviteUserEmail from '@/components/PropertySettings/InviteUserEmail';
 import { createClient } from '@/utils/supabase/server';
 import { getUser } from '@/utils/supabase/actions';
 import { generateId } from "@/lib/utils"
+import { unstable_noStore as noStore } from "next/cache";
 
 export async function sendInviteEmail(formData: FormData) {
+  noStore();
   const supabase = createClient()
   const user = await getUser()
-  if (!user) throw new Error('User not found')
+  if (!user) {
+    throw new Error('User not found')
+  }
 
   const { data: user_data } = await supabase.from('users')
     .select()
     .eq('id', user.id)
     .single()
-  if (!user_data) throw new Error('User not found')
+  if (!user_data) {
+    throw new Error('User not found')
+  }
 
   const email = String(formData.get('email'))
   const fullName = String(formData.get('fullName'));
@@ -24,7 +30,9 @@ export async function sendInviteEmail(formData: FormData) {
     .select()
     .eq('id', propertyId)
     .single()
-  if (!property) throw new Error('Property not found')
+  if (!property) {
+    throw new Error('Property not found')
+  }
 
   const token = generateId({ length: 12 })
   const { error: tokenError } = await supabase
@@ -37,11 +45,10 @@ export async function sendInviteEmail(formData: FormData) {
     })
 
   if (tokenError) {
-    console.error(tokenError)
     throw new Error('Error creating invite')
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY)
+  const resend = new Resend('re_GMbJz3MW_K175ScDJdkrMMWNanGZWB8PH')
   const { data: id, error } = await resend.emails.send({
     from: 'Cribbly.io <support@cribbly.io>',
     reply_to: 'support@cribbly.io',
