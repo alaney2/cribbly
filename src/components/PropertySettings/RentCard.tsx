@@ -291,7 +291,6 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
               autoComplete="off"
               value={rentAmount}
               onChange={(e) => {
-                console.log(e)
                 setIsLoading(true)
                 setRentAmount(e.target.value)
                 setTimeout(() => {
@@ -376,7 +375,6 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
         <div className="mt-4 -mb-2 flex justify-between">
           <Button type="button" variant="outline" size="sm" onClick={() => setIsDialogOpen(true)}>Add Fee</Button>
           <Button type="button" variant="secondary" size="sm" onClick={() => setIsScheduleOpen(true)}>Billing Schedule</Button>
-
         </div>
       </CardContent>
       

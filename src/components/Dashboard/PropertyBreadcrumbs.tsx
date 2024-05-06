@@ -88,7 +88,7 @@ export function PropertyBreadcrumbs() {
               <BreadcrumbItem className="tracking-tight font-lexend text-sm select-none">
               {(isLoading || otherProperties === (undefined || null)) ? <Skeleton height={18} width={80} /> : (
                 <>
-                  <BreadcrumbLink href={`/${segments.slice(0, index + 1).join('/')}`}>{property?.street_address}</BreadcrumbLink>
+                  <BreadcrumbLink href={`/${segments.slice(0, index + 1).join('/')}`}>{property?.street_address}{property?.apt ? ` ${property?.apt}` : ''}</BreadcrumbLink>
                   <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild className="">
                       <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-100" />

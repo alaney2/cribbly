@@ -68,7 +68,7 @@ const tenantsFetcher = async (property_id: string) => {
     .eq('property_id', property_id)
   // console.log('error', error)
   if (error) throw error;
-  console.log(data)
+  // console.log(data)
   return data
 }
 
@@ -89,7 +89,7 @@ export function PropertyStats({ propertyId }: PropertyStatsProps ) {
   ]
 
   useEffect(() => {
-    console.log(data)
+    // console.log(data)
   }, [data])
 
   return (

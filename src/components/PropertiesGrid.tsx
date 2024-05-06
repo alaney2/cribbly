@@ -1,5 +1,5 @@
 "use client"
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import useSWR from 'swr';
 import { toast } from 'sonner'
@@ -14,6 +14,9 @@ import Link from 'next/link';
 import { Spinner } from '@/components/Spinners/Spinner'
 import useSparks from '@/components/default/useSparks'
 import { useRouter } from 'next/navigation'
+import Confetti from 'react-confetti'
+import useWindowSize from 'react-use/lib/useWindowSize'
+import { useLocalStorage } from 'react-use';
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -40,6 +43,15 @@ export function PropertiesGrid() {
   const [addPropertyClicked, setAddPropertyClicked] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const { width, height } = useWindowSize()
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [value, setValue, remove] = useLocalStorage('welcomeConfettiShown');
+  useEffect(() => {
+    if (!value) {
+      setShowConfetti(true);
+      setValue(true);
+    }
+  }, [])
 
   const fuse = new Fuse(properties || [], { keys: ['street_address', 'city', 'state'],
     threshold: 0.4,
@@ -74,6 +86,16 @@ export function PropertiesGrid() {
 
   return (
     <div ref={containerRef} className="p-2 md:p-8 content-container">
+      {showConfetti && width && height && isFinite(width) && isFinite(height) && <Confetti
+        width={width}
+        height={height}
+        gravity={0.3}
+        recycle={false}
+        numberOfPieces={600}
+        initialVelocityY={20}
+        initialVelocityX={10}
+        opacity={0.8}
+      />}
       <Spinner />
       <div className="flex flex-col sm:flex-row items-center justify-between sm:justify-center mb-4">
         <div className="relative sm:mr-2.5 w-full sm:w-auto mb-2.5 sm:mb-0">

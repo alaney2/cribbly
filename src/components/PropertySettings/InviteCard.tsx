@@ -82,7 +82,6 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
         action={async (formData) => {
           toast.promise(new Promise(async (resolve, reject) => {
             try {
-              console.log('IM HERE')
               await sendInviteEmail(formData)
               mutate()
               setEmail('');

@@ -7,6 +7,11 @@ export function calculateRentDates(start: Date, end: Date) {
   rentDates.push(start);
 
   let monthsDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+  
+  // Subtract one month if the end day is before the start day
+  if (end.getDate() < start.getDate()) {
+    monthsDiff--;
+  }
 
   for (let i = 1; i <= monthsDiff; i++) {
     const nextMonth = new Date(start.getFullYear(), start.getMonth() + i, 1);

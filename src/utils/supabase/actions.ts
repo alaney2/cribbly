@@ -260,7 +260,6 @@ export async function addProperty(formData: FormData) {
   }
 
   redirect(`/dashboard/${data.id}/settings`);
-  return data
 }
 
 export async function deleteProperty(propertyId: string) {

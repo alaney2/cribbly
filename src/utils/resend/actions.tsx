@@ -48,7 +48,7 @@ export async function sendInviteEmail(formData: FormData) {
     throw new Error('Error creating invite')
   }
 
-  const resend = new Resend('re_GMbJz3MW_K175ScDJdkrMMWNanGZWB8PH')
+  const resend = new Resend(process.env.RESEND_API_KEY)
   const { data: id, error } = await resend.emails.send({
     from: 'Cribbly.io <support@cribbly.io>',
     reply_to: 'support@cribbly.io',

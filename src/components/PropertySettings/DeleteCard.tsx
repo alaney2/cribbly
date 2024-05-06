@@ -21,17 +21,39 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert"
+import { useSWRConfig } from "swr"
+import { toast } from 'sonner'
 
 export function DeleteCard({ propertyId }: { propertyId: string }) {
   const router = useRouter()
   const [deleteInput, setDeleteInput] = React.useState('')
   let [isOpen, setIsOpen] = React.useState(false)
+  const { mutate } = useSWRConfig()
+  const [isDeleting, setIsDeleting] = React.useState(false)
 
   const handleDeleteProperty = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     if (deleteInput !== 'delete my property') return;
-    await deleteProperty(propertyId)
-    router.push('/dashboard')
+    setIsDeleting(true)
+    const toastId = toast.loading('Deleting property...')
+    try {
+      // toast.loading('Deleting property...')
+      await deleteProperty(propertyId)
+      mutate('properties')
+      toast.success('Property has been deleted', {
+        id: toastId,
+        duration: 5000
+      });
+      router.push('/dashboard')
+    } catch (error) {
+      toast.error('Error deleting property', {
+        id: toastId,
+      });
+      console.error(error)
+    } finally {
+      setIsDeleting(false)
+      setIsOpen(false)
+    }
   }
   return (
     <>
@@ -72,7 +94,8 @@ export function DeleteCard({ propertyId }: { propertyId: string }) {
                 name="verifyDelete"
                 className="mt-2"
                 pattern="\s*delete my property\s*"
-                required
+                title="Validate the input by typing 'delete my property' exactly as shown."
+                required={true}
                 aria-required="true"
                 aria-invalid={deleteInput !== 'delete my property'}
                 autoCapitalize="off"
@@ -85,7 +108,7 @@ export function DeleteCard({ propertyId }: { propertyId: string }) {
         </DialogBody>
         <DialogActions>
           <Button type="button" variant="outline">Cancel</Button>
-          <Button type="submit" variant="destructive" onClick={handleDeleteProperty}>Continue</Button>
+          <Button type="submit" variant="destructive" onClick={handleDeleteProperty}>Delete</Button>
         </DialogActions>
         </form>
       </Dialog>
