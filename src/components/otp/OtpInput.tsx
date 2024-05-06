@@ -6,7 +6,7 @@ import { verifyOtp } from '@/app/auth/otp/action'
 import { Input } from '@/components/ui/input'
 // @ts-expect-error
 import { useFormState } from 'react-dom'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, usePathname } from 'next/navigation'
 import { insertNewTenant, deleteInvite } from '@/utils/supabase/tenant/actions'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
@@ -20,6 +20,9 @@ function OtpInputWithParams({ email }: { email: string } ) {
   const token = searchParams.get('token')
   const [hasError, setHasError] = useState(false)
   const router = useRouter()
+  const pathname = usePathname()
+
+  console.log(pathname)
   // const email = searchParams.get('email')
   // const name = searchParams.get('name')
   // const address = searchParams.get('address')
@@ -99,9 +102,13 @@ function OtpInputWithParams({ email }: { email: string } ) {
     <form 
       action={async (formData) => {
         try {
-          if (token && email && propertyId) {
-            await deleteInvite(formData)
-            await insertNewTenant(formData)
+          if (pathname === '/invite') {
+            if (token && email && propertyId) {
+              await deleteInvite(formData)
+              await insertNewTenant(formData)
+            } else {
+              throw new Error('Invalid invite link')
+            }
           }
           await verifyOtp(formData)
         } catch (error) {
