@@ -106,7 +106,7 @@ export function MobileSidebar({ userEmail, fullName }: MobileSidebarProps) {
                       pathname === item.href
                             ? 'text-blue-500'
                             : 'text-gray-500 hover:text-blue-500',
-                      'block w-full gap-x-3 rounded-md px-2 py-3 text-md font-semibold flex items-center '
+                      'w-full gap-x-3 rounded-md px-2 py-3 text-md font-semibold flex items-center'
                     )}
                   >
                     <item.icon
