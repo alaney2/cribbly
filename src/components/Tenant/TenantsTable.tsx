@@ -37,7 +37,7 @@ export function TenantsTable({ propertyId }: { propertyId: string }) {
             <TableHeader>Name</TableHeader>
             <TableHeader>Email</TableHeader>
             <TableHeader>Date joined</TableHeader>
-            <TableHeader></TableHeader>
+            {/* <TableHeader></TableHeader> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -47,15 +47,13 @@ export function TenantsTable({ propertyId }: { propertyId: string }) {
               <TableCell>{tenant.email}</TableCell>
               <TableCell>{format(tenant.created_at, "MM/dd/yyyy")}</TableCell>
 
-              {/* {/* <TableCell>{tenant.role}</TableCell> */}
-              <TableCell className="text-red-600/80 hover:text-red-600">
+              {/* <TableCell className="text-red-600/80 hover:text-red-600">
                 <button className="cursor-default" onClick={async () => {
                   
                 }}>
                   Delete
                 </button>
-              </TableCell>
-              {/* <TableCell className="text-zinc-500">{tenant.access}</TableCell> */}
+              </TableCell> */}
             </TableRow>
           ))}
           {tenantsData && tenantsData.length === 0 && (
