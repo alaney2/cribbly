@@ -22,7 +22,7 @@ function OtpInputWithParams({ email }: { email: string } ) {
   const router = useRouter()
   const pathname = usePathname()
 
-  console.log(pathname)
+  // console.log(pathname)
   // const email = searchParams.get('email')
   // const name = searchParams.get('name')
   // const address = searchParams.get('address')

@@ -3,14 +3,19 @@ import useSWR from 'swr';
 import { useSearchParams } from 'next/navigation'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'
 import { createClient } from '@/utils/supabase/client';
+import { useEffect } from 'react'
 
 
 const tenantsFetcher = async (property_id: string) => {
   const supabase = createClient();
   const { data, error } = await supabase
     .from('tenants')
-    .select('*')
-    .eq('property_id', property_id)
+    .select(`
+      id,
+      email,
+      users ( full_name )
+    `)
+    .eq('property_id', property_id);
   // console.log('error', error)
   if (error) throw error;
   // console.log(data)
@@ -20,9 +25,12 @@ const tenantsFetcher = async (property_id: string) => {
 export function TenantsTable({ propertyId }: { propertyId: string }) {
   const { data: tenantsData, error: tenantsError, isLoading: isTenantsLoading } = useSWR(['tenants', propertyId], ([_, property_id]) => tenantsFetcher(property_id))
 
+  useEffect(() => {
+    console.log(tenantsData)
+  }, [tenantsData])
   return (
     <>
-      <Table bleed className="w-full grid mx-auto [--gutter:theme(spacing.6)] sm:[--gutter:theme(spacing.8)]">
+      <Table bleed className="[--gutter:theme(spacing.6)] sm:[--gutter:theme(spacing.8)]">
         <TableHead>
           <TableRow>
             <TableHeader>Name</TableHeader>

@@ -187,7 +187,9 @@ export function PropertiesGrid() {
           </div>
         ) : (
           sortedProperties?.map((property, index) => (
-            <div key={property.id} className="rounded-lg p-4 h-28 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md relative transition ease-in-out duration-200 hover:ring-2 hover:ring-blue-300">
+            <div key={property.id} 
+              className={`rounded-lg p-4 ${property.apt ? 'h-32' : 'h-28'} md:h-32 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md relative transition ease-in-out duration-200 hover:ring-2 hover:ring-blue-300`}
+            >
               <div className="absolute top-3 right-3">
                 <Dropdown>
                   <DropdownButton plain className="h-7 w-6 p-0 bg-transparent transition ease-in-out duration-200">
