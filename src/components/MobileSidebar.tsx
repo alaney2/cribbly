@@ -103,14 +103,18 @@ export function MobileSidebar({ userEmail, fullName }: MobileSidebarProps) {
                     }}
                     href={item.href}
                     className={classNames(
-                      'text-gray-700 hover:text-blue-600',
-                      'block w-full gap-x-3 rounded-md px-2 py-3 text-md font-semibold'
+                      pathname === item.href
+                            ? 'text-blue-500'
+                            : 'text-gray-500 hover:text-blue-500',
+                      'block w-full gap-x-3 rounded-md px-2 py-3 text-md font-semibold flex items-center '
                     )}
                   >
                     <item.icon
                       className={classNames(
-                        'text-gray-400 group-hover:text-blue-600',
-                        'inline-block h-5 w-5 mr-3'
+                        pathname === item.href
+                            ? 'text-blue-500'
+                            : 'text-gray-500 group-hover:text-blue-500',
+                        'inline-block h-5 w-5 mr-1.5'
                       )}
                       aria-hidden="true"
                     />
