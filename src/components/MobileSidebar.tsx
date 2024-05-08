@@ -62,7 +62,7 @@ export function MobileSidebar({ userEmail, fullName }: MobileSidebarProps) {
 
   return (
     <>
-      <div className="top-0 z-50 flex items-center justify-center gap-x-6 bg-gray-50 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
+      <div className="top-0 z-50 flex justify-center items-center gap-x-6 bg-gray-50 px-4 py-4 shadow-sm sm:px-6 lg:hidden w-screen">
         <button
           type="button"
           className={`absolute left-2.5 p-2.5 text-gray-700 lg:hidden z-50 ${sidebarOpen ? 'openmenu' : ''}`}
@@ -77,7 +77,13 @@ export function MobileSidebar({ userEmail, fullName }: MobileSidebarProps) {
             </div>
           </div>
         </button>
-        <Link href="/dashboard" className=''>
+        <Link href="/dashboard" className='' 
+          onClick={() => {
+            setSidebarOpen(false)
+            document.body.classList.remove("overflow-y-hidden")
+            document.body.classList.remove("fixed")
+          }}
+        >
           <div className="text-md font-medium font-lexend text-gray-700 tracking-tight">
             <span className={`text-gray-600`}>Crib</span>
             <span className={`text-blue-500`}>bly</span>
