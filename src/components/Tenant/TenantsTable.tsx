@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'
 import { createClient } from '@/utils/supabase/client';
 import { useEffect } from 'react'
-
+import { format } from 'date-fns'
 
 const tenantsFetcher = async (property_id: string) => {
   const supabase = createClient();
@@ -13,7 +13,8 @@ const tenantsFetcher = async (property_id: string) => {
     .select(`
       id,
       email,
-      users ( full_name )
+      created_at,
+      users:email ( full_name )
     `)
     .eq('property_id', property_id);
   // console.log('error', error)
@@ -35,18 +36,25 @@ export function TenantsTable({ propertyId }: { propertyId: string }) {
           <TableRow>
             <TableHeader>Name</TableHeader>
             <TableHeader>Email</TableHeader>
-            {/* <TableHeader>Role</TableHeader>
-            <TableHeader>Email</TableHeader>
-            <TableHeader>Access</TableHeader> */}
+            <TableHeader>Date joined</TableHeader>
+            <TableHeader></TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
           {tenantsData && tenantsData.length > 0 && tenantsData?.map((tenant) => (
             <TableRow key={tenant.id}>
-              <TableCell className="font-medium">{'Temp'}</TableCell>
+              <TableCell className="font-medium">{tenant.users?.full_name}</TableCell>
               <TableCell>{tenant.email}</TableCell>
+              <TableCell>{format(tenant.created_at, "MM/dd/yyyy")}</TableCell>
+
               {/* {/* <TableCell>{tenant.role}</TableCell> */}
-              <TableCell>{'Action'}</TableCell>
+              <TableCell className="text-red-600/80 hover:text-red-600">
+                <button className="cursor-default" onClick={async () => {
+                  
+                }}>
+                  Delete
+                </button>
+              </TableCell>
               {/* <TableCell className="text-zinc-500">{tenant.access}</TableCell> */}
             </TableRow>
           ))}

@@ -300,3 +300,8 @@ export async function getProducts() {
 
   return products;
 }
+
+export async function removeTenant(tenantId: { tenantId: string }) {
+  const supabase = createClient();
+
+}
