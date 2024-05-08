@@ -43,6 +43,7 @@ export function TenantsTable({ propertyId }: { propertyId: string }) {
         <TableBody>
           {tenantsData && tenantsData.length > 0 && tenantsData?.map((tenant) => (
             <TableRow key={tenant.id}>
+              {/* @ts-ignore: the column does exist */}
               <TableCell className="font-medium">{tenant.users?.full_name}</TableCell>
               <TableCell>{tenant.email}</TableCell>
               <TableCell>{format(tenant.created_at, "MM/dd/yyyy")}</TableCell>

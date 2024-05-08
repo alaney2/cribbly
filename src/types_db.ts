@@ -28,6 +28,23 @@ export interface Database {
           email?: string
           created_at?: Date | null
         }
+        Relationships: [
+          {
+            foreignKeyName: 'tenants_property_id_fkey'
+            columns: ['property_id']
+            isOneToOne: false
+            referencedRelation: 'properties'
+            referencedColumns: ['id']
+          
+          },
+          {
+            foreignKeyName: 'tenants_email_fkey'
+            columns: ['email']
+            isOneToOne: true
+            referencedRelation: 'users'
+            referencedColumns: ['email']
+          },
+        ]
       }
       property_invites: {
         Row: {
