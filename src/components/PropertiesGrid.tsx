@@ -27,7 +27,7 @@ const fetcher = async () => {
   }
   const { data, error } = await supabase
     .from('properties')
-    .select('*')
+    .select(`*, tenants(*)`)
     .eq('user_id', user!.id);
   if (error) {
     throw error;
@@ -52,6 +52,10 @@ export function PropertiesGrid() {
       setValue(true);
     }
   }, [])
+
+  useEffect(() => {
+    console.log(properties)
+  }, [properties])
 
   const fuse = new Fuse(properties || [], { keys: ['street_address', 'city', 'state'],
     threshold: 0.4,
@@ -214,14 +218,14 @@ export function PropertiesGrid() {
                 <p>{property.apt}</p>
                 <p>{property.city}, {property.state} {property.zip}</p>
                 <div className="absolute bottom-4 left-4 flex items-center gap-x-1">
-                  {index % 2 == 0 ? 
+                  {property.tenants.length > 0 ? 
                     <>
                       <CheckCircleIcon className="h-4 w-4 text-blue-500" />
-                      <span className="text-gray-700 tracking-tight text-sm">Occupied</span>
+                      <span className="text-gray-700 tracking-tight text-sm">{property.tenants.length} {property.tenants.length === 1 ? 'tenant' : 'tenants'}</span>
                     </> : 
                     <>
-                      <XCircleIcon className="h-4 w-4 text-red-300" />
-                      <span className="text-gray-700 tracking-tight text-sm">Unoccupied</span>
+                      <XCircleIcon className="h-4 w-4 text-red-400/80" />
+                      <span className="text-gray-700 tracking-tight text-sm">No tenants</span>
                     </>
                 }
                 </div>
