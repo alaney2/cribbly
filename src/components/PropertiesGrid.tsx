@@ -53,10 +53,6 @@ export function PropertiesGrid() {
     }
   }, [])
 
-  useEffect(() => {
-    console.log(properties)
-  }, [properties])
-
   const fuse = new Fuse(properties || [], { keys: ['street_address', 'city', 'state'],
     threshold: 0.4,
   });

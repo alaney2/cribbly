@@ -83,7 +83,7 @@ export function PropertyStats({ propertyId }: PropertyStatsProps ) {
 
   const stats = [
     { name: 'Rent price', stat: data ? `$${data.rent_price}` : '-', icon: CurrencyIcon, editIcon: <PencilSquareIcon className="h-5 w-5 text-gray-500" />, href: `/dashboard/${propertyId}/settings` },
-    { name: 'Lease ends', icon: HourglassIcon, stat: data ? `${format(data.rent_end, 'M/d/yyyy')}` : '-' },
+    { name: 'Lease period', icon: HourglassIcon, stat: data ? `${format(data.rent_start, 'M/d/yy')} - ${format(data.rent_end, 'M/d/yy')}` : '-' },
     { name: 'Current tenants', icon: TenantIcon, stat: tenantsData ? `${tenantsData.length}` : '-' },
     { name: 'This month\'s rent', icon: CalendarIcon, stat: data ? `Unpaid (0/${data.months_left} months)` : 'Paid' },
   ]
