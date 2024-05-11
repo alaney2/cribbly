@@ -51,7 +51,7 @@ export function PropertiesGrid() {
       setShowConfetti(true);
       setValue(true);
     }
-  }, [])
+  }, [setValue, value])
 
   const fuse = new Fuse(properties || [], { keys: ['street_address', 'city', 'state'],
     threshold: 0.4,
