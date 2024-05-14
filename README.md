@@ -30,7 +30,6 @@ Monthly Cash Flow: A line graph displaying the monthly cash flow (income minus e
 Property Performance Comparison: A bar graph comparing the financial performance (e.g., rental income, expenses) of different properties.
 Maintenance Request Summary: A table or bar graph showing the number of open, in-progress, and completed maintenance requests.
 
-
 payloadcms, strapi, sanity
 
 shottr, screen studio
