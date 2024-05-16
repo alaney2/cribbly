@@ -214,7 +214,7 @@ export function PropertiesGrid() {
                 <p>{property.apt}</p>
                 <p>{property.city}, {property.state} {property.zip}</p>
                 <div className="absolute bottom-4 left-4 flex items-center gap-x-1">
-                  {property.tenants.length > 0 ? 
+                  {property && property.tenants && property.tenants.length > 0 ? 
                     <>
                       <CheckCircleIcon className="h-4 w-4 text-blue-500" />
                       <span className="text-gray-700 tracking-tight text-sm">{property.tenants.length} {property.tenants.length === 1 ? 'tenant' : 'tenants'}</span>

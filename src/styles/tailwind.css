@@ -13,10 +13,10 @@
 }
 
 @layer base {
-  @font-face {
+  /* @font-face {
     font-family: 'Lexend';
     src: url('../fonts/Lexend-VariableFont_wght.ttf') format('truetype');
-  }
+  } */
   :root {
     --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;

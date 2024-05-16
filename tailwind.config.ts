@@ -25,6 +25,9 @@ const config = {
       },
     },
     fontFamily: {
+      // sans: 'var(--font-inter)',
+      sans: 'var(--font-open-runde)',
+      display: 'var(--font-lexend)',
       lexend: ["Lexend", ...defaultTheme.fontFamily.sans],
     },
     extend: {

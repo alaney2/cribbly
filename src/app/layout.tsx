@@ -1,5 +1,6 @@
 import '@/styles/globals.css'
 import { Inter, Lexend, Poppins } from 'next/font/google'
+import localFont from 'next/font/local'
 import clsx from 'clsx'
 import { Analytics } from '@vercel/analytics/react';
 // import '@/styles/mapbox-gl.css';
@@ -48,11 +49,29 @@ const lexend = Lexend({
   variable: '--font-lexend',
 })
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-poppins',
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+const openRunde = localFont({
+  src: [
+    {
+      path: '../../public/fonts/open-runde/OpenRunde-Regular.otf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/open-runde/OpenRunde-Medium.otf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/open-runde/OpenRunde-Semibold.otf',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/open-runde/OpenRunde-Bold.otf',
+      weight: '700',
+      style: 'normal',
+    },  ],
+  variable: '--font-open-runde',
 })
 
 export default function RootLayout({ children }: PropsWithChildren) {
@@ -63,6 +82,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         'h-full scroll-smooth bg-gray-50',
         inter.variable,
         lexend.variable,
+        openRunde.variable,
       )}
     >
       <Script
