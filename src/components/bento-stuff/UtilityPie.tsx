@@ -17,7 +17,7 @@ import { useState, useEffect } from 'react'
 function SelectTime() {
   return (
     <Select defaultValue="month">
-      <SelectTrigger className="w-36">
+      <SelectTrigger className="w-36 cursor-default">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
