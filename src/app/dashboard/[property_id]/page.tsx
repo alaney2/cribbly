@@ -52,9 +52,9 @@ export default async function CurrentProperty({ params } : { params: { property_
 
         <BentoStats />
 
-        <div className="flex justify-center mt-8">
+        {/* <div className="flex justify-center mt-8">
           <Button color="blue" className="">Randomize data</Button>
-        </div>
+        </div> */}
       </div>
     </>
   )
