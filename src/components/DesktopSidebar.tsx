@@ -109,18 +109,19 @@ export function DesktopSidebar({ fullName, sidebarCollapsed }: DesktopSidebarPro
           <Image src={icon} alt="logo" height={28} width={28} className="ml-4" />
           <AnimatePresence>
             {!isSidebarCollapsed && (
-              <motion.span
-                initial={{ opacity: 1 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="group-hover:text-blue-500"
-              >
-                <>
-                  <span className={`text-gray-600`}>Crib</span>
-                  <span className={`text-blue-500`}>bly</span>
-                </>
-              </motion.span>
+              <motion.div
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="group"
+            >
+              <>
+                <span className="text-gray-600 group-hover:text-blue-500">Crib</span>
+                <span className="text-blue-500 group-hover:text-gray-600">bly</span>
+              </>
+            </motion.div>
+            
             )}
           </AnimatePresence>
         </Link>

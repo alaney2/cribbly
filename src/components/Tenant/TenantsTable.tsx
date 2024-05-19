@@ -17,18 +17,16 @@ const tenantsFetcher = async (property_id: string) => {
       users:email ( full_name )
     `)
     .eq('property_id', property_id);
-  // console.log('error', error)
   if (error) throw error;
-  // console.log(data)
   return data
 }
 
 export function TenantsTable({ propertyId }: { propertyId: string }) {
   const { data: tenantsData, error: tenantsError, isLoading: isTenantsLoading } = useSWR(['tenants', propertyId], ([_, property_id]) => tenantsFetcher(property_id))
 
-  useEffect(() => {
-    console.log(tenantsData)
-  }, [tenantsData])
+  // useEffect(() => {
+  //   console.log(tenantsData)
+  // }, [tenantsData])
   return (
     <>
       <Table bleed className="[--gutter:theme(spacing.6)] sm:[--gutter:theme(spacing.8)]">

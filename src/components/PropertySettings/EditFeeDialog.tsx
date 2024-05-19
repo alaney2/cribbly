@@ -35,7 +35,7 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees, mutateFee
       <Dialog open={isOpen} onClose={setIsOpen}>
         <DialogTitle>Edit fee</DialogTitle>
         <DialogDescription>
-          Enter a negative amount to apply a discount.
+          Add a one-time or recurring fee for the tenant, billed at the start of next month. Enter a negative amount to apply a discount.
         </DialogDescription>
         <form 
           action={async (formData) => {
@@ -108,8 +108,8 @@ export function EditFeeDialog({ isOpen, setIsOpen, fee, fees, setFees, mutateFee
           >
             Delete
           </Button>
-          <Button type="submit" size="sm" >
-            Save
+          <Button type="submit" variant="outline" size="sm" >
+            Confirm
           </Button>
         </DialogActions>
         </form>

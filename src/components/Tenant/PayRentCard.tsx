@@ -36,9 +36,6 @@ const fetcher = async () => {
 export function PayRentCard() {
   const { data, error, isLoading } = useSWR('tenantProperty', fetcher);
   const [isOpen, setIsOpen] = useState(false)
-  // useEffect(() => {
-  //   console.log(data)
-  // }, [data])
   return (
     <>
       <div className="text-center flex items-center justify-center flex-col h-full">

@@ -189,15 +189,18 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
     <Card className={`w-[350px] sm:w-[400px] animate__animated animate__faster ${animationClass}`}>
       <form
         action={async (formData) => {
-          console.log('HEREERERE')
           toast.promise(new Promise(async (resolve, reject) => {
             try {
-              console.log('im here')
               const data = await addPropertyFees(formData)
-              console.log(data)
-              resolve('Rent and fees added!')
-              buttonOnClick && setFadeOut(true)
-              buttonOnClick && setTimeout(buttonOnClick, 300)
+              if (buttonOnClick) {
+                setFadeOut(true);
+                setTimeout(() => {
+                  buttonOnClick();
+                  resolve('Success');
+                }, 300);
+              } else {
+                resolve('Success');
+              }
             } catch (error) {
               reject(error)
             }
@@ -511,7 +514,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
         <Button type="button" variant="ghost" size="sm" onClick={() => setIsDialogOpen(false)}>
           Cancel
         </Button>
-        <Button type="submit" size="sm" className="px-4">
+        <Button type="submit" variant="outline" size="sm" className="px-4">
           Add
         </Button>
       </DialogActions>
