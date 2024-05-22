@@ -21,7 +21,7 @@ import { Radio, RadioField, RadioGroup } from '@/components/catalyst/radio'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'
 import { EditFeeDialog } from '@/components/PropertySettings/EditFeeDialog'
-import { generateId } from "@/lib/utils"
+// import { generateId } from "@/lib/utils"
 import { addPropertyFees } from '@/utils/supabase/actions'
 import "react-datepicker/dist/react-datepicker.css";
 import { Calendar as CalendarIcon } from "lucide-react"
@@ -144,7 +144,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
 
   const handleAddFee = async () => {
     const newFee = {
-      id: generateId(),
+      id: '',
       property_id: propertyId,
       fee_type: dialogFee.fee_type,
       fee_name: dialogFee.fee_name,

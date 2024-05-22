@@ -133,9 +133,9 @@ export async function addPropertyFees(formData: FormData) {
     }
     if (pair[0].startsWith('fee')) {
       const fee = JSON.parse(pair[1].toString())
-      console.log(fee.id, fee.fee_name, fee.fee_type, fee.fee_cost, monthsOfRent, startDate, endDate)
+      // console.log(fee.id, fee.fee_name, fee.fee_type, fee.fee_cost, monthsOfRent, startDate, endDate)
       if (fee.id) {
-        console.log('FEEID', fee.id)
+        // console.log('FEEID', fee.id)
         const { error } = await supabase.from('property_fees')
           .update(
             {
@@ -154,8 +154,6 @@ export async function addPropertyFees(formData: FormData) {
           }
         }
       } else {
-        console.log('im here')
-        console.log(fee)
         const { error } = await supabase.from('property_fees')
           .insert(
             {
