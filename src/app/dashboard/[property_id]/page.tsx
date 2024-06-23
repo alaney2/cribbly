@@ -44,7 +44,7 @@ export default async function CurrentProperty({ params } : { params: { property_
 
   return (
     <>
-      <div className="mb-8 lg:mb-0">
+      <div className="mb-8 lg:mb-0 content-container">
         <h1 className="lg:hidden text-xl font-semibold mb-8 ml-4 tracking-tight">{propertyData[0]?.street_address}, {propertyData[0]?.city} {propertyData[0]?.state} {propertyData[0]?.apt}</h1>
         <div className="mb-4 cursor-default">
           <PropertyStats propertyId={params.property_id} />

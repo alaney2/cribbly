@@ -58,7 +58,7 @@ input[type=number] {
 }
 
 .content-container {
-  min-height: calc(100svh - theme('height.24'));
+  min-height: calc(100svh - theme('height.32'));
 }
 
 button {
