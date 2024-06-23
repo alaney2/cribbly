@@ -24,7 +24,7 @@ export function CallToAction() {
             Let’s get started
           </h2>
           <p className="mt-4 text-lg tracking-tight text-white">
-            Join over 500 landlords and property managers today!
+            Join over 200 property managers today!
           </p>
           <Button 
             href="/get-started"
