@@ -12,6 +12,7 @@ import {
 import {
   IconWavesElectricity,
   IconSignature,
+  IconVariableMinus,
 } from "@tabler/icons-react";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'
@@ -58,6 +59,7 @@ export function MobileSidebar({ userEmail, fullName }: MobileSidebarProps) {
     { name: 'Utilities', href: getDashboardURL('utilities'), icon: IconWavesElectricity },
     { name: 'Documents', href: getDashboardURL('documents'), icon: IconSignature },
     { name: 'Settings', href: getDashboardURL('settings'), icon: Cog8ToothIcon },
+    { name: 'Delete', href: getDashboardURL('delete-property'), icon: IconVariableMinus },
   ]
 
   return (

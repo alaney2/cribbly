@@ -20,6 +20,7 @@ import {
 import {
   IconWavesElectricity,
   IconSignature,
+  IconVariableMinus,
 } from "@tabler/icons-react";
 import Link from 'next/link';
 import icon from '@/images/icon.png';
@@ -81,6 +82,7 @@ export function DesktopSidebar({ fullName, sidebarCollapsed }: DesktopSidebarPro
     { name: 'Utilities', href: getDashboardURL('utilities'), icon: IconWavesElectricity },
     { name: 'Documents', href: getDashboardURL('documents'), icon: IconSignature },
     { name: 'Settings', href: getDashboardURL('settings'), icon: Cog8ToothIcon },
+    { name: 'Delete', href: getDashboardURL('delete-property'), icon: IconVariableMinus },
   ]
 
 

@@ -7,7 +7,18 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Button } from '@/components/catalyst/button';
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '../../dropdown';
-import { ChevronDownIcon, MagnifyingGlassIcon, PlusIcon, CheckCircleIcon, XCircleIcon, EllipsisVerticalIcon } from '@heroicons/react/16/solid';
+import { 
+  ChevronDownIcon, 
+  MagnifyingGlassIcon, 
+  PlusIcon, 
+  CheckCircleIcon, 
+  XCircleIcon, 
+  EllipsisVerticalIcon,
+  Cog6ToothIcon,
+  UsersIcon,
+  MinusCircleIcon,
+} 
+  from '@heroicons/react/16/solid';
 import Fuse from 'fuse.js';
 import { Input } from '@/components/aceternity/Input'
 import Link from 'next/link';
@@ -191,19 +202,31 @@ export function PropertiesGrid() {
               className={`rounded-lg p-4 ${property.apt ? 'h-32' : 'h-28'} md:h-32 lg:h-36 shadow-sm bg-gray-50 ring-1 ring-gray-300 w-full max-w-md relative transition ease-in-out duration-200 hover:ring-2 hover:ring-blue-300`}
             >
               <div className="absolute top-3 right-3">
-                <Dropdown>
-                  <DropdownButton plain className="h-7 w-6 p-0 bg-transparent transition ease-in-out duration-200">
-                    <EllipsisVerticalIcon className="h-5 w-5" />
-                  </DropdownButton>
-                  <DropdownMenu>
-                    <DropdownItem href={`/dashboard/${property.id}/settings`}>
+              <Dropdown>
+                <DropdownButton plain className="h-7 w-6 p-0 bg-transparent transition ease-in-out duration-200">
+                  <EllipsisVerticalIcon className="h-5 w-5" />
+                </DropdownButton>
+                <DropdownMenu>
+                  <DropdownItem href={`/dashboard/${property.id}/settings`}>
+                    <div className="flex items-center">
+                      <Cog6ToothIcon className="h-4 w-4 mr-2 text-gray-700" />
                       Settings
-                    </DropdownItem>
-                    <DropdownItem href={`/dashboard/${property.id}`}>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem href={`/dashboard/${property.id}/tenants`}>
+                    <div className="flex items-center">
+                      <UsersIcon className="h-4 w-4 mr-2 text-gray-700" />
                       Tenants
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem href={`/dashboard/${property.id}/delete-property`}>
+                    <div className="flex items-center">
+                      <MinusCircleIcon className="h-4 w-4 mr-2 text-gray-700" />
+                      Delete
+                    </div>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
               </div>
               <Link 
                 href={{

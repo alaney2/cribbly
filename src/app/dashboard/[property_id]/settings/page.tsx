@@ -1,7 +1,7 @@
 // "use client"
 import { RentCard } from '@/components/PropertySettings/RentCard'
 import { InviteCard } from '@/components/PropertySettings/InviteCard'
-import { DeleteCard } from '@/components/PropertySettings/DeleteCard'
+// import { DeleteCard } from '@/components/PropertySettings/DeleteCard'
 
 export default function CurrentPropertySettings({ params } : { params: { property_id: string } }) {
 
@@ -15,7 +15,7 @@ export default function CurrentPropertySettings({ params } : { params: { propert
             </div>
             <div className="space-y-4">
               <InviteCard propertyId={params.property_id} />
-              <DeleteCard propertyId={params.property_id}/>
+              {/* <DeleteCard propertyId={params.property_id}/> */}
             </div>
           </div>
         </main>
