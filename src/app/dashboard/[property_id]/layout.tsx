@@ -55,7 +55,7 @@ export default async function PropertyDashboardLayout({
           <aside className={`lg:sticky top-0 left-4 flex-col overflow-y-auto absolute hidden lg:block`}>
             <DesktopSidebar fullName={data?.full_name} sidebarCollapsed={data?.is_sidebar_collapsed} />
           </aside>
-          <main className="flex-1 lg:bg-white lg:rounded-3xl lg:shadow-md lg:block lg:mr-8 p-2 lg:p-8 content-container">
+          <main className="flex-1 lg:bg-white lg:rounded-3xl lg:shadow-md lg:block lg:mr-8 p-2 lg:p-8 content-container min-h-full">
             {children}
           </main>
         </div>

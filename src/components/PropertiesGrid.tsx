@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import { toast } from 'sonner'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { Button } from '@/components/catalyst/button';
+import { Button } from '@/components/ui/button';
 import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '../../dropdown';
 import { 
   ChevronDownIcon, 
@@ -92,7 +92,7 @@ export function PropertiesGrid() {
     const clickY = e.pageY - window.scrollY;
   
     makeBurst({ x: clickX, y: clickY });
-    setTimeout(() => router.push('/dashboard/add-property'), 150);
+    setTimeout(() => router.push('/dashboard/add-property'), 0);
   };
 
   return (
@@ -149,7 +149,7 @@ export function PropertiesGrid() {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <Button color={addPropertyClicked ? 'lightblue' : 'blue'} 
+          <Button disabled={addPropertyClicked}
             className="w-40 h-10 cursor-default" onClick={handleClick}
           >
             <div className="">

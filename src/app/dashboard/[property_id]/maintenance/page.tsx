@@ -24,7 +24,7 @@ export default function Maintenance({ params, searchParams } : IndexPageProps ) 
           triggerClassName="ml-auto w-56 sm:w-60"
           align="end"
         />
-        <React.Suspense
+        {/* <React.Suspense
           fallback={
             <DataTableSkeleton
               columnCount={5}
@@ -34,9 +34,9 @@ export default function Maintenance({ params, searchParams } : IndexPageProps ) 
               shrinkZero
             />
           }
-        >
+        > */}
           <TasksTable tasksPromise={tasksPromise} />
-        </React.Suspense>
+        {/* </React.Suspense> */}
       </div>
     </>
   )
