@@ -12,11 +12,11 @@ importers:
         specifier: ^0.26.16
         version: 0.26.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@headlessui/react':
-        specifier: 2.0.0-alpha.4
-        version: 2.0.0-alpha.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: ^2.1.1
+        version: 2.1.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@headlessui/tailwindcss':
         specifier: ^0.2.1
-        version: 0.2.1(tailwindcss@3.4.3)
+        version: 0.2.1(tailwindcss@3.4.4)
       '@heroicons/react':
         specifier: ^2.1.3
         version: 2.1.3(react@18.2.0)
@@ -100,7 +100,7 @@ importers:
         version: 3.5.0(react@18.2.0)
       '@tailwindcss/forms':
         specifier: ^0.5.7
-        version: 0.5.7(tailwindcss@3.4.3)
+        version: 0.5.7(tailwindcss@3.4.4)
       '@tanstack/react-table':
         specifier: ^8.17.3
         version: 8.17.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -138,8 +138,8 @@ importers:
         specifier: ^2.5.1
         version: 2.5.1
       clsx:
-        specifier: ^1.2.1
-        version: 1.2.1
+        specifier: ^2.1.1
+        version: 2.1.1
       cmdk:
         specifier: ^1.0.0
         version: 1.0.0(@types/react-dom@18.2.7)(@types/react@18.2.18)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -236,9 +236,6 @@ importers:
       tailwind-merge:
         specifier: ^2.3.0
         version: 2.3.0
-      tailwindcss:
-        specifier: ^3.4.3
-        version: 3.4.3
       typescript:
         specifier: 5.1.6
         version: 5.1.6
@@ -282,9 +279,12 @@ importers:
       supabase:
         specifier: ^1.172.2
         version: 1.172.2
+      tailwindcss:
+        specifier: ^3.4.4
+        version: 3.4.4
       tailwindcss-animate:
         specifier: ^1.0.7
-        version: 1.0.7(tailwindcss@3.4.3)
+        version: 1.0.7(tailwindcss@3.4.4)
 
 packages:
 
@@ -347,12 +347,12 @@ packages:
   '@floating-ui/utils@0.2.2':
     resolution: {integrity: sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==}
 
-  '@headlessui/react@2.0.0-alpha.4':
-    resolution: {integrity: sha512-spykSTXskDUYjSFhdId97Bqclo1F9Ky2pgLmyNKdV4f7aRDncdc/mjMPx67eEWRN2xQobksaUCcnn5K/AcRXsg==}
+  '@headlessui/react@2.1.1':
+    resolution: {integrity: sha512-808gVNUbRDbDR3GMNPHy+ON0uvR8b9H7IA+Q2UbhOsNCIjgwuwb2Iuv8VPT/1AW0UzLX8g10tN6LhF15GaUJCQ==}
     engines: {node: '>=10'}
     peerDependencies:
-      react: ^16 || ^17 || ^18
-      react-dom: ^16 || ^17 || ^18
+      react: ^18
+      react-dom: ^18
 
   '@headlessui/tailwindcss@0.2.1':
     resolution: {integrity: sha512-2+5+NZ+RzMyrVeCZOxdbvkUSssSxGvcUxphkIfSVLpRiKsj+/63T2TOL9dBYMXVfj/CGr6hMxSRInzXv6YY7sA==}
@@ -961,30 +961,14 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
 
-  '@react-aria/interactions@3.0.0-nightly.2584':
-    resolution: {integrity: sha512-6DqYQx8XnbCfIen33uLz4kdgevrXLW6aoxsBOTY/Mzq9n0LHzbG/5H87obrOxRNVYh62RcQolo/qfqEpXZ7bVA==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-
   '@react-aria/interactions@3.21.3':
     resolution: {integrity: sha512-BWIuf4qCs5FreDJ9AguawLVS0lV9UU+sK4CCnbCNNmYqOWY+1+gRXCsnOM32K+oMESBxilAjdHW5n1hsMqYMpA==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-
-  '@react-aria/ssr@3.9.1-nightly.4295':
-    resolution: {integrity: sha512-cv0+RaS3LJeZiSJ4pVGqSAyiyL+rieLiR3ctyoU7EwkArY1W7fI3NSkMEbNhHe4YoqqjPy1ZzAcpSA11EceiBg==}
-    engines: {node: '>= 12'}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
 
   '@react-aria/ssr@3.9.4':
     resolution: {integrity: sha512-4jmAigVq409qcJvQyuorsmBR4+9r3+JEC60wC+Y0MZV0HCtTmm8D9guYXlJMdx0SSkgj0hHAyFm/HvPNFofCoQ==}
     engines: {node: '>= 12'}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-
-  '@react-aria/utils@3.0.0-nightly.2584':
-    resolution: {integrity: sha512-A6NP3Yc9MMA+PiRBMTpMlx5plaiK7ejl3cppdkKiNPHtFmZrzxn6o9WHth4NToqIUkJRWHIrpTK8a/gBgVFPOg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
 
@@ -1115,18 +1099,8 @@ packages:
     peerDependencies:
       react: 18.2.0
 
-  '@react-stately/utils@3.0.0-nightly.2584':
-    resolution: {integrity: sha512-UOW2P+H3O7goB1mNEIwUdxr28CVHrKKvi+N1CQ0TGDwr+Bp6oIZK2aXE6aQluzgwZ36aRvLPW5dAoovpzTTcQQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-
   '@react-stately/utils@3.10.1':
     resolution: {integrity: sha512-VS/EHRyicef25zDZcM/ClpzYMC5i2YGN6uegOeQawmgfGjb02yaCX0F0zR69Pod9m2Hr3wunTbtpgVXvYbZItg==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-
-  '@react-types/shared@3.0.0-nightly.2584':
-    resolution: {integrity: sha512-SVqvg7B3rtzN1ypQni5g6sfpUNf4wODRDtiOalBFSJ02YuaUIr7gXVjafPYIXOC1BkJbZtPun/Pv4mCwNHFNbA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
 
@@ -1244,17 +1218,18 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
-  '@tanstack/react-virtual@3.0.0-beta.60':
-    resolution: {integrity: sha512-F0wL9+byp7lf/tH6U5LW0ZjBqs+hrMXJrj5xcIGcklI0pggvjzMNW9DdIBcyltPNr6hmHQ0wt8FDGe1n1ZAThA==}
+  '@tanstack/react-virtual@3.5.0':
+    resolution: {integrity: sha512-rtvo7KwuIvqK9zb0VZ5IL7fiJAEnG+0EiFZz8FUOs+2mhGqdGmjKIaT1XU7Zq0eFqL0jonLlhbayJI/J2SA/Bw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
 
   '@tanstack/table-core@8.17.3':
     resolution: {integrity: sha512-mPBodDGVL+fl6d90wUREepHa/7lhsghg2A3vFpakEhrhtbIlgNAZiMr7ccTgak5qbHqF14Fwy+W1yFWQt+WmYQ==}
     engines: {node: '>=12'}
 
-  '@tanstack/virtual-core@3.0.0-beta.60':
-    resolution: {integrity: sha512-QlCdhsV1+JIf0c0U6ge6SQmpwsyAT0oQaOSZk50AtEeAyQl9tQrd6qCHAslxQpgphrfe945abvKG8uYvw3hIGA==}
+  '@tanstack/virtual-core@3.5.0':
+    resolution: {integrity: sha512-KnPRCkQTyqhanNC0K63GBG3wA8I+D1fQuVnAvcBF8f13akOKeQp1gSbu6f77zCxhEk727iV5oQnbHLYzHrECLg==}
 
   '@types/cacheable-request@6.0.3':
     resolution: {integrity: sha512-IQ3EbTzGxIigb1I3qPZc1rWJnH0BmSKv5QYTalEwweFvyBDLSAe24zP0le/hyi7ecGfZVlIVAg4BZqb8WBwKqw==}
@@ -1694,10 +1669,6 @@ packages:
 
   clone-response@1.0.3:
     resolution: {integrity: sha512-ROoL94jJH2dUVML2Y/5PEDNaSHgeOdSDicUyS7izcF63G6sTc/FTjLub4b8Il9S8S0beOfYt0TaA5qvFK+w0wA==}
-
-  clsx@1.2.1:
-    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
-    engines: {node: '>=6'}
 
   clsx@2.0.0:
     resolution: {integrity: sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==}
@@ -3851,8 +3822,8 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
 
-  tailwindcss@3.4.3:
-    resolution: {integrity: sha512-U7sxQk/n397Bmx4JHbJx/iSOOv5G+II3f1kpLpY2QeUv5DcPdcTsYLlusZfq1NthHS1c1cZoyFmmkex1rzke0A==}
+  tailwindcss@3.4.4:
+    resolution: {integrity: sha512-ZoyXOdJjISB7/BcLTR6SEsLgKtDStYyYZVLsUtWChO4Ps20CBad7lfJKVDiejocV4ME1hLmyY0WJE3hSDcmQ2A==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -4209,18 +4180,18 @@ snapshots:
 
   '@floating-ui/utils@0.2.2': {}
 
-  '@headlessui/react@2.0.0-alpha.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+  '@headlessui/react@2.1.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@floating-ui/react': 0.26.16(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@react-aria/focus': 3.17.1(react@18.2.0)
-      '@react-aria/interactions': 3.0.0-nightly.2584(react@18.2.0)
-      '@tanstack/react-virtual': 3.0.0-beta.60(react@18.2.0)
+      '@react-aria/interactions': 3.21.3(react@18.2.0)
+      '@tanstack/react-virtual': 3.5.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
-  '@headlessui/tailwindcss@0.2.1(tailwindcss@3.4.3)':
+  '@headlessui/tailwindcss@0.2.1(tailwindcss@3.4.4)':
     dependencies:
-      tailwindcss: 3.4.3
+      tailwindcss: 3.4.4
 
   '@heroicons/react@2.1.3(react@18.2.0)':
     dependencies:
@@ -4866,14 +4837,6 @@ snapshots:
       clsx: 2.1.1
       react: 18.2.0
 
-  '@react-aria/interactions@3.0.0-nightly.2584(react@18.2.0)':
-    dependencies:
-      '@react-aria/ssr': 3.9.1-nightly.4295(react@18.2.0)
-      '@react-aria/utils': 3.0.0-nightly.2584(react@18.2.0)
-      '@react-types/shared': 3.0.0-nightly.2584(react@18.2.0)
-      '@swc/helpers': 0.5.11
-      react: 18.2.0
-
   '@react-aria/interactions@3.21.3(react@18.2.0)':
     dependencies:
       '@react-aria/ssr': 3.9.4(react@18.2.0)
@@ -4882,23 +4845,9 @@ snapshots:
       '@swc/helpers': 0.5.11
       react: 18.2.0
 
-  '@react-aria/ssr@3.9.1-nightly.4295(react@18.2.0)':
-    dependencies:
-      '@swc/helpers': 0.5.11
-      react: 18.2.0
-
   '@react-aria/ssr@3.9.4(react@18.2.0)':
     dependencies:
       '@swc/helpers': 0.5.11
-      react: 18.2.0
-
-  '@react-aria/utils@3.0.0-nightly.2584(react@18.2.0)':
-    dependencies:
-      '@react-aria/ssr': 3.9.1-nightly.4295(react@18.2.0)
-      '@react-stately/utils': 3.0.0-nightly.2584(react@18.2.0)
-      '@react-types/shared': 3.0.0-nightly.2584(react@18.2.0)
-      '@swc/helpers': 0.5.11
-      clsx: 1.2.1
       react: 18.2.0
 
   '@react-aria/utils@3.24.1(react@18.2.0)':
@@ -5024,18 +4973,9 @@ snapshots:
     dependencies:
       react: 18.2.0
 
-  '@react-stately/utils@3.0.0-nightly.2584(react@18.2.0)':
-    dependencies:
-      '@swc/helpers': 0.5.11
-      react: 18.2.0
-
   '@react-stately/utils@3.10.1(react@18.2.0)':
     dependencies:
       '@swc/helpers': 0.5.11
-      react: 18.2.0
-
-  '@react-types/shared@3.0.0-nightly.2584(react@18.2.0)':
-    dependencies:
       react: 18.2.0
 
   '@react-types/shared@3.23.1(react@18.2.0)':
@@ -5156,10 +5096,10 @@ snapshots:
 
   '@tabler/icons@3.5.0': {}
 
-  '@tailwindcss/forms@0.5.7(tailwindcss@3.4.3)':
+  '@tailwindcss/forms@0.5.7(tailwindcss@3.4.4)':
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.3
+      tailwindcss: 3.4.4
 
   '@tanstack/react-table@8.17.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
@@ -5167,14 +5107,15 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
-  '@tanstack/react-virtual@3.0.0-beta.60(react@18.2.0)':
+  '@tanstack/react-virtual@3.5.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@tanstack/virtual-core': 3.0.0-beta.60
+      '@tanstack/virtual-core': 3.5.0
       react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   '@tanstack/table-core@8.17.3': {}
 
-  '@tanstack/virtual-core@3.0.0-beta.60': {}
+  '@tanstack/virtual-core@3.5.0': {}
 
   '@types/cacheable-request@6.0.3':
     dependencies:
@@ -5663,8 +5604,6 @@ snapshots:
     dependencies:
       mimic-response: 1.0.1
 
-  clsx@1.2.1: {}
-
   clsx@2.0.0: {}
 
   clsx@2.1.1: {}
@@ -6044,7 +5983,7 @@ snapshots:
       '@typescript-eslint/parser': 6.21.0(eslint@8.45.0)(typescript@5.1.6)
       eslint: 8.45.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.45.0)
+      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.45.0))(eslint@8.45.0)
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-typescript@3.6.1)(eslint@8.45.0)
       eslint-plugin-jsx-a11y: 6.8.0(eslint@8.45.0)
       eslint-plugin-react: 7.34.2(eslint@8.45.0)
@@ -6063,12 +6002,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.45.0):
+  eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.45.0))(eslint@8.45.0):
     dependencies:
       debug: 4.3.5
       enhanced-resolve: 5.16.1
       eslint: 8.45.0
-      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.45.0))(eslint@8.45.0)
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.45.0))(eslint@8.45.0))(eslint@8.45.0)
       eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-typescript@3.6.1)(eslint@8.45.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.5
@@ -6080,14 +6019,14 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.45.0))(eslint@8.45.0):
+  eslint-module-utils@2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.45.0))(eslint@8.45.0))(eslint@8.45.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 6.21.0(eslint@8.45.0)(typescript@5.1.6)
       eslint: 8.45.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.45.0)
+      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.45.0))(eslint@8.45.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -6101,7 +6040,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.45.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.45.0))(eslint@8.45.0)
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.45.0)(typescript@5.1.6))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.45.0))(eslint@8.45.0))(eslint@8.45.0)
       hasown: 2.0.2
       is-core-module: 2.13.1
       is-glob: 4.0.3
@@ -7842,11 +7781,11 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.24.6
 
-  tailwindcss-animate@1.0.7(tailwindcss@3.4.3):
+  tailwindcss-animate@1.0.7(tailwindcss@3.4.4):
     dependencies:
-      tailwindcss: 3.4.3
+      tailwindcss: 3.4.4
 
-  tailwindcss@3.4.3:
+  tailwindcss@3.4.4:
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
