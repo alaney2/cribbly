@@ -1,12 +1,12 @@
 "use client"
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/catalyst/button'
-import { TextField } from '@/components/default/Fields'
 import logo from '@/images/icon.png'
+import { TextField } from '@/components/default/Fields'
 import Image from 'next/image'
 import { GoogleSignIn } from '@/components/auth/GoogleSignIn'
 import { SlimLayout } from '@/components/default/SlimLayout'
-import styles from '@/styles/InputCenter.module.css';
+import styles from '@/styles/InputCenter.module.css'
 import { signInWithOtp } from '@/app/auth/action'
 import { OtpForm } from '@/components/auth/otp/OtpForm'
 import 'animate.css'
