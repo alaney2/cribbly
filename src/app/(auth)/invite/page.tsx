@@ -11,7 +11,7 @@ import styles from '@/components/welcome/Welcome.module.css';
 import { FloatingLabelInput } from '@/components/ui/floating-label-input';
 import { useState, useEffect, Suspense } from 'react'
 import { signInWithOtp } from '@/app/auth/action'
-import { OtpForm } from '@/components/otp/OtpForm'
+import { OtpForm } from '@/components/auth/otp/OtpForm'
 import clsx from 'clsx'
 import { insertNewTenant, deleteInvite } from '@/utils/supabase/tenant/actions'
 import { toast } from 'sonner';

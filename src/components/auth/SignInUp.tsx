@@ -6,12 +6,10 @@ import logo from '@/images/icon.png'
 import Image from 'next/image'
 import { GoogleSignIn } from '@/components/auth/GoogleSignIn'
 import { SlimLayout } from '@/components/default/SlimLayout'
-import styles from '@/components/welcome/Welcome.module.css';
+import styles from '@/components/auth/InputCenter.module.css';
 import { signInWithOtp } from '@/app/auth/action'
-import { OtpForm } from '@/components/otp/OtpForm'
+import { OtpForm } from '@/components/auth/otp/OtpForm'
 import 'animate.css'
-// @ts-expect-error
-import { useFormState } from 'react-dom'
 import clsx from 'clsx'
 import Link from 'next/link'
 
