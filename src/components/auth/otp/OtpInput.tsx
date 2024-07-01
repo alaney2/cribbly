@@ -4,8 +4,6 @@ import { Button } from '@/components/default/Button'
 import { Spinner } from '@/components/Spinners/Spinner'
 import { verifyOtp } from '@/app/auth/otp/action'
 import { Input } from '@/components/ui/input'
-// @ts-expect-error
-import { useFormState } from 'react-dom'
 import { useSearchParams, usePathname } from 'next/navigation'
 import { insertNewTenant, deleteInvite } from '@/utils/supabase/tenant/actions'
 import { toast } from 'sonner'
