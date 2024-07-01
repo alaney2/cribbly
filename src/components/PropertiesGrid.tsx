@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { Button } from '@/components/ui/button';
-import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '../../dropdown';
+import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from '@/components/catalyst/dropdown';
 import { 
   ChevronDownIcon, 
   MagnifyingGlassIcon, 
