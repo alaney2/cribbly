@@ -9,8 +9,7 @@ import { Select } from '@/components/catalyst/select'
 import { useState, useEffect, useRef } from 'react'
 import { addPropertyFromWelcome, addProperty } from '@/utils/supabase/actions'
 import { toast } from 'sonner';
-// @ts-expect-error
-import { useFormState } from 'react-dom'
+// import { useFormState } from 'react-dom'
 import { useRouter } from 'next/navigation';
 
 interface AddressDialogProps {
@@ -25,7 +24,7 @@ interface AddressDialogProps {
 
 export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome=true, nextPage, setPropertyId } : AddressDialogProps ) {
   const router = useRouter()
-  const [state, formAction] = useFormState(addPropertyFromWelcome, { message: '' })
+  // const [state, formAction] = useFormState(addPropertyFromWelcome, { message: '' })
   const address = result.place_name;
   const addressArray = address.split(',');
   for (let i = 0; i < addressArray.length; i++) {
