@@ -7,7 +7,7 @@ import { SlimLayout } from '@/components/default/SlimLayout'
 import logo from '@/images/icon.png'
 import Link from 'next/link'
 import Image from 'next/image'
-import styles from '@/components/welcome/Welcome.module.css';
+import styles from '@/styles/InputCenter.module.css';
 import { FloatingLabelInput } from '@/components/ui/floating-label-input';
 import { useState, useEffect, Suspense } from 'react'
 import { signInWithOtp } from '@/app/auth/action'

@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import 'animate.css';
-import styles from '@/components/welcome/Welcome.module.css';
+import styles from '@/styles/InputCenter.module.css';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Script from 'next/script'

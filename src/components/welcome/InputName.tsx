@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import logo from '@/images/icon.png'
 import Image from 'next/image';
-import styles from './Welcome.module.css';
+import styles from '@/styles/InputCenter.module.css';
 import { Button } from '@/components/catalyst/button'
 import { updateFullName } from '@/utils/supabase/actions';
 

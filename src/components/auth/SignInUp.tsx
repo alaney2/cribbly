@@ -6,7 +6,7 @@ import logo from '@/images/icon.png'
 import Image from 'next/image'
 import { GoogleSignIn } from '@/components/auth/GoogleSignIn'
 import { SlimLayout } from '@/components/default/SlimLayout'
-import styles from '@/components/auth/InputCenter.module.css';
+import styles from '@/styles/InputCenter.module.css';
 import { signInWithOtp } from '@/app/auth/action'
 import { OtpForm } from '@/components/auth/otp/OtpForm'
 import 'animate.css'
