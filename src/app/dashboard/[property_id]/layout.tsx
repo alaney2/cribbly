@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation';
 import type { Metadata, ResolvingMetadata } from 'next'
 import { PropertyBreadcrumbs } from '@/components/Dashboard/PropertyBreadcrumbs'
+import { AppLayout } from '@/components/AppLayout'
 
 type Props = {
   params: { property_id: string }
@@ -47,7 +48,8 @@ export default async function PropertyDashboardLayout({
   return (
     <>
       <div className='h-full flex flex-col'>
-        <MobileSidebar userEmail={data?.email} fullName={data?.full_name} />
+        <AppLayout>{children}</AppLayout>
+        {/* <MobileSidebar userEmail={data?.email} fullName={data?.full_name} />
         <div className="absolute left-64 top-4 overflow-hidden hidden lg:block">
           <PropertyBreadcrumbs />
         </div>
@@ -58,7 +60,7 @@ export default async function PropertyDashboardLayout({
           <main className="flex-1 lg:bg-white lg:rounded-3xl lg:shadow-md lg:block lg:mr-8 p-2 lg:p-8 content-container min-h-full">
             {children}
           </main>
-        </div>
+        </div> */}
       </div>
     </>
   )
