@@ -1,4 +1,4 @@
-"use client"
+// "use client"
 import { Avatar } from '@/components/catalyst/avatar'
 import {
   Dropdown,
@@ -42,19 +42,23 @@ import {
   Square2StackIcon,
   TicketIcon,
 } from '@heroicons/react/20/solid'
-import { usePathname } from 'next/navigation'
+// import { usePathname } from 'next/navigation'
+// import { useGetDashboardURL } from '@/utils/useGetDashboardURL'
+import { AppLayoutLinks } from '@/components/AppLayoutLinks'
 
 export function AppLayout({children}: {children: React.ReactNode}) {
-  const pathname = usePathname()
-  const getDashboardURL = (href: string = '') => {
-    const match = pathname.match(/\/dashboard\/([^/]+)/);
-    const propertyId = match ? match[1] : '';
-    let url = `/dashboard/${propertyId}`
-    if (href !== '') {
-      url += `/${href}`
-    }
-    return url
-  }
+  // const pathname = usePathname()
+  // const getDashboardURL = useGetDashboardURL()
+
+  // const getDashboardURL = (href: string = '') => {
+  //   const match = pathname.match(/\/dashboard\/([^/]+)/);
+  //   const propertyId = match ? match[1] : '';
+  //   let url = `/dashboard/${propertyId}`
+  //   if (href !== '') {
+  //     url += `/${href}`
+  //   }
+  //   return url
+  // }
 
   return (
     <SidebarLayout
@@ -65,12 +69,13 @@ export function AppLayout({children}: {children: React.ReactNode}) {
             {/* <NavbarItem href="/search" aria-label="Search">
               <MagnifyingGlassIcon />
             </NavbarItem> */}
-            <NavbarItem href="/inbox" aria-label="Inbox">
+            {/* <NavbarItem href="/inbox" aria-label="Inbox">
               <InboxIcon />
-            </NavbarItem>
+            </NavbarItem> */}
             <Dropdown>
               <DropdownButton as={NavbarItem}>
-                <Avatar src="/profile-photo.jpg" square />
+                {/* <Avatar src="/profile-photo.jpg" square /> */}
+                <div>photo here</div>
               </DropdownButton>
               <DropdownMenu className="min-w-64" anchor="bottom end">
                 <DropdownItem href="/my-profile">
@@ -105,7 +110,7 @@ export function AppLayout({children}: {children: React.ReactNode}) {
           <SidebarHeader>
             <Dropdown>
               <DropdownButton as={SidebarItem} className="lg:mb-2.5">
-                <Avatar src="/tailwind-logo.svg" />
+                {/* <Avatar src="/tailwind-logo.svg" /> */}
                 <SidebarLabel>Tailwind Labs</SidebarLabel>
                 <ChevronDownIcon />
               </DropdownButton>
@@ -116,17 +121,17 @@ export function AppLayout({children}: {children: React.ReactNode}) {
                 </DropdownItem>
                 <DropdownDivider />
                 <DropdownItem href="/teams/1">
-                  <Avatar slot="icon" src="/tailwind-logo.svg" />
+                  {/* <Avatar slot="icon" src="/tailwind-logo.svg" /> */}
                   <DropdownLabel>Tailwind Labs</DropdownLabel>
                 </DropdownItem>
                 <DropdownItem href="/teams/2">
-                  <Avatar slot="icon" initials="WC" className="bg-purple-500 text-white" />
+                  {/* <Avatar slot="icon" initials="WC" className="bg-purple-500 text-white" /> */}
                   <DropdownLabel>Workcation</DropdownLabel>
                 </DropdownItem>
                 <DropdownDivider />
-                <DropdownItem href="/teams/create">
+                <DropdownItem href="/dashboard/add-property">
                   <PlusIcon />
-                  <DropdownLabel>New team&hellip;</DropdownLabel>
+                  <DropdownLabel>Add property&hellip;</DropdownLabel>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -142,7 +147,8 @@ export function AppLayout({children}: {children: React.ReactNode}) {
             </SidebarSection>
           </SidebarHeader>
           <SidebarBody>
-            <SidebarSection>
+            <AppLayoutLinks />
+            {/* <SidebarSection>
               <SidebarItem href={getDashboardURL()} current={pathname === getDashboardURL()}>
                 <HomeIcon />
                 <SidebarLabel>Home</SidebarLabel>
@@ -167,7 +173,7 @@ export function AppLayout({children}: {children: React.ReactNode}) {
                 <MegaphoneIcon />
                 <SidebarLabel>Delete property</SidebarLabel>
               </SidebarItem>
-            </SidebarSection>
+            </SidebarSection> */}
             {/* <SidebarSection className="max-lg:hidden">
               <SidebarHeading>Upcoming Events</SidebarHeading>
               <SidebarItem href="/events/1">Bear Hug: Live in Concert</SidebarItem>
@@ -191,7 +197,7 @@ export function AppLayout({children}: {children: React.ReactNode}) {
             <Dropdown>
               <DropdownButton as={SidebarItem}>
                 <span className="flex min-w-0 items-center gap-3">
-                  <Avatar src="/profile-photo.jpg" className="size-10" square alt="" />
+                  {/* <Avatar src="/profile-photo.jpg" className="size-10" square alt="" /> */}
                   <span className="min-w-0">
                     <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">Erica</span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
