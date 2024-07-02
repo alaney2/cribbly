@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 import { Avatar } from '@/components/catalyst/avatar'
 import {
   Dropdown,
