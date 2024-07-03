@@ -186,7 +186,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
 
   return (
     <>
-    <Card className={`w-[350px] sm:w-[400px] animate__animated animate__faster ${animationClass}`}>
+    <Card className={`w-full animate__animated animate__faster ${animationClass}`}>
       <form
         action={async (formData) => {
           toast.promise(new Promise(async (resolve, reject) => {
@@ -221,13 +221,13 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
         {/* <p className="text-gray-500 text-sm mb-4">
           Set the rent and fees to charge for this property per month. Rent is billed on the start date, and then the first of each month.
         </p> */}
-        <div className="flex items-center gap-x-2 mb-3 justify-between">
+        <div className="flex gap-x-2 mb-5 items-center">
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-1/2 justify-start text-left font-normal",
+                  "grow min-w-48 max-w-84 justify-center text-center font-normal",
                   !startDate && "text-muted-foreground"
                 )}
               >
@@ -254,7 +254,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-1/2 justify-start text-left font-normal",
+                  "grow min-w-48 max-w-84 justify-center font-normal",
                   !endDate && "text-muted-foreground"
                 )}
               >
@@ -308,25 +308,27 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
           </>
         </div>
 
-        <div className="flex items-center space-x-2 justify-between mt-4">
-          <Label htmlFor="securityDeposit">Security deposit</Label>
-          <Switch id="securityDeposit" name="securityDepositSwitch" color="blue" checked={securityDeposit}
-            onChange={() => { 
-              setSecurityDeposit(!securityDeposit)
-            }}
-          />
-        </div>
-        <div className={`mt-1 overflow-hidden transition-all duration-200 ${securityDeposit ? 'max-h-40' : 'max-h-0'}`}>
-          <div className="relative">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        <div className="relative mt-4">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="securityDeposit">Security deposit</Label>
+            <Switch id="securityDeposit" name="securityDepositSwitch" color="blue" checked={securityDeposit}
+              onChange={() => { 
+                setSecurityDeposit(!securityDeposit)
+              }}
+            />
+          </div>
+          <>
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 mt-6">
               <span className="text-gray-500 font-semibold text-md">$</span>
             </div>
-            <input
+            <Input
               type="number"
               id="depositAmount"
               name="depositAmount"
               placeholder="0"
-              className="py-1.5 px-7 resize-none font-semibold text-md h-10 w-full rounded-md bg-background text-base sm:text-sm transition-all ease-in-out duration-150 border focus:ring-0 focus:outline-0 "
+              disabled={!securityDeposit}
+              className="py-1.5 px-7 resize-none font-semibold text-md mt-1"
+              // className="py-1.5 px-7 resize-none font-semibold text-md h-10 w-full rounded-md bg-background text-base sm:text-sm transition-all ease-in-out duration-150 border focus:ring-0 focus:outline-0 "
               autoComplete="off"
               value={securityDepositFee}
               required={securityDeposit}
@@ -341,8 +343,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
               min="0"
               pattern="^\d+(?:\.\d{1,2})?$"
             />
-
-          </div>
+          </>
         </div>
         {fees.length > 0 && (
           <div className="mt-3">

@@ -14,19 +14,11 @@ export default async function CurrentPropertySettings() {
 
   return (
     <>
-      <div className="justify-around flex" >
-        <main className="flex-auto lg:px-4 lg:py-4 w-full space-y-4 sm:space-y-8 flex justify-center">
-          <div className="grid xl:grid-cols-2 gap-8">
-            <div className="">
-              <RentCard propertyId={currentPropertyId} />
-            </div>
-            <div className="space-y-4">
-              <InviteCard propertyId={currentPropertyId} />
-              <DeleteCard propertyId={currentPropertyId} />
-            </div>
-          </div>
-        </main>
-      </div>
+      <main className="flex flex-col w-full space-y-4 sm:space-y-8 justify-center">
+        <RentCard propertyId={currentPropertyId} />
+        <InviteCard propertyId={currentPropertyId} />
+        <DeleteCard propertyId={currentPropertyId} />
+      </main>
     </>
   )
 }

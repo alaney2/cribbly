@@ -71,7 +71,7 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
 
   return (
     <>
-    <Card className={`w-[350px] sm:w-[400px] animate__animated animate__faster} ${animationClass}`}>
+    <Card className={`w-full animate__animated animate__faster} ${animationClass}`}>
       <CardHeader>
         <CardTitle>Invite tenants</CardTitle>
         <CardDescription className="text-gray-500 text-sm mb-4">

@@ -57,7 +57,7 @@ export function DeleteCard({ propertyId }: { propertyId: string }) {
   }
   return (
     <>
-    <Card className="w-[350px] sm:w-[400px] ring-1 ring-red-500/25">
+    <Card className="w-full ring-1 ring-red-500/25">
       <CardHeader>
         <CardTitle>Delete property</CardTitle>
       </CardHeader>
