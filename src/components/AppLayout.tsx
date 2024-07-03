@@ -1,4 +1,3 @@
-"use client"
 import { Avatar } from '@/components/catalyst/avatar'
 import {
   Dropdown,
@@ -36,29 +35,65 @@ import {
   HomeIcon,
   InboxIcon,
   MagnifyingGlassIcon,
-  MegaphoneIcon,
   QuestionMarkCircleIcon,
   SparklesIcon,
-  Square2StackIcon,
-  TicketIcon,
 } from '@heroicons/react/20/solid'
-// import { usePathname } from 'next/navigation'
-// import { useGetDashboardURL } from '@/utils/useGetDashboardURL'
 import { AppLayoutLinks } from '@/components/AppLayoutLinks'
+import { PropertiesDropdown } from '@/components/PropertiesDropdown'
+// import PropertiesDropdown from '@/components/PropertiesDropdown'
 
-export function AppLayout({children}: {children: React.ReactNode}) {
-  // const pathname = usePathname()
-  // const getDashboardURL = useGetDashboardURL()
+import { getInitials } from '@/utils/helpers';
+import { createClient } from '@/utils/supabase/server'
 
-  // const getDashboardURL = (href: string = '') => {
-  //   const match = pathname.match(/\/dashboard\/([^/]+)/);
-  //   const propertyId = match ? match[1] : '';
-  //   let url = `/dashboard/${propertyId}`
-  //   if (href !== '') {
-  //     url += `/${href}`
-  //   }
-  //   return url
-  // }
+// export async function updateCurrentProperty(formData: FormData) {
+//   const supabase = createClient()
+
+// }
+
+export async function AppLayout({
+  children,
+  userEmail,
+  fullName,
+  userId,
+}: {
+  children: React.ReactNode;
+  userEmail?: string;
+  fullName?: string;
+  userId?: string;
+}) {
+  
+  const supabase = createClient()
+
+  const { data: properties, error: propertiesError } = await supabase
+    .from('properties')
+    .select(`*, tenants(*)`)
+    .eq('user_id', userId!);
+  
+  // Get current property ID from authenticated user data
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  let currentPropertyId = user?.user_metadata?.currentPropertyId
+
+  if (userError) {
+    console.error('Error fetching user:', userError)
+    // Handle the error appropriately
+  }
+
+  // If no current property is set, set it to the first property (if available)
+  if (!currentPropertyId && properties && properties.length > 0) {
+    currentPropertyId = properties[0].id
+    const { error: updateError } = await supabase.auth.updateUser({
+      data: { currentPropertyId: currentPropertyId }
+    })
+    if (updateError) {
+      console.error('Error updating user metadata:', updateError)
+      // Handle the error appropriately
+    }
+  }
+
+  if (propertiesError) {
+    console.error('Error fetching properties:', propertiesError)
+    // Handle the error appropriately
+  }
 
   return (
     <SidebarLayout
@@ -74,20 +109,15 @@ export function AppLayout({children}: {children: React.ReactNode}) {
             </NavbarItem> */}
             <Dropdown>
               <DropdownButton as={NavbarItem}>
-                {/* <Avatar src="/profile-photo.jpg" square /> */}
-                <div>photo here</div>
+                <Avatar initials={getInitials(fullName!)} className="bg-blue-500 text-white" square />
               </DropdownButton>
               <DropdownMenu className="min-w-64" anchor="bottom end">
-                <DropdownItem href="/my-profile">
+                <DropdownItem href="/dashboard/account">
                   <UserIcon />
-                  <DropdownLabel>My profile</DropdownLabel>
-                </DropdownItem>
-                <DropdownItem href="/settings">
-                  <Cog8ToothIcon />
-                  <DropdownLabel>Settings</DropdownLabel>
+                  <DropdownLabel>Account Settings</DropdownLabel>
                 </DropdownItem>
                 <DropdownDivider />
-                <DropdownItem href="/privacy-policy">
+                <DropdownItem href="/privacy">
                   <ShieldCheckIcon />
                   <DropdownLabel>Privacy policy</DropdownLabel>
                 </DropdownItem>
@@ -108,38 +138,8 @@ export function AppLayout({children}: {children: React.ReactNode}) {
       sidebar={
         <Sidebar>
           <SidebarHeader>
-            <Dropdown>
-              <DropdownButton as={SidebarItem} className="lg:mb-2.5">
-                {/* <Avatar src="/tailwind-logo.svg" /> */}
-                <SidebarLabel>Tailwind Labs</SidebarLabel>
-                <ChevronDownIcon />
-              </DropdownButton>
-              <DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
-                <DropdownItem href="/teams/1/settings">
-                  <Cog8ToothIcon />
-                  <DropdownLabel>Settings</DropdownLabel>
-                </DropdownItem>
-                <DropdownDivider />
-                <DropdownItem href="/teams/1">
-                  {/* <Avatar slot="icon" src="/tailwind-logo.svg" /> */}
-                  <DropdownLabel>Tailwind Labs</DropdownLabel>
-                </DropdownItem>
-                <DropdownItem href="/teams/2">
-                  {/* <Avatar slot="icon" initials="WC" className="bg-purple-500 text-white" /> */}
-                  <DropdownLabel>Workcation</DropdownLabel>
-                </DropdownItem>
-                <DropdownDivider />
-                <DropdownItem href="/dashboard/add-property">
-                  <PlusIcon />
-                  <DropdownLabel>Add property&hellip;</DropdownLabel>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <PropertiesDropdown currentPropertyId={currentPropertyId} properties={properties} />
             <SidebarSection className="max-lg:hidden">
-              {/* <SidebarItem href="/search">
-                <MagnifyingGlassIcon />
-                <SidebarLabel>Search</SidebarLabel>
-              </SidebarItem> */}
               <SidebarItem href="/inbox">
                 <InboxIcon />
                 <SidebarLabel>Inbox</SidebarLabel>
@@ -148,39 +148,6 @@ export function AppLayout({children}: {children: React.ReactNode}) {
           </SidebarHeader>
           <SidebarBody>
             <AppLayoutLinks />
-            {/* <SidebarSection>
-              <SidebarItem href={getDashboardURL()} current={pathname === getDashboardURL()}>
-                <HomeIcon />
-                <SidebarLabel>Home</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href={getDashboardURL('tenants')} current={pathname === getDashboardURL('tenants')}>
-                <Square2StackIcon />
-                <SidebarLabel>Tenants</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href={getDashboardURL('maintenance')} current={pathname === getDashboardURL('maintenance')}>
-                <TicketIcon />
-                <SidebarLabel>Maintenance</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href={getDashboardURL('documents')} current={pathname === getDashboardURL('documents')}>
-                <Cog6ToothIcon />
-                <SidebarLabel>Documents</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href={getDashboardURL('settings')} current={pathname === getDashboardURL('settings')}>
-                <MegaphoneIcon />
-                <SidebarLabel>Settings</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href={getDashboardURL('delete-property')} current={pathname === getDashboardURL('delete-property')}>
-                <MegaphoneIcon />
-                <SidebarLabel>Delete property</SidebarLabel>
-              </SidebarItem>
-            </SidebarSection> */}
-            {/* <SidebarSection className="max-lg:hidden">
-              <SidebarHeading>Upcoming Events</SidebarHeading>
-              <SidebarItem href="/events/1">Bear Hug: Live in Concert</SidebarItem>
-              <SidebarItem href="/events/2">Viking People</SidebarItem>
-              <SidebarItem href="/events/3">Six Fingers — DJ Set</SidebarItem>
-              <SidebarItem href="/events/4">We All Look The Same</SidebarItem>
-            </SidebarSection> */}
             <SidebarSpacer />
             <SidebarSection>
               <SidebarItem href="/support">
@@ -197,31 +164,28 @@ export function AppLayout({children}: {children: React.ReactNode}) {
             <Dropdown>
               <DropdownButton as={SidebarItem}>
                 <span className="flex min-w-0 items-center gap-3">
-                  {/* <Avatar src="/profile-photo.jpg" className="size-10" square alt="" /> */}
+                  {/* <Avatar initials={getUserInitials(fullName)} className="size-10" square alt="" /> */}
                   <span className="min-w-0">
-                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">Erica</span>
+                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">{fullName}</span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                      erica@example.com
+                      {userEmail}
                     </span>
                   </span>
                 </span>
                 <ChevronUpIcon />
               </DropdownButton>
               <DropdownMenu className="min-w-64" anchor="top start">
-                <DropdownItem href="/my-profile">
+                <DropdownItem href="/dashboard/account">
                   <UserIcon />
-                  <DropdownLabel>My profile</DropdownLabel>
-                </DropdownItem>
-                <DropdownItem href="/settings">
-                  <Cog8ToothIcon />
-                  <DropdownLabel>Settings</DropdownLabel>
+                  <DropdownLabel>Account Settings</DropdownLabel>
                 </DropdownItem>
                 <DropdownDivider />
-                <DropdownItem href="/privacy-policy">
+                <DropdownItem href="/privacy">
                   <ShieldCheckIcon />
                   <DropdownLabel>Privacy policy</DropdownLabel>
                 </DropdownItem>
-                <DropdownItem href="/share-feedback">
+                {/* <DropdownItem href="/share-feedback"> */}
+                <DropdownItem>
                   <LightBulbIcon />
                   <DropdownLabel>Share feedback</DropdownLabel>
                 </DropdownItem>

@@ -330,3 +330,23 @@ export async function removeTenant(tenantId: { tenantId: string }) {
   const supabase = createClient();
 
 }
+
+// Function to update current property
+export async function updateCurrentProperty(propertyId: string) {
+  const supabase = createClient();
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  if (!user || userError) {
+    console.error('Error fetching user:', userError)
+    // Handle the error appropriately
+  }
+  const { error: updateError } = await supabase.auth.updateUser({
+    data: { currentPropertyId: propertyId }
+  })
+  if (updateError) {
+    console.error('Error updating current property:', updateError)
+    // Handle the error appropriately
+  } else {
+    // You might want to add a redirect here to the selected property page
+    // or handle the UI update in your client-side code
+  }
+}
