@@ -43,10 +43,10 @@ export function AppLayoutLinks() {
         <Cog6ToothIcon />
         <SidebarLabel>Property Settings</SidebarLabel>
       </SidebarItem>
-      <SidebarItem href={'/dashboard/delete-property'} current={pathname === '/dashboard/delete-property'}>
+      {/* <SidebarItem href={'/dashboard/delete-property'} current={pathname === '/dashboard/delete-property'}>
         <MegaphoneIcon />
         <SidebarLabel>Delete property</SidebarLabel>
-      </SidebarItem>
+      </SidebarItem> */}
     </SidebarSection>
   )
 }

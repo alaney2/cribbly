@@ -31,25 +31,22 @@ import {
 import { updateCurrentProperty } from '@/utils/supabase/actions'
 import { mutate } from 'swr'
 
-export function PropertiesDropdown({properties, currentPropertyId}) {
+export function PropertiesDropdown({properties, currentPropertyId, streetAddress}) {
   return (
-    <>
     <Dropdown>
       <DropdownButton as={SidebarItem} className="lg:mb-2.5">
         {/* <Avatar src="/tailwind-logo.svg" /> */}
-        <SidebarLabel>Properties</SidebarLabel>
+        <SidebarLabel>{streetAddress}</SidebarLabel>
         <ChevronDownIcon />
       </DropdownButton>
       
       <DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
-
         {properties && properties.map((property, index) => (
-          <DropdownItem 
+          <DropdownItem
             key={property.id}
             // href={`/dashboard`}
             onClick={async () => {
               await updateCurrentProperty(property.id)
-
               mutate(['propertyRent', property.id])
               mutate(['tenants', property.id])
             }}
@@ -68,7 +65,5 @@ export function PropertiesDropdown({properties, currentPropertyId}) {
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
-    </>
-
   )
 }

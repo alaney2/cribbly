@@ -40,15 +40,11 @@ import {
 } from '@heroicons/react/20/solid'
 import { AppLayoutLinks } from '@/components/AppLayoutLinks'
 import { PropertiesDropdown } from '@/components/PropertiesDropdown'
-// import PropertiesDropdown from '@/components/PropertiesDropdown'
 
 import { getInitials } from '@/utils/helpers';
 import { createClient } from '@/utils/supabase/server'
 
-// export async function updateCurrentProperty(formData: FormData) {
-//   const supabase = createClient()
 
-// }
 
 export async function AppLayout({
   children,
@@ -95,6 +91,12 @@ export async function AppLayout({
     // Handle the error appropriately
   }
 
+  const { data, error: propertyError } = await supabase
+    .from('properties')
+    .select('*')
+    .eq('id', currentPropertyId)
+    .single()
+
   return (
     <SidebarLayout
       navbar={
@@ -138,7 +140,7 @@ export async function AppLayout({
       sidebar={
         <Sidebar>
           <SidebarHeader>
-            <PropertiesDropdown currentPropertyId={currentPropertyId} properties={properties} />
+            <PropertiesDropdown currentPropertyId={currentPropertyId} properties={properties} streetAddress={data?.street_address ?? 'Properties'} />
             <SidebarSection className="max-lg:hidden">
               <SidebarItem href="/inbox">
                 <InboxIcon />
