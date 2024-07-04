@@ -471,8 +471,8 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
       <form action={handleAddFee}>
       <DialogBody>
         <div className="items-center">
-          <HeadlessFieldset >
-            <HeadlessLegend className="text-base/6 font-medium sm:text-sm/6">
+          <HeadlessFieldset>
+            <HeadlessLegend className="text-base/6 font-medium sm:text-sm/6 mb-3">
               Fee type
             </HeadlessLegend>
             <HeadlessRadioGroup name="feeType" defaultValue="one-time" className="flex gap-x-3 items-center mt-1"
@@ -493,38 +493,42 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
             </HeadlessRadioGroup>
           </HeadlessFieldset>
         </div>
-        <div className="mt-2">
-          <Label htmlFor="feeName">Fee name</Label>
-          <Input
-            id="feeName"
-            value={dialogFee.fee_name}
-            onChange={(e) => setDialogFee({ ...dialogFee, fee_name: e.target.value })}
-            // placeholder="Enter fee name"
-            autoComplete="off"
-            required
-          />
+        <div className="mt-6">
+          <Field>
+            <Label htmlFor="feeName">Fee name</Label>
+            <Input
+              id="feeName"
+              value={dialogFee.fee_name}
+              onChange={(e) => setDialogFee({ ...dialogFee, fee_name: e.target.value })}
+              // placeholder="Enter fee name"
+              autoComplete="off"
+              required
+            />
+          </Field>
         </div>
-        <div className="mt-2">
-          <Label htmlFor="feeAmount ">Fee amount</Label>
-          <Input
-            id="feeAmount"
-            type="number"
-            value={dialogFee.fee_cost || ''}
-            onChange={(e) => setDialogFee({ ...dialogFee, fee_cost: Number(e.target.value) })}
-            placeholder="0"
-            autoComplete="off"
-            required
-            // min="0"
-            pattern="^\d+(?:\.\d{1,2})?$"
-            step=".01"
-          />
+        <div className="mt-6">
+          <Field>
+            <Label htmlFor="feeAmount ">Fee amount</Label>
+            <Input
+              id="feeAmount"
+              type="number"
+              value={dialogFee.fee_cost || ''}
+              onChange={(e) => setDialogFee({ ...dialogFee, fee_cost: Number(e.target.value) })}
+              placeholder="0"
+              autoComplete="off"
+              required
+              // min="0"
+              pattern="^\d+(?:\.\d{1,2})?$"
+              step=".01"
+            />
+          </Field>
         </div>
       </DialogBody>
-      <DialogActions >
-        <Button type="button" variant="ghost" size="sm" onClick={() => setIsDialogOpen(false)}>
+      <DialogActions>
+        <Button type="button" outline={true} onClick={() => setIsDialogOpen(false)}>
           Cancel
         </Button>
-        <Button type="submit" variant="outline" size="sm" className="px-4">
+        <Button type="submit" color="blue" className="">
           Add
         </Button>
       </DialogActions>

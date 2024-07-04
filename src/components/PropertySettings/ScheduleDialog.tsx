@@ -1,8 +1,6 @@
 "use client"
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/catalyst/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'
 import { useState } from 'react'
 import { calculateRentDates } from '@/utils/helpers'
@@ -51,17 +49,11 @@ export function ScheduleDialog({ isOpen, setIsOpen, startDate, endDate, netIncom
             </TableBody>
           </Table>
         </DialogBody>
-        {/* <DialogActions className="flex justify-between items-center w-full">
-          <Button variant="destructive" size="sm" 
-            
-          >
-            Delete
+        <DialogActions className="flex justify-between items-center w-full">
+          <Button type="button" outline onClick={() => setIsOpen(false)}>
+            Close
           </Button>
-          <Button type="submit" size="sm" 
-          >
-            Save
-          </Button>
-        </DialogActions> */}
+        </DialogActions>
         </form>
       </Dialog>
     </>
