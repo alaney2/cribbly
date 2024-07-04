@@ -1,12 +1,13 @@
 "use client"
 import * as React from "react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/catalyst/button"
 import {
   Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Input, InputGroup } from "@/components/catalyst/input"
+import { Field, Label } from '@/components/catalyst/fieldset'
+import * as Headless from '@headlessui/react'
 import {
   Field as HeadlessField,
   Fieldset as HeadlessFieldset,
@@ -32,6 +33,8 @@ import { ScheduleDialog } from '@/components/PropertySettings/ScheduleDialog'
 import { toast } from 'sonner';
 import useSWR from 'swr';
 import { createClient } from '@/utils/supabase/client';
+import { IconCurrencyDollar } from '@tabler/icons-react';
+import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 
 const fetcher = async (propertyId: string) => {
   const supabase = createClient();
@@ -218,132 +221,137 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {/* <p className="text-gray-500 text-sm mb-4">
-          Set the rent and fees to charge for this property per month. Rent is billed on the start date, and then the first of each month.
-        </p> */}
-        <div className="flex gap-x-2 mb-5 items-center">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "grow min-w-48 max-w-84 justify-center text-center font-normal",
-                  !startDate && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {startDate ? format(startDate, "MM/dd/yyyy") : <span>Start date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={startDate}
-                onSelect={setStartDate}
-                initialFocus
-                defaultMonth={startDate}
-                disabled={(date) =>
-                  date < new Date()
-                }
-              />
-            </PopoverContent>
-          </Popover>
-          <span>-</span>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "grow min-w-48 max-w-84 justify-center font-normal",
-                  !endDate && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {endDate ? format(endDate, "MM/dd/yyyy") : <span>End date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={endDate}
-                onSelect={setEndDate}
-                initialFocus
-                defaultMonth={endDate}
-                disabled={(date) =>
-                  (startDate !== undefined) ? date < startDate : date < new Date()
-                }
-              />
-            </PopoverContent>
-          </Popover>
-          <input name="rent_id" required value={property_rent?.[0]?.id ?? ''} readOnly type="hidden"></input>
-          <input name="startDate" required value={startDate ? format(startDate, "MM/dd/yyyy") : ""} readOnly type="hidden"></input>
-          <input name="endDate" required value={endDate ? format(endDate, "MM/dd/yyyy") : ""} readOnly type="hidden"></input>
-        </div>
-        <div className="relative">
-          <Label htmlFor="rentAmount">Rent per month</Label>
-          <>
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 mt-7">
-              <span className="text-gray-500 font-semibold text-md ">$</span>
-            </div>
-            <Input
-              type="number"
-              id="rentAmount"
-              name="rentAmount"
-              placeholder="0"
-              className="py-1.5 px-7 resize-none font-semibold text-md mt-1"
-              autoComplete="off"
-              value={rentAmount}
-              onChange={(e) => {
-                setIsLoading(true)
-                setRentAmount(e.target.value)
-                setTimeout(() => {
-                  setIsLoading(false)
-                }, Math.floor(Math.random() * 501) + 200)
-              }}
-              step=".01"
-              required
-              min="0"
-              pattern="^\d+(?:\.\d{1,2})?$"
-            />
-          </>
-        </div>
-
-        <div className="relative mt-4">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="securityDeposit">Security deposit</Label>
-            <Switch id="securityDeposit" name="securityDepositSwitch" color="blue" checked={securityDeposit}
-              onChange={() => { 
-                setSecurityDeposit(!securityDeposit)
-              }}
-            />
+        <div className="flex flex-col md:flex-row md:items-center md:gap-4 mb-5">
+          <div className="sm:text-sm text-zinc-950 md:w-40 mb-2 md:mb-0">
+            Start and end date
           </div>
-          <>
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 mt-6">
-              <span className="text-gray-500 font-semibold text-md">$</span>
+          <div className="flex items-center gap-2 grow">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  outline={true}
+                  className={cn(
+                    "flex-1 justify-center text-center text-sm",
+                    !startDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="sm:mr-2 h-4 w-4" />
+                  {startDate ? format(startDate, "MM/dd/yyyy") : <span>Start date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={startDate}
+                  onSelect={setStartDate}
+                  initialFocus
+                  defaultMonth={startDate}
+                  disabled={(date) => date < new Date()}
+                />
+              </PopoverContent>
+            </Popover>
+            <span className="px-0">-</span>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  outline={true}
+                  className={cn(
+                    "flex-1 justify-center text-center text-sm",
+                    !endDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="sm:mr-2 h-4 w-4" />
+                  {endDate ? format(endDate, "MM/dd/yyyy") : <span>End date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={endDate}
+                  onSelect={setEndDate}
+                  initialFocus
+                  defaultMonth={endDate}
+                  disabled={(date) =>
+                    (startDate !== undefined) ? date < startDate : date < new Date()
+                  }
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+          <input name="rent_id" required value={property_rent?.[0]?.id ?? ''} readOnly type="hidden" />
+          <input name="startDate" required value={startDate ? format(startDate, "MM/dd/yyyy") : ""} readOnly type="hidden" />
+          <input name="endDate" required value={endDate ? format(endDate, "MM/dd/yyyy") : ""} readOnly type="hidden" />
+        </div>
+        <div className="relative space-y-4">
+          <Headless.Field className="relative flex flex-col md:flex-row md:items-center md:gap-4">
+            <Label htmlFor="rentAmount" className="mb-2 md:mb-0 md:w-40 md:flex-shrink-0">Rent per month</Label>
+            <div className="flex-grow">
+              <InputGroup className="w-full">
+                <CurrencyDollarIcon className="h-5 w-5 text-gray-400" />
+                <Input
+                  type="number"
+                  id="rentAmount"
+                  name="rentAmount"
+                  placeholder="0"
+                  className="w-full flex-grow"
+                  autoComplete="off"
+                  value={rentAmount}
+                  onChange={(e) => {
+                    setIsLoading(true)
+                    setRentAmount(e.target.value)
+                    setTimeout(() => {
+                      setIsLoading(false)
+                    }, Math.floor(Math.random() * 501) + 200)
+                  }}
+                  step="1"
+                  required
+                  min="0"
+                  pattern="^\d+(?:\.\d{1,2})?$"
+                />
+              </InputGroup>
             </div>
-            <Input
-              type="number"
-              id="depositAmount"
-              name="depositAmount"
-              placeholder="0"
-              disabled={!securityDeposit}
-              className="py-1.5 px-7 resize-none font-semibold text-md mt-1"
-              // className="py-1.5 px-7 resize-none font-semibold text-md h-10 w-full rounded-md bg-background text-base sm:text-sm transition-all ease-in-out duration-150 border focus:ring-0 focus:outline-0 "
-              autoComplete="off"
-              value={securityDepositFee}
-              required={securityDeposit}
-              onChange={(e) => {
-                setIsLoading(true)
-                setSecurityDepositFee(e.target.value)
-                setTimeout(() => {
-                  setIsLoading(false)
-                }, Math.floor(Math.random() * 501) + 200)
-              }}
-              step=".01"
-              min="0"
-              pattern="^\d+(?:\.\d{1,2})?$"
-            />
-          </>
+          </Headless.Field>
+
+          <Headless.Field className="relative flex flex-col md:flex-row md:items-center md:gap-4">
+            <div className="flex justify-between items-center mb-2 md:mb-0 md:w-40 md:flex-shrink-0">
+              <Label htmlFor="securityDeposit">Security deposit</Label>
+              <Switch
+                id="securityDeposit"
+                name="securityDepositSwitch"
+                color="blue"
+                checked={securityDeposit}
+                onChange={() => {
+                  setSecurityDeposit(!securityDeposit)
+                }}
+              />
+            </div>
+            <div className="flex-grow">
+              <InputGroup className="w-full">
+                <CurrencyDollarIcon className="h-5 w-5 text-gray-400" />
+                <Input
+                  type="number"
+                  id="depositAmount"
+                  name="depositAmount"
+                  placeholder="0"
+                  disabled={!securityDeposit}
+                  className="w-full flex-grow"
+                  autoComplete="off"
+                  value={securityDepositFee}
+                  required={securityDeposit}
+                  onChange={(e) => {
+                    setIsLoading(true)
+                    setSecurityDepositFee(e.target.value)
+                    setTimeout(() => {
+                      setIsLoading(false)
+                    }, Math.floor(Math.random() * 501) + 200)
+                  }}
+                  step=".01"
+                  min="0"
+                  pattern="^\d+(?:\.\d{1,2})?$"
+                />
+              </InputGroup>
+            </div>
+          </Headless.Field>
         </div>
         {fees.length > 0 && (
           <div className="mt-3">
@@ -377,8 +385,8 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
         ))}
         <input name='propertyId' defaultValue={propertyId} readOnly className="hidden" />
         <div className="mt-4 -mb-2 flex justify-between">
-          <Button type="button" variant="outline" size="sm" onClick={() => setIsDialogOpen(true)}>Add Fee</Button>
-          <Button type="button" variant="secondary" size="sm" onClick={() => setIsScheduleOpen(true)}>Billing Schedule</Button>
+          <Button type="button" color="blue" outline={true} onClick={() => setIsDialogOpen(true)}>Add Fee</Button>
+          <Button type="button" outline={true} onClick={() => setIsScheduleOpen(true)}>Billing Schedule</Button>
         </div>
       </CardContent>
       
@@ -399,6 +407,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
             <PopoverTrigger 
               className="ml-3 flex items-center"
               onMouseEnter={() => {setIsPopoverOpen(true)}}
+              onMouseLeave={() => {setIsPopoverOpen(false)}}
               onClick={e => {
                 e.preventDefault();
               }}
@@ -449,7 +458,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
           </Popover>
         </div>
         <div className="flex gap-x-3">
-          <Button type="submit" size="sm">Save</Button>
+          <Button type="submit" color="blue" >Save</Button>
         </div>
       </CardFooter>
       </form>

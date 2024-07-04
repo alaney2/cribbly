@@ -44,8 +44,6 @@ import { PropertiesDropdown } from '@/components/PropertiesDropdown'
 import { getInitials } from '@/utils/helpers';
 import { createClient } from '@/utils/supabase/server'
 
-
-
 export async function AppLayout({
   children,
   userEmail,
