@@ -385,8 +385,8 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
         ))}
         <input name='propertyId' defaultValue={propertyId} readOnly className="hidden" />
         <div className="mt-4 -mb-2 flex justify-between">
-          <Button type="button" color="blue" outline={true} onClick={() => setIsDialogOpen(true)}>Add Fee</Button>
-          <Button type="button" outline={true} onClick={() => setIsScheduleOpen(true)}>Billing Schedule</Button>
+          <Button type="button" color="blue" outline onClick={() => setIsDialogOpen(true)}>Add Fee</Button>
+          <Button type="button" outline onClick={() => setIsScheduleOpen(true)}>Billing Schedule</Button>
         </div>
       </CardContent>
       
