@@ -229,7 +229,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  outline={true}
+                  outline
                   className={cn(
                     "flex-1 justify-center text-center text-sm",
                     !startDate && "text-muted-foreground"
@@ -254,7 +254,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
             <Popover>
               <PopoverTrigger asChild>
                 <Button
-                  outline={true}
+                  outline
                   className={cn(
                     "flex-1 justify-center text-center text-sm",
                     !endDate && "text-muted-foreground"
@@ -385,7 +385,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
         ))}
         <input name='propertyId' defaultValue={propertyId} readOnly className="hidden" />
         <div className="mt-4 -mb-2 flex justify-between">
-          <Button type="button" color="blue" outline onClick={() => setIsDialogOpen(true)}>Add Fee</Button>
+          <Button type="button" color="blue" onClick={() => setIsDialogOpen(true)}>Add Fee</Button>
           <Button type="button" outline onClick={() => setIsScheduleOpen(true)}>Billing Schedule</Button>
         </div>
       </CardContent>
@@ -525,7 +525,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
         </div>
       </DialogBody>
       <DialogActions>
-        <Button type="button" outline={true} onClick={() => setIsDialogOpen(false)}>
+        <Button type="button" outline onClick={() => setIsDialogOpen(false)}>
           Cancel
         </Button>
         <Button type="submit" color="blue" className="">
