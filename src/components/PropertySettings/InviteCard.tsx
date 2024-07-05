@@ -6,8 +6,8 @@ import {
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useState, useEffect } from 'react'
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Input } from "@/components/catalyst/input"
+import { Description, Field, FieldGroup, Fieldset, Label, Legend } from '@/components/catalyst/fieldset'
 import { toast } from 'sonner';
 import { sendInviteEmail } from '@/utils/resend/actions';
 import { setWelcomeScreen, deleteInvite } from '@/utils/supabase/actions'
@@ -44,8 +44,6 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
       setPropertyId(localStorage.getItem('propertyId') || '')
     }
   }, [propertyId, setPropertyId])
-
-  
 
   const { data: invites, error, isLoading, mutate } = useSWR(propertyId ? ['invitesSent', propertyId] : null, ([_, propertyId]) => fetcher(propertyId));
 
@@ -106,18 +104,25 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
       <CardContent>
         <div className="grid w-full items-center gap-4">
           <div className="flex flex-col space-y-1.5">
-            <Label htmlFor="fullName">Name (optional)</Label>
-            <Input
-              id="fullName"
-              type="text"
-              placeholder="John Doe"
-              name="fullName"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              autoComplete="off"
-            />
+            <Fieldset>
+              <FieldGroup>
+              <Field>
+              <Label htmlFor="fullName">Name (optional)</Label>
+              <Input
+                id="fullName"
+                type="text"
+                placeholder="John Doe"
+                name="fullName"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                autoComplete="off"
+              />
+              </Field>
+              </FieldGroup>
+            </Fieldset>
           </div>
           <div className="flex flex-col space-y-1.5">
+            <Field>
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
@@ -129,6 +134,7 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
               required
               autoComplete="off"
             />
+            </Field>
           </div>
         </div>
         <input name='propertyId' defaultValue={propertyId} readOnly className="hidden" />
