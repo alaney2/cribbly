@@ -245,8 +245,9 @@ export function Account() {
 
           <div>
             <h2 className="text-base font-semibold leading-7 text-gray-900">Bank accounts</h2>
-            <p className="mt-1 text-sm leading-6 text-gray-500">Connect bank accounts to your account.</p>
-
+            <p className="mt-1 text-sm leading-6 text-gray-500">
+              Connect bank accounts to your account.
+            </p>
             <ul role="list" className="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
               {bankIsLoading ? (
                 <li className="gap-y-12 py-7">
@@ -275,7 +276,7 @@ export function Account() {
               <Button type="button" plain className="text-blue-600 hover:text-blue-500"
                 onClick={() => setIsBankDialogOpen(true)}
               >
-                <span aria-hidden="true">+</span> Add another bank
+                <span aria-hidden="true">+</span> Add an account
               </Button>
             </div>
           </div>
