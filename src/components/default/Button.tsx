@@ -1,12 +1,12 @@
 import Link from 'next/link'
-import clsx from 'clsx'
+import clsx, { ClassValue } from 'clsx'
 
 const baseStyles = {
   solid:
     'group inline-flex items-center justify-center rounded-lg py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 cursor-default',
   outline:
     'group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-none cursor-default',
-}
+} as const;
 
 const variantStyles = {
   solid: {
@@ -23,11 +23,10 @@ const variantStyles = {
     white:
       'ring-slate-700 text-white hover:ring-slate-500 active:ring-slate-700 active:text-slate-400 focus-visible:outline-white',
   },
-}
+} as const;
 
 type VariantKey = keyof typeof variantStyles
-type ColorKey<Variant extends VariantKey> =
-  keyof (typeof variantStyles)[Variant]
+type ColorKey<Variant extends VariantKey> = keyof (typeof variantStyles)[Variant]
 
 type ButtonProps<
   Variant extends VariantKey,
@@ -46,13 +45,13 @@ export function Button<
   Color extends ColorKey<Variant>,
   Variant extends VariantKey = 'solid',
 >({ variant, color, className, ...props }: ButtonProps<Variant, Color>) {
-  variant = variant ?? ('solid' as Variant)
-  color = color ?? ('slate' as Color)
+  variant = (variant ?? 'solid') as Variant
+  color = (color ?? 'slate') as Color
 
   className = clsx(
     baseStyles[variant],
-    variantStyles[variant][color],
-    className,
+    variantStyles[variant][color] as ClassValue,
+    className
   )
 
   return typeof props.href === 'undefined' ? (
