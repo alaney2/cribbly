@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
+// import BoxZoomHandler from "mapbox-gl";
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import 'animate.css';
 import styles from '@/styles/InputCenter.module.css';
@@ -23,9 +24,9 @@ export function MapBox() {
   const animationClass = fadeOut ? 'animate__animated animate__fadeOut animate__faster' : '';
   const geocoderRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapRef>(null);
-  const popupRef = useRef<mapboxgl.Popup>(null);
-  let [isOpen, setIsOpen] = useState(false)
+  const popupRef = useRef<mapboxgl.Popup | null>(null);
 
+  const [isOpen, setIsOpen] = useState(false)
 
   const popupClick = () => {
     if (typeof window !== "undefined") {
@@ -37,7 +38,7 @@ export function MapBox() {
   }
 
   useEffect(() => {
-    if (mapboxgl.supported() === false) {
+    if (!mapboxgl.supported()) {
       alert('Your browser does not support Mapbox GL');
       return;
     }

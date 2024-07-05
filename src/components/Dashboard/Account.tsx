@@ -4,7 +4,7 @@ import { Button } from '@/components/catalyst/button';
 import { PlaidLinkError, PlaidLinkOnExitMetadata, PlaidLinkOptions, usePlaidLink } from 'react-plaid-link';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
-import { LockClosedIcon } from '@heroicons/react/24/outline';
+import { LockClosedIcon, StarIcon } from '@heroicons/react/24/outline';
 import { toast } from 'sonner'
 import { useSearchParams, usePathname } from 'next/navigation'
 import useSWR, { useSWRConfig } from 'swr';
@@ -12,8 +12,7 @@ import { Spinner } from '@/components/Spinners/FuelSpinner'
 import { RemoveBankDialog } from '@/components/Dashboard/RemoveBankDialog'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { Input } from '@/components/ui/input'
-import { Button as ShadButton } from '@/components/ui/button'
+import { Input } from '@/components/catalyst/input'
 
 const fetcher = async () => {
   const supabase = createClient();
@@ -107,6 +106,35 @@ export function Account() {
     setEditedName(user_data?.full_name || '');
   };
 
+  const setPrimaryAccount = async (accountId: string) => {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("User not found");
+      return;
+    }
+
+    // First, set all accounts to not be primary
+    await supabase
+      .from('plaid_accounts')
+      .update({ use_for_payouts: false })
+      .eq('user_id', user.id);
+
+    // Then, set the selected account as primary
+    const { error } = await supabase
+      .from('plaid_accounts')
+      .update({ use_for_payouts: true })
+      .eq('account_id', accountId);
+
+    if (error) {
+      console.error(error);
+      toast.error("Failed to set primary account");
+    } else {
+      toast.success("Primary account updated");
+      mutate('bank_accounts_data');
+    }
+  };
+
   const generateToken = async () => {
     if (searchParams.has('oauth_state_id')) {
       const link_token = localStorage.getItem('link_token')
@@ -141,20 +169,39 @@ export function Account() {
           },
           body: JSON.stringify({ publicToken }),
         });
-        mutate('bank_accounts_data')
         if (!response.ok) {
           // Handle error
           console.error('Failed to exchange public token for access token');
           throw new Error('Failed to exchange public token for access token');
         }
-        const { error, success } = await response.json();
+        const { error, success, accountId } = await response.json();
+        console.log(success, accountId)
+
         localStorage.removeItem('link_token');
         setLinkToken(null);
         if (error) {
           throw new Error(error);
-        } else {
-          return success;
         }
+
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+          return
+        }
+
+        const { data: existingAccounts } = await supabase
+        .from('plaid_accounts')
+        .select('account_id')
+        .eq('user_id', user.id);
+      
+        if (existingAccounts && existingAccounts.length === 1) {
+          // This is the first account, set it as primary
+          await setPrimaryAccount(accountId);
+        }
+        mutate('bank_accounts_data')
+
+        return success;
       },
       {
         loading: 'Linking bank account...',
@@ -189,7 +236,7 @@ export function Account() {
   }, [linkToken, ready, open]);
 
   return (
-    <div className="p-6 md:p-8 relative justify-center flex">
+    <div className="relative justify-center flex">
       <main className="px-4 py-4 sm:px-6 flex-auto lg:px-4 lg:py-4 max-w-7xl">
         <div className="w-full space-y-16 sm:space-y-20">
           <div>
@@ -255,20 +302,37 @@ export function Account() {
                 </li>
               ) :
               bank_data?.map((bank_account) => 
-                <li key={bank_account.account_id} className="flex justify-between md:gap-x-6 py-6">
-                  <div className="font-medium text-gray-700">
-                    {bank_account.name} ••••{bank_account.mask}
-                  </div>
-                  <button type="button" className="px-2 font-semibold text-red-600 hover:text-red-500" 
+                <li key={bank_account.account_id} className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-2 md:gap-x-6 py-6">
+                <div className="font-medium text-gray-700 flex items-center">
+                  {bank_account.name} ••••{bank_account.mask}
+                  {bank_account.use_for_payouts && (
+                    <StarIcon className="h-5 w-5 text-yellow-400 ml-2" aria-hidden="true" />
+                  )}
+                </div>
+                <div className="flex justify-between md:justify-end items-center space-x-4">
+                  {!bank_account.use_for_payouts &&
+                    <button
+                      type="button"
+                      className="text-sm md:px-2 font-semibold text-blue-600 hover:text-blue-500"
+                      onClick={() => setPrimaryAccount(bank_account.account_id)}
+                    >
+                      Set as primary
+                    </button>
+                  }
+                  {!bank_account.use_for_payouts &&
+                  <button
+                    type="button"
+                    className="md:px-2 font-semibold text-red-600 hover:text-red-500"
                     onClick={() => {
-                      setBankDetails(`${bank_account.name} ••••${bank_account.mask}`)
-                      setAccountId(bank_account.account_id)
-                      setIsRemoveBankDialogOpen(true)}
-                    }
+                      setBankDetails(`${bank_account.name} ••••${bank_account.mask}`);
+                      setAccountId(bank_account.account_id);
+                      setIsRemoveBankDialogOpen(true);
+                    }}
                   >
-                    Remove <span className="hidden sm:inline"> account</span>
-                  </button>
-                </li>
+                    Remove <span className="hidden sm:inline">account</span>
+                  </button>}
+                </div>
+              </li>
               )}
             </ul> 
             <RemoveBankDialog isOpen={isRemoveBankDialogOpen} setIsOpen={setIsRemoveBankDialogOpen} bank_details={bankDetails} account_id={accountId} />
@@ -281,9 +345,6 @@ export function Account() {
             </div>
           </div>
         </div>
-        {/* <Button type="button" color="blue" onClick={async () => { fetch('/api/plaid/get_bank_name') }}>
-          Bank name
-        </Button> */}
         <Dialog open={isBankDialogOpen} onClose={setIsBankDialogOpen}>
           <div className="flex items-center gap-x-4 mb-4">
             <LockClosedIcon className="w-6 text-gray-500" />

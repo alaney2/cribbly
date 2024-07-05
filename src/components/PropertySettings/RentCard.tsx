@@ -225,7 +225,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
           <div className="sm:text-sm text-zinc-950 md:w-40 mb-2 md:mb-0">
             Start and end date
           </div>
-          <div className="flex items-center gap-2 grow">
+          <div className="flex items-center gap-1 sm:gap-2 grow">
             <Popover>
               <PopoverTrigger asChild>
                 <Button

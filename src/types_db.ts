@@ -213,6 +213,7 @@ export interface Database {
           mask: string
           name: string
           time_added: Date
+          use_for_payouts: boolean | null
         }
         Insert: {
           account_id: string
@@ -225,6 +226,7 @@ export interface Database {
           mask?: string | null
           name?: string | null
           time_added?: Date | null
+          use_for_payouts?: boolean | null
         }
         Update: {
           account_id?: string
@@ -237,6 +239,7 @@ export interface Database {
           mask?: string
           name?: string
           time_added?: Date | null
+          use_for_payouts?: boolean | null
         }
       }
       shadcn_tasks: {
