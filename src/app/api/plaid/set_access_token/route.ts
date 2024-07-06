@@ -68,6 +68,8 @@ export async function POST(request: Request) {
       })
     }
 
+    let accountId = null;
+
     for (let i = 0; i < accounts.length; i++) {
       const { account_id, name, mask, official_name, type, subtype } = accounts[i]
       const { account, routing, wire_routing } = ach[i]
@@ -91,10 +93,13 @@ export async function POST(request: Request) {
           error: error,
         })
       }
+
+      accountId = account_id
     }
   
     return NextResponse.json({
       success: 'Bank linked successfully',
+      accountId: accountId,
     });
 
   } catch (error) {

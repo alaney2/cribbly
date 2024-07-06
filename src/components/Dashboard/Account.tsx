@@ -174,8 +174,7 @@ export function Account() {
           console.error('Failed to exchange public token for access token');
           throw new Error('Failed to exchange public token for access token');
         }
-        const { error, success, accountId } = await response.json();
-        console.log(success, accountId)
+        const { success, accountId } = await response.json();
 
         localStorage.removeItem('link_token');
         setLinkToken(null);
