@@ -1,8 +1,9 @@
 "use client"
 import * as React from "react"
 import { deleteProperty } from '@/utils/supabase/actions'
-
-import { Button } from "@/components/ui/button"
+import { Heading } from '@/components/catalyst/heading'
+import { Strong, Text, TextLink } from '@/components/catalyst/text'
+import { Button } from "@/components/catalyst/button"
 import {
   Card,
   CardContent,
@@ -11,8 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Input } from "@/components/catalyst/input"
+import { Field, Label } from "@/components/catalyst/fieldset"
 import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
 import { useRouter } from 'next/navigation'
 import { Separator } from "@/components/ui/separator"
@@ -59,15 +60,19 @@ export function DeleteCard({ propertyId }: { propertyId: string }) {
     <>
     <Card className="w-full ring-1 ring-red-500/25">
       <CardHeader>
-        <CardTitle>Delete property</CardTitle>
+        {/* <CardTitle> */}
+          <Heading>
+          Delete property
+          </Heading>
+        {/* </CardTitle> */}
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-gray-500">
+        <Text >
           Permanently remove your property and all of its contents from the Cribbly platform. This action is irreversible.
-        </p>
+        </Text>
       </CardContent>
       <CardFooter className="flex justify-end ">
-        <Button size="sm" type="button" variant="destructive" className="" onClick={() => setIsOpen(true)}>Delete property</Button>
+        <Button type="button" color="red" onClick={() => setIsOpen(true)}>Delete property</Button>
         </CardFooter>
       </Card>
       <Dialog open={isOpen} onClose={setIsOpen} >
@@ -78,13 +83,10 @@ export function DeleteCard({ propertyId }: { propertyId: string }) {
         <form>
         <DialogBody>
           <div className="">
-            {/* <div className="mb-4 font-medium">
-              This property will be deleted, along with its Settings, Tenants, Maintenance tasks, and all other Data.
-            </div> */}
             <Alert variant="destructive" className="bg-red-300/75 px-3 py-2 mb-4 font-semibold text-sm rounded-lg">
               <AlertTitle><span className="text-gray-50">Warning: </span>This action is not reversible. Please be certain.</AlertTitle>
             </Alert>
-            <div className="items-center">
+            <Field className="items-center">
               <Label htmlFor="verifyDelete" className="">
                 To verify, type <span className="font-bold">delete my property</span> below:
               </Label>
@@ -103,12 +105,12 @@ export function DeleteCard({ propertyId }: { propertyId: string }) {
                 autoCorrect="off"
                 onChange={(e) => { setDeleteInput(e.target.value) }}
               />
-            </div>
+            </Field>
           </div>
         </DialogBody>
         <DialogActions>
-          <Button type="button" variant="outline">Cancel</Button>
-          <Button type="submit" variant="destructive" onClick={handleDeleteProperty}>Delete</Button>
+          <Button type="button" outline>Cancel</Button>
+          <Button type="submit" color="red" onClick={handleDeleteProperty}>Delete</Button>
         </DialogActions>
         </form>
       </Dialog>

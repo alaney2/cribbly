@@ -17,6 +17,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { TrashIcon } from "@heroicons/react/24/outline"
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { Heading } from '@/components/catalyst/heading'
+import { Strong, Text, TextLink } from '@/components/catalyst/text'
 
 const fetcher = async (propertyId: string) => {
   const supabase = createClient();
@@ -72,10 +74,10 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
     <>
     <Card className={`w-full animate__animated animate__faster} ${animationClass}`}>
       <CardHeader>
-        <CardTitle>Invite tenants</CardTitle>
-        <CardDescription className="text-gray-500 text-sm mb-4">
+        <Heading>Invite tenants</Heading>
+        <Text className="">
           Invite a tenant through email to this property
-        </CardDescription>
+        </Text>
       </CardHeader>
       <form
         action={(formData) => {

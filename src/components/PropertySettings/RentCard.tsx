@@ -7,6 +7,8 @@ import {
 } from "@/components/ui/card"
 import { Input, InputGroup } from "@/components/catalyst/input"
 import { Field, Label } from '@/components/catalyst/fieldset'
+import { Heading } from '@/components/catalyst/heading'
+import { Strong, Text, TextLink } from '@/components/catalyst/text'
 import * as Headless from '@headlessui/react'
 import {
   Field as HeadlessField,
@@ -215,10 +217,10 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
         }}
       >
       <CardHeader>
-        <CardTitle>Property setup</CardTitle>
-        <CardDescription className="mt-2">
+        <Heading>Property setup</Heading>
+        <Text className="">
         Set the rent and fees to charge for this property per month. Rent is billed on the start date, and then the first of each month.
-        </CardDescription>
+        </Text>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col md:flex-row md:items-center md:gap-4 mb-5">
