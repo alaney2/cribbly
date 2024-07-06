@@ -31,7 +31,7 @@ export function AppLayoutLinks() {
         <Square2StackIcon />
         <SidebarLabel>Tenants</SidebarLabel>
       </SidebarItem>
-      <SidebarItem href={'/dashboard/maintenance'} current={pathname === '/dashboard/maintenance'}>
+      <SidebarItem href={'/dashboard/maintenance'} current={pathname.startsWith('/dashboard/maintenance')}>
         <WrenchIcon />
         <SidebarLabel>Maintenance</SidebarLabel>
       </SidebarItem>

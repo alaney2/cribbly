@@ -68,19 +68,19 @@ export function MaintenanceTable() {
               </tr>
             </thead>
             <tbody>
-            {!tasks ? (
-              <tr>
-                <td colSpan={4}>
-                  <div className="animate-pulse">
-                    <div className="h-8 bg-gray-200 rounded w-full my-4"></div>
-                    <div className="h-8 bg-gray-200 rounded w-full mb-4"></div>
-                    <div className="h-8 bg-gray-200 rounded w-full"></div>
-                  </div>
-                </td>
-              </tr>
-            )
-            : (
-              tasks.map((task) => (
+            {isLoading && (
+                <tr>
+                  <td colSpan={4}>
+                    <div className="animate-pulse">
+                      <div className="h-8 bg-gray-200 rounded w-full my-4"></div>
+                      <div className="h-8 bg-gray-200 rounded w-full mb-4"></div>
+                      <div className="h-8 bg-gray-200 rounded w-full"></div>
+                    </div>
+                  </td>
+                </tr>
+              )
+            }
+            {tasks && tasks.map((task) => (
                 <tr key={task.code}>
                   <td className="relative py-4 pr-3 text-sm font-medium text-gray-900">
                     {task.title}
@@ -92,7 +92,7 @@ export function MaintenanceTable() {
                   <td className="px-3 py-4 text-sm text-gray-500">{task.cost}</td>
                 </tr>
               ))
-            )}
+            }
             </tbody>
           </table>
         </div>

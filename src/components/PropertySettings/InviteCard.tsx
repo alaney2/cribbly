@@ -1,17 +1,16 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/catalyst/button"
 import {
   Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { Input } from "@/components/catalyst/input"
 import { Description, Field, FieldGroup, Fieldset, Label, Legend } from '@/components/catalyst/fieldset'
 import { toast } from 'sonner';
 import { sendInviteEmail } from '@/utils/resend/actions';
 import { setWelcomeScreen, deleteInvite } from '@/utils/supabase/actions'
-import { useRouter } from 'next/navigation'
 import useSWR from 'swr';
 import { createClient } from '@/utils/supabase/client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'
@@ -57,6 +56,8 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const animationClass = fadeOut ? ' animate__fadeOut' : 'animate__fadeIn';
+  const [buttonEnabled, setButtonEnabled] = useState(true)
+  const [isPending, startTransition] = useTransition();
 
   const handleDeleteInvite = async (token: string) => {
     try {
@@ -77,28 +78,28 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
         </CardDescription>
       </CardHeader>
       <form
-        action={async (formData) => {
-          toast.promise(new Promise(async (resolve, reject) => {
-            try {
-              await sendInviteEmail(formData)
-              mutate()
-              setEmail('');
-              setFullName('');
-              resolve('Email sent!')
-              // setFinishWelcome && setFinishWelcome(true)
-              // const data = await addPropertyFees(formData)
-              // resolve('Rent and fees added!')
-              // buttonOnClick && setFadeOut(true)
-              // buttonOnClick && setTimeout(buttonOnClick, 300)
-            } catch (error) {
-              console.error(error)
-              reject(error)
-            }
-          }), {
-            loading: 'Inviting...',
-            success: 'Tenant has been invited!',
-            error: 'An error occurred, please check the form and try again.'
-          })
+        action={(formData) => {
+          startTransition(async () => {
+            toast.promise(
+              (async () => {
+                try {
+                  await sendInviteEmail(formData);
+                  setEmail('');
+                  setFullName('');
+                  mutate();
+                  return 'Email sent!';
+                } catch (error) {
+                  console.error(error);
+                  throw error;
+                }
+              })(),
+              {
+                loading: 'Inviting...',
+                success: 'Tenant has been invited!',
+                error: 'An error occurred, please check the form and try again.'
+              }
+            );
+          });
         }}
       >
       <CardContent>
@@ -174,8 +175,8 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
       <Separator className="mt-0" />
 
       <CardFooter className="flex justify-end">
-        <Button type="submit" size="sm" className="">
-          Send email
+        <Button type="submit" color="blue" disabled={isPending} >
+        {isPending ? 'Sending...' : 'Send email'}
         </Button>
       </CardFooter>
       </form>

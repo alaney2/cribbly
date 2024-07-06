@@ -35,18 +35,6 @@ export async function sendInviteEmail(formData: FormData) {
   }
 
   const token = generateId({ length: 12 })
-  const { error: tokenError } = await supabase
-    .from('property_invites')
-    .upsert({
-      token,
-      full_name: fullName,
-      email,
-      property_id: propertyId,
-    })
-
-  if (tokenError) {
-    throw new Error('Error creating invite')
-  }
 
   const resend = new Resend(process.env.RESEND_API_KEY)
   const { data: id, error } = await resend.emails.send({
@@ -62,9 +50,23 @@ export async function sendInviteEmail(formData: FormData) {
       inviteLink={`https://cribbly.io/invite?property=${propertyId}&token=${token}&email=${email}&name=${fullName}&address=${property.street_address} ${property.apt}`}
     />,
   });
+
+  
   if (error) {
     console.error(error);
     throw new Error('Error sending email')
   }
 
+  const { error: tokenError } = await supabase
+    .from('property_invites')
+    .upsert({
+      token,
+      full_name: fullName,
+      email,
+      property_id: propertyId,
+    })
+
+  if (tokenError) {
+    throw new Error('Error creating invite')
+  }
 }
