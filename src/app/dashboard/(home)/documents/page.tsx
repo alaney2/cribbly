@@ -1,300 +1,293 @@
-import { CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { JSX, SVGProps } from "react"
+"use client"
+import { useRef, useState, useEffect, useTransition, JSX, SVGProps } from "react"
+import { useRouter } from "next/navigation"
+import { Button } from "@/components/catalyst/button"
+import { Heading, Subheading } from '@/components/catalyst/heading'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'
+import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
+import { Field, Label } from '@/components/catalyst/fieldset'
+import { Select } from '@/components/catalyst/select'
+import { Text } from '@/components/catalyst/text'
+import { fetchDocuments, viewDocument, uploadDocument, downloadDocument } from "@/utils/r2/actions"
+import { Dropdown, DropdownButton, DropdownLabel, DropdownItem, DropdownMenu } from '@/components/catalyst/dropdown'
+import { EllipsisHorizontalIcon, EyeIcon, PlusIcon, ArrowDownTrayIcon, TrashIcon } from '@heroicons/react/16/solid'
+import { toast } from 'sonner'
 
+type Document = {
+  key: string | undefined
+  name: string | undefined
+  date: Date | undefined
+}
 
-export default function Documents({ params } : { params: { property_id: string } }) {
+export default function Documents() {
+  const [selectedYear, setSelectedYear] = useState("2024")
+  const years = ["2024"]
+  const [taxDocuments, setTaxDocuments] = useState<Document[]>([])
+  const [viewingDocument, setViewingDocument] = useState<string | null>(null)
+  const [otherDocuments, setOtherDocuments] = useState<Document[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isPending, startTransition] = useTransition()
+  const router = useRouter()
+
+  useEffect(() => {
+    loadDocuments()
+  }, [])
+
+  const handleViewDocument = async (key: string) => {
+    try {
+      const url = await viewDocument(key)
+      setViewingDocument(url)
+    } catch (error) {
+      console.error("Error viewing document:", error)
+      toast.error("Failed to view document")
+    }
+  }
+
+  const loadDocuments = async () => {
+    setIsLoading(true)
+    try {
+      const documents = await fetchDocuments()
+      if (!documents) return
+      setTaxDocuments(documents.filter(doc => doc.key && doc.key.toLowerCase().includes('tax')))
+      setOtherDocuments(documents.filter(doc => doc.key && !doc.key.toLowerCase().includes('tax')))
+    } catch (error) {
+      console.error("Error fetching documents:", error)
+      toast.error("Failed to load documents")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleDownloadDocument = async (key: string) => {
+    try {
+      const url = await downloadDocument(key)
+      const link = document.createElement('a')
+      link.href = url
+      link.target = '_self'
+      link.rel = 'noopener noreferrer'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch (error) {
+      console.error("Error viewing document:", error)
+      toast.error("Failed to view document")
+    }
+  }
+
+  const handleUpload = async (formData: FormData) => {
+    const file = formData.get('file') as File
+    if (!file) {
+      toast.error("No file selected")
+      return
+    }
+    const uploadToastId = toast.loading(`Uploading ${file.name}...`)
+    try {
+      await uploadDocument(formData)
+      toast.success(`${file.name} uploaded successfully`, { id: uploadToastId })
+      startTransition(() => {
+        loadDocuments()
+        router.refresh()
+      })
+    } catch (error) {
+      console.error("Error uploading document:", error)
+      toast.error(`Failed to upload ${file.name}`, { id: uploadToastId })
+    }
+  }
 
   return (
     <>
-      <div className="mb-8 lg:mb-0 text-gray-600" >
-        Store important documents here to access anytime
-      </div>
-      <div className="flex min-h-[calc(100vh-3.5rem)]">
-        <main className="flex-1 p-6">
+      <main className=" mx-auto">
+        <Heading className="mb-6">All Documents</Heading>
+        <div className="bg-white border border-zinc-200 rounded-lg p-6 mb-6">
+          <div className="flex justify-between items-center">
+            <Subheading className="mb-4">Tax Documents</Subheading>
+            <Field className="mb-4">
+              <Select
+                id="year"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+              >
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+          </div>
+          {taxDocuments.length === 0 && <Text>
+            Your 1040 tax forms should be located here by January 31.
+          </Text>}
+          {taxDocuments.length > 0 && <Table>
+            <TableHead>
+              <TableRow>
+                <TableHeader className="w-1/2">Document Name</TableHeader>
+                <TableHeader className="w-1/4">Date</TableHeader>
+                <TableHeader className="relative w-0">
+                  <span className="sr-only">Actions</span>
+                </TableHeader>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {taxDocuments && taxDocuments.map((doc) => (
+                <TableRow key={doc.key}>
+                  <TableCell className="font-medium w-1/2">{doc.name}</TableCell>
+                  <TableCell className="w-1/4">{doc?.date?.toLocaleDateString()}</TableCell>
+                  <TableCell>
+                    <Dropdown>
+                      <DropdownButton plain aria-label="More options">
+                        <EllipsisHorizontalIcon />
+                      </DropdownButton>
+                      <DropdownMenu anchor="bottom end">
+                        <DropdownItem onClick={() => {
+                          doc.key && handleViewDocument(doc.key)
+                        }}>
+                          <EyeIcon />
+                          <DropdownLabel>View</DropdownLabel>
+                        </DropdownItem>
+                        <DropdownItem onClick={() => {
+                          doc.key && handleDownloadDocument(doc.key)
+                        }}>
+                          <ArrowDownTrayIcon />
+                          <DropdownLabel>Download</DropdownLabel>
+                        </DropdownItem>
+                        <DropdownItem>
+                          <TrashIcon />
+                          <DropdownLabel>Delete</DropdownLabel>
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>}
+        </div>
+
+        <div className="bg-white border border-zinc-200 rounded-lg p-6">
           <div className="mb-6 flex items-center justify-between">
-            <h1 className="text-2xl font-semibold">All Documents</h1>
-            <Button>
-              <PlusIcon className="mr-2 h-4 w-4" />
-              Add Document
-            </Button>
+            <Subheading>Property Documents</Subheading>
+            <form action={handleUpload}>
+              <label htmlFor="upload-document">
+                <Button disabled={isPending} color="blue" onClick={() => {
+                  fileInputRef?.current?.click()
+                }}>
+                  <PlusIcon className="mr-0 h-4 w-4" />
+                  <span className="sm:hidden">Upload</span>
+                  <span className="hidden sm:inline">Upload document</span>
+                </Button>
+                <input
+                  ref={fileInputRef}
+                  id="upload-document"
+                  name="file"
+                  type="file"
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.form) {
+                      e.target.form.requestSubmit()
+                    }
+                  }}
+                />
+              </label>
+            </form>
           </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">Quarterly Report</h3>
-                  <Button size="icon" variant="ghost">
-                    <StarIcon className="h-5 w-5" />
-                  </Button>
-                </div>
-                <p className="text-sm text-gray-500">PDF</p>
-              </CardHeader>
-              <CardContent>
-                <p>
-                  This is the quarterly financial report for the company. It includes key metrics and performance
-                  indicators.
-                </p>
-              </CardContent>
-              <CardFooter>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-500">Updated 2 days ago</p>
-                  <div className="flex items-center gap-2">
-                    <Button size="icon" variant="ghost">
-                      <DownloadIcon className="h-5 w-5" />
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <TrashIcon className="h-5 w-5" />
-                    </Button>
-                  </div>
-                </div>
-              </CardFooter>
-            </Card>
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">Marketing Plan</h3>
-                  <Button size="icon" variant="ghost">
-                    <StarIcon className="h-5 w-5" />
-                  </Button>
-                </div>
-                <p className="text-sm text-gray-500">PDF</p>
-              </CardHeader>
-              <CardContent>
-                <p>This is the marketing plan for the upcoming year. It outlines our strategies and campaigns.</p>
-              </CardContent>
-              <CardFooter>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-500">Updated 1 week ago</p>
-                  <div className="flex items-center gap-2">
-                    <Button size="icon" variant="ghost">
-                      <DownloadIcon className="h-5 w-5" />
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <TrashIcon className="h-5 w-5" />
-                    </Button>
-                  </div>
-                </div>
-              </CardFooter>
-            </Card>
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">HR Handbook</h3>
-                  <Button size="icon" variant="ghost">
-                    <StarIcon className="h-5 w-5" />
-                  </Button>
-                </div>
-                <p className="text-sm text-gray-500">PDF</p>
-              </CardHeader>
-              <CardContent>
-                <p>This is the employee handbook that outlines our HR policies and procedures.</p>
-              </CardContent>
-              <CardFooter>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-500">Updated 3 weeks ago</p>
-                  <div className="flex items-center gap-2">
-                    <Button size="icon" variant="ghost">
-                      <DownloadIcon className="h-5 w-5" />
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <TrashIcon className="h-5 w-5" />
-                    </Button>
-                  </div>
-                </div>
-              </CardFooter>
-            </Card>
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">Product Roadmap</h3>
-                  <Button size="icon" variant="ghost">
-                    <StarIcon className="h-5 w-5" />
-                  </Button>
-                </div>
-                <p className="text-sm text-gray-500">PDF</p>
-              </CardHeader>
-              <CardContent>
-                <p>
-                  This is the product roadmap for the next 12 months. It outlines our planned features and releases.
-                </p>
-              </CardContent>
-              <CardFooter>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-500">Updated 5 days ago</p>
-                  <div className="flex items-center gap-2">
-                    <Button size="icon" variant="ghost">
-                      <DownloadIcon className="h-5 w-5" />
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <TrashIcon className="h-5 w-5" />
-                    </Button>
-                  </div>
-                </div>
-              </CardFooter>
-            </Card>
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">Operations Manual</h3>
-                  <Button size="icon" variant="ghost">
-                    <StarIcon className="h-5 w-5" />
-                  </Button>
-                </div>
-                <p className="text-sm text-gray-500">PDF</p>
-              </CardHeader>
-              <CardContent>
-                <p>This is the operations manual that outlines our processes and procedures.</p>
-              </CardContent>
-              <CardFooter>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-500">Updated 2 months ago</p>
-                  <div className="flex items-center gap-2">
-                    <Button size="icon" variant="ghost">
-                      <DownloadIcon className="h-5 w-5" />
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <TrashIcon className="h-5 w-5" />
-                    </Button>
-                  </div>
-                </div>
-              </CardFooter>
-            </Card>
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">Sales Playbook</h3>
-                  <Button size="icon" variant="ghost">
-                    <StarIcon className="h-5 w-5" />
-                  </Button>
-                </div>
-                <p className="text-sm text-gray-500">PDF</p>
-              </CardHeader>
-              <CardContent>
-                <p>This is the sales playbook that outlines our sales strategies and best practices.</p>
-              </CardContent>
-              <CardFooter>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-500">Updated 1 month ago</p>
-                  <div className="flex items-center gap-2">
-                    <Button size="icon" variant="ghost">
-                      <DownloadIcon className="h-5 w-5" />
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <TrashIcon className="h-5 w-5" />
-                    </Button>
-                  </div>
-                </div>
-              </CardFooter>
-            </Card>
+          {otherDocuments.length > 0 && <Table>
+            <TableHead>
+              <TableRow>
+                <TableHeader className="w-1/2">Document Name</TableHeader>
+                <TableHeader className="w-1/4">Date</TableHeader>
+                <TableHeader className="relative w-0">
+                  <span className="sr-only">Actions</span>
+                </TableHeader>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {otherDocuments && otherDocuments.map((doc) => (
+                <TableRow key={doc.key}>
+                  <TableCell className="font-medium w-1/2">
+                    <div className="flex items-center">
+                      <DocumentIcon className="mr-2 h-4 w-4" />
+                      {doc.name}
+                    </div>
+                  </TableCell>
+                  <TableCell className="w-1/4">{doc?.date?.toLocaleDateString()}</TableCell>
+                  <TableCell className="text-right">
+                    <Dropdown>
+                      <DropdownButton plain aria-label="More options">
+                        <EllipsisHorizontalIcon />
+                      </DropdownButton>
+                      <DropdownMenu anchor="bottom end">
+                        <DropdownItem onClick={() => {
+                          doc.key && handleViewDocument(doc.key)
+                        }}>
+                          <EyeIcon />
+                          <DropdownLabel>View</DropdownLabel>
+                        </DropdownItem>
+                        <DropdownItem onClick={() => {
+                          doc.key && handleDownloadDocument(doc.key)
+                        }}>
+                          <ArrowDownTrayIcon />
+                          <DropdownLabel>Download</DropdownLabel>
+                        </DropdownItem>
+                        <DropdownItem>
+                          <TrashIcon />
+                          <DropdownLabel>Delete</DropdownLabel>
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>}
+        </div>
+      </main>
+      <Dialog size="4xl" open={!!viewingDocument} onClose={() => setViewingDocument(null)}>
+        <DialogTitle>Document Viewer</DialogTitle>
+        {/* <DialogDescription>
+          You can view the document below. Close this dialog to return to the document list.
+        </DialogDescription> */}
+        <DialogBody className="sm:max-w-[900px]">
+          <div className="mt-4" style={{ height: "70vh" }}>
+            {viewingDocument && (
+              <iframe
+                src={`${viewingDocument}#toolbar=1&view=FitH`}
+                width="100%"
+                height="100%"
+                style={{ border: "none" }}
+                title="Document Viewer"
+              />
+            )}
           </div>
-        </main>
-      </div>
+        </DialogBody>
+        <DialogActions>
+          <Button outline onClick={() => setViewingDocument(null)}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }
 
-function DownloadIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="7 10 12 15 17 10" />
-      <line x1="12" x2="12" y1="15" y2="3" />
-    </svg>
-  )
-}
-
-
-function FileIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-    </svg>
-  )
-}
-
-
-function PlusIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
-  )
-}
-
-
-function StarIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
-  )
-}
-
-
-function TrashIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 6h18" />
-      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-    </svg>
-  )
-}
+const DocumentIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="16" y1="13" x2="8" y2="13" />
+    <line x1="16" y1="17" x2="8" y2="17" />
+    <polyline points="10 9 9 9 8 9" />
+  </svg>
+)

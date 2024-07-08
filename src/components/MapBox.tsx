@@ -109,7 +109,7 @@ export function MapBox() {
             reuseMaps={true}
             attributionControl={false}
             style={{
-              borderRadius: '1rem',
+              borderRadius: '0.5rem',
               lineHeight: 1,
               zIndex: 0,
               height: 'calc(100vh - 6rem)',
