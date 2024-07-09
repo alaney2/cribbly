@@ -20,7 +20,7 @@ type Document = {
   date: Date | undefined
 }
 
-const fetcher = (propertyId: string) => fetchDocuments(propertyId)
+const fetcher = ([url, propertyId]: [string, string]) => fetchDocuments(propertyId)
 
 export function DocumentsClient({ propertyId }: { propertyId: string }) {
   const [selectedYear, setSelectedYear] = useState("2024")
@@ -32,7 +32,10 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
-  const { data: documents, error, isLoading: fetcherLoading, mutate } = useSWR<Document[]>(`documents-${propertyId}`, () => fetcher(propertyId))
+  const { data: documents, error, isLoading: fetcherLoading, mutate } = useSWR<Document[]>(
+    [`documents-${propertyId}`, propertyId],
+    fetcher
+  )
 
   const taxDocuments = documents?.filter(doc => doc.key && doc.key.toLowerCase().includes('tax')) || []
   const otherDocuments = documents?.filter(doc => doc.key && !doc.key.toLowerCase().includes('tax')) || []
