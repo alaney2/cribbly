@@ -1,7 +1,7 @@
 "use client"
 import { useRef, useState, useEffect, useTransition, JSX, SVGProps } from "react"
 import { useRouter } from "next/navigation"
-import useSWR from 'swr'
+import useSWR, { BareFetcher } from 'swr'
 import { Button } from "@/components/catalyst/button"
 import { Heading, Subheading } from '@/components/catalyst/heading'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'
@@ -20,7 +20,7 @@ type Document = {
   date: Date | undefined
 }
 
-const fetcher = ([url, propertyId]: [string, string]) => fetchDocuments(propertyId)
+const fetcher = (propertyId: string) => fetchDocuments(propertyId)
 
 export function DocumentsClient({ propertyId }: { propertyId: string }) {
   const [selectedYear, setSelectedYear] = useState("2024")
@@ -32,17 +32,14 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
-  const { data: documents, error, isLoading: fetcherLoading, mutate } = useSWR<Document[]>(
-    [`documents-${propertyId}`, propertyId],
-    fetcher
-  )
+  const { data: documents, error, isLoading: fetcherLoading, mutate } = useSWR<Document[]>(`documents-${propertyId}`, fetcher as BareFetcher<Document[]>)
 
   const taxDocuments = documents?.filter(doc => doc.key && doc.key.toLowerCase().includes('tax')) || []
   const otherDocuments = documents?.filter(doc => doc.key && !doc.key.toLowerCase().includes('tax')) || []
 
   const handleViewDocument = async (key: string) => {
     try {
-        const url = await viewDocument(propertyId, key)
+      const url = await viewDocument(propertyId, key)
       setViewingDocument(url)
     } catch (error) {
       console.error("Error viewing document:", error)
