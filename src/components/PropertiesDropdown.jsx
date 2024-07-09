@@ -8,30 +8,23 @@ import {
   DropdownMenu,
 } from '@/components/catalyst/dropdown'
 import {
-  Sidebar,
-  SidebarBody,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarHeading,
   SidebarItem,
   SidebarLabel,
-  SidebarSection,
-  SidebarSpacer,
 } from '@/components/catalyst/sidebar'
 import {
   ArrowRightStartOnRectangleIcon,
   ChevronDownIcon,
-  ChevronUpIcon,
-  Cog8ToothIcon,
-  LightBulbIcon,
   PlusIcon,
-  ShieldCheckIcon,
-  UserIcon,
 } from '@heroicons/react/16/solid'
 import { updateCurrentProperty } from '@/utils/supabase/actions'
 import { mutate } from 'swr'
+import { useRouter } from "next/navigation"
+import { useSWRConfig } from 'swr'
 
 export function PropertiesDropdown({properties, currentPropertyId, streetAddress}) {
+  const router = useRouter()
+  const { mutate } = useSWRConfig()
+
   return (
     <Dropdown>
       <DropdownButton as={SidebarItem} className="lg:mb-2.5">
@@ -49,6 +42,7 @@ export function PropertiesDropdown({properties, currentPropertyId, streetAddress
               await updateCurrentProperty(property.id)
               mutate(['propertyRent', property.id])
               mutate(['tenants', property.id])
+              mutate(`documents-${property.id}`)
             }}
           >
             {property.id === currentPropertyId && (

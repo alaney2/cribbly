@@ -1,7 +1,9 @@
 "use server"
-import { S3Client, S3ClientConfig, ListObjectsV2Command, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
+import { S3Client, DeleteObjectCommand, S3ClientConfig, ListObjectsV2Command, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { revalidatePath } from "next/cache"
+import { getUser } from '@/utils/supabase/actions'
+import { createClient } from '@/utils/supabase/server'
 
 const R2_CLIENT = new S3Client({
   region: "auto",
@@ -18,10 +20,33 @@ if (!BUCKET_NAME) {
   throw new Error("R2_BUCKET_NAME is not set in environment variables");
 }
 
-export async function fetchDocuments() {
+async function userHasAccessToProperty(propertyId: string) {
+  // Implement your logic here to check if the user has access to the property
+  // This might involve querying your database to check user-property relationships
+  // Return true if the user has access, false otherwise
+  // For example:
+  // const userProperties = await db.userProperties.findMany({ where: { userId } })
+  // return userProperties.some(prop => prop.id === propertyId)
+  const supabase = createClient()
+  const { data, error } = await supabase.from('properties')
+    .select('id')
+    .eq('id', propertyId)
+    .single()
+  if (error) {
+    console.error('Error fetching property:', error)
+    return false
+  }
+  return !!data
+}
+
+export async function fetchDocuments(propertyId: string) {
+  if (!(await userHasAccessToProperty(propertyId))) {
+    throw new Error("Unauthorized access to property")
+  }
+
   const command = new ListObjectsV2Command({
     Bucket: process.env.R2_BUCKET_NAME,
-    Prefix: 'documents/'
+    Prefix: `properties/${propertyId}/documents/`
   });
 
   const response = await R2_CLIENT.send(command);
@@ -32,7 +57,11 @@ export async function fetchDocuments() {
   }));
 }
 
-export async function viewDocument(key: any) {
+export async function viewDocument(propertyId: string, key: any) {
+  if (!(await userHasAccessToProperty(propertyId))) {
+    throw new Error("Unauthorized access to property")
+  }
+
   const command = new GetObjectCommand({
     Bucket: process.env.R2_BUCKET_NAME,
     Key: key,
@@ -43,7 +72,11 @@ export async function viewDocument(key: any) {
   return getSignedUrl(R2_CLIENT, command, { expiresIn: 3600 });
 }
 
-export async function downloadDocument(key: any) {
+export async function downloadDocument(propertyId: string, key: any) {
+  if (!(await userHasAccessToProperty(propertyId))) {
+    throw new Error("Unauthorized access to property")
+  }
+
   const command = new GetObjectCommand({
     Bucket: process.env.R2_BUCKET_NAME,
     Key: key,
@@ -54,7 +87,11 @@ export async function downloadDocument(key: any) {
   return getSignedUrl(R2_CLIENT, command, { expiresIn: 3600 });
 }
 
-export async function uploadDocument(formData: FormData) {
+export async function uploadDocument(propertyId: string, formData: FormData) {
+  if (!(await userHasAccessToProperty(propertyId))) {
+    throw new Error("Unauthorized access to property")
+  }
+
   const file = formData.get('file') as File
   if (!file) {
     throw new Error('No file uploaded')
@@ -64,7 +101,7 @@ export async function uploadDocument(formData: FormData) {
 
   const command = new PutObjectCommand({
     Bucket: BUCKET_NAME,
-    Key: `documents/${file.name}`,
+    Key: `properties/${propertyId}/documents/${file.name}`,
     Body: Buffer.from(buffer),
   })
 
@@ -74,6 +111,26 @@ export async function uploadDocument(formData: FormData) {
     revalidatePath('/dashboard/documents')
   } catch (error) {
     console.error('Error uploading file:', error)
+    throw error
+  }
+}
+
+export async function deleteDocument(propertyId: string, key: string) {
+  if (!(await userHasAccessToProperty(propertyId))) {
+    throw new Error("Unauthorized access to property")
+  }
+
+  const command = new DeleteObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: key,
+  })
+
+  try {
+    await R2_CLIENT.send(command)
+    console.log('File deleted successfully')
+    revalidatePath('/dashboard/documents')
+  } catch (error) {
+    console.error('Error deleting file:', error)
     throw error
   }
 }

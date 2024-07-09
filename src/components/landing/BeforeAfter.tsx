@@ -15,7 +15,7 @@ const afterBenefits = [
   'Automatic rent collection through direct deposits',
   'One central source of truth for all documents and financials',
   'Centralized maintenance request system accessible from any device',
-  'Financial reports and automatic tax calculations for an effortless tax season',
+  'Financial reports and automatic tax calculations for an easy tax season',
 ]
 
 export function BeforeAfter() {

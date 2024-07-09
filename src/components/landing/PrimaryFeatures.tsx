@@ -81,7 +81,7 @@ export function PrimaryFeatures() {
             Less time on Management, More time on You
           </h2>
           <p className="mt-6 text-lg tracking-tight text-blue-100">
-            Collect rent, handle maintenance requests, analyze performance, and automate tax forms effortlessly
+            Collect rent, handle maintenance requests, analyze performance, and automate tax forms
           </p>
         </div>
         <Tab.Group
