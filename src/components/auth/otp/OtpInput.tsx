@@ -7,21 +7,18 @@ import { Input } from '@/components/ui/input'
 import { useSearchParams, usePathname } from 'next/navigation'
 import { insertNewTenant, deleteInvite } from '@/utils/supabase/tenant/actions'
 import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
 
 function OtpInputWithParams({ email }: { email: string } ) {
   const inputsRef = useRef<HTMLInputElement[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
-  // const [state, formAction] = useFormState(verifyOtp, { message: '' })
   const searchParams = useSearchParams()
   const propertyId = searchParams.get('property')
   const token = searchParams.get('token')
-  const [hasError, setHasError] = useState(false)
-  const router = useRouter()
+  // const [hasError, setHasError] = useState(false)
   const pathname = usePathname()
 
   const checkAndSubmit = () => {
-    if (hasError) return;
+    // if (hasError) return;
     const allFilled = inputsRef.current.every(input => input.value !== '');
     if (allFilled) {
       document.getElementById('submitButton')?.click();
@@ -50,16 +47,7 @@ function OtpInputWithParams({ email }: { email: string } ) {
       currentInput.value = e.key;
       if (index < 5) {
         inputsRef.current[index + 1].focus();
-
       }
-    }
-
-    if (e.key === 'ArrowRight' && index < inputsRef.current.length - 1) {
-      inputsRef.current[index + 1].focus();
-    }
-  
-    if (e.key === 'ArrowLeft' && index > 0) {
-      inputsRef.current[index - 1].focus();
     }
 
     checkAndSubmit();
@@ -71,11 +59,16 @@ function OtpInputWithParams({ email }: { email: string } ) {
     if (pasteData.length === 6) {
       pasteData.split('').forEach((value, index) => {
         inputsRef.current[index].value = value;
-        if (index < 5) {
-          inputsRef.current[index + 1].focus();
-        }
       });
+      inputsRef.current[5].focus();
       checkAndSubmit();
+    }
+  }
+
+  const handleFocus = (index: number) => {
+    const emptyInputIndex = inputsRef.current.findIndex(input => input.value === '');
+    if (emptyInputIndex !== -1 && index > emptyInputIndex) {
+      inputsRef.current[emptyInputIndex].focus();
     }
   }
 
@@ -88,20 +81,22 @@ function OtpInputWithParams({ email }: { email: string } ) {
     <form 
       action={async (formData) => {
         try {
-          if (pathname === '/invite') {
-            if (token && email && propertyId) {
-              await deleteInvite(formData)
-              await insertNewTenant(formData)
-            } else {
-              throw new Error('Invalid invite link')
-            }
-          }
+          // if (pathname === '/invite') {
+          //   if (token && email && propertyId) {
+          //     await deleteInvite(formData)
+          //     await insertNewTenant(formData)
+          //   } else {
+          //     throw new Error('Invalid invite link')
+          //   }
+          // }
           await verifyOtp(formData)
         } catch (error) {
           setIsSubmitting(false)
-          setHasError(true)
-          toast.error('An error occurred, please check the form and try again.')
+          // setHasError(true)
+          toast.error('An error occurred, please try again.')
           return;
+        } finally {
+          setIsSubmitting(false)
         }
       }} 
       className="" autoComplete='off'
@@ -124,6 +119,7 @@ function OtpInputWithParams({ email }: { email: string } ) {
             name={`otp${index}`}
             maxLength={1}
             onKeyDown={(e) => handleKeyPress(index, e)}
+            onFocus={() => handleFocus(index)}
             onPaste={handlePaste}
             autoComplete='off'
             required
@@ -131,7 +127,6 @@ function OtpInputWithParams({ email }: { email: string } ) {
           />
         ))}
       </div>
-      {/* {state?.message && <p className="text-red-500 text-xs text-center">{state.message}</p>} */}
       {propertyId && <input className="hidden" name="propertyId" value={propertyId} />}
       {token && <input className="hidden" name="token" value={token} />}
       {email && <input className="hidden" name="email" value={email} />}

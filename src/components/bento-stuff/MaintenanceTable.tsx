@@ -9,7 +9,6 @@ const fetcher = async (property_id: string) => {
   const supabase = createClient();
   let { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    toast.error("User not found")
     return
   }
   const { data, error } = await supabase

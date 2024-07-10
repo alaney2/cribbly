@@ -20,6 +20,7 @@ export async function verifyOtp(formData: FormData) {
     const { data: { user }, error } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
 
     if (error) {
+      throw new Error('Invalid verification code')
       return {
         message: 'Please enter a valid verification code'
       }
@@ -46,6 +47,7 @@ export async function verifyOtp(formData: FormData) {
       }
     }
   } else {
+    throw new Error('Invalid verification code') 
     return {
       message: 'Invalid email or verification code'
     }

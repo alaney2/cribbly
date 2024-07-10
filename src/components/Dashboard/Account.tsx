@@ -18,7 +18,7 @@ const fetcher = async () => {
   const supabase = createClient();
   let { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    toast.error("User not found")
+    return
   }
   const { data, error } = await supabase.from('users')
     .select()
@@ -35,7 +35,6 @@ const bankFetcher = async () => {
   const supabase = createClient();
   let { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    toast.error("User not found")
     return
   }
   const { data, error } = await supabase.from('plaid_accounts')
@@ -110,7 +109,6 @@ export function Account() {
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      toast.error("User not found");
       return;
     }
 

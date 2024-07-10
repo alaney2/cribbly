@@ -27,13 +27,6 @@ export default async function CurrentProperty({ params } : { params: { property_
     redirect('/dashboard')
   }
 
-  // const supabase = createClient();
-    // const { data: { user } } = await supabase.auth.getUser();
-    // if (!user) {
-    //   toast.error("User not found");
-    //   return;
-    // }
-
   let showBankText = false;
 
   const { data: existingAccounts } = await supabase
