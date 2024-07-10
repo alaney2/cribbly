@@ -20,19 +20,7 @@ function OtpInputWithParams({ email }: { email: string } ) {
   const router = useRouter()
   const pathname = usePathname()
 
-  // console.log(pathname)
-  // const email = searchParams.get('email')
-  // const name = searchParams.get('name')
-  // const address = searchParams.get('address')
-
-  // useEffect(() => {
-  //   setIsSubmitting(false);
-  // }, [state]);
-
   const checkAndSubmit = () => {
-    // if (state?.message !== '') {
-    //   return;
-    // }
     if (hasError) return;
     const allFilled = inputsRef.current.every(input => input.value !== '');
     if (allFilled) {

@@ -43,6 +43,8 @@ import { PropertiesDropdown } from '@/components/PropertiesDropdown'
 
 import { getInitials } from '@/utils/helpers';
 import { createClient } from '@/utils/supabase/server'
+import { signOut } from '@/utils/supabase/sign-out'
+import { SignOutDropdown } from '@/components/SignOutDropdown'
 
 export async function AppLayout({
   children,
@@ -126,10 +128,7 @@ export async function AppLayout({
                   <DropdownLabel>Share feedback</DropdownLabel>
                 </DropdownItem>
                 <DropdownDivider />
-                <DropdownItem href="/logout">
-                  <ArrowRightStartOnRectangleIcon />
-                  <DropdownLabel>Sign out</DropdownLabel>
-                </DropdownItem>
+                <SignOutDropdown />
               </DropdownMenu>
             </Dropdown>
           </NavbarSection>
@@ -190,10 +189,7 @@ export async function AppLayout({
                   <DropdownLabel>Share feedback</DropdownLabel>
                 </DropdownItem>
                 <DropdownDivider />
-                <DropdownItem href="/logout">
-                  <ArrowRightStartOnRectangleIcon />
-                  <DropdownLabel>Sign out</DropdownLabel>
-                </DropdownItem>
+                <SignOutDropdown />
               </DropdownMenu>
             </Dropdown>
           </SidebarFooter>
