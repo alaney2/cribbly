@@ -8,20 +8,21 @@ export async function signInGoogle() {
   const supabase = createClient()
   const redirectURL = getURL('/auth/callback');
   console.log(redirectURL)
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google', 
-    options: {
-      redirectTo: redirectURL,
-      queryParams: {
-        // access_type: 'offline',
-        // prompt: 'consent',
-      },
-    },
-  })
+  redirect(redirectURL)
+  // const { data, error } = await supabase.auth.signInWithOAuth({
+  //   provider: 'google', 
+  //   options: {
+  //     redirectTo: redirectURL,
+  //     queryParams: {
+  //       // access_type: 'offline',
+  //       // prompt: 'consent',
+  //     },
+  //   },
+  // })
 
-  if (data && data.url) {
-    redirect(data.url);
-  } else {
-    console.error("Authentication failed or no data received", error);
-  }
+  // if (data && data.url) {
+  //   redirect(data.url);
+  // } else {
+  //   console.error("Authentication failed or no data received", error);
+  // }
 }
