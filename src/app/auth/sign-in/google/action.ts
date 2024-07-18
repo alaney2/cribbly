@@ -13,7 +13,7 @@ export async function signInGoogle() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google', 
     options: {
-      redirectTo: "https://www.cribbly.io/auth/callback",
+      redirectTo: redirectURL,
       queryParams: {
         // access_type: 'offline',
         // prompt: 'consent',

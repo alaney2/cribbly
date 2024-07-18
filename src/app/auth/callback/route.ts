@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
   // by the `@supabase/ssr` package. It exchanges an auth code for the user's session.
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  console.log('requestUrl', requestUrl)
   const next = requestUrl.searchParams.get('next') ?? '/'
 
   if (code) {
