@@ -9,7 +9,7 @@ export async function signInGoogle() {
   const redirectURL = getURL('/auth/callback');
   const newUrl = redirectURL + '?provider=google&next=/dashboard'
   console.log(redirectURL)
-  redirect(redirectURL)
+  redirect(newUrl)
   // const { data, error } = await supabase.auth.signInWithOAuth({
   //   provider: 'google', 
   //   options: {
