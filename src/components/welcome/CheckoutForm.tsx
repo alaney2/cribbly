@@ -11,6 +11,7 @@ import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout
 } from '@stripe/react-stripe-js';
+import { getURL } from "@/utils/helpers";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -68,7 +69,8 @@ export function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000",
+        // return_url: "http://localhost:3000",
+        return_url: getURL(),
       },
     });
 
