@@ -13,6 +13,7 @@ import { SetupProperty } from '@/components/welcome/SetupProperty'
 import { InviteCard } from '@/components/PropertySettings/InviteCard';
 import { setWelcomeScreen } from '@/utils/supabase/actions'
 import { useRouter } from 'next/navigation'
+import GoogleMap from '@/components/welcome/GoogleMap'
 
 export default function WelcomeLayout({ user, subscription, products } : { user: any, subscription: any, products: any }) {
   const [currentStep, setCurrentStep] = useState(0)
@@ -47,10 +48,11 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
         )
       case 2:
         return (
-          <WelcomeMap
-            buttonOnClick={() => setCurrentStep(currentStep + 1)}
-            setPropertyId={setPropertyId}
-          />
+          // <WelcomeMap
+          //   buttonOnClick={() => setCurrentStep(currentStep + 1)}
+          //   setPropertyId={setPropertyId}
+          // />
+          <GoogleMap />
         )
       case 3:
         return (

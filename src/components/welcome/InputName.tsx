@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import logo from '@/images/icon.png'
 import Image from 'next/image';
 import styles from '@/styles/InputCenter.module.css';
@@ -58,6 +58,7 @@ export function InputName({ fullName, setFullName, buttonOnClick }: InputNamePro
             onChange={handleInputChange}
             autoFocus
             defaultValue={fullName}
+            autoComplete='off'
           />
           <Button
             type="submit"
