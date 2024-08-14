@@ -48,7 +48,7 @@ export function Hero() {
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
         {/* Tired of tracking down rent every month? Wish you could see your earnings with just a glance? Dreading the next maintenance emergency? We’ve got your back. */}
-        Experience the freedom of automation, where rent collection, maintenance handling, and financial oversight are simplified
+        Simplify rent collection, maintenance handling, and financial oversight
       </p>
       </div>
       <div ref={containerRef} className="relative mt-10 flex justify-center gap-x-6">
