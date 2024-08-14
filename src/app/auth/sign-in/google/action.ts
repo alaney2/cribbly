@@ -13,7 +13,7 @@ export async function signInGoogle() {
       redirectTo: redirectURL,
       queryParams: {
         // access_type: 'offline',
-        // prompt: 'consent',
+        prompt: 'consent',
       },
     },
   })

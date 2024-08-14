@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import logo from '@/images/icon.png'
 import Image from 'next/image';
 import styles from '@/styles/InputCenter.module.css';
 import { Button } from '@/components/catalyst/button'
 import { updateFullName } from '@/utils/supabase/actions';
+import { createClient } from '@/utils/supabase/client'
+import useSWR from 'swr';
+
 
 type InputNameProps = {
   fullName: string
@@ -13,8 +16,24 @@ type InputNameProps = {
 const formClasses =
   'block text-base w-80 h-10 appearance-none bg-gray-50 rounded-md border-1 border-gray-200 bg-white px-3 py-1.5 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 text-center animate__animated animate__fadeIn animate__fast'
 
+  const fetcher = async () => {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('Not authenticated');
+    
+    const { data, error } = await supabase
+      .from('users')
+      .select('full_name')
+      .eq('id', user.id)
+      .single();
+  
+    if (error) throw error;
+    return data?.full_name || '';
+  };
+
 export function InputName({ fullName, setFullName, buttonOnClick }: InputNameProps) {
   const [fadeOut, setFadeOut] = useState(false);
+  const { data: initialFullName, error } = useSWR('fullName', fetcher);
   const animationClass = fadeOut ? 'animate__animated animate__fadeOut animate__faster' : '';
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -27,6 +46,12 @@ export function InputName({ fullName, setFullName, buttonOnClick }: InputNamePro
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullName(e.target.value);
   };
+
+  useEffect(() => {
+    if (initialFullName) {
+      setFullName(initialFullName);
+    }
+  }, [initialFullName, setFullName]);
 
   return (
     <>

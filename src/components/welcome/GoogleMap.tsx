@@ -64,7 +64,7 @@ const AddressAutocomplete = () => {
         {
           input: value,
           componentRestrictions: { country: 'us' },
-          types: ['street_address'],
+          types: ['address'],
         },
         (predictions: google.maps.places.AutocompletePrediction[] | null, status: google.maps.places.PlacesServiceStatus) => {
           if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
