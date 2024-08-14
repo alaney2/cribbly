@@ -81,7 +81,7 @@ export function Faqs() {
       /> */}
       
       <Container className="relative">
-        <div className="mx-auto max-w-2xl lg:mx-0">
+        <div className="mx-auto lg:mx-0">
           <h2
             id="faq-title"
             className="font-display text-3xl sm:text-4xl font-medium tracking-tight text-slate-800 bg-gradient-to-r to-blue-600 from-[#60a4ff] via-indigo-400 inline-block text-transparent bg-clip-text"
@@ -89,7 +89,7 @@ export function Faqs() {
             Frequently asked questions
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
-            We’ve got your questions covered!
+            We’ve got your questions covered! If you have any additional questions, please feel free to reach out to us at <a href="mailto:support@cribbly.io " className="text-blue-600"> support@cribbly.io</a>
           </p>
         </div>
         <ul
