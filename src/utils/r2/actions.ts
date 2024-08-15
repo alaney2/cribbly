@@ -21,12 +21,6 @@ if (!BUCKET_NAME) {
 }
 
 async function userHasAccessToProperty(propertyId: string) {
-  // Implement your logic here to check if the user has access to the property
-  // This might involve querying your database to check user-property relationships
-  // Return true if the user has access, false otherwise
-  // For example:
-  // const userProperties = await db.userProperties.findMany({ where: { userId } })
-  // return userProperties.some(prop => prop.id === propertyId)
   const supabase = createClient()
   const { data, error } = await supabase.from('properties')
     .select('id')
@@ -40,6 +34,7 @@ async function userHasAccessToProperty(propertyId: string) {
 }
 
 export async function fetchDocuments(propertyId: string) {
+  console.log('Fetching documents for property:', propertyId)
   if (!(await userHasAccessToProperty(propertyId))) {
     throw new Error("Unauthorized access to property")
   }

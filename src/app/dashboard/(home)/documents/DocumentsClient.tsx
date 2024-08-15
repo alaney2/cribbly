@@ -32,7 +32,7 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
 
-  const { data: documents, error, isLoading: fetcherLoading, mutate } = useSWR<Document[]>(`documents-${propertyId}`, fetcher as BareFetcher<Document[]>)
+  const { data: documents, error, isLoading: fetcherLoading, mutate } = useSWR<Document[]>(`${propertyId}`, fetcher as BareFetcher<Document[]>)
 
   const taxDocuments = documents?.filter(doc => doc.key && doc.key.toLowerCase().includes('tax')) || []
   const otherDocuments = documents?.filter(doc => doc.key && !doc.key.toLowerCase().includes('tax')) || []
