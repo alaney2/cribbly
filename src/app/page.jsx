@@ -33,9 +33,6 @@ export default function Home() {
         {/* <SecondaryFeatures /> */}
         {/* <Pricing /> */}
         <Faqs />
-        <section className="relative mx-auto justify-center w-full">
-          If you have any additional questions, please feel free to reach out to us at <a href="mailto:support@cribbly.io "> support@cribbly.io</a>
-        </section>
       </main>
       <Footer />
     </>
