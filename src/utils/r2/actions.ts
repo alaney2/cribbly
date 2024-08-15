@@ -34,7 +34,6 @@ async function userHasAccessToProperty(propertyId: string) {
 }
 
 export async function fetchDocuments(propertyId: string) {
-  console.log('Fetching documents for property:', propertyId)
   if (!(await userHasAccessToProperty(propertyId))) {
     throw new Error("Unauthorized access to property")
   }

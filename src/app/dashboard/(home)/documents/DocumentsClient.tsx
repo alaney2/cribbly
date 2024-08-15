@@ -154,9 +154,9 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
           <TableBody>
             {documents.map((doc) => (
               <TableRow key={doc.key}>
-                <TableCell className="font-medium w-1/2">{doc.name}</TableCell>
-                <TableCell className="w-1/4">{doc?.date?.toLocaleDateString()}</TableCell>
-                <TableCell>
+                <TableCell className="font-medium w-full md:w-3/4">{doc.name}</TableCell>
+                <TableCell className="w-full md:w-1/2">{doc?.date?.toLocaleDateString()}</TableCell>
+                <TableCell className="text-right w-full md:w-1/4">
                   <Dropdown>
                     <DropdownButton plain aria-label="More options">
                       <EllipsisHorizontalIcon />
@@ -247,7 +247,7 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
                   </div>
                 </TableCell>
                 <TableCell className="w-1/4">{doc?.date?.toLocaleDateString()}</TableCell>
-                <TableCell>
+                <TableCell className="text-right">
                   <Dropdown>
                     <DropdownButton plain aria-label="More options">
                       <EllipsisHorizontalIcon />
