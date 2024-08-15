@@ -178,7 +178,7 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
 
       <CardFooter className="flex justify-end">
         <Button type="submit" color="blue" disabled={isPending} >
-        {isPending ? 'Sending...' : 'Send email'}
+        {isPending ? 'Sending...' : 'Send invite'}
         </Button>
       </CardFooter>
       </form>
