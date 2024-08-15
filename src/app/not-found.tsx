@@ -6,7 +6,7 @@ import { SlimLayout } from '@/components/default/SlimLayout'
 
 export default function NotFound() {
   return (
-    <SlimLayout>
+    <SlimLayout heading="Page not found" subHeading=''>
       <div className="flex">
         <Link href={{pathname: '/'}} aria-label="Home">
           <Logo className="h-10 w-auto" />
