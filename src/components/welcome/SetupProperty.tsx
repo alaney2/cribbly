@@ -36,7 +36,7 @@ export function SetupProperty({ propertyId, setPropertyId, buttonOnClick }: Setu
   return (
     <>
       <div
-        className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full w-full gap-y-4 `}
+        className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full gap-y-4 `}
       >
         <RentCard propertyId={propertyId} setPropertyId={setPropertyId} freeMonthsLeft={data} buttonOnClick={buttonOnClick} />
         {/* <FeeCard /> */}

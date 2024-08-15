@@ -133,7 +133,7 @@ export async function addPropertyFees(formData: FormData) {
     }
     if (pair[0].startsWith('fee')) {
       const fee = JSON.parse(pair[1].toString())
-      // console.log(fee.id, fee.fee_name, fee.fee_type, fee.fee_cost, monthsOfRent, startDate, endDate)
+      console.log(fee.id, fee.fee_name, fee.fee_type, fee.fee_cost, monthsOfRent, startDate, endDate)
       if (fee.id) {
         // console.log('FEEID', fee.id)
         const { error } = await supabase.from('property_fees')
@@ -183,6 +183,49 @@ export async function addPropertyFees(formData: FormData) {
   return {
     message: 'Success!'
   }
+}
+
+export async function addPropertyNew(formData: FormData) {
+  const user = await getUser();
+  if (!user) throw new Error('User not found');
+  const supabase = createClient();
+  const street_address = String(formData.get('street'));
+  const zip = String(formData.get('zip'));
+  const apt = String(formData.get('apt'));
+  const city = String(formData.get('city'));
+  const state = String(formData.get('state'));
+  const country = String(formData.get('country'));
+  const { data: currentProperty, error: currentPropertyError } = await supabase
+    .from('properties')
+    .select('*')
+    .eq('user_id', user.id)
+    .single();
+  if (currentProperty) {
+    await supabase.from('properties').delete().eq('id', currentProperty.id);
+  }
+
+  if (!street_address || !zip || !city || !state || !country) throw new Error('Missing required fields');
+  const { data, error } = await supabase.from('properties').upsert(
+    {
+      user_id: user.id,
+      street_address,
+      zip,
+      apt,
+      city,
+      state,
+      country
+    }, {
+      onConflict: 'user_id, street_address, zip, apt, city, state, country',
+      ignoreDuplicates: false,
+    })
+    .select()
+    .single()
+
+  if (error) {
+    console.error(error);
+    throw new Error('Unable to add property')
+  }
+  return data;
 }
 
 export async function addPropertyFromWelcome(formData: FormData) {

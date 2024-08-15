@@ -23,7 +23,6 @@ interface AddressDialogProps {
 }
 
 export function AddressDialog({ isOpen, setIsOpen, result, setFadeOut, isWelcome=true, nextPage, setPropertyId } : AddressDialogProps ) {
-  const router = useRouter()
   // const [state, formAction] = useFormState(addPropertyFromWelcome, { message: '' })
   const address = result.place_name;
   const addressArray = address.split(',');

@@ -16,20 +16,20 @@ type InputNameProps = {
 const formClasses =
   'block text-base w-80 h-10 appearance-none bg-gray-50 rounded-md border-1 border-gray-200 bg-white px-3 py-1.5 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 text-center animate__animated animate__fadeIn animate__fast'
 
-  const fetcher = async () => {
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('Not authenticated');
-    
-    const { data, error } = await supabase
-      .from('users')
-      .select('full_name')
-      .eq('id', user.id)
-      .single();
+const fetcher = async () => {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
   
-    if (error) throw error;
-    return data?.full_name || '';
-  };
+  const { data, error } = await supabase
+    .from('users')
+    .select('full_name')
+    .eq('id', user.id)
+    .single();
+
+  if (error) throw error;
+  return data?.full_name || '';
+};
 
 export function InputName({ fullName, setFullName, buttonOnClick }: InputNameProps) {
   const [fadeOut, setFadeOut] = useState(false);

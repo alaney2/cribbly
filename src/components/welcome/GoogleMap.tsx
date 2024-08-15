@@ -6,9 +6,16 @@ import { Description, Field, FieldGroup, Fieldset, Label, Legend } from '@/compo
 import { Button } from '@/components/catalyst/button'
 import { Divider } from '@/components/catalyst/divider'
 import 'animate.css';
+import { createClient } from '@/utils/supabase/client';
+import useSWR from 'swr';
+import { toast } from 'sonner';
+import { addPropertyNew } from '@/utils/supabase/actions'
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
+type FunctionProps = {
+  buttonOnClick: () => void
+}
 interface Address {
   street: string;
   apt: string;
@@ -23,7 +30,22 @@ interface Suggestion {
   description: string;
 }
 
-const AddressAutocomplete = () => {
+const fetcher = async () => {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+  const { data, error } = await supabase
+    .from('properties')
+    .select('*')
+    .eq('user_id', user.id)
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+const AddressAutocomplete = ({buttonOnClick} : FunctionProps) => {
+  const { data: property, error } = useSWR('property', fetcher);
   const [address, setAddress] = useState<Address>({
     street: '',
     apt: '',
@@ -39,6 +61,19 @@ const AddressAutocomplete = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLUListElement>(null);
   const places = useMapsLibrary('places');
+
+  useEffect(() => {
+    if (property) {
+      setAddress({
+        street: property.street_address,
+        apt: property.apt || '',
+        city: property.city,
+        state: property.state,
+        zip: property.zip,
+        country: property.country
+      });
+    }
+  }, [property]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -139,108 +174,126 @@ const AddressAutocomplete = () => {
 
   return (
     <div className="space-y-4">
-      <form autoComplete="off" action="/orders" method="POST">
-      <Fieldset>
-      <FieldGroup>
-      <div className="relative">
-        <Field>
-        <Label>Street address</Label>
-        <Input
-          ref={inputRef}
-          type="text"
-          name="street"
-          value={address.street}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          onBlurCapture={() => setTimeout(() => setShowSuggestions(false), 100)}
-          onFocus={handleInputFocus}
-          autoComplete='off'
-          autoFocus
-        />
-        </Field>
-        {showSuggestions && suggestions.length > 0 && (
-          <ul ref={suggestionsRef} className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-64 overflow-y-auto">
-            {suggestions.map((suggestion, index) => (
-              <React.Fragment key={suggestion.place_id}>
-                <li
-                  onClick={() => handleSuggestionClick(suggestion)}
-                  className={`p-2.5 cursor-default sm:text-sm transition-colors duration-150 ease-in-out ${
-                    index === selectedIndex ? 'bg-gray-100' : 'hover:bg-gray-100'
-                  }`}
-                >
-                  {suggestion.description}
-                </li>
-                {index < suggestions.length - 1 && <Divider />}
-              </React.Fragment>
-            ))}
-          </ul>
-        )}
-      </div>
-      <Field>
-        <Label>Apt, Suite, etc (optional)</Label>
-        <Input
-          type="text"
-          name="apt"
-          value={address.apt}
-          onChange={handleInputChange}
-          autoComplete='off'
-        />
-      </Field>
-      <Field>
-        <Label>City</Label>
-        <Input
-          type="text"
-          name="city"
-          value={address.city}
-          onChange={handleInputChange}
-          autoComplete='off'
-        />
-      </Field>
-      <div className="flex space-x-4">
-      <Field>
-      <Label>State</Label>
-        <Input
-          type="text"
-          name="state"
-          value={address.state}
-          onChange={handleInputChange}
-          autoComplete='off'
-        />
-      </Field>
-      <Field>
-        <Label>ZIP Code</Label>
-        <Input
-          type="text"
-          name="zip"
-          value={address.zip}
-          onChange={handleInputChange}
-          autoComplete='off'
-        />
-      </Field>
-
-      </div>
-      <Field>
-        <Label>Country</Label>
-      <Input
-        type="text"
-        name="country"
-        value={address.country}
-        onChange={handleInputChange}
-        autoComplete='off'
-        readOnly
-      />
-      </Field>
-      </FieldGroup>
-      </Fieldset>
-      <Button type="submit" color='blue' className="w-full h-10 text-sm mt-8 py-2 px-4 rounded-md">
-        Add property
-      </Button>
+      <form autoComplete="off" 
+        action={async (formData) => {
+          try {
+            const result = await addPropertyNew(formData);
+            await toast.promise(
+              Promise.resolve(result),
+              {
+                loading: 'Adding property...',
+                success: () => {
+                  buttonOnClick();
+                  return 'Property added successfully!';
+                },
+                error: (err) => `Error adding property: ${err.message}`
+              }
+            );
+          } catch (error) {
+            console.error('Error in form submission:', error);
+          }
+        }}
+      >
+        <Fieldset>
+          <FieldGroup>
+            <div className="relative">
+              <Field>
+                <Label>Street address</Label>
+                <Input
+                  ref={inputRef}
+                  type="text"
+                  name="street"
+                  value={address.street}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                  onBlurCapture={() => setTimeout(() => setShowSuggestions(false), 100)}
+                  onFocus={handleInputFocus}
+                  autoComplete='off'
+                  autoFocus
+                />
+              </Field>
+              {showSuggestions && suggestions.length > 0 && (
+                <ul ref={suggestionsRef} className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-64 overflow-y-auto">
+                  {suggestions.map((suggestion, index) => (
+                    <React.Fragment key={suggestion.place_id}>
+                      <li
+                        onClick={() => handleSuggestionClick(suggestion)}
+                        className={`p-2.5 cursor-default sm:text-sm transition-colors duration-150 ease-in-out ${
+                          index === selectedIndex ? 'bg-gray-100' : 'hover:bg-gray-100'
+                        }`}
+                      >
+                        {suggestion.description}
+                      </li>
+                      {index < suggestions.length - 1 && <Divider />}
+                    </React.Fragment>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <Field>
+              <Label>Apt, Suite, etc (optional)</Label>
+              <Input
+                type="text"
+                name="apt"
+                value={address.apt}
+                onChange={handleInputChange}
+                autoComplete='off'
+              />
+            </Field>
+            <Field>
+              <Label>City</Label>
+              <Input
+                type="text"
+                name="city"
+                value={address.city}
+                onChange={handleInputChange}
+                autoComplete='off'
+              />
+            </Field>
+            <div className="flex space-x-4">
+              <Field>
+              <Label>State</Label>
+                <Input
+                  type="text"
+                  name="state"
+                  value={address.state}
+                  onChange={handleInputChange}
+                  autoComplete='off'
+                />
+              </Field>
+              <Field>
+                <Label>ZIP Code</Label>
+                <Input
+                  type="text"
+                  name="zip"
+                  value={address.zip}
+                  onChange={handleInputChange}
+                  autoComplete='off'
+                />
+              </Field>
+            </div>
+            <Field>
+              <Label>Country</Label>
+            <Input
+              type="text"
+              name="country"
+              value={address.country}
+              onChange={handleInputChange}
+              autoComplete='off'
+              readOnly
+            />
+            </Field>
+          </FieldGroup>
+        </Fieldset>
+        <Button type="submit" color='blue' className="w-full h-10 text-sm mt-8 py-2 px-4 rounded-md">
+          Add property
+        </Button>
       </form>
     </div>
   );
 };
 
-const App = () => {
+const App = ({buttonOnClick} : FunctionProps) => {
   const [fadeOut, setFadeOut] = useState(false);
   const animationClass = fadeOut ? 'animate__animated animate__fadeOut animate__faster' : '';
 
@@ -249,7 +302,7 @@ const App = () => {
       <div className={`p-4 animate__animated animate__fadeIn ${animationClass}`}>
         <Heading>Property address</Heading>
         <Subheading className="mb-6">Get started with entering your property address</Subheading>
-        <AddressAutocomplete />
+        <AddressAutocomplete buttonOnClick={buttonOnClick} />
       </div>
     </APIProvider>
   );

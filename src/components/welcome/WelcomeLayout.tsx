@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/catalyst/button"
 import { Step0 } from '@/components/welcome/Step0'
 import { InputName } from '@/components/welcome/InputName'
 import { AutofilledProperty } from '@/components/welcome/AutofilledProperty'
@@ -52,7 +52,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
           //   buttonOnClick={() => setCurrentStep(currentStep + 1)}
           //   setPropertyId={setPropertyId}
           // />
-          <GoogleMap />
+          <GoogleMap buttonOnClick={() => setCurrentStep(currentStep + 1)} />
         )
       case 3:
         return (
@@ -62,7 +62,7 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
         return (
           <div className="flex flex-col justify-center">
             <InviteCard propertyId={propertyId} setPropertyId={setPropertyId} finishWelcome={finishWelcome} setFinishWelcome={setFinishWelcome} />
-            <Button disabled={!finishWelcome} className="mt-8 " 
+            <Button disabled={!finishWelcome} className="mt-8 " color="blue"
               onClick={async () => {
                 // setFadeOut(true)
                 localStorage.removeItem('propertyId')
@@ -73,6 +73,18 @@ export default function WelcomeLayout({ user, subscription, products } : { user:
               }}
             >
               Finish setup
+            </Button>
+            <Button className="mt-4" plain
+              onClick={async () => {
+                // setFadeOut(true)
+                localStorage.removeItem('propertyId')
+                localStorage.removeItem('fullName')
+                localStorage.removeItem('email')
+                await setWelcomeScreen(false)
+                router.push('/dashboard')
+              }}
+            >
+              Skip, do later
             </Button>
           </div>
         )

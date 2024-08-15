@@ -12,11 +12,11 @@ type ScheduleDialogProps = {
   setIsOpen: (isOpen: boolean) => void
   startDate: Date
   endDate: Date
-  netIncome: number
+  rentAmount: string
   securityDeposit: boolean
   securityDepositFee: string
 }
-export function ScheduleDialog({ isOpen, setIsOpen, startDate, endDate, netIncome, securityDeposit, securityDepositFee }: ScheduleDialogProps) {
+export function ScheduleDialog({ isOpen, setIsOpen, startDate, endDate, rentAmount, securityDeposit, securityDepositFee }: ScheduleDialogProps) {
   const rentInfo = calculateRentDates(startDate, endDate);
   const monthsOfRent = rentInfo.monthsOfRent;
   const rentDates = rentInfo.rentDates;
@@ -43,7 +43,7 @@ export function ScheduleDialog({ isOpen, setIsOpen, startDate, endDate, netIncom
               {rentDates.map((date, index) => (
                 <TableRow key={String(date)}>
                   <TableCell className="">{format(date, "MM/dd/yyyy")}</TableCell>
-                  <TableCell className="text-zinc-500 text-right">${netIncome + (index === 0 && securityDeposit ? Number(securityDepositFee) : 0)} {index === 0 && securityDeposit && '(incl. security deposit)'}</TableCell>
+                  <TableCell className="text-zinc-500 text-right">${Number(rentAmount) + (index === 0 && securityDeposit ? Number(securityDepositFee) : 0)} {index === 0 && securityDeposit && '(incl. security deposit)'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

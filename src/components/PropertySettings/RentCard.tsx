@@ -91,10 +91,8 @@ type RentCardProps = {
   buttonOnClick?: () => void
 }
 
-const CRIBBLY_FEE = 10
 
 export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnClick }: RentCardProps ) {
-
   React.useEffect(() => {
     if (typeof window !== "undefined" && setPropertyId && !propertyId) {
       setPropertyId(localStorage.getItem('propertyId') || '')
@@ -110,7 +108,6 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
   }
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [isScheduleOpen, setIsScheduleOpen] = React.useState(false)
-  const [isPopoverOpen, setIsPopoverOpen] = React.useState(false)
   const [rentAmount, setRentAmount] = React.useState<string>("")
   const [securityDeposit, setSecurityDeposit] = React.useState(false)
   const [securityDepositFee, setSecurityDepositFee] = React.useState<string>("")
@@ -123,7 +120,6 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
   })
   const [fees, setFees] = React.useState<Fee[]>([])
   const [netIncome, setNetIncome] = React.useState<number>(0)
-  const [cribblyFee, setCribblyFee] = React.useState<number>(0)
   const [isLoading, setIsLoading] = React.useState(false)
   const [editFeeOpen, setEditFeeOpen] = React.useState(false)
   const [feeEdit, setFeeEdit] = React.useState<Fee>()
@@ -165,29 +161,6 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
       fee_cost: 0,
     })
   }
-
-  React.useEffect(() => {
-    const calculateNetIncome = () => {
-      // setIsLoading(true)
-      const rentAmountNumber = Number(rentAmount)
-      // const securityDepositNumber = Number(securityDepositFee)
-      const totalFees = fees.reduce((total, fee) => total + Number(fee.fee_cost), 0)
-      let softwareFee = 0
-      if (freeMonthsLeft) {
-        if (freeMonthsLeft <= 0 ) {
-          if (rentAmountNumber) {
-            if (rentAmountNumber >= 10) {
-              softwareFee = Number(CRIBBLY_FEE.toFixed(2))
-            }
-          }
-        }
-      }
-      setCribblyFee(softwareFee)
-      const result = (rentAmountNumber || 0) + totalFees - softwareFee
-      setNetIncome(parseFloat(result.toFixed(2)))
-    }
-    calculateNetIncome()
-  }, [securityDeposit, rentAmount, securityDepositFee, fees, freeMonthsLeft])
 
   return (
     <>
@@ -393,73 +366,10 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
       </CardContent>
       
       <Separator className="mt-0" />
-      <CardFooter className="flex justify-between items-center">
-        <div className="text-sm flex items-center">
-          <span className="font-medium mr-2">
-            Monthly income:
-          </span>
-          <span>
-          {isLoading ? (
-            <div className="w-12 h-4 bg-gray-200 rounded animate-pulse"></div>
-          ) : (
-            `$${netIncome ? netIncome < 0 ? 0 : netIncome : 0}`
-          )}
-          </span>
-          <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
-            <PopoverTrigger 
-              className="ml-3 flex items-center"
-              onMouseEnter={() => {setIsPopoverOpen(true)}}
-              onMouseLeave={() => {setIsPopoverOpen(false)}}
-              onClick={e => {
-                e.preventDefault();
-              }}
-            >
-              <span className="ml-0 text-gray-500 cursor-default">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                </svg>
-              </span>
-            </PopoverTrigger>
-            <PopoverContent>
-              <div className="text-sm">
-                <p className="flex justify-between">
-                  <span>Rent: </span>
-                  <span>${Number(rentAmount) || 0}</span>
-                </p>
-                {/* {
-                  securityDeposit && (
-                    <p className="flex justify-between">
-                      <span>Security deposit: </span>
-                      <span>${Number(securityDepositFee) || 0}</span>
-                    </p>
-                  )
-                } */}
-                {fees.map((fee, index) => (
-                  <p key={index} className="flex justify-between">
-                    <span>{fee.fee_name}: </span>
-                    <span>${fee.fee_cost}</span>
-                  </p>
-                ))}
-                <p className="flex justify-between">
-                  <span>Cribbly fee: </span>
-                  {cribblyFee === 0 ? (
-                    <span>
-                      <s>$10</s> $0
-                    </span>
-                  ) : (
-                    <span>${cribblyFee}</span>
-                  )}
-                </p>
-                <Separator className="my-2"/>
-                <p className="flex justify-between">
-                  <span>Net income: </span>
-                  <span>${netIncome ? netIncome < 0 ? 0 : netIncome : 0}</span>
-                </p>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
+      <CardFooter className="flex justify-end items-center">
+        
         <div className="flex gap-x-3">
+          {/* <Button color="white">Edit</Button> */}
           <Button type="submit" color="blue" >Save</Button>
         </div>
       </CardFooter>
@@ -537,7 +447,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
       </form>
     </Dialog>
     {editFeeOpen && feeEdit && <EditFeeDialog isOpen={editFeeOpen} setIsOpen={setEditFeeOpen} fee={feeEdit} fees={fees} setFees={setFees} mutateFees={mutateFees} />}
-    {startDate && endDate && <ScheduleDialog isOpen={isScheduleOpen} setIsOpen={setIsScheduleOpen} startDate={startDate} endDate={endDate} netIncome={netIncome} securityDeposit={securityDeposit} securityDepositFee={securityDepositFee}/>}
+    {startDate && endDate && <ScheduleDialog isOpen={isScheduleOpen} setIsOpen={setIsScheduleOpen} startDate={startDate} endDate={endDate} rentAmount={rentAmount} securityDeposit={securityDeposit} securityDepositFee={securityDepositFee}/>}
     </>
   )
 }
