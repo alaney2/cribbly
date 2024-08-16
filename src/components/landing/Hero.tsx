@@ -6,6 +6,8 @@ import { Button } from '@/components/default/Button'
 import { Container } from '@/components/default/Container'
 import useSparks from '@/components/default/useSparks'
 import { motion, useMotionValue } from "framer-motion";
+import { toast } from 'sonner'
+
 
 export function Hero() {
   const { makeBurst, sparks } = useSparks();
@@ -70,6 +72,7 @@ export function Hero() {
           href=""
           variant="outline"
           className="cursor-pointer"
+          onClick={() => toast.success('Coming soon!')}
         >
           <svg
             aria-hidden="true"

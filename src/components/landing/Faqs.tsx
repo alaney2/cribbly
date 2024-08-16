@@ -41,7 +41,7 @@ const faqs = [
       question: 
       'How much does Cribbly cost?',
       answer:
-      'Cribbly costs $29 to list one property and $89 to list unlimited properties. Tenants pay a small fee when paying rent to cover the payment processing cost. There are no hidden fees or additional charges. We also offer a 30-day money-back guarantee if you are not satisfied with the service.',
+      'Cribbly costs $39 to list one property and $89 to list unlimited properties. Tenants pay a small fee when paying rent to cover the payment processing cost. There are no hidden fees or additional charges. We also offer a 30-day money-back guarantee if you are not satisfied with the service.',
     },
     {
       question: 
