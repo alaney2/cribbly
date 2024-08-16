@@ -7,14 +7,17 @@ import { Button } from '@/components/catalyst/button'
 import { Divider } from '@/components/catalyst/divider'
 import 'animate.css';
 import { createClient } from '@/utils/supabase/client';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import { toast } from 'sonner';
 import { addPropertyNew } from '@/utils/supabase/actions'
+import { useRouter } from 'next/navigation';
+import { updateCurrentProperty } from '@/utils/supabase/actions'
+
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 type FunctionProps = {
-  buttonOnClick: () => void
+  buttonOnClick?: () => void
 }
 interface Address {
   street: string;
@@ -61,6 +64,8 @@ const AddressAutocomplete = ({buttonOnClick} : FunctionProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLUListElement>(null);
   const places = useMapsLibrary('places');
+  const router = useRouter();
+  const { mutate } = useSWRConfig()
 
   useEffect(() => {
     if (property) {
@@ -178,12 +183,20 @@ const AddressAutocomplete = ({buttonOnClick} : FunctionProps) => {
         action={async (formData) => {
           try {
             const result = await addPropertyNew(formData);
+            await updateCurrentProperty(result.id);
             await toast.promise(
               Promise.resolve(result),
               {
                 loading: 'Adding property...',
                 success: () => {
-                  buttonOnClick();
+                  if (buttonOnClick) {
+                    buttonOnClick();
+                  } else {
+                    mutate(['propertyRent', result.id])
+                    mutate(['tenants', result.id])
+                    mutate(`documents-${result.id}`)
+                    router.push('/dashboard');
+                  }
                   return 'Property added successfully!';
                 },
                 error: (err) => `Error adding property: ${err.message}`

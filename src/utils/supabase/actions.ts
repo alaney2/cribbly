@@ -330,16 +330,25 @@ export async function addProperty(formData: FormData) {
   redirect(`/dashboard/${data.id}/settings`);
 }
 
-export async function deleteProperty(propertyId: string) {
+export async function deleteProperty(currentPropertyId: string) {
   const user = await getUser();
   if (!user) return;
   const supabase = createClient();
 
+  const { error: rentError } = await supabase.from('property_rents').delete().eq('property_id', currentPropertyId).select()
   const { error } = await supabase.from('properties').delete()
-    .eq('id', propertyId)
+    .eq('id', currentPropertyId).select()
+  await supabase.from('property_security_deposits').delete().eq('property_id', currentPropertyId).select()
+  await supabase.from('property_fees').delete().eq('property_id', currentPropertyId).select()
+  await supabase.from('property_invites').delete().eq('property_id', currentPropertyId).select()
   
+  if (rentError) {
+    console.error(rentError);
+    throw new Error('Error deleting rents');
+  }
   if (error) {
     console.error(error);
+    throw new Error('Error deleting property');
   }
 }
 
@@ -377,19 +386,30 @@ export async function removeTenant(tenantId: { tenantId: string }) {
 // Function to update current property
 export async function updateCurrentProperty(propertyId: string) {
   const supabase = createClient();
-  const { data: { user }, error: userError } = await supabase.auth.getUser()
-  if (!user || userError) {
-    console.error('Error fetching user:', userError)
-    // Handle the error appropriately
-  }
+  // const { data: { user }, error: userError } = await supabase.auth.getUser()
+  // if (!user || userError) {
+  //   console.error('Error fetching user:', userError)
+  //   // Handle the error appropriately
+  // }
   const { error: updateError } = await supabase.auth.updateUser({
     data: { currentPropertyId: propertyId }
   })
   if (updateError) {
     console.error('Error updating current property:', updateError)
-    // Handle the error appropriately
+    throw new Error('Error updating current property')
   } else {
-    // You might want to add a redirect here to the selected property page
-    // or handle the UI update in your client-side code
+    return 'Success'
   }
+}
+
+export async function getCurrentProperty(): Promise<string> {
+  const supabase = createClient();
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  if (!user || userError) {
+    console.error('Error fetching user:', userError)
+    throw new Error('Error fetching user')
+  }
+  const currentPropertyId = user.user_metadata.currentPropertyId
+  console.log('Current Property ID:', currentPropertyId)
+  return currentPropertyId
 }

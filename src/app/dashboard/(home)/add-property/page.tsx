@@ -1,11 +1,14 @@
-import '@/styles/no-overscroll.css'
+"use client"
+// import '@/styles/no-overscroll.css'
 import { MapBox } from "@/components/MapBox";
+import GoogleMap from "@/components/welcome/GoogleMap";
 
-export default async function Home() {
+export default function AddProperty() {
   return (
     <>
-      <div className="">
-        <MapBox />
+      <div className="flex justify-center mt-32">
+        {/* <MapBox /> */}
+        <GoogleMap />
       </div>
     </>
   )

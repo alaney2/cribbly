@@ -99,6 +99,7 @@ export function BentoStats() {
       header: <SkeletonOne />,
       className: "md:col-span-1",
       icon: <IconFileStack className="h-4 w-4 text-blue-500" />,
+      href: `/dashboard/documents`,
       edit: true,
     },
     {

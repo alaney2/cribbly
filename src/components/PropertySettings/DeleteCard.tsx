@@ -25,7 +25,7 @@ import {
 import { useSWRConfig } from "swr"
 import { toast } from 'sonner'
 
-export function DeleteCard({ propertyId }: { propertyId: string }) {
+export function DeleteCard({ propertyId } : { propertyId: string }) {
   const router = useRouter()
   const [deleteInput, setDeleteInput] = React.useState('')
   let [isOpen, setIsOpen] = React.useState(false)

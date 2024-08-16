@@ -17,12 +17,10 @@ import {
   PlusIcon,
 } from '@heroicons/react/16/solid'
 import { updateCurrentProperty } from '@/utils/supabase/actions'
-import { mutate } from 'swr'
 import { useRouter } from "next/navigation"
 import { useSWRConfig } from 'swr'
 
 export function PropertiesDropdown({properties, currentPropertyId, streetAddress}) {
-  const router = useRouter()
   const { mutate } = useSWRConfig()
 
   return (

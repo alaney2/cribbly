@@ -67,7 +67,7 @@ export function MaintenanceTable() {
               </tr>
             </thead>
             <tbody>
-            {isLoading && (
+            {/* {isLoading && (
                 <tr>
                   <td colSpan={4}>
                     <div className="animate-pulse">
@@ -78,7 +78,7 @@ export function MaintenanceTable() {
                   </td>
                 </tr>
               )
-            }
+            } */}
             {tasks && tasks.map((task) => (
                 <tr key={task.code}>
                   <td className="relative py-4 pr-3 text-sm font-medium text-gray-900">
