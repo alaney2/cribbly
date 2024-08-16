@@ -97,6 +97,12 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
       toast.error("No file selected")
       return
     }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Only images (JPEG, PNG) and PDF files are allowed")
+      return
+    }
     const uploadToastId = toast.loading(`Uploading ${file.name}...`)
     try {
       await uploadDocument(propertyId, formData)
@@ -202,6 +208,7 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
               name="file"
               type="file"
               className="hidden"
+              accept=".pdf,image/*"
               onChange={(e) => e.target.form?.requestSubmit()}
             />
           </label>
