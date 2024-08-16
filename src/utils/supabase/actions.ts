@@ -410,6 +410,5 @@ export async function getCurrentProperty(): Promise<string> {
     throw new Error('Error fetching user')
   }
   const currentPropertyId = user.user_metadata.currentPropertyId
-  console.log('Current Property ID:', currentPropertyId)
   return currentPropertyId
 }

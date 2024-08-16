@@ -41,7 +41,7 @@ export function AppLayoutLinks() {
       </SidebarItem>
       <SidebarItem href={'/dashboard/settings'} current={pathname === '/dashboard/settings'}>
         <Cog6ToothIcon />
-        <SidebarLabel>Property Settings</SidebarLabel>
+        <SidebarLabel>Settings</SidebarLabel>
       </SidebarItem>
       {/* <SidebarItem href={'/dashboard/delete-property'} current={pathname === '/dashboard/delete-property'}>
         <MegaphoneIcon />

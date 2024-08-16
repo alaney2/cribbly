@@ -4,7 +4,7 @@ import { DeleteCard } from '@/components/PropertySettings/DeleteCard'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { Button } from '@/components/catalyst/button'
-import { SettingsNavigation } from '@/components/SettingsNavigation'
+import SettingsNavigation from '@/components/SettingsNavigation'
 import { getCurrentProperty } from '@/utils/supabase/actions'
 
 export default async function CurrentPropertySettings() {
