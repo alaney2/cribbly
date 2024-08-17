@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 
 import { motion, AnimatePresence, useMotionValue } from "framer-motion";
-import { cn } from "@/utils/cn";
+import { cn } from "@/lib/utils";
 
 export const FollowerPointerCard = ({
   children,
@@ -26,35 +26,14 @@ export const FollowerPointerCard = ({
     }
   }, []);
 
-  const throttle = (func: { (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void; apply?: any; }, limit: number | undefined) => {
-    let inThrottle: boolean;
-    return function(this: any) {
-      const args = arguments;
-      const context: any = this;
-      if (!inThrottle) {
-        func.apply(context, args);
-        inThrottle = true;
-        setTimeout(() => inThrottle = false, limit);
-      }
-    };
-  };
-  
-  const handleMouseMove = throttle((e: React.MouseEvent<HTMLDivElement>) => {
-    if (ref.current) {
-      const rect = ref.current.getBoundingClientRect(); // Get the updated bounding rect on every mouse move
-      const newX = e.clientX - rect.left;
-      const newY = e.clientY - rect.top;
-
-      if (newX >= 0 && newY >= 0 && newX <= rect.width && newY <= rect.height) {
-        x.set(newX);
-        y.set(newY);
-        setIsInside(true);
-      } else {
-        setIsInside(false);
-      }
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (rect) {
+      const scrollX = window.scrollX;
+      const scrollY = window.scrollY;
+      x.set(e.clientX - rect.left + scrollX);
+      y.set(e.clientY - rect.top + scrollY);
     }
-  }, 1);
-  
+  };
   const handleMouseLeave = () => {
     setIsInside(false);
   };
@@ -71,9 +50,9 @@ export const FollowerPointerCard = ({
         cursor: "none",
       }}
       ref={ref}
-      className={cn("relative overflow-hidden", className)}
+      className={cn("relative", className)}
     >
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {isInside && <FollowPointer x={x} y={y} title={title} />}
       </AnimatePresence>
       {children}
@@ -92,9 +71,12 @@ export const FollowPointer = ({
 }) => {
   const colors = [
     "var(--sky-500)",
+    "var(--neutral-500)",
     "var(--teal-500)",
     "var(--green-500)",
     "var(--blue-500)",
+    "var(--red-500)",
+    "var(--yellow-500)",
   ];
   return (
     <motion.div
@@ -122,7 +104,7 @@ export const FollowPointer = ({
         fill="currentColor"
         strokeWidth="1"
         viewBox="0 0 16 16"
-        className="h-6 w-6 text-sky-500 transform -rotate-[70deg] -translate-x-[6px] -translate-y-[0px] stroke-sky-600"
+        className="h-6 w-6 text-sky-500 transform -rotate-[70deg] -translate-x-[12px] -translate-y-[10px] stroke-sky-600"
         height="1em"
         width="1em"
         xmlns="http://www.w3.org/2000/svg"
