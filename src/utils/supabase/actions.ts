@@ -412,3 +412,7 @@ export async function getCurrentProperty(): Promise<string> {
   const currentPropertyId = user.user_metadata.currentPropertyId
   return currentPropertyId
 }
+
+export async function createTask(formData: FormData) {
+  
+}
