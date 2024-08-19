@@ -6,6 +6,7 @@ import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
 import * as React from "react"
 import { DateRangePicker } from '@/components/data-table/date-range-picker'
 import { TasksTableProvider } from "@/app/_components/tasks-table-provider"
+import { MaintenanceTable } from "@/components/maintenance/MaintenanceTable"
 
 export interface IndexPageProps {
   params: { property_id: string }
@@ -18,25 +19,8 @@ export default function Maintenance({ params, searchParams } : IndexPageProps ) 
 
   return (
     <>
-      <div className="p-0 md:p-8" >
-        <DateRangePicker
-          triggerSize="sm"
-          triggerClassName="ml-auto w-56 sm:w-60"
-          align="end"
-        />
-        {/* <React.Suspense
-          fallback={
-            <DataTableSkeleton
-              columnCount={5}
-              searchableColumnCount={1}
-              filterableColumnCount={2}
-              cellWidths={["10rem", "40rem", "12rem", "12rem", "8rem"]}
-              shrinkZero
-            />
-          }
-        > */}
-          <TasksTable tasksPromise={tasksPromise} />
-        {/* </React.Suspense> */}
+      <div className="" >
+        <MaintenanceTable />
       </div>
     </>
   )

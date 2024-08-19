@@ -1,7 +1,6 @@
 "use client"
-import { useRef, useState, useEffect, useTransition, JSX, SVGProps } from "react"
+import { useRef, useState, useTransition, JSX, SVGProps } from "react"
 import { useRouter } from "next/navigation"
-import useSWR, { BareFetcher } from 'swr'
 import { Button } from "@/components/catalyst/button"
 import { Heading, Subheading } from '@/components/catalyst/heading'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'
@@ -13,6 +12,7 @@ import { fetchDocuments, viewDocument, uploadDocument, downloadDocument, deleteD
 import { Dropdown, DropdownButton, DropdownLabel, DropdownItem, DropdownMenu } from '@/components/catalyst/dropdown'
 import { EllipsisHorizontalIcon, EyeIcon, PlusIcon, ArrowDownTrayIcon, TrashIcon } from '@heroicons/react/16/solid'
 import { toast } from 'sonner'
+import { FileUpload } from '@/components/aceternity/file-upload'
 
 type Document = {
   key: string | undefined
@@ -20,22 +20,16 @@ type Document = {
   date: Date | undefined
 }
 
-const fetcher = (propertyId: string) => fetchDocuments(propertyId)
 
-export function DocumentsClient({ propertyId }: { propertyId: string }) {
+export function DocumentsClient({ propertyId, documents }: { propertyId: string, documents: Document[] }) {
   const [selectedYear, setSelectedYear] = useState("2024")
   const years = ["2024"]
   const [viewingDocument, setViewingDocument] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [documentToDelete, setDocumentToDelete] = useState<Document | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [isPending, startTransition] = useTransition()
-  const router = useRouter()
+  const [files, setFiles] = useState<Document[]>(documents)
 
-  const { data: documents, error, isLoading: fetcherLoading, mutate } = useSWR<Document[]>(`${propertyId}`, fetcher as BareFetcher<Document[]>)
-
-  const taxDocuments = documents?.filter(doc => doc.key && doc.key.toLowerCase().includes('tax')) || []
-  const otherDocuments = documents?.filter(doc => doc.key && !doc.key.toLowerCase().includes('tax')) || []
 
   const handleViewDocument = async (key: string) => {
     try {
@@ -59,18 +53,12 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
     try {
       await deleteDocument(propertyId, documentToDelete.key)
       toast.success(`${documentToDelete.name} deleted successfully`, { id: deleteToastId })
-
-      mutate()
-      
-      startTransition(() => {
-        // loadDocuments()
-        router.refresh()
-      })
     } catch (error) {
       console.error("Error deleting document:", error)
       toast.error(`Failed to delete ${documentToDelete.name}`, { id: deleteToastId })
     } finally {
       setIsDeleteDialogOpen(false)
+      setFiles(prevFiles => prevFiles.filter(file => file.name !== documentToDelete.name))
       setDocumentToDelete(null)
     }
   }
@@ -107,24 +95,60 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
     try {
       await uploadDocument(propertyId, formData)
       toast.success(`${file.name} uploaded successfully`, { id: uploadToastId })
-      mutate()
-      startTransition(() => {
-        // loadDocuments()
-        router.refresh()
-      })
+
     } catch (error) {
       console.error("Error uploading document:", error)
       toast.error(`Failed to upload ${file.name}`, { id: uploadToastId })
     }
   }
 
-  const SkeletonRow = () => (
-    <TableRow>
-      <TableCell><div className="h-4 bg-gray-200 rounded w-full md:w-3/4 animate-pulse"></div></TableCell>
-      <TableCell><div className="h-4 bg-gray-200 rounded w-full md:w-1/2 animate-pulse"></div></TableCell>
-      <TableCell className="text-right"><div className="h-4 bg-gray-200 rounded w-full md:w-1/4 animate-pulse ml-auto"></div></TableCell>
-    </TableRow>
-  );
+  const handleFileUpload = async (uploadedFiles: File[]) => {
+    // setFiles(uploadedFiles)
+    
+    for (const file of uploadedFiles) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Only images (JPEG, PNG) and PDF files are allowed")
+        return
+      }
+      
+      const uploadToastId = toast.loading(`Uploading ${file.name}...`)
+      const formData = new FormData()
+      formData.append('file', file)
+
+      try {
+        await uploadDocument(propertyId, formData)
+        toast.success(`${file.name} uploaded successfully`, { id: uploadToastId })
+      } catch (error) {
+        console.error("Error uploading document:", error)
+        toast.error(`Failed to upload ${file.name}`, { id: uploadToastId })
+      }
+      // finally {
+      //   setFiles(prevFiles => {
+      //     const fileExists = prevFiles.some(existingFile => existingFile.name === file.name);
+          
+      //     if (!fileExists) {
+      //       const newDocument = {
+      //         key: file.name,
+      //         name: file.name,
+      //         date: new Date()
+      //       };
+      //       return [...prevFiles, newDocument];
+      //     }
+          
+      //     return prevFiles;
+      //   });
+      // }
+    }
+  }
+
+  // const SkeletonRow = () => (
+  //   <TableRow>
+  //     <TableCell><div className="h-4 bg-gray-200 rounded w-full md:w-3/4 animate-pulse"></div></TableCell>
+  //     <TableCell><div className="h-4 bg-gray-200 rounded w-full md:w-1/2 animate-pulse"></div></TableCell>
+  //     <TableCell className="text-right"><div className="h-4 bg-gray-200 rounded w-full md:w-1/4 animate-pulse ml-auto"></div></TableCell>
+  //   </TableRow>
+  // );
 
   const TaxDocumentsTable = ({ documents }: { documents: Document[] }) => (
     <div className="bg-white border border-zinc-200 rounded-lg p-6 mb-6">
@@ -158,7 +182,7 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {documents.map((doc) => (
+            {files.map((doc) => (
               <TableRow key={doc.key}>
                 <TableCell className="font-medium w-full md:w-3/4">{doc.name}</TableCell>
                 <TableCell className="w-full md:w-1/2">{doc?.date?.toLocaleDateString()}</TableCell>
@@ -193,9 +217,12 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
 
   const PropertyDocumentsTable = ({ documents }: { documents: Document[] }) => (
     <div className="bg-white border border-zinc-200 rounded-lg p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <Subheading>Property Documents</Subheading>
-        <form action={handleUpload}>
+      <div className="mb-6 flex flex-col">
+        <Subheading className="text-left mb-4">Property Documents</Subheading>
+        <div className="w-full mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
+        <FileUpload onChange={handleFileUpload} />
+        </div>
+        {/* <form action={handleUpload}>
           <label htmlFor="upload-document">
             <Button disabled={isPending} color="blue" onClick={() => fileInputRef?.current?.click()}>
               <PlusIcon className="mr-0 h-4 w-4" />
@@ -212,26 +239,28 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
               onChange={(e) => e.target.form?.requestSubmit()}
             />
           </label>
-        </form>
+        </form> */}
       </div>
-      {fetcherLoading ? (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableHeader className="w-1/2">Document Name</TableHeader>
-              <TableHeader className="w-1/4">Date</TableHeader>
-              <TableHeader className="relative w-0">
-                <span className="sr-only">Actions</span>
-              </TableHeader>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {[...Array(2)].map((_, index) => (
-              <SkeletonRow key={index} />
-            ))}
-          </TableBody>
-        </Table>
-      ) : documents.length === 0 ? (
+      {
+      // fetcherLoading ? (
+      //   <Table>
+      //     <TableHead>
+      //       <TableRow>
+      //         <TableHeader className="w-1/2">Document Name</TableHeader>
+      //         <TableHeader className="w-1/4">Date</TableHeader>
+      //         <TableHeader className="relative w-0">
+      //           <span className="sr-only">Actions</span>
+      //         </TableHeader>
+      //       </TableRow>
+      //     </TableHead>
+      //     <TableBody>
+      //       {[...Array(2)].map((_, index) => (
+      //         <SkeletonRow key={index} />
+      //       ))}
+      //     </TableBody>
+      //   </Table>
+      // ) : 
+      files.length === 0 ? (
         <Text>No property documents found.</Text>
       ) : (
         <Table>
@@ -245,7 +274,7 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {documents.map((doc) => (
+            {files.map((doc) => (
               <TableRow key={doc.key}>
                 <TableCell className="font-medium w-1/2">
                   <div className="flex items-center">
@@ -260,10 +289,12 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
                       <EllipsisHorizontalIcon />
                     </DropdownButton>
                     <DropdownMenu anchor="bottom end">
-                      <DropdownItem onClick={() => doc.key && handleViewDocument(doc.key)}>
-                        <EyeIcon />
-                        <DropdownLabel>View</DropdownLabel>
-                      </DropdownItem>
+                      {doc.name?.endsWith('.pdf') && (
+                        <DropdownItem onClick={() => doc.key && handleViewDocument(doc.key)}>
+                          <EyeIcon />
+                          <DropdownLabel>View</DropdownLabel>
+                        </DropdownItem>
+                      )}
                       <DropdownItem onClick={() => doc.key && handleDownloadDocument(doc.key)}>
                         <ArrowDownTrayIcon />
                         <DropdownLabel>Download</DropdownLabel>
@@ -288,10 +319,11 @@ export function DocumentsClient({ propertyId }: { propertyId: string }) {
       <main className=" mx-auto">
         <Heading className="mb-6">All Documents</Heading>
         <TaxDocumentsTable 
-          documents={documents?.filter(doc => doc.key && doc.key.toLowerCase().includes('tax')) || []}
+          documents={[]}
         />
         <PropertyDocumentsTable 
-          documents={documents?.filter(doc => doc.key && !doc.key.toLowerCase().includes('tax')) || []}
+          // documents={documents?.filter(doc => doc.name && !doc.name.toLowerCase().includes('tax')) || []}
+          documents={files}
         />
       </main>
 

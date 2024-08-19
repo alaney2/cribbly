@@ -21,7 +21,7 @@ export function CheckboxGroup({ className, ...props }: React.ComponentPropsWitho
 export function CheckboxField({
   className,
   ...props
-}: { className?: string } & Omit<Headless.FieldProps, 'className'>) {
+}: { className?: string } & Omit<Headless.FieldProps, 'as' | 'className'>) {
   return (
     <Headless.Field
       data-slot="field"
@@ -121,7 +121,7 @@ export function Checkbox({
 }: {
   color?: Color
   className?: string
-} & Omit<Headless.CheckboxProps, 'className'>) {
+} & Omit<Headless.CheckboxProps, 'as' | 'className'>) {
   return (
     <Headless.Checkbox
       data-slot="control"

@@ -18,7 +18,10 @@ export function SwitchGroup({ className, ...props }: React.ComponentPropsWithout
   )
 }
 
-export function SwitchField({ className, ...props }: { className?: string } & Omit<Headless.FieldProps, 'className'>) {
+export function SwitchField({
+  className,
+  ...props
+}: { className?: string } & Omit<Headless.FieldProps, 'as' | 'className'>) {
   return (
     <Headless.Field
       data-slot="field"
@@ -140,7 +143,7 @@ export function Switch({
 }: {
   color?: Color
   className?: string
-} & Omit<Headless.SwitchProps, 'className' | 'children'>) {
+} & Omit<Headless.SwitchProps, 'as' | 'className' | 'children'>) {
   return (
     <Headless.Switch
       data-slot="control"

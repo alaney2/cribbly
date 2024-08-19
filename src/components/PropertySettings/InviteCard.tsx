@@ -110,7 +110,7 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
             <Fieldset>
               <FieldGroup>
               <Field>
-              <Label htmlFor="fullName">Name (optional)</Label>
+              <Label htmlFor="fullName">Name</Label>
               <Input
                 id="fullName"
                 type="text"

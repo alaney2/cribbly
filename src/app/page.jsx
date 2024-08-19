@@ -15,7 +15,6 @@ import { WavyBackground } from '@/components/aceternity/wavy-background'
 import { BeforeAfter } from '@/components/landing/BeforeAfter'
 import Image from 'next/image'
 import { Button } from '@/components/catalyst/button'
-// import { Container } from '@/components/default/Container'
 import backgroundImage from '@/images/background-call-to-action.jpg'
 
 export default function Home() {
