@@ -9,6 +9,60 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      maintenance: {
+        Row: {
+          id: string
+          property_id: string
+          user_id: string
+          title: string
+          description: string
+          priority: string
+          status: string
+          created_at: Date
+          updated_at: Date
+          notify: boolean
+        }
+      }
+      Insert: {
+        id?: string
+        property_id: string
+        user_id: string
+        title: string
+        description?: string
+        priority: string
+        status: string
+        created_at?: Date | null
+        updated_at?: Date | null
+        notify: boolean
+      }
+      Update:  {
+        id?: string
+        property_id?: string
+        user_id?: string
+        title?: string
+        description?: string
+        priority?: string
+        status?: string
+        created_at?: Date | null
+        updated_at?: Date | null
+        notify?: boolean
+      }
+      Relationships: [
+        {
+          foreignKeyName: 'maintenance_property_id_fkey'
+          columns: ['property_id']
+          isOneToOne: false
+          referencedRelation: 'properties'
+          referencedColumns: ['id']
+        },
+        {
+          foreignKeyName: 'maintenance_user_id_fkey'
+          columns: ['user_id']
+          isOneToOne: false
+          referencedRelation: 'users'
+          referencedColumns: ['id']
+        },
+      ]
       tenants: {
         Row: {
           id: string

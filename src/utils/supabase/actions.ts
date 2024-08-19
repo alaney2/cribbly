@@ -81,10 +81,13 @@ export async function addPropertyFees(formData: FormData) {
   const securityDepositSwitch = formData.get('securityDepositSwitch')
   let startDate = new Date(String(formData.get('startDate')))
   let endDate = new Date(String(formData.get('endDate')))
+  let dateFrom = new Date(String(formData.get('dateFrom')))
+  let dateTo = new Date(String(formData.get('dateTo')))
   const rent_id = String(formData.get('rent_id'))
-  const rentInfo = calculateRentDates(startDate, endDate);
+  const rentInfo = calculateRentDates(dateFrom, dateTo);
   const monthsOfRent = rentInfo.monthsOfRent;
   const rentDates = rentInfo.rentDates;
+  console.log(rentDates)
   const supabase = createClient();
   for (const pair of formData.entries()) {
     if (pair[0] === 'rentAmount') {
@@ -94,8 +97,8 @@ export async function addPropertyFees(formData: FormData) {
             id: rent_id ? rent_id : generateId(),
             property_id: propertyId.toString(),
             rent_price: Number(parseFloat(pair[1].toString()).toFixed(2)),
-            rent_start: startDate,
-            rent_end: endDate,
+            rent_start: dateFrom,
+            rent_end: dateTo,
             months_left: monthsOfRent,
           }, {
             onConflict: 'property_id',
@@ -133,7 +136,7 @@ export async function addPropertyFees(formData: FormData) {
     }
     if (pair[0].startsWith('fee')) {
       const fee = JSON.parse(pair[1].toString())
-      console.log(fee.id, fee.fee_name, fee.fee_type, fee.fee_cost, monthsOfRent, startDate, endDate)
+      console.log(fee.id, fee.fee_name, fee.fee_type, fee.fee_cost, monthsOfRent, dateFrom, dateTo)
       if (fee.id) {
         // console.log('FEEID', fee.id)
         const { error } = await supabase.from('property_fees')
@@ -143,8 +146,8 @@ export async function addPropertyFees(formData: FormData) {
               fee_type: fee.fee_type,
               fee_cost: Number(parseFloat(fee.fee_cost).toFixed(2)),
               months_left: fee.fee_type === 'recurring' ? monthsOfRent : 1,
-              start_date: startDate,
-              end_date: endDate,
+              start_date: dateFrom,
+              end_date: dateTo,
             })
           .eq('id', fee.id);
         if (error) {
@@ -163,8 +166,8 @@ export async function addPropertyFees(formData: FormData) {
               fee_type: fee.fee_type,
               fee_cost: Number(parseFloat(fee.fee_cost).toFixed(2)),
               months_left: fee.fee_type === 'recurring' ? monthsOfRent : 1,
-              start_date: startDate,
-              end_date: endDate,
+              start_date: dateFrom,
+              end_date: dateTo,
             }, 
             // {
             //   onConflict: 'id, property_id, fee_name, fee_type, fee_cost, start_date, end_date',
@@ -413,6 +416,45 @@ export async function getCurrentProperty(): Promise<string> {
   return currentPropertyId
 }
 
+export async function getTasks() {
+  const supabase = createClient();
+  const { data, error } = await supabase.from('maintenance').select('*').order('created_at', { ascending: false })
+  if (error) {
+    console.error('Error fetching tasks:', error)
+    throw new Error('Error fetching tasks')
+  }
+  return data
+}
+
 export async function createTask(formData: FormData) {
-  
+  const title = formData.get('title')
+  const description = formData.get('description')
+  const priority = formData.get('priority')
+  const status = formData.get('status')
+  const notify = formData.get('notify') === 'on' ? true : false
+  const supabase = createClient();
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  if (!user || userError) {
+    console.error('Error fetching user:', userError)
+    throw new Error('Error fetching user')
+  }
+  const currentPropertyId = user.user_metadata.currentPropertyId
+
+  const { data, error} = await supabase.from('maintenance').insert([
+    {
+      title,
+      description,
+      priority,
+      status,
+      notify,
+      user_id: user.id,
+      property_id: currentPropertyId
+    }
+  ])
+
+  if (error) {
+    console.error('Error creating task:', error)
+    throw new Error('Error creating task')
+  }
+  return data
 }

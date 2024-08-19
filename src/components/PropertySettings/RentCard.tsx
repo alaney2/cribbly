@@ -1,5 +1,5 @@
 "use client"
-import * as React from "react"
+import React, { useState, useEffect } from "react"
 
 import { Button } from "@/components/catalyst/button"
 import {
@@ -26,7 +26,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { EditFeeDialog } from '@/components/PropertySettings/EditFeeDialog'
 // import { generateId } from "@/lib/utils"
 import { addPropertyFees } from '@/utils/supabase/actions'
-import "react-datepicker/dist/react-datepicker.css";
 import { Calendar as CalendarIcon } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
 import { format, addYears, subDays, addDays } from "date-fns"
@@ -37,6 +36,7 @@ import useSWR from 'swr';
 import { createClient } from '@/utils/supabase/client';
 import { IconCurrencyDollar } from '@tabler/icons-react';
 import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
+import { DateRange } from "react-day-picker"
 
 const fetcher = async (propertyId: string) => {
   const supabase = createClient();
@@ -93,7 +93,7 @@ type RentCardProps = {
 
 
 export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnClick }: RentCardProps ) {
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof window !== "undefined" && setPropertyId && !propertyId) {
       setPropertyId(localStorage.getItem('propertyId') || '')
     }
@@ -125,10 +125,14 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
   const [feeEdit, setFeeEdit] = React.useState<Fee>()
   const [startDate, setStartDate] = React.useState<Date | undefined>(addDays(new Date(), 1));
   const [endDate, setEndDate] = React.useState<Date | undefined>((addYears(new Date(), 1)));
+  const [date, setDate] = React.useState<DateRange | undefined>({
+    from: (addDays(new Date(), 1)),
+    to: (addYears(new Date(), 1)),
+  })
   const [fadeOut, setFadeOut] = React.useState(false);
   const animationClass = fadeOut ? ' animate__fadeOut' : 'animate__fadeIn';
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (property_rent && property_rent.length > 0) {
       setRentAmount(String(property_rent[0].rent_price))
       setStartDate(new Date(property_rent[0].rent_start))
@@ -200,7 +204,47 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
           <div className="sm:text-sm text-zinc-950 md:w-40 mb-2 md:mb-0">
             Start and end date
           </div>
-          <div className="flex items-center gap-1 sm:gap-2 grow">
+          <div className="flex-grow">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                id="date"
+                outline
+                className={cn(
+                  "text-center w-full",
+                  !date && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {date?.from ? (
+                  date.to ? (
+                    <>
+                      {format(date.from, "LLL dd, y")} -{" "}
+                      {format(date.to, "LLL dd, y")}
+                    </>
+                  ) : (
+                    format(date.from, "LLL dd, y")
+                  )
+                ) : (
+                  <span>Pick a date</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                initialFocus
+                mode="range"
+                defaultMonth={date?.from}
+                selected={date}
+                onSelect={setDate}
+                numberOfMonths={2}
+                disabled={(date) => date < new Date()}
+              />
+            </PopoverContent>
+          </Popover>
+          </div>
+
+          {/* <div className="flex items-center gap-1 sm:gap-2 grow">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -252,10 +296,12 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
                 />
               </PopoverContent>
             </Popover>
-          </div>
+          </div> */}
           <input name="rent_id" required value={property_rent?.[0]?.id ?? ''} readOnly type="hidden" />
           <input name="startDate" required value={startDate ? format(startDate, "MM/dd/yyyy") : ""} readOnly type="hidden" />
           <input name="endDate" required value={endDate ? format(endDate, "MM/dd/yyyy") : ""} readOnly type="hidden" />
+          <input name="dateFrom" required value={date?.from ? format(date?.from, "MM/dd/yyyy") : ""} readOnly type="hidden" />
+          <input name="dateTo" required value={date?.to ? format(date?.to, "MM/dd/yyyy") : ""} readOnly type="hidden" />
         </div>
         <div className="relative space-y-4">
           <Headless.Field className="relative flex flex-col md:flex-row md:items-center md:gap-4">

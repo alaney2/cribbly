@@ -12,6 +12,7 @@ import { Radio, RadioField, RadioGroup } from '@/components/catalyst/radio'
 import { Heading, Subheading } from '@/components/catalyst/heading'
 import { Checkbox, CheckboxField, CheckboxGroup } from '@/components/catalyst/checkbox'
 import { Listbox, ListboxLabel, ListboxOption } from '@/components/catalyst/listbox'
+import { createTask } from '@/utils/supabase/actions'
 
 // const initialRequests = [
 //   { id: 1, date: '2024-08-18', title: 'Leaky Faucet', description: 'The kitchen faucet is leaking', status: 'Pending', priority: 'Medium' },
@@ -20,24 +21,29 @@ import { Listbox, ListboxLabel, ListboxOption } from '@/components/catalyst/list
 // ];
 type Request = {
   id: number
-  date: string
+  property_id?: string
+  user_id?: string
+  created_at?: Date
+  updated_at: Date
   title: string
   description: string
   status: string
   priority: string
+  notify: boolean
 }
 
-export function MaintenanceTable() {
-  const [requests, setRequests] = useState<Request[]>([]);
+export function MaintenanceTable({ tasks } : { tasks: Request[] }) {
+  const [requests, setRequests] = useState<Request[]>(tasks);
   const [isNewDialogOpen, setIsNewDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [currentRequest, setCurrentRequest] = useState({
     id: 0,
-    date: '',
+    updated_at: new Date(),
     title: '',
     description: '',
     status: '',
     priority: '',
+    notify: false
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -50,10 +56,10 @@ export function MaintenanceTable() {
     if (currentRequest.id === 0) {
       // New request
       const newId = requests.length + 1;
-      const currentDate = new Date().toISOString().split('T')[0];
+      const currentDate = new Date();
       setRequests([
         ...requests,
-        { ...currentRequest, id: newId, date: currentDate, status: 'Pending' },
+        { ...currentRequest, id: newId, updated_at: currentDate, status: 'Pending' },
       ]);
     } else {
       // Edit existing request
@@ -63,7 +69,7 @@ export function MaintenanceTable() {
     }
     setIsNewDialogOpen(false);
     setIsEditDialogOpen(false);
-    setCurrentRequest({ id: 0, date: '', title: '', description: '', status: '', priority: '' });
+    setCurrentRequest({ id: 0, updated_at: new Date(), title: '', description: '', status: '', priority: '', notify: false });
   };
 
   const handleRowClick = (request: Request) => {
@@ -75,7 +81,7 @@ export function MaintenanceTable() {
     <div className="p-4">
       <Heading className="mb-4">Maintenance Requests</Heading>
       <Button onClick={() => {
-        setCurrentRequest({ id: 0, date: '', title: '', description: '', status: '', priority: 'Medium' });
+        setCurrentRequest({ id: 0, updated_at: new Date(), title: '', description: '', status: '', priority: 'Medium', notify: false });
         setIsNewDialogOpen(true);
       }} className="mb-4" color="blue">New Request</Button>
       
@@ -91,7 +97,7 @@ export function MaintenanceTable() {
         <TableBody>
           {requests.map((request) => (
             <TableRow key={request.id} onClick={() => handleRowClick(request)} className="cursor-default hover:bg-gray-50">
-              <TableCell>{request.date}</TableCell>
+              <TableCell>{String(request.created_at)}</TableCell>
               <TableCell>{request.title}</TableCell>
               <TableCell>{request.status}</TableCell>
               <TableCell>{request.priority}</TableCell>
@@ -106,7 +112,7 @@ export function MaintenanceTable() {
       }}>
         <DialogTitle>{currentRequest.id === 0 ? 'New Maintenance Request' : 'Edit Maintenance Request'}</DialogTitle>
         <DialogBody>
-          <form onSubmit={handleSubmit}>
+          <form action={createTask}>
             <FieldGroup>
               <Field>
                 <Label htmlFor="title">Title</Label>
