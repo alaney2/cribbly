@@ -13,7 +13,7 @@ import { Heading, Subheading } from '@/components/catalyst/heading'
 import { Checkbox, CheckboxField, CheckboxGroup } from '@/components/catalyst/checkbox'
 import { Listbox, ListboxLabel, ListboxOption } from '@/components/catalyst/listbox'
 import { createTask } from '@/utils/supabase/actions'
-
+import { toast } from 'sonner';
 // const initialRequests = [
 //   { id: 1, date: '2024-08-18', title: 'Leaky Faucet', description: 'The kitchen faucet is leaking', status: 'Pending', priority: 'Medium' },
 //   { id: 2, date: '2024-08-17', title: 'Broken Window', description: 'Living room window is cracked', status: 'In Progress', priority: 'High' },
@@ -51,8 +51,8 @@ export function MaintenanceTable({ tasks } : { tasks: Request[] }) {
     setCurrentRequest((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    // e.preventDefault();
     if (currentRequest.id === 0) {
       // New request
       const newId = requests.length + 1;
@@ -112,7 +112,23 @@ export function MaintenanceTable({ tasks } : { tasks: Request[] }) {
       }}>
         <DialogTitle>{currentRequest.id === 0 ? 'New Maintenance Request' : 'Edit Maintenance Request'}</DialogTitle>
         <DialogBody>
-          <form action={createTask}>
+          <form action={async (formData) => {
+            toast.promise(new Promise(async (resolve, reject) => {
+              try {
+                const data = await createTask(formData)
+                resolve('Success');
+              } catch (error) {
+                reject(error)
+              } finally {
+                handleSubmit()
+              }
+            }), {
+              loading: 'Adding...',
+              success: 'Task added!',
+              error: 'An error occurred, please check the form and try again.'
+            })
+            
+          }}>
             <FieldGroup>
               <Field>
                 <Label htmlFor="title">Title</Label>

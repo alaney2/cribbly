@@ -211,7 +211,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
                 id="date"
                 outline
                 className={cn(
-                  "text-center w-full",
+                  "w-full",
                   !date && "text-muted-foreground"
                 )}
               >
