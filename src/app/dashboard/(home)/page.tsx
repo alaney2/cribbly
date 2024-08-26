@@ -1,12 +1,7 @@
 "use server"
 import { createClient } from '@/utils/supabase/server'
-import { PencilSquareIcon, WrenchIcon } from '@heroicons/react/24/outline';
-import { IconCurrencyDollar } from '@tabler/icons-react';
-import { Button } from '@/components/catalyst/button'
-import type { Metadata, ResolvingMetadata } from 'next'
 import { BentoStats } from '@/components/Dashboard/BentoStats'
 import { redirect } from 'next/navigation'
-// import { CalendarIcon } from '@radix-ui/react-icons';
 import { PropertyStats } from '@/components/Dashboard/PropertyStats'
 import { Strong, Text, TextLink } from '@/components/catalyst/text'
 

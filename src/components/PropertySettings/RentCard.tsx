@@ -34,9 +34,10 @@ import { ScheduleDialog } from '@/components/PropertySettings/ScheduleDialog'
 import { toast } from 'sonner';
 import useSWR from 'swr';
 import { createClient } from '@/utils/supabase/client';
-import { IconCurrencyDollar } from '@tabler/icons-react';
 import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import { DateRange } from "react-day-picker"
+import { daysBetween } from "@/utils/helpers"
+import { Subheading } from "@/components/catalyst/heading"
 
 const fetcher = async (propertyId: string) => {
   const supabase = createClient();
@@ -119,18 +120,17 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
     fee_cost: 0,
   })
   const [fees, setFees] = React.useState<Fee[]>([])
-  const [netIncome, setNetIncome] = React.useState<number>(0)
-  const [isLoading, setIsLoading] = React.useState(false)
   const [editFeeOpen, setEditFeeOpen] = React.useState(false)
   const [feeEdit, setFeeEdit] = React.useState<Fee>()
   const [startDate, setStartDate] = React.useState<Date | undefined>(addDays(new Date(), 1));
   const [endDate, setEndDate] = React.useState<Date | undefined>((addYears(new Date(), 1)));
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: (addDays(new Date(), 1)),
-    to: (addYears(new Date(), 1)),
+    from: (addDays(new Date(), 0)),
+    to: (addDays(addYears(new Date(), 1), 6)),
   })
   const [fadeOut, setFadeOut] = React.useState(false);
   const animationClass = fadeOut ? ' animate__fadeOut' : 'animate__fadeIn';
+  const daysBetweenDates = daysBetween(date?.from ?? new Date(), new Date())
 
   useEffect(() => {
     if (property_rent && property_rent.length > 0) {
@@ -214,6 +214,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
                   "w-full",
                   !date && "text-muted-foreground"
                 )}
+                disabled={daysBetweenDates <= 0}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {date?.from ? (
@@ -244,59 +245,6 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
           </Popover>
           </div>
 
-          {/* <div className="flex items-center gap-1 sm:gap-2 grow">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  outline
-                  className={cn(
-                    "flex-1 justify-center text-center text-sm",
-                    !startDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="sm:mr-2 h-4 w-4" />
-                  {startDate ? format(startDate, "MM/dd/yyyy") : <span>Start date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={startDate}
-                  onSelect={setStartDate}
-                  initialFocus
-                  defaultMonth={startDate}
-                  disabled={(date) => date < new Date()}
-                />
-              </PopoverContent>
-            </Popover>
-            <span className="px-0">-</span>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  outline
-                  className={cn(
-                    "flex-1 justify-center text-center text-sm",
-                    !endDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="sm:mr-2 h-4 w-4" />
-                  {endDate ? format(endDate, "MM/dd/yyyy") : <span>End date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={endDate}
-                  onSelect={setEndDate}
-                  initialFocus
-                  defaultMonth={endDate}
-                  disabled={(date) =>
-                    (startDate !== undefined) ? date < startDate : date < new Date()
-                  }
-                />
-              </PopoverContent>
-            </Popover>
-          </div> */}
           <input name="rent_id" required value={property_rent?.[0]?.id ?? ''} readOnly type="hidden" />
           <input name="startDate" required value={startDate ? format(startDate, "MM/dd/yyyy") : ""} readOnly type="hidden" />
           <input name="endDate" required value={endDate ? format(endDate, "MM/dd/yyyy") : ""} readOnly type="hidden" />
@@ -318,16 +266,15 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
                   autoComplete="off"
                   value={rentAmount}
                   onChange={(e) => {
-                    setIsLoading(true)
                     setRentAmount(e.target.value)
                     setTimeout(() => {
-                      setIsLoading(false)
                     }, Math.floor(Math.random() * 501) + 200)
                   }}
                   step="1"
                   required
                   min="0"
                   pattern="^\d+(?:\.\d{1,2})?$"
+                  disabled={daysBetweenDates <= 0}
                 />
               </InputGroup>
             </div>
@@ -354,16 +301,14 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
                   id="depositAmount"
                   name="depositAmount"
                   placeholder="0"
-                  disabled={!securityDeposit}
+                  disabled={!securityDeposit || daysBetweenDates <= 0}
                   className="w-full flex-grow"
                   autoComplete="off"
                   value={securityDepositFee}
                   required={securityDeposit}
                   onChange={(e) => {
-                    setIsLoading(true)
                     setSecurityDepositFee(e.target.value)
                     setTimeout(() => {
-                      setIsLoading(false)
                     }, Math.floor(Math.random() * 501) + 200)
                   }}
                   step=".01"
@@ -406,7 +351,13 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
         ))}
         <input name='propertyId' defaultValue={propertyId} readOnly className="hidden" />
         <div className="mt-4 -mb-2 flex justify-between">
-          <Button type="button" color="blue" onClick={() => setIsDialogOpen(true)}>Add Fee</Button>
+          <Button 
+            type="button" 
+            color="blue" 
+            onClick={() => setIsDialogOpen(true)}
+          >
+            Add Fee
+          </Button>
           <Button type="button" outline onClick={() => setIsScheduleOpen(true)}>Billing Schedule</Button>
         </div>
       </CardContent>
@@ -416,7 +367,13 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
         
         <div className="flex gap-x-3">
           {/* <Button color="white">Edit</Button> */}
-          <Button type="submit" color="blue" >Save</Button>
+          <Button 
+            type="submit" 
+            color="blue"
+            disabled={daysBetweenDates <= 0}
+          >
+            Save
+          </Button>
         </div>
       </CardFooter>
       </form>
@@ -493,7 +450,7 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
       </form>
     </Dialog>
     {editFeeOpen && feeEdit && <EditFeeDialog isOpen={editFeeOpen} setIsOpen={setEditFeeOpen} fee={feeEdit} fees={fees} setFees={setFees} mutateFees={mutateFees} />}
-    {startDate && endDate && <ScheduleDialog isOpen={isScheduleOpen} setIsOpen={setIsScheduleOpen} startDate={startDate} endDate={endDate} rentAmount={rentAmount} securityDeposit={securityDeposit} securityDepositFee={securityDepositFee}/>}
+    {date && date.to && date.from && <ScheduleDialog isOpen={isScheduleOpen} setIsOpen={setIsScheduleOpen} startDate={date.from} endDate={date.to} rentAmount={rentAmount} securityDeposit={securityDeposit} securityDepositFee={securityDepositFee}/>}
     </>
   )
 }

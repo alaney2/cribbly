@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, useState, Suspense } from 'react'
-import { Button } from '@/components/default/Button'
+import { Button } from '@/components/catalyst/button'
 import { Spinner } from '@/components/Spinners/Spinner'
 import { verifyOtp } from '@/app/auth/otp/action'
 import { Input } from '@/components/ui/input'
@@ -133,8 +133,9 @@ function OtpInputWithParams({ email }: { email: string } ) {
       <Button
         id="submitButton"
         type="submit"
-        variant="solid"
-        color={isSubmitting ? 'lightblue' : 'blue'}
+        // variant="solid"
+        disabled={isSubmitting}
+        color={'blue'}
         className="w-full h-10 mt-2"
         onClick={() => {
           if (inputsRef.current.every(input => input.value !== '')) {

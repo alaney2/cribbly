@@ -4,7 +4,6 @@ import localFont from 'next/font/local'
 import clsx from 'clsx'
 import { Analytics } from '@vercel/analytics/react';
 // import '@/styles/mapbox-gl.css';
-import '@/styles/geoencoder.css';
 import '@/styles/tailwind.css'
 import { type Metadata } from 'next'
 import { SpeedInsights } from "@vercel/speed-insights/next"

@@ -10,12 +10,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   if (user) {
     if (user.user_metadata.role === 'tenant') {
-      const unavailableRoutes = ['/sign-in', '/get-started', '/welcome', '/invite', '/dashboard']
-      if (pathname !== '/tenant-dashboard' && (pathname === '/' || unavailableRoutes.some((path) => url.pathname.startsWith(path)))) {
-        return NextResponse.redirect(new URL('/tenant-dashboard', request.url))
-      } else {
-        return NextResponse.next()
-      }
+      return NextResponse.redirect(new URL('https://resident.cribbly.io'))
     } else if (!user.user_metadata.role || user.user_metadata.role !== 'tenant') {
       const { data: show_welcome_data } = await supabase
       .from('users')
@@ -32,7 +27,7 @@ export async function middleware(request: NextRequest) {
       }
 
       if (!welcome_screen) {
-        const unavailableRoutes = ['/sign-in', '/get-started', '/welcome', '/invite', '/tenant-dashboard']
+        const unavailableRoutes = ['/sign-in', '/get-started', '/welcome', '/invite']
         // Can't sign in or sign up if already logged in
         if (
           pathname === '/' ||

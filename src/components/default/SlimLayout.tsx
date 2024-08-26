@@ -1,17 +1,10 @@
 'use client'
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image'
-// import Spline from '@splinetool/react-spline';
 import backgroundDefault from '@/images/background-auth.jpg'
-import 'animate.css';
-import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css'
-import { Notification } from '@/components/Notification'
-import { signal, effect } from '@preact/signals'
 import { Boxes } from '@/components/aceternity/background-boxes'
-import { cn } from '@/utils/cn'
 
-const Spline = React.lazy(() => import('@splinetool/react-spline'));
 
 type SlimLayoutProps = {
   children: React.ReactNode; 
@@ -21,19 +14,12 @@ type SlimLayoutProps = {
 }
 
 export function SlimLayout({ children, splineLink, heading, subHeading }: SlimLayoutProps ) {
-  const isSplineLoaded = signal(false)
-  const isLargeScreen = signal(true)
+  const [isLargeScreen, setIsLargeScreen] = useState(true)
 
-  const handleSplineLoaded = () => {
-    setTimeout(() => {
-      isSplineLoaded.value = true
-    }, 0)
-  }
-
-  effect(() => {
+  useEffect(() => {
     const checkSize = () => {
       if (typeof window === 'undefined') return
-      isLargeScreen.value = window.innerWidth >= 1024;
+      setIsLargeScreen(window.innerWidth >= 1024);
     };
 
     checkSize();
@@ -41,20 +27,17 @@ export function SlimLayout({ children, splineLink, heading, subHeading }: SlimLa
     window.addEventListener('resize', checkSize);
 
     return () => window.removeEventListener('resize', checkSize);
-  });
+  }, [isLargeScreen]);
 
   return (
     <>
       <div className="relative flex min-h-full justify-center md:px-12 lg:px-0 bg-gray-50">
-        <Suspense>
-          <Notification />
-        </Suspense>
         <div className="relative z-10 flex flex-1 flex-col px-4 py-10 justify-center md:flex-none md:px-28">
           <main className="mx-auto w-full max-w-md sm:px-4 md:w-96 md:max-w-sm md:px-0">
             {children}
           </main>
         </div>
-        {isLargeScreen.value && (
+        {isLargeScreen && (
           <div className="hidden lg:relative lg:block lg:flex-1 leading-4">
             <>
               <div className="h-full relative w-full overflow-hidden bg-blue-500 flex flex-col items-center justify-center select-none">

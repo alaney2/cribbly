@@ -2,6 +2,14 @@ import type { Tables } from '@/types_db';
 
 type Price = Tables<'prices'>;
 
+export function daysBetween(first: Date, second: Date) {
+  const date1 = Date.UTC(first.getFullYear(), first.getMonth(), first.getDate());
+  const date2 = Date.UTC(second.getFullYear(), second.getMonth(), second.getDate());
+  const ms = date1 - date2;
+  const millisecondsPerDay = 1000 * 60 * 60 * 24;
+  return Math.floor(ms / millisecondsPerDay);
+}
+
 export function calculateRentDates(start: Date, end: Date) {
   const rentDates = [];
   rentDates.push(start);

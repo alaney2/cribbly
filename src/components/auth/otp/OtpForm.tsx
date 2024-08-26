@@ -1,7 +1,6 @@
 "use client"
 import clsx from 'clsx'
 import { useState } from 'react'
-import { Button } from '@/components/default/Button'
 import { OtpResend } from '@/components/auth/otp/OtpResend'
 import { OtpInput } from '@/components/auth/otp/OtpInput'
 import 'animate.css'

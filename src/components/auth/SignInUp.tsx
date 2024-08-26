@@ -12,6 +12,8 @@ import { OtpForm } from '@/components/auth/otp/OtpForm'
 import 'animate.css'
 import clsx from 'clsx'
 import Link from 'next/link'
+import { toast } from 'sonner'
+
 
 const formClasses = `
     block text-base w-full mt-6 h-11 appearance-none bg-gray-50 rounded-md 
@@ -93,7 +95,17 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
                 <GoogleSignIn />
               </div>
 
-              <form className="" action={signInWithOtp}>
+              <form 
+                className="" 
+                action={async (formData) => {
+                  try {
+                    await signInWithOtp(formData)
+                  } catch (error) {
+                    toast.error('An error occurred, please try again')
+                    console.error(error)
+                  }
+                }
+              }>
                 {showEmailInput && (
                   <input
                     // type="email"
@@ -144,7 +156,8 @@ export function SignInUp({ signIn, splineLink } : { signIn : boolean; splineLink
   }
 
   return (
-    <SlimLayout splineLink={splineLink} heading={signIn ? 'Sign in to Cribbly' : undefined} subHeading={signIn ? 'Sign in to your account, whether you are a tenant or landlord' : undefined}>
+    <SlimLayout splineLink={splineLink} heading={signIn ? 'Sign in to Cribbly' : undefined} 
+      subHeading={signIn ? 'Sign in to your account through Google or email verification' : undefined}>
       {renderStepContent(currentStep)}
     </SlimLayout>
   )

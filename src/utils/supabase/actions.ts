@@ -87,7 +87,7 @@ export async function addPropertyFees(formData: FormData) {
   const rentInfo = calculateRentDates(dateFrom, dateTo);
   const monthsOfRent = rentInfo.monthsOfRent;
   const rentDates = rentInfo.rentDates;
-  console.log(rentDates)
+  // console.log(rentDates)
   const supabase = createClient();
   for (const pair of formData.entries()) {
     if (pair[0] === 'rentAmount') {
@@ -136,7 +136,7 @@ export async function addPropertyFees(formData: FormData) {
     }
     if (pair[0].startsWith('fee')) {
       const fee = JSON.parse(pair[1].toString())
-      console.log(fee.id, fee.fee_name, fee.fee_type, fee.fee_cost, monthsOfRent, dateFrom, dateTo)
+      // console.log(fee.id, fee.fee_name, fee.fee_type, fee.fee_cost, monthsOfRent, dateFrom, dateTo)
       if (fee.id) {
         // console.log('FEEID', fee.id)
         const { error } = await supabase.from('property_fees')
