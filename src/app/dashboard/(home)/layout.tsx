@@ -51,7 +51,7 @@ export default async function PropertyDashboardLayout({
   let { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/sign-in')
 
-  let { data } = await supabase.from('users').select()
+  let { data, error } = await supabase.from('users').select()
     .eq('id', user.id)
     .single()
 
