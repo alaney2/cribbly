@@ -5,6 +5,7 @@ import { InviteCard } from '@/components/PropertySettings/InviteCard'
 import { DeleteCard } from '@/components/PropertySettings/DeleteCard'
 import { Heading } from '@/components/catalyst/heading'
 import { Divider } from '@/components/catalyst/divider'
+import Link from 'next/link'
 
 interface SettingsNavigationProps {
   currentPropertyId: string
@@ -12,6 +13,7 @@ interface SettingsNavigationProps {
   securityDeposit: any | null
   propertyFees: any[] | null
   key: string
+  initialTab?: string
 }
 
 const NavButton = ({
@@ -24,10 +26,8 @@ const NavButton = ({
   children: React.ReactNode
 }) => (
   <button
-    className={`w-full cursor-default rounded-md px-4 py-2 text-left text-sm transition-colors ${
-      active
-        ? 'bg-gray-100 font-medium text-gray-900'
-        : 'text-gray-600 hover:bg-gray-100'
+    className={`w-full cursor-default rounded-md px-4 py-2 text-left text-sm transition-colors hover:bg-gray-100 ${
+      active ? 'font-medium text-gray-900' : 'text-gray-600'
     }`}
     onClick={onClick}
   >
@@ -40,8 +40,9 @@ export default function SettingsNavigation({
   propertyRent,
   securityDeposit,
   propertyFees,
+  initialTab,
 }: SettingsNavigationProps) {
-  const [activeTab, setActiveTab] = useState('General')
+  const [activeTab, setActiveTab] = useState(initialTab || 'General')
 
   const renderContent = () => {
     switch (activeTab) {
@@ -76,18 +77,24 @@ export default function SettingsNavigation({
         {/* Vertical Navbar */}
         <nav className="mr-6 w-64 overflow-y-auto pb-4 pt-12">
           <div className="space-y-1 px-3">
-            <NavButton
-              active={activeTab === 'General'}
-              onClick={() => setActiveTab('General')}
-            >
-              General
-            </NavButton>
-            <NavButton
-              active={activeTab === 'Invite Tenants'}
-              onClick={() => setActiveTab('Invite Tenants')}
-            >
-              Invite Tenants
-            </NavButton>
+            <Link href="/dashboard/settings/general">
+              <NavButton
+                active={activeTab === 'General'}
+                onClick={() => setActiveTab('General')}
+              >
+                General
+              </NavButton>
+            </Link>
+            <Link href="/dashboard/settings/tenants">
+              <NavButton
+                active={activeTab === 'Invite Tenants'}
+                onClick={() => {
+                  setActiveTab('Invite Tenants')
+                }}
+              >
+                Invite Tenants
+              </NavButton>
+            </Link>
             <NavButton
               active={activeTab === 'Delete'}
               onClick={() => setActiveTab('Delete')}
