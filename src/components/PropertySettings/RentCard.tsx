@@ -1,11 +1,16 @@
-"use client"
-import React, { useState, useEffect } from "react"
+'use client'
+import React, { useState, useEffect } from 'react'
 
-import { Button } from "@/components/catalyst/button"
+import { Button } from '@/components/catalyst/button'
 import {
-  Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,
-} from "@/components/ui/card"
-import { Input, InputGroup } from "@/components/catalyst/input"
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Input, InputGroup } from '@/components/catalyst/input'
 import { Field, Label } from '@/components/catalyst/fieldset'
 import { Heading } from '@/components/catalyst/heading'
 import { Strong, Text, TextLink } from '@/components/catalyst/text'
@@ -17,135 +22,127 @@ import {
   Legend as HeadlessLegend,
   RadioGroup as HeadlessRadioGroup,
 } from '@headlessui/react'
-import { Separator } from "@/components/ui/separator"
-import { Switch } from "@/components/catalyst/switch"
-import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/catalyst/dialog'
+import { Separator } from '@/components/ui/separator'
+import { Switch } from '@/components/catalyst/switch'
+import {
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogDescription,
+  DialogTitle,
+} from '@/components/catalyst/dialog'
 import { Radio, RadioField, RadioGroup } from '@/components/catalyst/radio'
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/catalyst/table'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/catalyst/table'
 import { EditFeeDialog } from '@/components/PropertySettings/EditFeeDialog'
 // import { generateId } from "@/lib/utils"
 import { addPropertyFees } from '@/utils/supabase/actions'
-import { Calendar as CalendarIcon } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
-import { format, addYears, subDays, addDays } from "date-fns"
-import { cn } from "@/lib/utils"
+import { Calendar as CalendarIcon } from 'lucide-react'
+import { Calendar } from '@/components/ui/calendar'
+import { format, addYears, subDays, addDays, addWeeks } from 'date-fns'
+import { cn } from '@/lib/utils'
 import { ScheduleDialog } from '@/components/PropertySettings/ScheduleDialog'
-import { toast } from 'sonner';
-import useSWR from 'swr';
-import { createClient } from '@/utils/supabase/client';
+import { toast } from 'sonner'
 import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
-import { DateRange } from "react-day-picker"
-import { daysBetween } from "@/utils/helpers"
-import { Subheading } from "@/components/catalyst/heading"
-
-const fetcher = async (propertyId: string) => {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from('property_rents')
-    .select('*')
-    .eq('property_id', propertyId)
-  if (error) {
-    throw error;
-  }
-  return data;
-};
-
-const sd_fetcher = async (propertyId: string) => {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from('property_security_deposits')
-    .select('*')
-    .eq('property_id', propertyId)
-  if (error) {
-    throw error;
-  }
-  return data;
-};
-
-const fees_fetcher = async (propertyId: string) => {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from('property_fees')
-    .select('*')
-    .eq('property_id', propertyId)
-  if (error) {
-    throw error;
-  }
-  return data;
-};
+import { DateRange } from 'react-day-picker'
+import { daysBetween } from '@/utils/helpers'
+import { parseISO } from 'date-fns'
 
 export interface Fee {
   id: string
   property_id?: string
-  fee_type: "one-time" | "recurring"
+  fee_type: 'one-time' | 'recurring'
   fee_name: string
   fee_cost: number | undefined
-  months_left?: number;
-  created_at?: Date;
+  months_left?: number
+  created_at?: Date
 }
 
 type RentCardProps = {
   propertyId: string
+  propertyRent: any | null
+  securityDeposit: any | null
+  propertyFees: any[] | null
   setPropertyId?: (propertyId: string) => void
   freeMonthsLeft?: number
   buttonOnClick?: () => void
 }
 
-
-export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnClick }: RentCardProps ) {
+export function RentCard({
+  propertyId,
+  propertyRent,
+  securityDeposit,
+  propertyFees,
+  setPropertyId,
+  freeMonthsLeft,
+  buttonOnClick,
+}: RentCardProps) {
   useEffect(() => {
-    if (typeof window !== "undefined" && setPropertyId && !propertyId) {
+    if (typeof window !== 'undefined' && setPropertyId && !propertyId) {
       setPropertyId(localStorage.getItem('propertyId') || '')
     }
   }, [propertyId, setPropertyId])
 
-  const { data: property_rent, error, isLoading: isRentLoading, mutate } = useSWR(propertyId ? ['rentPrice', propertyId] : null, ([_, propertyId]) => fetcher(propertyId));
-  const { data: sd_data, error: sd_error, isLoading: isSdLoading } = useSWR(propertyId ? ['securityDeposit', propertyId] : null, ([_, propertyId]) => sd_fetcher(propertyId));
-  const { data: property_fees, error: fees_error, isLoading: isFeesLoading, mutate: mutateFees } = useSWR(propertyId ? ['fees', propertyId] : null, ([_, propertyId]) => fees_fetcher(propertyId));
-
-  if (fees_error) {
-    console.error(sd_error)
-  }
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false)
-  const [isScheduleOpen, setIsScheduleOpen] = React.useState(false)
-  const [rentAmount, setRentAmount] = React.useState<string>("")
-  const [securityDeposit, setSecurityDeposit] = React.useState(false)
-  const [securityDepositFee, setSecurityDepositFee] = React.useState<string>("")
-  const [dialogFee, setDialogFee] = React.useState<Fee>({
-    id: "",
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false)
+  const [rentAmount, setRentAmount] = useState<number>(
+    propertyRent ? propertyRent.rent_price : 0,
+  )
+  const [hasSecurityDeposit, setHasSecurityDeposit] = useState(
+    securityDeposit ? true : false,
+  )
+  const [securityDepositFee, setSecurityDepositFee] = useState<number>(
+    securityDeposit ? securityDeposit.deposit_amount : 0,
+  )
+  const [dialogFee, setDialogFee] = useState<Fee>({
+    id: '',
     property_id: propertyId,
-    fee_type: "one-time",
-    fee_name: "",
+    fee_type: 'one-time',
+    fee_name: '',
     fee_cost: 0,
   })
-  const [fees, setFees] = React.useState<Fee[]>([])
+  const [fees, setFees] = React.useState<any[]>(propertyFees ?? [])
   const [editFeeOpen, setEditFeeOpen] = React.useState(false)
   const [feeEdit, setFeeEdit] = React.useState<Fee>()
-  const [startDate, setStartDate] = React.useState<Date | undefined>(addDays(new Date(), 1));
-  const [endDate, setEndDate] = React.useState<Date | undefined>((addYears(new Date(), 1)));
+
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: (addDays(new Date(), 0)),
-    to: (addDays(addYears(new Date(), 1), 6)),
+    from: propertyRent
+      ? parseISO(propertyRent.rent_start)
+      : addWeeks(new Date(), 1),
+    to: propertyRent
+      ? parseISO(propertyRent.rent_end)
+      : addDays(addYears(new Date(), 1), 6),
   })
-  const [fadeOut, setFadeOut] = React.useState(false);
-  const animationClass = fadeOut ? ' animate__fadeOut' : 'animate__fadeIn';
+
+  const [fadeOut, setFadeOut] = React.useState(false)
+  const animationClass = fadeOut ? ' animate__fadeOut' : 'animate__fadeIn'
   const daysBetweenDates = daysBetween(date?.from ?? new Date(), new Date())
 
-  useEffect(() => {
-    if (property_rent && property_rent.length > 0) {
-      setRentAmount(String(property_rent[0].rent_price))
-      setStartDate(new Date(property_rent[0].rent_start))
-      setEndDate(new Date(property_rent[0].rent_end))
-    }
-    if (sd_data && sd_data.length > 0) {
-      setSecurityDeposit(true)
-      setSecurityDepositFee(String(sd_data[0].deposit_amount))
-    }
-    if (property_fees && property_fees.length > 0) {
-      setFees(property_fees)
-    }
-  }, [property_rent, sd_data, property_fees])
+  // useEffect(() => {
+  //   if (property_rent && property_rent.length > 0) {
+  //     setRentAmount(String(property_rent[0].rent_price))
+  //     setStartDate(new Date(property_rent[0].rent_start))
+  //     setEndDate(new Date(property_rent[0].rent_end))
+  //   }
+  //   if (sd_data && sd_data.length > 0) {
+  //     setSecurityDeposit(true)
+  //     setSecurityDepositFee(String(sd_data[0].deposit_amount))
+  //   }
+  //   if (property_fees && property_fees.length > 0) {
+  //     setFees(property_fees)
+  //   }
+  // }, [property_rent, sd_data, property_fees])
 
   const handleAddFee = async () => {
     const newFee = {
@@ -158,299 +155,399 @@ export function RentCard({ propertyId, setPropertyId, freeMonthsLeft, buttonOnCl
     setFees([...fees, newFee])
     setIsDialogOpen(false)
     setDialogFee({
-      id: "",
+      id: '',
       property_id: propertyId,
-      fee_type: "one-time",
-      fee_name: "",
+      fee_type: 'one-time',
+      fee_name: '',
       fee_cost: 0,
     })
   }
 
   return (
     <>
-    <Card className={`w-full animate__animated animate__faster ${animationClass}`}>
-      <form
-        action={async (formData) => {
-          toast.promise(new Promise(async (resolve, reject) => {
-            try {
-              const data = await addPropertyFees(formData)
-              if (buttonOnClick) {
-                setFadeOut(true);
-                setTimeout(() => {
-                  buttonOnClick();
-                  resolve('Success');
-                }, 300);
-              } else {
-                resolve('Success');
-              }
-            } catch (error) {
-              reject(error)
-            }
-          }), {
-            loading: 'Adding...',
-            success: 'Rent and fees added!',
-            error: 'An error occurred, please check the form and try again.'
-          })
-        }}
+      <Card
+        className={`animate__animated animate__faster w-full ${animationClass}`}
       >
-      <CardHeader>
-        <Heading>Property setup</Heading>
-        <Text className="">
-        Set the rent and fees to charge for this property per month. Rent is billed on the start date, and then the first of each month.
-        </Text>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col md:flex-row md:items-center md:gap-4 mb-5">
-          <div className="sm:text-sm text-zinc-950 md:w-40 mb-2 md:mb-0">
-            Start and end date
-          </div>
-          <div className="flex-grow">
-          <Popover>
-            <PopoverTrigger asChild>
+        <form
+          action={async (formData) => {
+            toast.promise(
+              new Promise(async (resolve, reject) => {
+                try {
+                  const data = await addPropertyFees(formData)
+                  if (buttonOnClick) {
+                    setFadeOut(true)
+                    setTimeout(() => {
+                      buttonOnClick()
+                      resolve('Success')
+                    }, 300)
+                  } else {
+                    resolve('Success')
+                  }
+                } catch (error) {
+                  reject(error)
+                }
+              }),
+              {
+                loading: 'Adding...',
+                success: 'Rent and fees added!',
+                error:
+                  'An error occurred, please check the form and try again.',
+              },
+            )
+          }}
+        >
+          <CardHeader>
+            <Heading>Property setup</Heading>
+            <Text className="">
+              Set the rent and fees to charge for this property per month. Rent
+              is billed on the start date, and then the first of each month.
+            </Text>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-5 flex flex-col md:flex-row md:items-center md:gap-4">
+              <div className="mb-2 text-zinc-950 sm:text-sm md:mb-0 md:w-40">
+                Start and end date
+              </div>
+              <div className="flex-grow">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      id="date"
+                      outline
+                      className={cn('w-full', !date && 'text-muted-foreground')}
+                      disabled={daysBetweenDates <= 0}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date?.from && format(date?.from, 'LLL dd, y')} -{' '}
+                      {date?.to && format(date?.to, 'LLL dd, y')}
+                      {/* {date?.from ? (
+                        date.to ? (
+                          <>
+                          </>
+                        ) : (
+                          format(date.from, 'LLL dd, y')
+                        )
+                      ) : (
+                        <span>Pick a date</span>
+                      )} */}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      initialFocus
+                      mode="range"
+                      defaultMonth={date?.from}
+                      selected={date}
+                      onSelect={setDate}
+                      numberOfMonths={2}
+                      disabled={(date) => date < new Date()}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <input
+                name="rent_id"
+                required
+                value={propertyRent?.id ?? ''}
+                readOnly
+                type="hidden"
+              />
+              <input
+                name="dateFrom"
+                required
+                value={date?.from ? format(date?.from, 'MM/dd/yyyy') : ''}
+                readOnly
+                type="hidden"
+              />
+              <input
+                name="dateTo"
+                required
+                value={date?.to ? format(date?.to, 'MM/dd/yyyy') : ''}
+                readOnly
+                type="hidden"
+              />
+            </div>
+            <div className="relative space-y-4">
+              <Headless.Field className="relative flex flex-col md:flex-row md:items-center md:gap-4">
+                <Label
+                  htmlFor="rentAmount"
+                  className="mb-2 md:mb-0 md:w-40 md:flex-shrink-0"
+                >
+                  Rent per month
+                </Label>
+                <div className="flex-grow">
+                  <InputGroup className="w-full">
+                    <CurrencyDollarIcon className="h-5 w-5 text-gray-400" />
+                    <Input
+                      type="number"
+                      id="rentAmount"
+                      name="rentAmount"
+                      placeholder="0"
+                      className="w-full flex-grow"
+                      autoComplete="off"
+                      value={rentAmount}
+                      onChange={(e) => {
+                        setRentAmount(Number(e.target.value))
+                        setTimeout(
+                          () => {},
+                          Math.floor(Math.random() * 501) + 200,
+                        )
+                      }}
+                      step="1"
+                      required
+                      min="0"
+                      pattern="^\d+(?:\.\d{1,2})?$"
+                      disabled={daysBetweenDates <= 0}
+                    />
+                  </InputGroup>
+                </div>
+              </Headless.Field>
+
+              <Headless.Field className="relative flex flex-col md:flex-row md:items-center md:gap-4">
+                <div className="mb-2 flex items-center justify-between md:mb-0 md:w-40 md:flex-shrink-0">
+                  <Label htmlFor="securityDeposit">Security deposit</Label>
+                  <Switch
+                    id="securityDeposit"
+                    name="securityDepositSwitch"
+                    color="blue"
+                    checked={hasSecurityDeposit}
+                    onChange={() => {
+                      setHasSecurityDeposit(!hasSecurityDeposit)
+                    }}
+                  />
+                </div>
+                <div className="flex-grow">
+                  <InputGroup className="w-full">
+                    <CurrencyDollarIcon className="h-5 w-5 text-gray-400" />
+                    <Input
+                      type="number"
+                      id="depositAmount"
+                      name="depositAmount"
+                      placeholder="0"
+                      disabled={!hasSecurityDeposit || daysBetweenDates <= 0}
+                      className="w-full flex-grow"
+                      autoComplete="off"
+                      value={securityDepositFee}
+                      required={hasSecurityDeposit}
+                      onChange={(e) => {
+                        setSecurityDepositFee(Number(e.target.value))
+                        setTimeout(
+                          () => {},
+                          Math.floor(Math.random() * 501) + 200,
+                        )
+                      }}
+                      step=".01"
+                      min="0"
+                      pattern="^\d+(?:\.\d{1,2})?$"
+                    />
+                  </InputGroup>
+                </div>
+              </Headless.Field>
+            </div>
+            {fees.length > 0 && (
+              <div className="mt-3">
+                <Table dense={true} className="">
+                  <TableHead>
+                    <TableRow className="text-card-foreground">
+                      <TableHeader className="">Fee name</TableHeader>
+                      <TableHeader>Fee type</TableHeader>
+                      <TableHeader className="text-right">Cost</TableHeader>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {fees.map((fee, index) => (
+                      <TableRow
+                        key={fee.id}
+                        className="cursor-default"
+                        onClick={() => {
+                          setFeeEdit(fee)
+                          setEditFeeOpen(true)
+                        }}
+                      >
+                        <TableCell className="max-w-[140px] truncate">
+                          {fee.fee_name}
+                        </TableCell>
+                        <TableCell>{fee.fee_type}</TableCell>
+                        <TableCell className="text-right">
+                          ${fee.fee_cost}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+            {fees.length > 0 &&
+              fees.map((fee, index) => (
+                <input
+                  key={fee.id}
+                  className="hidden"
+                  name={`fee${index}`}
+                  id={`fee${index}`}
+                  defaultValue={JSON.stringify(fee)}
+                  readOnly
+                />
+              ))}
+            <input
+              name="propertyId"
+              defaultValue={propertyId}
+              readOnly
+              className="hidden"
+            />
+            <div className="-mb-2 mt-4 flex justify-between">
               <Button
-                id="date"
+                type="button"
+                color="blue"
+                onClick={() => setIsDialogOpen(true)}
+              >
+                Add Fee
+              </Button>
+              <Button
+                type="button"
                 outline
-                className={cn(
-                  "w-full",
-                  !date && "text-muted-foreground"
-                )}
+                onClick={() => setIsScheduleOpen(true)}
+              >
+                Billing Schedule
+              </Button>
+            </div>
+          </CardContent>
+
+          <Separator className="mt-0" />
+          <CardFooter className="flex items-center justify-end">
+            <div className="flex gap-x-3">
+              {/* <Button color="white">Edit</Button> */}
+              <Button
+                type="submit"
+                color="blue"
                 disabled={daysBetweenDates <= 0}
               >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date?.from ? (
-                  date.to ? (
-                    <>
-                      {format(date.from, "LLL dd, y")} -{" "}
-                      {format(date.to, "LLL dd, y")}
-                    </>
-                  ) : (
-                    format(date.from, "LLL dd, y")
-                  )
-                ) : (
-                  <span>Pick a date</span>
-                )}
+                Save
               </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                initialFocus
-                mode="range"
-                defaultMonth={date?.from}
-                selected={date}
-                onSelect={setDate}
-                numberOfMonths={2}
-                disabled={(date) => date < new Date()}
-              />
-            </PopoverContent>
-          </Popover>
-          </div>
-
-          <input name="rent_id" required value={property_rent?.[0]?.id ?? ''} readOnly type="hidden" />
-          <input name="startDate" required value={startDate ? format(startDate, "MM/dd/yyyy") : ""} readOnly type="hidden" />
-          <input name="endDate" required value={endDate ? format(endDate, "MM/dd/yyyy") : ""} readOnly type="hidden" />
-          <input name="dateFrom" required value={date?.from ? format(date?.from, "MM/dd/yyyy") : ""} readOnly type="hidden" />
-          <input name="dateTo" required value={date?.to ? format(date?.to, "MM/dd/yyyy") : ""} readOnly type="hidden" />
-        </div>
-        <div className="relative space-y-4">
-          <Headless.Field className="relative flex flex-col md:flex-row md:items-center md:gap-4">
-            <Label htmlFor="rentAmount" className="mb-2 md:mb-0 md:w-40 md:flex-shrink-0">Rent per month</Label>
-            <div className="flex-grow">
-              <InputGroup className="w-full">
-                <CurrencyDollarIcon className="h-5 w-5 text-gray-400" />
+            </div>
+          </CardFooter>
+        </form>
+      </Card>
+      <Dialog open={isDialogOpen} onClose={setIsDialogOpen}>
+        <DialogTitle>Add Fee</DialogTitle>
+        <DialogDescription>
+          Add a one-time or recurring fee for the tenant, billed at the start of
+          next month. Enter a negative amount to apply a discount.
+        </DialogDescription>
+        <form action={handleAddFee}>
+          <DialogBody>
+            <div className="items-center">
+              <HeadlessFieldset>
+                <HeadlessLegend className="mb-3 text-base/6 font-medium sm:text-sm/6">
+                  Fee type
+                </HeadlessLegend>
+                <HeadlessRadioGroup
+                  name="feeType"
+                  defaultValue="one-time"
+                  className="mt-1 flex items-center gap-x-3"
+                  onChange={(feeType: 'one-time' | 'recurring') =>
+                    setDialogFee({ ...dialogFee, fee_type: feeType })
+                  }
+                >
+                  <HeadlessRadioGroup.Option value="one-time">
+                    <HeadlessField className="flex items-center rounded-lg pr-6 outline outline-1 outline-gray-200">
+                      <Radio
+                        value="one-time"
+                        color="blue"
+                        className="px-3 py-2"
+                      />
+                      <HeadlessLabel className="text-sm">
+                        One-time
+                      </HeadlessLabel>
+                    </HeadlessField>
+                  </HeadlessRadioGroup.Option>
+                  <HeadlessRadioGroup.Option value="recurring">
+                    <HeadlessField className="flex items-center rounded-lg pr-6 outline outline-1 outline-gray-200">
+                      <Radio
+                        value="recurring"
+                        color="blue"
+                        className="px-3 py-2"
+                      />
+                      <HeadlessLabel className="text-sm">
+                        Recurring
+                      </HeadlessLabel>
+                    </HeadlessField>
+                  </HeadlessRadioGroup.Option>
+                </HeadlessRadioGroup>
+              </HeadlessFieldset>
+            </div>
+            <div className="mt-6">
+              <Field>
+                <Label htmlFor="feeName">Fee name</Label>
                 <Input
-                  type="number"
-                  id="rentAmount"
-                  name="rentAmount"
-                  placeholder="0"
-                  className="w-full flex-grow"
+                  id="feeName"
+                  value={dialogFee.fee_name}
+                  onChange={(e) =>
+                    setDialogFee({ ...dialogFee, fee_name: e.target.value })
+                  }
+                  // placeholder="Enter fee name"
                   autoComplete="off"
-                  value={rentAmount}
-                  onChange={(e) => {
-                    setRentAmount(e.target.value)
-                    setTimeout(() => {
-                    }, Math.floor(Math.random() * 501) + 200)
-                  }}
-                  step="1"
                   required
-                  min="0"
-                  pattern="^\d+(?:\.\d{1,2})?$"
-                  disabled={daysBetweenDates <= 0}
                 />
-              </InputGroup>
+              </Field>
             </div>
-          </Headless.Field>
-
-          <Headless.Field className="relative flex flex-col md:flex-row md:items-center md:gap-4">
-            <div className="flex justify-between items-center mb-2 md:mb-0 md:w-40 md:flex-shrink-0">
-              <Label htmlFor="securityDeposit">Security deposit</Label>
-              <Switch
-                id="securityDeposit"
-                name="securityDepositSwitch"
-                color="blue"
-                checked={securityDeposit}
-                onChange={() => {
-                  setSecurityDeposit(!securityDeposit)
-                }}
-              />
-            </div>
-            <div className="flex-grow">
-              <InputGroup className="w-full">
-                <CurrencyDollarIcon className="h-5 w-5 text-gray-400" />
+            <div className="mt-6">
+              <Field>
+                <Label htmlFor="feeAmount ">Fee amount</Label>
                 <Input
+                  id="feeAmount"
                   type="number"
-                  id="depositAmount"
-                  name="depositAmount"
+                  value={dialogFee.fee_cost || ''}
+                  onChange={(e) =>
+                    setDialogFee({
+                      ...dialogFee,
+                      fee_cost: Number(e.target.value),
+                    })
+                  }
                   placeholder="0"
-                  disabled={!securityDeposit || daysBetweenDates <= 0}
-                  className="w-full flex-grow"
                   autoComplete="off"
-                  value={securityDepositFee}
-                  required={securityDeposit}
-                  onChange={(e) => {
-                    setSecurityDepositFee(e.target.value)
-                    setTimeout(() => {
-                    }, Math.floor(Math.random() * 501) + 200)
-                  }}
-                  step=".01"
-                  min="0"
+                  required
+                  // min="0"
                   pattern="^\d+(?:\.\d{1,2})?$"
+                  step=".01"
                 />
-              </InputGroup>
+              </Field>
             </div>
-          </Headless.Field>
-        </div>
-        {fees.length > 0 && (
-          <div className="mt-3">
-            <Table dense={true} className="">
-              <TableHead>
-                <TableRow className="text-card-foreground">
-                  <TableHeader className="">Fee name</TableHeader>
-                  <TableHeader>Fee type</TableHeader>
-                  <TableHeader className="text-right">Cost</TableHeader>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {fees.map((fee, index) => (
-                  <TableRow key={fee.id} className="cursor-default" 
-                    onClick={() => {
-                      setFeeEdit(fee)
-                      setEditFeeOpen(true)
-                    }}
-                  >
-                    <TableCell className="max-w-[140px] truncate">{fee.fee_name}</TableCell>
-                    <TableCell >{fee.fee_type}</TableCell>
-                    <TableCell className="text-right">${fee.fee_cost}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        )}
-        {fees.length > 0 && fees.map((fee, index) => (
-          <input key={fee.id} className="hidden" name={`fee${index}`} id={`fee${index}`} defaultValue={JSON.stringify(fee)} readOnly />
-        ))}
-        <input name='propertyId' defaultValue={propertyId} readOnly className="hidden" />
-        <div className="mt-4 -mb-2 flex justify-between">
-          <Button 
-            type="button" 
-            color="blue" 
-            onClick={() => setIsDialogOpen(true)}
-          >
-            Add Fee
-          </Button>
-          <Button type="button" outline onClick={() => setIsScheduleOpen(true)}>Billing Schedule</Button>
-        </div>
-      </CardContent>
-      
-      <Separator className="mt-0" />
-      <CardFooter className="flex justify-end items-center">
-        
-        <div className="flex gap-x-3">
-          {/* <Button color="white">Edit</Button> */}
-          <Button 
-            type="submit" 
-            color="blue"
-            disabled={daysBetweenDates <= 0}
-          >
-            Save
-          </Button>
-        </div>
-      </CardFooter>
-      </form>
-    </Card>
-    <Dialog open={isDialogOpen} onClose={setIsDialogOpen}>
-      <DialogTitle>Add Fee</DialogTitle>
-      <DialogDescription>
-        Add a one-time or recurring fee for the tenant, billed at the start of next month. Enter a negative amount to apply a discount.
-      </DialogDescription>
-      <form action={handleAddFee}>
-      <DialogBody>
-        <div className="items-center">
-          <HeadlessFieldset>
-            <HeadlessLegend className="text-base/6 font-medium sm:text-sm/6 mb-3">
-              Fee type
-            </HeadlessLegend>
-            <HeadlessRadioGroup name="feeType" defaultValue="one-time" className="flex gap-x-3 items-center mt-1"
-              onChange={(feeType: "one-time" | "recurring") => setDialogFee({ ...dialogFee, fee_type: feeType})}
+          </DialogBody>
+          <DialogActions>
+            <Button
+              type="button"
+              outline
+              onClick={() => setIsDialogOpen(false)}
             >
-              <HeadlessRadioGroup.Option value="one-time" >
-                <HeadlessField className="outline outline-1 pr-6 outline-gray-200 rounded-lg flex items-center">
-                  <Radio value="one-time" color="blue" className="px-3 py-2" />
-                  <HeadlessLabel className="text-sm">One-time</HeadlessLabel>
-                </HeadlessField>
-              </HeadlessRadioGroup.Option>
-              <HeadlessRadioGroup.Option value="recurring" >
-                <HeadlessField className="outline outline-1 pr-6 outline-gray-200 rounded-lg flex items-center">
-                  <Radio value="recurring" color="blue" className="px-3 py-2" />
-                  <HeadlessLabel className="text-sm">Recurring</HeadlessLabel>
-                </HeadlessField>
-              </HeadlessRadioGroup.Option>
-            </HeadlessRadioGroup>
-          </HeadlessFieldset>
-        </div>
-        <div className="mt-6">
-          <Field>
-            <Label htmlFor="feeName">Fee name</Label>
-            <Input
-              id="feeName"
-              value={dialogFee.fee_name}
-              onChange={(e) => setDialogFee({ ...dialogFee, fee_name: e.target.value })}
-              // placeholder="Enter fee name"
-              autoComplete="off"
-              required
-            />
-          </Field>
-        </div>
-        <div className="mt-6">
-          <Field>
-            <Label htmlFor="feeAmount ">Fee amount</Label>
-            <Input
-              id="feeAmount"
-              type="number"
-              value={dialogFee.fee_cost || ''}
-              onChange={(e) => setDialogFee({ ...dialogFee, fee_cost: Number(e.target.value) })}
-              placeholder="0"
-              autoComplete="off"
-              required
-              // min="0"
-              pattern="^\d+(?:\.\d{1,2})?$"
-              step=".01"
-            />
-          </Field>
-        </div>
-      </DialogBody>
-      <DialogActions>
-        <Button type="button" outline onClick={() => setIsDialogOpen(false)}>
-          Cancel
-        </Button>
-        <Button type="submit" color="blue" className="">
-          Add
-        </Button>
-      </DialogActions>
-      </form>
-    </Dialog>
-    {editFeeOpen && feeEdit && <EditFeeDialog isOpen={editFeeOpen} setIsOpen={setEditFeeOpen} fee={feeEdit} fees={fees} setFees={setFees} mutateFees={mutateFees} />}
-    {date && date.to && date.from && <ScheduleDialog isOpen={isScheduleOpen} setIsOpen={setIsScheduleOpen} startDate={date.from} endDate={date.to} rentAmount={rentAmount} securityDeposit={securityDeposit} securityDepositFee={securityDepositFee}/>}
+              Cancel
+            </Button>
+            <Button type="submit" color="blue" className="">
+              Add
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+      {editFeeOpen && feeEdit && (
+        <EditFeeDialog
+          isOpen={editFeeOpen}
+          setIsOpen={setEditFeeOpen}
+          fee={feeEdit}
+          fees={fees}
+          setFees={setFees}
+        />
+      )}
+      {date && date.to && date.from && (
+        <ScheduleDialog
+          isOpen={isScheduleOpen}
+          setIsOpen={setIsScheduleOpen}
+          startDate={date.from}
+          endDate={date.to}
+          rentAmount={rentAmount}
+          securityDeposit={securityDeposit}
+          securityDepositFee={securityDepositFee}
+        />
+      )}
     </>
   )
 }
