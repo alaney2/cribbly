@@ -129,21 +129,6 @@ export function RentCard({
   const animationClass = fadeOut ? ' animate__fadeOut' : 'animate__fadeIn'
   const daysBetweenDates = daysBetween(date?.from ?? new Date(), new Date())
 
-  // useEffect(() => {
-  //   if (property_rent && property_rent.length > 0) {
-  //     setRentAmount(String(property_rent[0].rent_price))
-  //     setStartDate(new Date(property_rent[0].rent_start))
-  //     setEndDate(new Date(property_rent[0].rent_end))
-  //   }
-  //   if (sd_data && sd_data.length > 0) {
-  //     setSecurityDeposit(true)
-  //     setSecurityDepositFee(String(sd_data[0].deposit_amount))
-  //   }
-  //   if (property_fees && property_fees.length > 0) {
-  //     setFees(property_fees)
-  //   }
-  // }, [property_rent, sd_data, property_fees])
-
   const handleAddFee = async () => {
     const newFee = {
       id: '',

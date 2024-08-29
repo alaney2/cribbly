@@ -1,22 +1,22 @@
-"use client"
-import { RentCard } from '@/components/PropertySettings/RentCard';
-import { FeeCard } from '@/components/PropertySettings/FeeCard';
+'use client'
+import { RentCard } from '@/components/PropertySettings/RentCard'
+import { FeeCard } from '@/components/PropertySettings/FeeCard'
 import { getUser } from '@/utils/supabase/actions'
 import { createClient } from '@/utils/supabase/client'
-import useSWR from 'swr';
-
+import useSWR from 'swr'
 
 type SetupPropertyProps = {
-  propertyId: string;
-  setPropertyId: (propertyId: string) => void;
-  buttonOnClick: () => void;
+  propertyId: string
+  setPropertyId: (propertyId: string) => void
+  buttonOnClick: () => void
 }
 
 const fetcher = async () => {
   const supabase = createClient()
   const user = await getUser()
   if (!user) return 0
-  const { data, error } = await supabase.from('users')
+  const { data, error } = await supabase
+    .from('users')
     .select('free_months')
     .eq('id', user.id)
     .single()
@@ -27,18 +27,27 @@ const fetcher = async () => {
   return data?.free_months || 0
 }
 
-export function SetupProperty({ propertyId, setPropertyId, buttonOnClick }: SetupPropertyProps ) {
+export function SetupProperty({
+  propertyId,
+  setPropertyId,
+  buttonOnClick,
+}: SetupPropertyProps) {
   // const [fadeOut, setFadeOut] = useState(false);
-  
+
   // const animationClass = fadeOut ? 'animate__animated animate__fadeOut animate__faster' : '';
-  const { data, error, isLoading } = useSWR('freeMonthsLeft', fetcher);
+  const { data, error, isLoading } = useSWR('freeMonthsLeft', fetcher)
 
   return (
     <>
       <div
-        className={`flex flex-col px-2 pt-8 sm:pt-4 justify-center items-center relative h-full gap-y-4 `}
+        className={`relative flex h-full flex-col items-center justify-center gap-y-4 px-2 pt-8 sm:pt-4`}
       >
-        <RentCard propertyId={propertyId} setPropertyId={setPropertyId} freeMonthsLeft={data} buttonOnClick={buttonOnClick} />
+        <RentCard
+          propertyId={propertyId}
+          setPropertyId={setPropertyId}
+          freeMonthsLeft={data}
+          buttonOnClick={buttonOnClick}
+        />
         {/* <FeeCard /> */}
       </div>
     </>
