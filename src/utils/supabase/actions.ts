@@ -418,7 +418,9 @@ export async function getCurrentProperty(): Promise<string> {
 
 export async function getTasks() {
   const supabase = createClient();
+  const currentPropertyId = await getCurrentProperty()
   const { data, error } = await supabase.from('maintenance').select('*').order('created_at', { ascending: false })
+    .eq('property_id', currentPropertyId)
   if (error) {
     console.error('Error fetching tasks:', error)
     throw new Error('Error fetching tasks')
