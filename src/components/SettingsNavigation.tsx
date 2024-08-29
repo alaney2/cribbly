@@ -1,11 +1,10 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { RentCard } from '@/components/PropertySettings/RentCard'
 import { InviteCard } from '@/components/PropertySettings/InviteCard'
 import { DeleteCard } from '@/components/PropertySettings/DeleteCard'
 import { Heading } from '@/components/catalyst/heading'
 import { Divider } from '@/components/catalyst/divider'
-import Link from 'next/link'
 
 interface SettingsNavigationProps {
   currentPropertyId: string
@@ -44,6 +43,10 @@ export default function SettingsNavigation({
 }: SettingsNavigationProps) {
   const [activeTab, setActiveTab] = useState(initialTab || 'General')
 
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab)
+  }
+
   const renderContent = () => {
     switch (activeTab) {
       case 'General':
@@ -55,7 +58,7 @@ export default function SettingsNavigation({
             propertyFees={propertyFees}
           />
         )
-      case 'Invite Tenants':
+      case 'Tenants':
         return <InviteCard propertyId={currentPropertyId} />
       case 'Delete':
         return <DeleteCard propertyId={currentPropertyId} />
@@ -77,32 +80,24 @@ export default function SettingsNavigation({
         {/* Vertical Navbar */}
         <nav className="mr-6 w-64 overflow-y-auto pb-4 pt-12">
           <div className="space-y-1 px-3">
-            <Link href="/dashboard/settings/general">
-              <NavButton
-                active={activeTab === 'General'}
-                onClick={() => setActiveTab('General')}
-              >
-                General
-              </NavButton>
-            </Link>
-            <Link href="/dashboard/settings/tenants">
-              <NavButton
-                active={activeTab === 'Invite Tenants'}
-                onClick={() => {
-                  setActiveTab('Invite Tenants')
-                }}
-              >
-                Invite Tenants
-              </NavButton>
-            </Link>
-            <Link href="/dashboard/settings/delete">
-              <NavButton
-                active={activeTab === 'Delete'}
-                onClick={() => setActiveTab('Delete')}
-              >
-                Delete
-              </NavButton>
-            </Link>
+            <NavButton
+              active={activeTab === 'General'}
+              onClick={() => handleTabChange('General')}
+            >
+              General
+            </NavButton>
+            <NavButton
+              active={activeTab === 'Tenants'}
+              onClick={() => handleTabChange('Tenants')}
+            >
+              Invite Tenants
+            </NavButton>
+            <NavButton
+              active={activeTab === 'Delete'}
+              onClick={() => handleTabChange('Delete')}
+            >
+              Delete
+            </NavButton>
           </div>
         </nav>
 
