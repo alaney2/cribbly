@@ -71,9 +71,9 @@ export interface Fee {
 
 type RentCardProps = {
   propertyId: string
-  propertyRent: any | null
-  securityDeposit: any | null
-  propertyFees: any[] | null
+  propertyRent?: any | null
+  securityDeposit?: any | null
+  propertyFees?: any[] | null
   setPropertyId?: (propertyId: string) => void
   freeMonthsLeft?: number
   buttonOnClick?: () => void
@@ -97,7 +97,7 @@ export function RentCard({
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isScheduleOpen, setIsScheduleOpen] = useState(false)
   const [rentAmount, setRentAmount] = useState<number>(
-    propertyRent ? propertyRent.rent_price : 0,
+    propertyRent?.rent_price ?? 0,
   )
   const [hasSecurityDeposit, setHasSecurityDeposit] = useState(
     securityDeposit ? true : false,
