@@ -32,7 +32,7 @@ type Request = {
   notify: boolean
 }
 
-export function MaintenanceTable({ tasks } : { tasks: Request[] }) {
+export function MaintenanceTable({ tasks, key } : { tasks: Request[]; key: string }) {
   const [requests, setRequests] = useState<Request[]>(tasks);
   const [isNewDialogOpen, setIsNewDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);

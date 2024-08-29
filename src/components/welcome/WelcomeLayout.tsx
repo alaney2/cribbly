@@ -4,7 +4,7 @@ import { Button } from "@/components/catalyst/button"
 import { Step0 } from '@/components/welcome/Step0'
 import { InputName } from '@/components/welcome/InputName'
 import { AutofilledProperty } from '@/components/welcome/AutofilledProperty'
-import { WelcomeMap } from '@/components/welcome/WelcomeMap'
+// import { WelcomeMap } from '@/components/welcome/WelcomeMap'
 import { Checkout } from '@/components/welcome/Checkout'
 import Payment from '@/components/welcome/Payment'
 import { Pricing } from '@/components/landing/Pricing'

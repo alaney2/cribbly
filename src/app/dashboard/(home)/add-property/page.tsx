@@ -1,6 +1,5 @@
 "use client"
 // import '@/styles/no-overscroll.css'
-import { MapBox } from "@/components/MapBox";
 import GoogleMap from "@/components/welcome/GoogleMap";
 
 export default function AddProperty() {
