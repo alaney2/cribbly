@@ -95,12 +95,14 @@ export default function SettingsNavigation({
                 Invite Tenants
               </NavButton>
             </Link>
-            <NavButton
-              active={activeTab === 'Delete'}
-              onClick={() => setActiveTab('Delete')}
-            >
-              Delete
-            </NavButton>
+            <Link href="/dashboard/settings/delete">
+              <NavButton
+                active={activeTab === 'Delete'}
+                onClick={() => setActiveTab('Delete')}
+              >
+                Delete
+              </NavButton>
+            </Link>
           </div>
         </nav>
 

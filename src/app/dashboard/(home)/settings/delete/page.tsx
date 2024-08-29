@@ -33,7 +33,7 @@ export default async function TenantSettings() {
         securityDeposit={sd_data}
         propertyFees={property_fees}
         key={currentPropertyId}
-        initialTab="Invite Tenants"
+        initialTab="Delete"
       />
     </main>
   )
