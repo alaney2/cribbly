@@ -47,6 +47,9 @@ export function SetupProperty({
           setPropertyId={setPropertyId}
           freeMonthsLeft={data}
           buttonOnClick={buttonOnClick}
+          propertyFees={null}
+          propertyRent={null}
+          securityDeposit={null}
         />
         {/* <FeeCard /> */}
       </div>
