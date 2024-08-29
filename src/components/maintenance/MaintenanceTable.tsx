@@ -126,50 +126,91 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
 
   return (
     <div className="p-4">
-      <Heading className="mb-4">Maintenance Requests</Heading>
-      <Button
-        onClick={() => {
-          setCurrentRequest({
-            id: 0,
-            updated_at: new Date(),
-            title: '',
-            description: '',
-            status: '',
-            priority: 'Medium',
-            notify: false,
-          })
-          setIsNewDialogOpen(true)
-        }}
-        className="mb-4"
-        color="blue"
-      >
-        New Request
-      </Button>
+      <div className="mx-2 mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <Heading className="mb-4 text-center sm:text-left">
+          Maintenance Requests
+        </Heading>
+        <Button
+          onClick={() => {
+            setCurrentRequest({
+              id: 0,
+              updated_at: new Date(),
+              title: '',
+              description: '',
+              status: '',
+              priority: 'Medium',
+              notify: false,
+            })
+            setIsNewDialogOpen(true)
+          }}
+          className="mb-4"
+          color="blue"
+        >
+          New Request
+        </Button>
+      </div>
 
-      <Table bleed grid>
-        <TableHead>
-          <TableRow>
-            <TableHeader>Date</TableHeader>
-            <TableHeader>Title</TableHeader>
-            <TableHeader>Status</TableHeader>
-            <TableHeader>Priority</TableHeader>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {requests.map((request) => (
-            <TableRow
-              key={request.id}
-              onClick={() => handleRowClick(request)}
-              className="cursor-default hover:bg-gray-50"
-            >
-              <TableCell>{String(request.created_at)}</TableCell>
-              <TableCell>{request.title}</TableCell>
-              <TableCell>{request.status}</TableCell>
-              <TableCell>{request.priority}</TableCell>
+      {requests.length > 0 ? (
+        <Table bleed grid>
+          <TableHead>
+            <TableRow>
+              <TableHeader>Date</TableHeader>
+              <TableHeader>Title</TableHeader>
+              <TableHeader>Status</TableHeader>
+              <TableHeader>Priority</TableHeader>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {requests.map((request) => (
+              <TableRow
+                key={request.id}
+                onClick={() => handleRowClick(request)}
+                className="cursor-default hover:bg-gray-50"
+              >
+                <TableCell>{String(request.created_at)}</TableCell>
+                <TableCell>{request.title}</TableCell>
+                <TableCell>{request.status}</TableCell>
+                <TableCell>{request.priority}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : (
+        <>
+          <Table bleed grid>
+            <TableHead>
+              <TableRow>
+                <TableHeader>Date</TableHeader>
+                <TableHeader>Title</TableHeader>
+                <TableHeader>Status</TableHeader>
+                <TableHeader>Priority</TableHeader>
+              </TableRow>
+            </TableHead>
+          </Table>
+          <div className="flex flex-col items-center justify-center py-12">
+            <Text className="mb-4 text-gray-600">
+              No maintenance requests found.
+            </Text>
+            <Button
+              onClick={() => {
+                setCurrentRequest({
+                  id: 0,
+                  updated_at: new Date(),
+                  title: '',
+                  description: '',
+                  status: '',
+                  priority: 'Medium',
+                  notify: false,
+                })
+                setIsNewDialogOpen(true)
+              }}
+              color="blue"
+            >
+              Create New Request
+            </Button>
+          </div>
+        </>
+      )}
 
       <Dialog
         open={isNewDialogOpen || isEditDialogOpen}
@@ -280,6 +321,16 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
               )}
             </FieldGroup>
             <DialogActions>
+              <Button
+                type="button"
+                color="red"
+                onClick={() => {
+                  // Add delete logic here
+                  console.log('Delete request:', currentRequest.id)
+                }}
+              >
+                Delete
+              </Button>
               <Button
                 type="button"
                 onClick={() => {
