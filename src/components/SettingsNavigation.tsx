@@ -8,6 +8,9 @@ import { Divider } from '@/components/catalyst/divider'
 
 interface SettingsNavigationProps {
   currentPropertyId: string;
+  propertyRent: any[];
+  securityDeposit: any[];
+  propertyFees: any[];
 }
 
 const NavButton = ({ active, onClick, children }: { active: boolean, onClick: () => void, children: React.ReactNode }) => (
@@ -23,7 +26,7 @@ const NavButton = ({ active, onClick, children }: { active: boolean, onClick: ()
   </button>
 );
 
-export default function SettingsNavigation({ currentPropertyId }: SettingsNavigationProps) {
+export default function SettingsNavigation({ currentPropertyId, propertyRent, securityDeposit, propertyFees }: SettingsNavigationProps) {
   const [activeTab, setActiveTab] = useState('General');
 
   const renderContent = () => {
