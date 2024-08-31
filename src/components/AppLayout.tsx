@@ -7,7 +7,12 @@ import {
   DropdownLabel,
   DropdownMenu,
 } from '@/components/catalyst/dropdown'
-import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from '@/components/catalyst/navbar'
+import {
+  Navbar,
+  NavbarItem,
+  NavbarSection,
+  NavbarSpacer,
+} from '@/components/catalyst/navbar'
 import {
   Sidebar,
   SidebarBody,
@@ -41,7 +46,7 @@ import {
 import { AppLayoutLinks } from '@/components/AppLayoutLinks'
 import { PropertiesDropdown } from '@/components/PropertiesDropdown'
 
-import { getInitials } from '@/utils/helpers';
+import { getInitials } from '@/utils/helpers'
 import { createClient } from '@/utils/supabase/server'
 import { signOut } from '@/utils/supabase/sign-out'
 import { SignOutDropdown } from '@/components/SignOutDropdown'
@@ -52,21 +57,23 @@ export async function AppLayout({
   fullName,
   userId,
 }: {
-  children: React.ReactNode;
-  userEmail?: string;
-  fullName?: string;
-  userId?: string;
+  children: React.ReactNode
+  userEmail?: string
+  fullName?: string
+  userId?: string
 }) {
-  
   const supabase = createClient()
 
   const { data: properties, error: propertiesError } = await supabase
     .from('properties')
     .select(`*, tenants(*)`)
-    .eq('user_id', userId!);
-  
+    .eq('user_id', userId!)
+
   // Get current property ID from authenticated user data
-  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser()
   let currentPropertyId = user?.user_metadata?.currentPropertyId
 
   if (userError) {
@@ -78,7 +85,7 @@ export async function AppLayout({
   if (!currentPropertyId && properties && properties.length > 0) {
     currentPropertyId = properties[0].id
     const { error: updateError } = await supabase.auth.updateUser({
-      data: { currentPropertyId: currentPropertyId }
+      data: { currentPropertyId: currentPropertyId },
     })
     if (updateError) {
       console.error('Error updating user metadata:', updateError)
@@ -111,7 +118,11 @@ export async function AppLayout({
             </NavbarItem> */}
             <Dropdown>
               <DropdownButton as={NavbarItem}>
-                <Avatar initials={getInitials(fullName!)} className="bg-blue-500 text-white" square />
+                <Avatar
+                  initials={getInitials(fullName!)}
+                  className="bg-blue-500 text-white"
+                  square
+                />
               </DropdownButton>
               <DropdownMenu className="min-w-64" anchor="bottom end">
                 <DropdownItem href="/dashboard/account">
@@ -137,9 +148,13 @@ export async function AppLayout({
       sidebar={
         <Sidebar>
           <SidebarHeader>
-            <PropertiesDropdown currentPropertyId={currentPropertyId} properties={properties} streetAddress={data?.street_address ?? 'Properties'} />
+            <PropertiesDropdown
+              currentPropertyId={currentPropertyId}
+              properties={properties}
+              streetAddress={data?.street_address ?? 'Properties'}
+            />
             <SidebarSection className="max-lg:hidden">
-              <SidebarItem href="/inbox">
+              <SidebarItem href="/dashboard/inbox">
                 <InboxIcon />
                 <SidebarLabel>Inbox</SidebarLabel>
               </SidebarItem>
@@ -165,7 +180,9 @@ export async function AppLayout({
                 <span className="flex min-w-0 items-center gap-3">
                   {/* <Avatar initials={getUserInitials(fullName)} className="size-10" square alt="" /> */}
                   <span className="min-w-0">
-                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">{fullName}</span>
+                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
+                      {fullName}
+                    </span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
                       {userEmail}
                     </span>

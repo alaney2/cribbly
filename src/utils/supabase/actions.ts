@@ -495,7 +495,20 @@ export async function getTasks() {
   return data
 }
 
+export async function deleteTask(id: string) {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('maintenance')
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    throw new Error('Delete unsuccessful')
+  }
+}
+
 export async function createTask(formData: FormData) {
+  const id = formData.get('id')
   const title = formData.get('title')
   const description = formData.get('description')
   const priority = formData.get('priority')
@@ -512,17 +525,27 @@ export async function createTask(formData: FormData) {
   }
   const currentPropertyId = user.user_metadata.currentPropertyId
 
-  const { data, error } = await supabase.from('maintenance').insert([
-    {
-      title,
-      description,
-      priority,
-      status,
-      notify,
-      user_id: user.id,
-      property_id: currentPropertyId,
-    },
-  ])
+  const { data, error } = await supabase
+    .from('maintenance')
+    .upsert(
+      {
+        id,
+        title,
+        description,
+        priority,
+        status,
+        notify,
+        user_id: user.id,
+        property_id: currentPropertyId,
+        updated_at: new Date(),
+      },
+      {
+        onConflict: 'id',
+        ignoreDuplicates: false,
+      },
+    )
+    .select()
+    .single()
 
   if (error) {
     console.error('Error creating task:', error)

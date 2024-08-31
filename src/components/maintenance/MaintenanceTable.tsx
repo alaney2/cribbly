@@ -40,7 +40,7 @@ import {
   ListboxLabel,
   ListboxOption,
 } from '@/components/catalyst/listbox'
-import { createTask } from '@/utils/supabase/actions'
+import { createTask, deleteTask } from '@/utils/supabase/actions'
 import { toast } from 'sonner'
 // const initialRequests = [
 //   { id: 1, date: '2024-08-18', title: 'Leaky Faucet', description: 'The kitchen faucet is leaking', status: 'Pending', priority: 'Medium' },
@@ -48,7 +48,7 @@ import { toast } from 'sonner'
 //   { id: 3, date: '2024-08-16', title: 'HVAC Maintenance', description: 'Annual HVAC system check', status: 'Completed', priority: 'Low' },
 // ];
 type Request = {
-  id: number
+  id: string
   property_id?: string
   user_id?: string
   created_at?: Date
@@ -65,7 +65,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
   const [isNewDialogOpen, setIsNewDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [currentRequest, setCurrentRequest] = useState({
-    id: 0,
+    id: '0',
     updated_at: new Date(),
     title: '',
     description: '',
@@ -83,45 +83,21 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
     setCurrentRequest((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = () => {
-    // e.preventDefault();
-    if (currentRequest.id === 0) {
-      // New request
-      const newId = requests.length + 1
-      const currentDate = new Date()
-      setRequests([
-        ...requests,
-        {
-          ...currentRequest,
-          id: newId,
-          updated_at: currentDate,
-          status: 'Pending',
-        },
-      ])
-    } else {
-      // Edit existing request
-      setRequests(
-        requests.map((req) =>
-          req.id === currentRequest.id ? currentRequest : req,
-        ),
-      )
-    }
-    setIsNewDialogOpen(false)
-    setIsEditDialogOpen(false)
-    setCurrentRequest({
-      id: 0,
-      updated_at: new Date(),
-      title: '',
-      description: '',
-      status: '',
-      priority: '',
-      notify: false,
-    })
-  }
-
   const handleRowClick = (request: Request) => {
     setCurrentRequest(request)
     setIsEditDialogOpen(true)
+  }
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteTask(id)
+      setRequests(requests.filter((req) => req.id !== id))
+      setIsEditDialogOpen(false)
+      toast.success('Task deleted successfully')
+    } catch (error) {
+      console.error('Error deleting task:', error)
+      toast.error('An error occurred while deleting the task')
+    }
   }
 
   return (
@@ -133,7 +109,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
         <Button
           onClick={() => {
             setCurrentRequest({
-              id: 0,
+              id: '0',
               updated_at: new Date(),
               title: '',
               description: '',
@@ -146,7 +122,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
           className="mb-4"
           color="blue"
         >
-          New Request
+          New Task
         </Button>
       </div>
 
@@ -154,7 +130,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
         <Table bleed grid>
           <TableHead>
             <TableRow>
-              <TableHeader>Date</TableHeader>
+              <TableHeader>Date created</TableHeader>
               <TableHeader>Title</TableHeader>
               <TableHeader>Status</TableHeader>
               <TableHeader>Priority</TableHeader>
@@ -167,7 +143,9 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
                 onClick={() => handleRowClick(request)}
                 className="cursor-default hover:bg-gray-50"
               >
-                <TableCell>{String(request.created_at)}</TableCell>
+                <TableCell>
+                  {new Date(request!.created_at!).toLocaleDateString()}
+                </TableCell>
                 <TableCell>{request.title}</TableCell>
                 <TableCell>{request.status}</TableCell>
                 <TableCell>{request.priority}</TableCell>
@@ -194,7 +172,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
             <Button
               onClick={() => {
                 setCurrentRequest({
-                  id: 0,
+                  id: '0',
                   updated_at: new Date(),
                   title: '',
                   description: '',
@@ -206,7 +184,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
               }}
               color="blue"
             >
-              Create New Request
+              Create New Task
             </Button>
           </div>
         </>
@@ -220,7 +198,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
         }}
       >
         <DialogTitle>
-          {currentRequest.id === 0
+          {currentRequest.id === '0'
             ? 'New Maintenance Request'
             : 'Edit Maintenance Request'}
         </DialogTitle>
@@ -231,11 +209,39 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
                 new Promise(async (resolve, reject) => {
                   try {
                     const data = await createTask(formData)
+                    if (currentRequest.id === '0') {
+                      // New request
+                      setRequests([
+                        ...requests,
+                        {
+                          ...currentRequest,
+                          id: data.id,
+                          updated_at: data.updated_at,
+                          status: data.status,
+                        },
+                      ])
+                    } else {
+                      // Edit existing request
+                      setRequests(
+                        requests.map((req) =>
+                          req.id === currentRequest.id ? currentRequest : req,
+                        ),
+                      )
+                    }
+                    setIsNewDialogOpen(false)
+                    setIsEditDialogOpen(false)
+                    setCurrentRequest({
+                      id: '0',
+                      updated_at: new Date(),
+                      title: '',
+                      description: '',
+                      status: '',
+                      priority: '',
+                      notify: false,
+                    })
                     resolve('Success')
                   } catch (error) {
                     reject(error)
-                  } finally {
-                    handleSubmit()
                   }
                 }),
                 {
@@ -247,6 +253,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
               )
             }}
           >
+            <input hidden value={currentRequest.id} name="id"></input>
             <FieldGroup>
               <Field>
                 <Label htmlFor="title">Title</Label>
@@ -283,7 +290,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
                 </Select>
               </Field>
 
-              {currentRequest.id !== 0 ? (
+              {currentRequest.id !== '0' ? (
                 <Field>
                   <Label htmlFor="status">Status</Label>
                   <Select
@@ -312,7 +319,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
                   </Select>
                 </Field>
               )}
-              {currentRequest.id === 0 && (
+              {currentRequest.id === '0' && (
                 <CheckboxField>
                   <Checkbox name="notify" />
                   <Label>Notify tenant(s)</Label>
@@ -320,17 +327,8 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
                 </CheckboxField>
               )}
             </FieldGroup>
-            <DialogActions className="flex w-full items-center justify-between">
-              <Button
-                type="button"
-                color="red"
-                onClick={() => {
-                  console.log('Delete request:', currentRequest.id)
-                }}
-              >
-                Delete
-              </Button>
-              <div className="flex gap-x-2">
+            {currentRequest.id === '0' ? (
+              <DialogActions className="">
                 <Button
                   type="button"
                   plain
@@ -344,8 +342,33 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
                 <Button type="submit" color="blue">
                   Submit
                 </Button>
-              </div>
-            </DialogActions>
+              </DialogActions>
+            ) : (
+              <DialogActions className="flex w-full items-center justify-between">
+                <Button
+                  type="button"
+                  color="red"
+                  onClick={() => handleDelete(currentRequest.id)}
+                >
+                  Delete
+                </Button>
+                <div className="flex gap-x-2">
+                  <Button
+                    type="button"
+                    plain
+                    onClick={() => {
+                      setIsNewDialogOpen(false)
+                      setIsEditDialogOpen(false)
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" color="blue">
+                    Submit
+                  </Button>
+                </div>
+              </DialogActions>
+            )}
           </form>
         </DialogBody>
       </Dialog>
