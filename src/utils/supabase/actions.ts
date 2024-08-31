@@ -78,13 +78,40 @@ export async function deleteFee(feeId: string) {
   }
 }
 
+export async function addFee(formData: FormData, propertyId: string) {
+  const supabase = createClient()
+  const feeType = String(formData.get('feeType'))
+  const fee_type: 'one-time' | 'recurring' | undefined =
+    feeType === 'one-time' || feeType === 'recurring' ? feeType : undefined
+  const fee_name = String(formData.get('feeName'))
+  const fee_cost = String(formData.get('feeAmount'))
+  const { data, error } = await supabase
+    .from('property_fees')
+    .insert([
+      {
+        id: generateId(),
+        property_id: propertyId,
+        fee_name,
+        fee_type,
+        fee_cost: Number(parseFloat(fee_cost).toFixed(2)),
+      },
+    ])
+    .select()
+    .single()
+  if (error) {
+    console.error(error)
+    throw new Error()
+  }
+  return data
+}
+
 export async function addPropertyFees(formData: FormData) {
   const propertyId = formData.get('propertyId')
   if (!propertyId) return
   const securityDepositSwitch = formData.get('securityDepositSwitch')
   let dateFrom = new Date(String(formData.get('dateFrom')))
   let dateTo = new Date(String(formData.get('dateTo')))
-  console.log(dateFrom, dateTo)
+  // console.log(dateFrom, dateTo)
   const rent_id = String(formData.get('rent_id'))
   const rentInfo = calculateRentDates(dateFrom, dateTo)
   const monthsOfRent = rentInfo.monthsOfRent
@@ -138,53 +165,53 @@ export async function addPropertyFees(formData: FormData) {
       }
       continue
     }
-    if (pair[0].startsWith('fee')) {
-      const fee = JSON.parse(pair[1].toString())
-      // console.log(fee.id, fee.fee_name, fee.fee_type, fee.fee_cost, monthsOfRent, dateFrom, dateTo)
-      if (fee.id) {
-        // console.log('FEEID', fee.id)
-        const { error } = await supabase
-          .from('property_fees')
-          .update({
-            fee_name: fee.fee_name,
-            fee_type: fee.fee_type,
-            fee_cost: Number(parseFloat(fee.fee_cost).toFixed(2)),
-            months_left: fee.fee_type === 'recurring' ? monthsOfRent : 1,
-            start_date: dateFrom,
-            end_date: dateTo,
-          })
-          .eq('id', fee.id)
-        if (error) {
-          console.error(error)
-          return {
-            message: 'Error adding fee',
-          }
-        }
-      } else {
-        const { error } = await supabase.from('property_fees').insert(
-          {
-            id: generateId(),
-            property_id: propertyId.toString(),
-            fee_name: fee.fee_name,
-            fee_type: fee.fee_type,
-            fee_cost: Number(parseFloat(fee.fee_cost).toFixed(2)),
-            months_left: fee.fee_type === 'recurring' ? monthsOfRent : 1,
-            start_date: dateFrom,
-            end_date: dateTo,
-          },
-          // {
-          //   onConflict: 'id, property_id, fee_name, fee_type, fee_cost, start_date, end_date',
-          //   ignoreDuplicates: false,
-          // }
-        )
-        if (error) {
-          console.error(error)
-          return {
-            message: 'Error adding fee',
-          }
-        }
-      }
-    }
+    // if (pair[0].startsWith('fee')) {
+    //   const fee = JSON.parse(pair[1].toString())
+    //   // console.log(fee.id, fee.fee_name, fee.fee_type, fee.fee_cost, monthsOfRent, dateFrom, dateTo)
+    //   if (fee.id) {
+    //     // console.log('FEEID', fee.id)
+    //     const { error } = await supabase
+    //       .from('property_fees')
+    //       .update({
+    //         fee_name: fee.fee_name,
+    //         fee_type: fee.fee_type,
+    //         fee_cost: Number(parseFloat(fee.fee_cost).toFixed(2)),
+    //         months_left: fee.fee_type === 'recurring' ? monthsOfRent : 1,
+    //         start_date: dateFrom,
+    //         end_date: dateTo,
+    //       })
+    //       .eq('id', fee.id)
+    //     if (error) {
+    //       console.error(error)
+    //       return {
+    //         message: 'Error adding fee',
+    //       }
+    //     }
+    //   } else {
+    //     const { error } = await supabase.from('property_fees').insert(
+    //       {
+    //         id: generateId(),
+    //         property_id: propertyId.toString(),
+    //         fee_name: fee.fee_name,
+    //         fee_type: fee.fee_type,
+    //         fee_cost: Number(parseFloat(fee.fee_cost).toFixed(2)),
+    //         months_left: fee.fee_type === 'recurring' ? monthsOfRent : 1,
+    //         start_date: dateFrom,
+    //         end_date: dateTo,
+    //       },
+    //       // {
+    //       //   onConflict: 'id, property_id, fee_name, fee_type, fee_cost, start_date, end_date',
+    //       //   ignoreDuplicates: false,
+    //       // }
+    //     )
+    //     if (error) {
+    //       console.error(error)
+    //       return {
+    //         message: 'Error adding fee',
+    //       }
+    //     }
+    //   }
+    // }
   }
   return {
     message: 'Success!',

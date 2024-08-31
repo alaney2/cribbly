@@ -320,29 +320,31 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
                 </CheckboxField>
               )}
             </FieldGroup>
-            <DialogActions>
+            <DialogActions className="flex w-full items-center justify-between">
               <Button
                 type="button"
                 color="red"
                 onClick={() => {
-                  // Add delete logic here
                   console.log('Delete request:', currentRequest.id)
                 }}
               >
                 Delete
               </Button>
-              <Button
-                type="button"
-                onClick={() => {
-                  setIsNewDialogOpen(false)
-                  setIsEditDialogOpen(false)
-                }}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" color="blue">
-                Submit
-              </Button>
+              <div className="flex gap-x-2">
+                <Button
+                  type="button"
+                  plain
+                  onClick={() => {
+                    setIsNewDialogOpen(false)
+                    setIsEditDialogOpen(false)
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" color="blue">
+                  Submit
+                </Button>
+              </div>
             </DialogActions>
           </form>
         </DialogBody>

@@ -47,7 +47,7 @@ import {
 } from '@/components/catalyst/table'
 import { EditFeeDialog } from '@/components/PropertySettings/EditFeeDialog'
 // import { generateId } from "@/lib/utils"
-import { addPropertyFees } from '@/utils/supabase/actions'
+import { addPropertyFees, addFee } from '@/utils/supabase/actions'
 import { Calendar as CalendarIcon } from 'lucide-react'
 import { Calendar } from '@/components/ui/calendar'
 import { format, addYears, subDays, addDays, addWeeks } from 'date-fns'
@@ -129,24 +129,29 @@ export function RentCard({
   const animationClass = fadeOut ? ' animate__fadeOut' : 'animate__fadeIn'
   const daysBetweenDates = daysBetween(date?.from ?? new Date(), new Date())
 
-  const handleAddFee = async () => {
-    const newFee = {
-      id: '',
-      property_id: propertyId,
-      fee_type: dialogFee.fee_type,
-      fee_name: dialogFee.fee_name,
-      fee_cost: dialogFee.fee_cost,
-    }
-    setFees([...fees, newFee])
-    setIsDialogOpen(false)
-    setDialogFee({
-      id: '',
-      property_id: propertyId,
-      fee_type: 'one-time',
-      fee_name: '',
-      fee_cost: 0,
-    })
-  }
+  const [initialRentAmount, setInitialRentAmount] = useState<number>(
+    propertyRent?.rent_price ?? 0,
+  )
+  const [initialSecurityDepositFee, setInitialSecurityDepositFee] =
+    useState<number>(securityDeposit ? securityDeposit.deposit_amount : 0)
+  // const [initialFees, setInitialFees] = React.useState<any[]>(propertyFees ?? [])
+
+  const [initialStartDate, setInitialStartDate] = useState<Date | undefined>(
+    propertyRent ? parseISO(propertyRent.rent_start) : undefined,
+  )
+  const [initialEndDate, setInitialEndDate] = useState<Date | undefined>(
+    propertyRent ? parseISO(propertyRent.rent_end) : undefined,
+  )
+
+  const hasChanges =
+    rentAmount !== initialRentAmount ||
+    securityDepositFee !== initialSecurityDepositFee ||
+    (date?.from &&
+      initialStartDate &&
+      date.from.getTime() !== initialStartDate.getTime()) ||
+    (date?.to &&
+      initialEndDate &&
+      date.to.getTime() !== initialEndDate.getTime())
 
   return (
     <>
@@ -174,7 +179,7 @@ export function RentCard({
               }),
               {
                 loading: 'Adding...',
-                success: 'Rent and fees added!',
+                success: 'Rental setup updated',
                 error:
                   'An error occurred, please check the form and try again.',
               },
@@ -271,13 +276,9 @@ export function RentCard({
                       placeholder="0"
                       className="w-full flex-grow"
                       autoComplete="off"
-                      value={rentAmount}
+                      value={rentAmount === 0 ? '' : rentAmount}
                       onChange={(e) => {
                         setRentAmount(Number(e.target.value))
-                        setTimeout(
-                          () => {},
-                          Math.floor(Math.random() * 501) + 200,
-                        )
                       }}
                       step="1"
                       required
@@ -313,16 +314,12 @@ export function RentCard({
                       disabled={!hasSecurityDeposit || daysBetweenDates <= 0}
                       className="w-full flex-grow"
                       autoComplete="off"
-                      value={securityDepositFee}
+                      value={securityDepositFee === 0 ? '' : securityDepositFee}
                       required={hasSecurityDeposit}
                       onChange={(e) => {
                         setSecurityDepositFee(Number(e.target.value))
-                        setTimeout(
-                          () => {},
-                          Math.floor(Math.random() * 501) + 200,
-                        )
                       }}
-                      step=".01"
+                      step="1"
                       min="0"
                       pattern="^\d+(?:\.\d{1,2})?$"
                     />
@@ -343,7 +340,7 @@ export function RentCard({
                   <TableBody>
                     {fees.map((fee, index) => (
                       <TableRow
-                        key={fee.id}
+                        key={index}
                         className="cursor-default"
                         onClick={() => {
                           setFeeEdit(fee)
@@ -363,17 +360,17 @@ export function RentCard({
                 </Table>
               </div>
             )}
-            {fees.length > 0 &&
+            {/* {fees.length > 0 &&
               fees.map((fee, index) => (
                 <input
-                  key={fee.id}
+                  key={index}
                   className="hidden"
                   name={`fee${index}`}
                   id={`fee${index}`}
                   defaultValue={JSON.stringify(fee)}
                   readOnly
                 />
-              ))}
+              ))} */}
             <input
               name="propertyId"
               defaultValue={propertyId}
@@ -405,7 +402,7 @@ export function RentCard({
               <Button
                 type="submit"
                 color="blue"
-                disabled={daysBetweenDates <= 0}
+                disabled={daysBetweenDates <= 0 || !hasChanges}
               >
                 Save
               </Button>
@@ -419,7 +416,41 @@ export function RentCard({
           Add a one-time or recurring fee for the tenant, billed at the start of
           next month. Enter a negative amount to apply a discount.
         </DialogDescription>
-        <form action={handleAddFee}>
+        <form
+          action={async (formData) => {
+            toast.promise(
+              new Promise(async (resolve, reject) => {
+                try {
+                  const data = await addFee(formData, propertyId)
+                  const newFee = {
+                    id: data.id,
+                    property_id: propertyId,
+                    fee_type: dialogFee.fee_type,
+                    fee_name: dialogFee.fee_name,
+                    fee_cost: dialogFee.fee_cost,
+                  }
+                  setFees([...fees, newFee])
+                  setIsDialogOpen(false)
+                  setDialogFee({
+                    id: '',
+                    property_id: propertyId,
+                    fee_type: 'one-time',
+                    fee_name: '',
+                    fee_cost: 0,
+                  })
+                  resolve('Success')
+                } catch (error) {
+                  reject(error)
+                }
+              }),
+              {
+                loading: 'Adding fee...',
+                success: 'Fee added!',
+                error: 'An error occurred while adding the fee.',
+              },
+            )
+          }}
+        >
           <DialogBody>
             <div className="items-center">
               <HeadlessFieldset>
@@ -467,6 +498,7 @@ export function RentCard({
                 <Input
                   id="feeName"
                   value={dialogFee.fee_name}
+                  name="feeName"
                   onChange={(e) =>
                     setDialogFee({ ...dialogFee, fee_name: e.target.value })
                   }
@@ -483,6 +515,7 @@ export function RentCard({
                   id="feeAmount"
                   type="number"
                   value={dialogFee.fee_cost || ''}
+                  name="feeAmount"
                   onChange={(e) =>
                     setDialogFee({
                       ...dialogFee,
