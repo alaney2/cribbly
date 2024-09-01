@@ -60,12 +60,19 @@ type Request = {
   notify: boolean
 }
 
-export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
+export function MaintenanceTable({
+  tasks,
+  bento,
+}: {
+  tasks: Request[]
+  bento?: boolean
+}) {
   const [requests, setRequests] = useState<Request[]>(tasks)
   const [isNewDialogOpen, setIsNewDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [currentRequest, setCurrentRequest] = useState({
     id: '0',
+    created_at: new Date(),
     updated_at: new Date(),
     title: '',
     description: '',
@@ -84,6 +91,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
   }
 
   const handleRowClick = (request: Request) => {
+    if (bento) return
     setCurrentRequest(request)
     setIsEditDialogOpen(true)
   }
@@ -110,6 +118,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
           onClick={() => {
             setCurrentRequest({
               id: '0',
+              created_at: new Date(),
               updated_at: new Date(),
               title: '',
               description: '',
@@ -131,6 +140,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
           <TableHead>
             <TableRow>
               <TableHeader>Date created</TableHeader>
+              {/* <TableHeader>Date Updated</TableHeader> */}
               <TableHeader>Title</TableHeader>
               <TableHeader>Status</TableHeader>
               <TableHeader>Priority</TableHeader>
@@ -146,6 +156,9 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
                 <TableCell>
                   {new Date(request!.created_at!).toLocaleDateString()}
                 </TableCell>
+                {/* <TableCell>
+                  {new Date(request!.updated_at!).toLocaleDateString()}
+                </TableCell> */}
                 <TableCell>{request.title}</TableCell>
                 <TableCell>{request.status}</TableCell>
                 <TableCell>{request.priority}</TableCell>
@@ -173,6 +186,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
               onClick={() => {
                 setCurrentRequest({
                   id: '0',
+                  created_at: new Date(),
                   updated_at: new Date(),
                   title: '',
                   description: '',
@@ -212,13 +226,13 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
                     if (currentRequest.id === '0') {
                       // New request
                       setRequests([
-                        ...requests,
                         {
                           ...currentRequest,
                           id: data.id,
                           updated_at: data.updated_at,
                           status: data.status,
                         },
+                        ...requests,
                       ])
                     } else {
                       // Edit existing request
@@ -232,6 +246,7 @@ export function MaintenanceTable({ tasks }: { tasks: Request[] }) {
                     setIsEditDialogOpen(false)
                     setCurrentRequest({
                       id: '0',
+                      created_at: new Date(),
                       updated_at: new Date(),
                       title: '',
                       description: '',

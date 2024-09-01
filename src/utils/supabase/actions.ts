@@ -525,11 +525,29 @@ export async function createTask(formData: FormData) {
   }
   const currentPropertyId = user.user_metadata.currentPropertyId
 
-  const { data, error } = await supabase
-    .from('maintenance')
-    .upsert(
-      {
-        id,
+  if (id === '0') {
+    const { data, error } = await supabase
+      .from('maintenance')
+      .insert({
+        title,
+        description,
+        priority,
+        status,
+        notify,
+        user_id: user.id,
+        property_id: currentPropertyId,
+      })
+      .select()
+      .single()
+    if (error) {
+      console.error('Error creating task:', error)
+      throw new Error('Error creating task')
+    }
+    return data
+  } else {
+    const { data, error } = await supabase
+      .from('maintenance')
+      .update({
         title,
         description,
         priority,
@@ -538,18 +556,15 @@ export async function createTask(formData: FormData) {
         user_id: user.id,
         property_id: currentPropertyId,
         updated_at: new Date(),
-      },
-      {
-        onConflict: 'id',
-        ignoreDuplicates: false,
-      },
-    )
-    .select()
-    .single()
+      })
+      .eq('id', id)
+      .select()
+      .single()
 
-  if (error) {
-    console.error('Error creating task:', error)
-    throw new Error('Error creating task')
+    if (error) {
+      console.error('Error creating task:', error)
+      throw new Error('Error creating task')
+    }
+    return data
   }
-  return data
 }

@@ -164,14 +164,14 @@ export async function AppLayout({
             <AppLayoutLinks />
             <SidebarSpacer />
             <SidebarSection>
-              <SidebarItem href="/support">
+              <SidebarItem href={`mailto:support@cribbly.io`}>
                 <QuestionMarkCircleIcon />
                 <SidebarLabel>Support</SidebarLabel>
               </SidebarItem>
-              <SidebarItem href="/changelog">
+              {/* <SidebarItem href="/changelog">
                 <SparklesIcon />
                 <SidebarLabel>Changelog</SidebarLabel>
-              </SidebarItem>
+              </SidebarItem> */}
             </SidebarSection>
           </SidebarBody>
           <SidebarFooter className="max-lg:hidden">
@@ -201,7 +201,7 @@ export async function AppLayout({
                   <DropdownLabel>Privacy policy</DropdownLabel>
                 </DropdownItem>
                 {/* <DropdownItem href="/share-feedback"> */}
-                <DropdownItem>
+                <DropdownItem href="mailto:alan@cribbly.io">
                   <LightBulbIcon />
                   <DropdownLabel>Share feedback</DropdownLabel>
                 </DropdownItem>
