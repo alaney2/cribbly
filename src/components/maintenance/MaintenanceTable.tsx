@@ -92,7 +92,16 @@ export function MaintenanceTable({
 
   const handleRowClick = (request: Request) => {
     if (bento) return
-    setCurrentRequest(request)
+    setCurrentRequest({
+      id: request.id,
+      created_at: request.created_at || new Date(),
+      updated_at: request.updated_at,
+      title: request.title,
+      description: request.description,
+      status: request.status,
+      priority: request.priority,
+      notify: request.notify,
+    })
     setIsEditDialogOpen(true)
   }
 

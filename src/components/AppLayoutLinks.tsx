@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   SidebarItem,
   SidebarLabel,
@@ -27,21 +27,33 @@ export function AppLayoutLinks() {
         <HomeIcon />
         <SidebarLabel>Home</SidebarLabel>
       </SidebarItem>
-      <SidebarItem href={'/dashboard/tenants'} current={pathname === '/dashboard/tenants'}>
+      <SidebarItem
+        href={'/dashboard/tenants'}
+        current={pathname === '/dashboard/tenants'}
+      >
         <Square2StackIcon />
         <SidebarLabel>Tenants</SidebarLabel>
       </SidebarItem>
-      <SidebarItem href={'/dashboard/maintenance'} current={pathname.startsWith('/dashboard/maintenance')}>
+      <SidebarItem
+        href={'/dashboard/maintenance'}
+        current={pathname.startsWith('/dashboard/maintenance')}
+      >
         <WrenchIcon />
         <SidebarLabel>Maintenance</SidebarLabel>
       </SidebarItem>
-      <SidebarItem href={'/dashboard/documents'} current={pathname === '/dashboard/documents'}>
+      <SidebarItem
+        href={'/dashboard/documents'}
+        current={pathname === '/dashboard/documents'}
+      >
         <DocumentTextIcon />
         <SidebarLabel>Documents</SidebarLabel>
       </SidebarItem>
-      <SidebarItem href={'/dashboard/settings'} current={pathname === '/dashboard/settings'}>
+      <SidebarItem
+        href={'/dashboard/settings'}
+        current={pathname === '/dashboard/settings'}
+      >
         <Cog6ToothIcon />
-        <SidebarLabel>Settings</SidebarLabel>
+        <SidebarLabel>Setup</SidebarLabel>
       </SidebarItem>
       {/* <SidebarItem href={'/dashboard/delete-property'} current={pathname === '/dashboard/delete-property'}>
         <MegaphoneIcon />
