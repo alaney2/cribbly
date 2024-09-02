@@ -22,7 +22,7 @@ export async function generateMetadata(
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) redirect('/sign-in')
-  let currentPropertyId = user.user_metadata.currentPropertyId
+  const currentPropertyId = user.user_metadata.currentPropertyId
 
   const { data: propertyData, error } = await supabase.from('properties')
     .select()
@@ -44,14 +44,14 @@ export default async function PropertyDashboardLayout({
   children,
 }: {
   params: { property_id: string };
-  searchParams: any,
+  searchParams: { [key: string]: string | string[] | undefined };
   children: React.ReactNode;
 }) {
   const supabase = createClient()
-  let { data: { user } } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/sign-in')
 
-  let { data, error } = await supabase.from('users').select()
+  const { data, error } = await supabase.from('users').select()
     .eq('id', user.id)
     .single()
 

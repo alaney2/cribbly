@@ -17,7 +17,7 @@ export default async function CurrentProperty({
   } = await supabase.auth.getUser()
   if (!user) redirect('/sign-in')
 
-  let currentPropertyId = user.user_metadata.currentPropertyId
+  const currentPropertyId = user.user_metadata.currentPropertyId
   // const { data: tasks } = await supabase
   //   .from('maintenance')
   //   .select('*')

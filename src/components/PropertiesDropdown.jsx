@@ -32,7 +32,7 @@ export function PropertiesDropdown({properties, currentPropertyId, streetAddress
       </DropdownButton>
       
       <DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
-        {properties && properties.map((property, index) => (
+        {properties?.map((property, index) => (
           <DropdownItem
             key={property.id}
             // href={`/dashboard`}

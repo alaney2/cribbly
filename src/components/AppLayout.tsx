@@ -66,8 +66,8 @@ export async function AppLayout({
 
   const { data: properties, error: propertiesError } = await supabase
     .from('properties')
-    .select(`*, tenants(*)`)
-    .eq('user_id', userId!)
+    .select('*, tenants(*)')
+    .eq('user_id', userId)
 
   // Get current property ID from authenticated user data
   const {
@@ -119,7 +119,7 @@ export async function AppLayout({
             <Dropdown>
               <DropdownButton as={NavbarItem}>
                 <Avatar
-                  initials={getInitials(fullName!)}
+                  initials={getInitials(fullName ?? '')}
                   className="bg-blue-500 text-white"
                   square
                 />
@@ -164,7 +164,7 @@ export async function AppLayout({
             <AppLayoutLinks />
             <SidebarSpacer />
             <SidebarSection>
-              <SidebarItem href={`mailto:support@cribbly.io`}>
+              <SidebarItem href={'mailto:support@cribbly.io'}>
                 <QuestionMarkCircleIcon />
                 <SidebarLabel>Support</SidebarLabel>
               </SidebarItem>
