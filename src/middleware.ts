@@ -1,44 +1,43 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { cookies } from 'next/headers'
 import { createClient } from '@/utils/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone()
 
   const { supabase, response } = createClient(request)
-  let { data: {user}, error } = await supabase.auth.getUser()
+  const { data: {user}, error } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
   if (user) {
     if (user.user_metadata.role === 'tenant') {
       return NextResponse.redirect(new URL('https://resident.cribbly.io'))
-    } else if (!user.user_metadata.role || user.user_metadata.role !== 'tenant') {
-      const { data: show_welcome_data } = await supabase
-      .from('users')
-      .select('welcome_screen')
-      .eq('id', user?.id)
-      .single()
+    } 
+    const { data: show_welcome_data } = await supabase
+    .from('users')
+    .select('welcome_screen')
+    .eq('id', user?.id)
+    .single()
 
-      const welcome_screen = show_welcome_data?.welcome_screen
+    const welcome_screen = show_welcome_data?.welcome_screen
 
-      if (welcome_screen === true && pathname !== '/welcome') {
-        return NextResponse.redirect(new URL('/welcome', request.url))
-      } else if (!welcome_screen && pathname === '/welcome') {
+    if (welcome_screen === true && pathname !== '/welcome') {
+      return NextResponse.redirect(new URL('/welcome', request.url))
+    }
+    if (!welcome_screen && pathname === '/welcome') {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+
+    if (!welcome_screen) {
+      const unavailableRoutes = ['/sign-in', '/get-started', '/welcome', '/invite']
+      // Can't sign in or sign up if already logged in
+      if (
+        pathname === '/' ||
+        unavailableRoutes.some((path) => url.pathname.startsWith(path))
+      ) {
         return NextResponse.redirect(new URL('/dashboard', request.url))
       }
-
-      if (!welcome_screen) {
-        const unavailableRoutes = ['/sign-in', '/get-started', '/welcome', '/invite']
-        // Can't sign in or sign up if already logged in
-        if (
-          pathname === '/' ||
-          unavailableRoutes.some((path) => url.pathname.startsWith(path))
-        ) {
-          return NextResponse.redirect(new URL('/dashboard', request.url))
-        } else {
-          return NextResponse.next()
-        }
-      }
+      return NextResponse.next()
     }
+
   } else {
     // No user is signed in
     const pathsWithoutAuth = ['/sign-in', '/get-started', '/invite', '/privacy', '/terms', '/security']
@@ -51,7 +50,6 @@ export async function middleware(request: NextRequest) {
     }
   }
   return response
-  return NextResponse.next()
 }
 
 export const config = {
