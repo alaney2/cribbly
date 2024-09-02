@@ -27,7 +27,7 @@ export default async function TenantsPage() {
       id,
       property_id,
       user_id,
-      users (
+      users:users (
         email,
         full_name,
         created_at
@@ -36,7 +36,6 @@ export default async function TenantsPage() {
     )
     .eq('property_id', currentPropertyId)
   
-
   if (tenantsError) {
     console.error('Error fetching tenants:', tenantsError)
     // Handle error as needed
@@ -46,6 +45,7 @@ export default async function TenantsPage() {
     <>
       <div className="mb-8 p-6 md:p-8 lg:mb-0">
         <div className="">
+          {/* @ts-ignore */}
           <TenantsTable tenantsData={tenantsData || []} />
         </div>
       </div>
