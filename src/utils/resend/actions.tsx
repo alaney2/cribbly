@@ -44,9 +44,8 @@ export async function sendInviteEmail(formData: FormData) {
     reply_to: 'support@cribbly.io',
     to: email,
     subject:
-      property?.street_address +
-      (property?.apt ? ` ${property.apt}` : '') +
-      ' Invitation',
+      `${property?.street_address +
+      (property?.apt ? ` ${property.apt}` : '')} Invitation`,
     react: (
       <InviteUserEmail
         invitedByUsername={user_data.full_name || ''}
@@ -55,8 +54,9 @@ export async function sendInviteEmail(formData: FormData) {
         teamName={
           property?.street_address + (property?.apt ? ` ${property.apt}` : '')
         }
-        // inviteLink={`https://resident.cribbly.io/invite?property=${propertyId}&token=${token}&email=${email}&name=${fullName}&address=${property.street_address} ${property.apt}`}
-        inviteLink={`http://localhost:3001/invite?property=${propertyId}&token=${token}&email=${email}&name=${fullName}&address=${property.street_address} ${property.apt}`}
+        inviteLink={`${process.env.NEXT_PUBLIC_SITE_URL}/invite?property=${propertyId}&token=${token}&email=${email}&name=${fullName}&address=${property.street_address} ${property.apt}`}
+        
+        // inviteLink={`http://localhost:3001/invite?property=${propertyId}&token=${token}&email=${email}&name=${fullName}&address=${property.street_address} ${property.apt}`}
       />
     ),
   })
