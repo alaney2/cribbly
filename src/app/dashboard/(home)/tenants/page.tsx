@@ -1,6 +1,4 @@
 import { TenantsTable } from '@/components/Tenant/TenantsTable'
-import { BentoStats } from '@/components/Dashboard/BentoStats'
-import { PropertyStats } from '@/components/Dashboard/PropertyStats'
 import { Button } from '@/components/catalyst/button'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
@@ -11,7 +9,7 @@ export default async function TenantsPage() {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) redirect('/sign-in')
-  let currentPropertyId = user.user_metadata.currentPropertyId
+  const currentPropertyId = user.user_metadata.currentPropertyId
 
   const { data: propertyData, error } = await supabase
     .from('properties')
@@ -30,7 +28,6 @@ export default async function TenantsPage() {
       property_id,
       user_id,
       users (
-        id,
         email,
         full_name,
         created_at
@@ -38,6 +35,7 @@ export default async function TenantsPage() {
     `,
     )
     .eq('property_id', currentPropertyId)
+  
 
   if (tenantsError) {
     console.error('Error fetching tenants:', tenantsError)

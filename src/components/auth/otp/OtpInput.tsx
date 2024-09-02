@@ -104,6 +104,7 @@ function OtpInputWithParams({ email }: { email: string } ) {
       <div className="flex justify-center space-x-2 mt-10 mb-4" onPaste={handlePaste}>
         {[...Array(6)].map((_, index) => (
           <Input
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
             key={index}
             ref={el => {
               if (el) {

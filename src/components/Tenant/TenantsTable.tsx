@@ -15,49 +15,18 @@ import { format } from 'date-fns'
 import Link from 'next/link'
 import { Text, TextLink } from '@/components/catalyst/text'
 
-// type User = {
-//   id: string
-//   email: string
-//   full_name: string | null
-//   created_at: string
-// }
+interface Tenant {
+  id: string;
+  property_id: string;
+  user_id: string;
+  users: {
+    full_name: string;
+    email: string;
+    created_at: Date;
+  };
+}
 
-// type Tenant = {
-//   id: string
-//   property_id: string
-//   user_id: string
-//   users: User
-// }
-
-// const tenantsFetcher = async (property_id: string) => {
-//   const supabase = createClient()
-//   const { data, error } = await supabase
-//     .from('tenants')
-//     .select(
-//       `
-//       id,
-//       email,
-//       created_at,
-//       users:email ( full_name )
-//     `,
-//     )
-//     .eq('property_id', property_id)
-//   if (error) throw error
-//   return data
-// }
-
-export function TenantsTable({ tenantsData }: { tenantsData: any[] }) {
-  // const {
-  //   data: tenantsData,
-  //   error: tenantsError,
-  //   isLoading: isTenantsLoading,
-  // } = useSWR(['tenants', propertyId], ([_, property_id]) =>
-  //   tenantsFetcher(property_id),
-  // )
-
-  // useEffect(() => {
-  //   console.log(tenantsData)
-  // }, [tenantsData])
+export function TenantsTable({ tenantsData }: { tenantsData: Tenant[] }) {
   return (
     <>
       <Table
@@ -78,11 +47,11 @@ export function TenantsTable({ tenantsData }: { tenantsData: any[] }) {
             tenantsData?.map((tenant) => (
               <TableRow key={tenant.id}>
                 {/* @ts-ignore: the column does exist */}
-                <TableCell className="font-medium">
+                <TableCell className="">
                   {tenant.users?.full_name}
                 </TableCell>
-                <TableCell>{tenant.email}</TableCell>
-                <TableCell>{format(tenant.created_at, 'MM/dd/yyyy')}</TableCell>
+                <TableCell>{tenant.users.email}</TableCell>
+                <TableCell>{format(tenant.users.created_at, 'MM/dd/yyyy')}</TableCell>
 
                 {/* <TableCell className="text-red-600/80 hover:text-red-600">
                 <button className="cursor-default" onClick={async () => {
