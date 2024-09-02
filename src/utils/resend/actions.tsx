@@ -54,7 +54,7 @@ export async function sendInviteEmail(formData: FormData) {
         teamName={
           property?.street_address + (property?.apt ? ` ${property.apt}` : '')
         }
-        inviteLink={`https://residential.cribbly.io/invite?property=${propertyId}&token=${token}&email=${email}&name=${fullName}&address=${property.street_address} ${property.apt}`}
+        inviteLink={`https://residential.cribbly.io/invite?token=${token}`}
         
         // inviteLink={`http://localhost:3001/invite?property=${propertyId}&token=${token}&email=${email}&name=${fullName}&address=${property.street_address} ${property.apt}`}
       />

@@ -52,7 +52,7 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
     if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
       setFinishWelcome(true)
     }
-  }, [finishWelcome, invites, isLoading, setFinishWelcome])
+  }, [finishWelcome, invites, setFinishWelcome])
 
   const [fadeOut, setFadeOut] = useState(false);
   const [email, setEmail] = useState('');
@@ -154,7 +154,7 @@ export function InviteCard({ propertyId, setPropertyId, finishWelcome, setFinish
                 <TableRow>
                   <TableHeader>Name</TableHeader>
                   <TableHeader>Email</TableHeader>
-                  <TableHeader></TableHeader>
+                  <TableHeader />
                 </TableRow>
               </TableHead>
               <TableBody>
