@@ -127,25 +127,27 @@ export function MaintenanceTable({
 				<Heading className="mb-4 text-center sm:text-left">
 					Maintenance Requests
 				</Heading>
-				<Button
-					onClick={() => {
-						setCurrentRequest({
-							id: "0",
-							created_at: new Date(),
-							updated_at: new Date(),
-							title: "",
-							description: "",
-							status: "Pending",
-							priority: "Medium",
-							user_id: userId,
-						});
-						setIsNewDialogOpen(true);
-					}}
-					className="mb-4"
-					color="blue"
-				>
-					New Task
-				</Button>
+				{!bento && (
+					<Button
+						onClick={() => {
+							setCurrentRequest({
+								id: "0",
+								created_at: new Date(),
+								updated_at: new Date(),
+								title: "",
+								description: "",
+								status: "Pending",
+								priority: "Medium",
+								user_id: userId,
+							});
+							setIsNewDialogOpen(true);
+						}}
+						className="mb-4"
+						color="blue"
+					>
+						New Task
+					</Button>
+				)}
 			</div>
 
 			{requests.length > 0 ? (
@@ -157,7 +159,7 @@ export function MaintenanceTable({
 							<TableHeader>Title</TableHeader>
 							<TableHeader>Status</TableHeader>
 							<TableHeader>Priority</TableHeader>
-							<TableHeader>Created by</TableHeader>
+							{!bento && <TableHeader>Created by</TableHeader>}
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -178,9 +180,11 @@ export function MaintenanceTable({
 								<TableCell>{request.title}</TableCell>
 								<TableCell>{request.status || "Pending"}</TableCell>
 								<TableCell>{request.priority || "Medium"}</TableCell>
-								<TableCell>
-									{request.user_id === userId ? "You" : "Other"}
-								</TableCell>
+								{!bento && (
+									<TableCell>
+										{request.user_id === userId ? "You" : "Other"}
+									</TableCell>
+								)}
 							</TableRow>
 						))}
 					</TableBody>
