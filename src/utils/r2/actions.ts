@@ -109,7 +109,6 @@ export async function uploadDocument(propertyId: string, formData: FormData) {
 
 	try {
 		await R2_CLIENT.send(command);
-		console.log("File uploaded successfully");
 		// revalidatePath('/dashboard/documents')
 	} catch (error) {
 		console.error("Error uploading file:", error);
