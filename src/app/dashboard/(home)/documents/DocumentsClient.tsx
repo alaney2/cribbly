@@ -171,22 +171,23 @@ export function DocumentsClient({
 			} catch (error) {
 				console.error("Error uploading document:", error);
 				toast.error(`Failed to upload ${file.name}`, { id: uploadToastId });
-			}
-			finally {
-			  setFiles(prevFiles => {
-			    const fileExists = prevFiles.some(existingFile => existingFile.name === file.name);
+			} finally {
+				setFiles((prevFiles) => {
+					const fileExists = prevFiles.some(
+						(existingFile) => existingFile.name === file.name,
+					);
 
-			    if (!fileExists) {
-			      const newDocument = {
-			        key: file.name,
-			        name: file.name,
-			        date: new Date()
-			      };
-			      return [...prevFiles, newDocument];
-			    }
+					if (!fileExists) {
+						const newDocument = {
+							key: `properties/${propertyId}/documents/${file.name}`,
+							name: file.name,
+							date: new Date(),
+						};
+						return [...prevFiles, newDocument];
+					}
 
-			    return prevFiles;
-			  });
+					return prevFiles;
+				});
 			}
 		}
 	};

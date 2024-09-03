@@ -57,15 +57,16 @@ type Request = {
 	description: string;
 	status: string;
 	priority: string;
-	notify: boolean;
 };
 
 export function MaintenanceTable({
 	tasks,
 	bento,
+	userId,
 }: {
 	tasks: Request[];
 	bento?: boolean;
+	userId: string;
 }) {
 	const [requests, setRequests] = useState<Request[]>(tasks);
 	const [isNewDialogOpen, setIsNewDialogOpen] = useState(false);
@@ -76,10 +77,13 @@ export function MaintenanceTable({
 		updated_at: new Date(),
 		title: "",
 		description: "",
-		status: "",
-		priority: "",
-		notify: false,
+		status: "Pending",
+		priority: "Medium",
+		user_id: userId,
 	});
+
+	const isCurrentUserRequest =
+		currentRequest.id === "0" || currentRequest.user_id === userId;
 
 	const handleInputChange = (
 		e: React.ChangeEvent<
@@ -100,7 +104,7 @@ export function MaintenanceTable({
 			description: request.description,
 			status: request.status,
 			priority: request.priority,
-			notify: request.notify,
+			user_id: request.user_id || "",
 		});
 		setIsEditDialogOpen(true);
 	};
@@ -131,9 +135,9 @@ export function MaintenanceTable({
 							updated_at: new Date(),
 							title: "",
 							description: "",
-							status: "",
+							status: "Pending",
 							priority: "Medium",
-							notify: false,
+							user_id: userId,
 						});
 						setIsNewDialogOpen(true);
 					}}
@@ -148,11 +152,12 @@ export function MaintenanceTable({
 				<Table bleed grid>
 					<TableHead>
 						<TableRow>
-							<TableHeader>Date created</TableHeader>
-							{/* <TableHeader>Date Updated</TableHeader> */}
+							{/* <TableHeader>Date created</TableHeader> */}
+							<TableHeader>Date Updated</TableHeader>
 							<TableHeader>Title</TableHeader>
 							<TableHeader>Status</TableHeader>
 							<TableHeader>Priority</TableHeader>
+							<TableHeader>Created by</TableHeader>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -162,15 +167,20 @@ export function MaintenanceTable({
 								onClick={() => handleRowClick(request)}
 								className="cursor-default hover:bg-gray-50"
 							>
-								<TableCell>
-                {new Date(request.created_at ?? Date.now()).toLocaleDateString()}
-								</TableCell>
 								{/* <TableCell>
-                  {new Date(request!.updated_at!).toLocaleDateString()}
-                </TableCell> */}
+									{new Date(
+										request.created_at ?? Date.now(),
+									).toLocaleDateString()}
+								</TableCell> */}
+								<TableCell>
+									{new Date(request.updated_at).toLocaleDateString()}
+								</TableCell>
 								<TableCell>{request.title}</TableCell>
-								<TableCell>{request.status}</TableCell>
-								<TableCell>{request.priority}</TableCell>
+								<TableCell>{request.status || "Pending"}</TableCell>
+								<TableCell>{request.priority || "Medium"}</TableCell>
+								<TableCell>
+									{request.user_id === userId ? "You" : "Other"}
+								</TableCell>
 							</TableRow>
 						))}
 					</TableBody>
@@ -199,9 +209,9 @@ export function MaintenanceTable({
 									updated_at: new Date(),
 									title: "",
 									description: "",
-									status: "",
+									status: "Pending",
 									priority: "Medium",
-									notify: false,
+									user_id: userId,
 								});
 								setIsNewDialogOpen(true);
 							}}
@@ -223,7 +233,9 @@ export function MaintenanceTable({
 				<DialogTitle>
 					{currentRequest.id === "0"
 						? "New Maintenance Request"
-						: "Edit Maintenance Request"}
+						: isCurrentUserRequest
+							? "Edit Maintenance Request"
+							: "View Maintenance Request"}
 				</DialogTitle>
 				<DialogBody>
 					<form
@@ -259,9 +271,9 @@ export function MaintenanceTable({
 												updated_at: new Date(),
 												title: "",
 												description: "",
-												status: "",
-												priority: "",
-												notify: false,
+												status: "Pending",
+												priority: "Medium",
+												user_id: userId,
 											});
 											resolve("Success");
 										})
@@ -288,6 +300,7 @@ export function MaintenanceTable({
 									value={currentRequest.title}
 									onChange={handleInputChange}
 									required
+									disabled={!isCurrentUserRequest}
 								/>
 							</Field>
 							<Field>
@@ -298,6 +311,7 @@ export function MaintenanceTable({
 									value={currentRequest.description}
 									onChange={handleInputChange}
 									required
+									disabled={!isCurrentUserRequest}
 								/>
 							</Field>
 
@@ -308,6 +322,7 @@ export function MaintenanceTable({
 									name="priority"
 									value={currentRequest.priority}
 									onChange={handleInputChange}
+									disabled={!isCurrentUserRequest}
 								>
 									<option value="Low">Low</option>
 									<option value="Medium">Medium</option>
@@ -315,42 +330,20 @@ export function MaintenanceTable({
 								</Select>
 							</Field>
 
-							{currentRequest.id !== "0" ? (
-								<Field>
-									<Label htmlFor="status">Status</Label>
-									<Select
-										id="status"
-										name="status"
-										value={currentRequest.status}
-										onChange={handleInputChange}
-									>
-										<option value="Pending">Pending</option>
-										<option value="In Progress">In Progress</option>
-										<option value="Completed">Completed</option>
-									</Select>
-								</Field>
-							) : (
-								<Field>
-									<Label htmlFor="status">Status</Label>
-									<Select
-										id="status"
-										name="status"
-										defaultValue={"Pending"}
-										onChange={handleInputChange}
-									>
-										<option value="Pending">Pending</option>
-										<option value="In Progress">In Progress</option>
-										<option value="Completed">Completed</option>
-									</Select>
-								</Field>
-							)}
-							{currentRequest.id === "0" && (
-								<CheckboxField>
-									<Checkbox name="notify" />
-									<Label>Notify tenant(s)</Label>
-									<Description>An email notification will be sent.</Description>
-								</CheckboxField>
-							)}
+							<Field>
+								<Label htmlFor="status">Status</Label>
+								<Select
+									id="status"
+									name="status"
+									value={currentRequest.status}
+									onChange={handleInputChange}
+									disabled={currentRequest.id === "0"}
+								>
+									<option value="Pending">Pending</option>
+									<option value="In Progress">In Progress</option>
+									<option value="Completed">Completed</option>
+								</Select>
+							</Field>
 						</FieldGroup>
 						{currentRequest.id === "0" ? (
 							<DialogActions className="">
@@ -374,6 +367,7 @@ export function MaintenanceTable({
 									type="button"
 									color="red"
 									onClick={() => handleDelete(currentRequest.id)}
+									disabled={!isCurrentUserRequest}
 								>
 									Delete
 								</Button>

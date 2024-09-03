@@ -109,7 +109,6 @@ export async function uploadDocument(propertyId: string, formData: FormData) {
 
 	try {
 		await R2_CLIENT.send(command);
-		// revalidatePath('/dashboard/documents')
 	} catch (error) {
 		console.error("Error uploading file:", error);
 		throw error;
@@ -128,8 +127,6 @@ export async function deleteDocument(propertyId: string, key: string) {
 
 	try {
 		await R2_CLIENT.send(command);
-		console.log("File deleted successfully");
-		// revalidatePath('/dashboard/documents')
 	} catch (error) {
 		console.error("Error deleting file:", error);
 		throw error;
