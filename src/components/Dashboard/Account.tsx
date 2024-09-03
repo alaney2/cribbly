@@ -19,7 +19,7 @@ import { LockClosedIcon, StarIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 import { useSearchParams, usePathname } from "next/navigation";
 import useSWR, { useSWRConfig } from "swr";
-import { RemoveBankDialog } from "@/components/dashboard/RemoveBankDialog";
+import { RemoveBankDialog } from "@/components/Dashboard/RemoveBankDialog";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Input } from "@/components/catalyst/input";
@@ -94,7 +94,9 @@ export function Account() {
 		setEditedName(user_data?.full_name || "");
 	};
 
-	const handleSaveName = async (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSaveName = async (
+		e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+	) => {
 		e.preventDefault();
 		const supabase = createClient();
 		const {
