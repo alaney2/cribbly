@@ -61,12 +61,12 @@ type Request = {
 
 export function MaintenanceTable({
 	tasks,
-	bento,
+	bento = false,
 	userId,
 }: {
 	tasks: Request[];
 	bento?: boolean;
-	userId: string;
+	userId?: string;
 }) {
 	const [requests, setRequests] = useState<Request[]>(tasks);
 	const [isNewDialogOpen, setIsNewDialogOpen] = useState(false);
