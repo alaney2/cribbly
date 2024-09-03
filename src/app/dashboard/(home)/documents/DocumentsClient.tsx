@@ -201,7 +201,7 @@ export function DocumentsClient({
 	// );
 
 	const TaxDocumentsTable = ({ documents }: { documents: Document[] }) => (
-		<div className="bg-white border border-zinc-200 rounded-lg p-6 mb-6">
+		<div className="bg-white dark:bg-black border border-zinc-200 dark:border-zinc-400 rounded-lg p-6 mb-6">
 			<div className="flex justify-between items-center mb-4">
 				<Subheading>Tax Documents</Subheading>
 				<Field>
@@ -276,7 +276,7 @@ export function DocumentsClient({
 	);
 
 	const PropertyDocumentsTable = ({ documents }: { documents: Document[] }) => (
-		<div className="bg-white border border-zinc-200 rounded-lg p-6">
+		<div className="bg-white dark:bg-black border border-zinc-200 dark:border-zinc-400 rounded-lg p-6">
 			<div className="mb-6 flex flex-col">
 				<Subheading className="text-left mb-4">Property Documents</Subheading>
 				<div className="w-full mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
