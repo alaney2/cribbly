@@ -11,9 +11,6 @@ export async function middleware(request: NextRequest) {
 	} = await supabase.auth.getUser();
 	const { pathname } = request.nextUrl;
 	if (user) {
-		if (user.user_metadata.role === "tenant") {
-			return NextResponse.redirect(new URL("https://resident.cribbly.io"));
-		}
 		const { data: show_welcome_data } = await supabase
 			.from("users")
 			.select("welcome_screen")
