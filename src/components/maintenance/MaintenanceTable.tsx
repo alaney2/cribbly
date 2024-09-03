@@ -124,9 +124,11 @@ export function MaintenanceTable({
 	return (
 		<div className="p-4">
 			<div className="mx-2 mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-				<Heading className="mb-4 text-center sm:text-left">
-					Maintenance Requests
-				</Heading>
+				{!bento && (
+					<Heading className="mb-4 text-center sm:text-left">
+						Maintenance Requests
+					</Heading>
+				)}
 				{!bento && (
 					<Button
 						onClick={() => {
@@ -205,24 +207,26 @@ export function MaintenanceTable({
 						<Text className="mb-4 text-gray-600">
 							No maintenance requests found.
 						</Text>
-						<Button
-							onClick={() => {
-								setCurrentRequest({
-									id: "0",
-									created_at: new Date(),
-									updated_at: new Date(),
-									title: "",
-									description: "",
-									status: "Pending",
-									priority: "Medium",
-									user_id: userId,
-								});
-								setIsNewDialogOpen(true);
-							}}
-							color="blue"
-						>
-							Create New Task
-						</Button>
+						{!bento && (
+							<Button
+								onClick={() => {
+									setCurrentRequest({
+										id: "0",
+										created_at: new Date(),
+										updated_at: new Date(),
+										title: "",
+										description: "",
+										status: "Pending",
+										priority: "Medium",
+										user_id: userId,
+									});
+									setIsNewDialogOpen(true);
+								}}
+								color="blue"
+							>
+								Create New Task
+							</Button>
+						)}
 					</div>
 				</>
 			)}
