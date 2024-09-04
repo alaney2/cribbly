@@ -9,8 +9,11 @@ import { Text, Strong } from "@/components/catalyst/text";
 
 interface SettingsNavigationProps {
 	currentPropertyId: string;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	propertyRent: any | null;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	securityDeposit: any | null;
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	propertyFees: any[] | null;
 	key: string;
 	initialTab?: string;
