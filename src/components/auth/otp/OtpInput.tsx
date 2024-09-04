@@ -123,7 +123,7 @@ function OtpInputWithParams({ email }: { email: string }) {
 									inputsRef.current[index] = el;
 								}
 							}}
-							className="w-10 h-12 ring-1 dark:ring-2 rounded-lg focus:ring-blue-300 ring-gray-200 dark:ring-gray-600 outline-none text-center text-lg sm:text-lg caret-transparent bg-white dark:bg-zinc-800 dark:text-white"
+							className="w-10 h-12 ring-1 dark:ring-2 rounded-lg focus:ring-blue-300 ring-gray-200 dark:ring-gray-600 outline-none text-center text-lg sm:text-lg caret-transparent bg-white dark:bg-black dark:text-white"
 							type="number"
 							pattern="[0-9]*"
 							inputMode="numeric"
