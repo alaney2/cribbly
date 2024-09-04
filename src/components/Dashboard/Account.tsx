@@ -18,7 +18,7 @@ import {
 import { LockClosedIcon, StarIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 import { useSearchParams, usePathname } from "next/navigation";
-import { RemoveBankDialog } from "@/components/dashboard/RemoveBankDialog";
+import { RemoveBankDialog } from "@/components/Dashboard/RemoveBankDialog";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Input } from "@/components/catalyst/input";
 import { Divider } from "@/components/catalyst/divider";
