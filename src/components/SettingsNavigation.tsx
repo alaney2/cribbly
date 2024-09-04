@@ -6,6 +6,7 @@ import { DeleteCard } from "@/components/PropertySettings/DeleteCard";
 import { Heading } from "@/components/catalyst/heading";
 import { Divider } from "@/components/catalyst/divider";
 import { Text, Strong } from "@/components/catalyst/text";
+
 interface SettingsNavigationProps {
 	currentPropertyId: string;
 	propertyRent: any | null;

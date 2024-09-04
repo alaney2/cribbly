@@ -26,7 +26,8 @@ export default async function DashboardAccount({
 	const { data: plaidAccounts, error: plaidAccountsError } = await supabase
 		.from("plaid_accounts")
 		.select()
-		.eq("user_id", user.id);
+		.eq("user_id", user.id)
+		.order("use_for_payouts", { ascending: false });
 
 	return (
 		<>

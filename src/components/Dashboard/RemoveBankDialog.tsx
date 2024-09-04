@@ -11,14 +11,15 @@ import {
 import { Button } from "@/components/catalyst/button";
 import { Checkbox, CheckboxField } from "@/components/catalyst/checkbox";
 import { Field, Label } from "@/components/catalyst/fieldset";
-import { useSWRConfig } from "swr";
 import { toast } from "sonner";
-
+import type { PlaidAccount } from "./Account";
 type BankDialogProps = {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
 	bank_details: string;
 	account_id: string;
+	bankAccounts: PlaidAccount[];
+	setBankAccounts: (bankAccounts: PlaidAccount[]) => void;
 };
 
 export function RemoveBankDialog({
@@ -26,9 +27,10 @@ export function RemoveBankDialog({
 	setIsOpen,
 	bank_details,
 	account_id,
+	bankAccounts,
+	setBankAccounts,
 }: BankDialogProps) {
 	const [checked, setChecked] = useState(false);
-	const { mutate } = useSWRConfig();
 
 	useEffect(() => {
 		setChecked(false);
@@ -46,12 +48,15 @@ export function RemoveBankDialog({
 			.eq("user_id", user.id)
 			.eq("account_id", account_id);
 
-		mutate("bank_accounts_data");
-
 		if (error) {
 			console.error("Error removing account:", error);
 			toast.error("Error removing account");
 		}
+		setBankAccounts(
+			bankAccounts.filter(
+				(account: PlaidAccount) => account.account_id !== account_id,
+			),
+		);
 	};
 
 	return (

@@ -21,12 +21,20 @@ import { useSearchParams, usePathname } from "next/navigation";
 import { RemoveBankDialog } from "@/components/dashboard/RemoveBankDialog";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Input } from "@/components/catalyst/input";
+import { Divider } from "@/components/catalyst/divider";
 
-type PlaidAccount = {
+export type PlaidAccount = {
 	account_id: string;
 	name: string;
 	mask: string;
 	use_for_payouts: boolean;
+	user_id: string;
+	account_number: string;
+	routing_number: string;
+	item_id: string;
+	access_token: string;
+	created_at: string;
+	updated_at: string;
 };
 
 type AccountProps = {
@@ -101,6 +109,13 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 			console.error(error);
 			toast.error("Failed to set primary account");
 		} else {
+			const updatedAccounts = bankAccounts.map((account) => {
+				if (account.account_id === accountId) {
+					return { ...account, use_for_payouts: true };
+				}
+				return { ...account, use_for_payouts: false };
+			});
+			setBankAccounts(updatedAccounts);
 			toast.success("Primary account updated");
 		}
 	};
@@ -160,7 +175,8 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 				const { data: existingAccounts } = await supabase
 					.from("plaid_accounts")
 					.select("*")
-					.eq("user_id", user.id);
+					.eq("user_id", user.id)
+					.order("use_for_payouts", { ascending: false });
 
 				setBankAccounts(existingAccounts || []);
 
@@ -214,7 +230,8 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 						<h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-neutral-200">
 							Profile
 						</h2>
-						<dl className="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
+						<Divider className="my-6" />
+						<dl className="mt-6 space-y-6 text-sm leading-6">
 							<div className="pt-6 sm:flex">
 								<dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6 dark:text-neutral-300">
 									Full name
@@ -275,48 +292,50 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 						<p className="mt-1 text-sm leading-6 text-gray-500 dark:text-neutral-200">
 							Connect bank accounts to your account
 						</p>
-						<ul className="mt-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
+						{/* <Divider className="mt-6" /> */}
+						<ul className="mt-6 text-sm leading-6">
 							{bankAccounts?.map((bank_account) => (
-								<li
-									key={bank_account.account_id}
-									className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-2 md:gap-x-6 py-6"
-								>
-									<div className="font-medium text-gray-700 dark:text-neutral-300 flex items-center">
-										{bank_account.name} ••••{bank_account.mask}
-										{bank_account.use_for_payouts && (
-											<StarIcon
-												className="h-5 w-5 text-yellow-400 ml-2"
-												aria-hidden="true"
-											/>
-										)}
-									</div>
-									<div className="flex justify-between md:justify-end items-center space-x-4">
-										{!bank_account.use_for_payouts && (
-											<button
-												type="button"
-												className="text-sm md:px-2 font-semibold text-blue-600 hover:text-blue-500"
-												onClick={() =>
-													setPrimaryAccount(bank_account.account_id)
-												}
-											>
-												Set as primary
-											</button>
-										)}
-										{!bank_account.use_for_payouts && (
-											<button
-												type="button"
-												className="md:px-2 font-semibold text-red-600 hover:text-red-500"
-												onClick={() => {
-													setBankDetails(
-														`${bank_account.name} ••••${bank_account.mask}`,
-													);
-													setAccountId(bank_account.account_id);
-													setIsRemoveBankDialogOpen(true);
-												}}
-											>
-												Remove <span className="hidden sm:inline">account</span>
-											</button>
-										)}
+								<li key={bank_account.account_id} className="">
+									<Divider key={bank_account.account_id} />
+									<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-2 md:gap-x-6 py-6">
+										<div className="font-medium text-gray-700 dark:text-neutral-300 flex items-center">
+											{bank_account.name} ••••{bank_account.mask}
+											{bank_account.use_for_payouts && (
+												<StarIcon
+													className="h-5 w-5 text-yellow-400 ml-2"
+													aria-hidden="true"
+												/>
+											)}
+										</div>
+										<div className="flex justify-between md:justify-end items-center space-x-4">
+											{!bank_account.use_for_payouts && (
+												<button
+													type="button"
+													className="text-sm md:px-2 font-semibold text-blue-600 hover:text-blue-500"
+													onClick={() =>
+														setPrimaryAccount(bank_account.account_id)
+													}
+												>
+													Set as primary
+												</button>
+											)}
+											{!bank_account.use_for_payouts && (
+												<button
+													type="button"
+													className="md:px-2 font-semibold text-red-600 hover:text-red-500"
+													onClick={() => {
+														setBankDetails(
+															`${bank_account.name} ••••${bank_account.mask}`,
+														);
+														setAccountId(bank_account.account_id);
+														setIsRemoveBankDialogOpen(true);
+													}}
+												>
+													Remove{" "}
+													<span className="hidden sm:inline">account</span>
+												</button>
+											)}
+										</div>
 									</div>
 								</li>
 							))}
@@ -326,8 +345,11 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 							setIsOpen={setIsRemoveBankDialogOpen}
 							bank_details={bankDetails}
 							account_id={accountId}
+							bankAccounts={bankAccounts}
+							setBankAccounts={setBankAccounts}
 						/>
-						<div className="flex border-t border-gray-100 pt-6">
+						<Divider />
+						<div className="flex pt-6">
 							<Button
 								type="button"
 								plain
