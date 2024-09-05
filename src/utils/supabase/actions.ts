@@ -111,10 +111,13 @@ export async function addPropertyFees(formData: FormData) {
 	const securityDepositSwitch = formData.get("securityDepositSwitch");
 	const dateFrom = new Date(String(formData.get("dateFrom")));
 	const dateTo = new Date(String(formData.get("dateTo")));
-	// console.log(dateFrom, dateTo)
+
 	const rent_id = String(formData.get("rent_id"));
 	const rentInfo = calculateRentDates(dateFrom, dateTo);
 	const monthsOfRent = rentInfo.monthsOfRent;
+	if (dateFrom >= dateTo) {
+		throw new Error("Invalid date range");
+	}
 	const rentDates = rentInfo.rentDates;
 	// console.log(rentDates)
 	const supabase = createClient();
@@ -166,53 +169,6 @@ export async function addPropertyFees(formData: FormData) {
 				};
 			}
 		}
-		// if (pair[0].startsWith('fee')) {
-		//   const fee = JSON.parse(pair[1].toString())
-		//   // console.log(fee.id, fee.fee_name, fee.fee_type, fee.fee_cost, monthsOfRent, dateFrom, dateTo)
-		//   if (fee.id) {
-		//     // console.log('FEEID', fee.id)
-		//     const { error } = await supabase
-		//       .from('property_fees')
-		//       .update({
-		//         fee_name: fee.fee_name,
-		//         fee_type: fee.fee_type,
-		//         fee_cost: Number(parseFloat(fee.fee_cost).toFixed(2)),
-		//         months_left: fee.fee_type === 'recurring' ? monthsOfRent : 1,
-		//         start_date: dateFrom,
-		//         end_date: dateTo,
-		//       })
-		//       .eq('id', fee.id)
-		//     if (error) {
-		//       console.error(error)
-		//       return {
-		//         message: 'Error adding fee',
-		//       }
-		//     }
-		//   } else {
-		//     const { error } = await supabase.from('property_fees').insert(
-		//       {
-		//         id: generateId(),
-		//         property_id: propertyId.toString(),
-		//         fee_name: fee.fee_name,
-		//         fee_type: fee.fee_type,
-		//         fee_cost: Number(parseFloat(fee.fee_cost).toFixed(2)),
-		//         months_left: fee.fee_type === 'recurring' ? monthsOfRent : 1,
-		//         start_date: dateFrom,
-		//         end_date: dateTo,
-		//       },
-		//       // {
-		//       //   onConflict: 'id, property_id, fee_name, fee_type, fee_cost, start_date, end_date',
-		//       //   ignoreDuplicates: false,
-		//       // }
-		//     )
-		//     if (error) {
-		//       console.error(error)
-		//       return {
-		//         message: 'Error adding fee',
-		//       }
-		//     }
-		//   }
-		// }
 	}
 	return {
 		message: "Success!",

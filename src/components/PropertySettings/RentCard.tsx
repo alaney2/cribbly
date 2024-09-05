@@ -76,7 +76,6 @@ type RentCardProps = {
 	securityDeposit?: any | null;
 	propertyFees?: any[] | null;
 	setPropertyId?: (propertyId: string) => void;
-	freeMonthsLeft?: number;
 	buttonOnClick?: () => void;
 };
 
@@ -86,7 +85,6 @@ export function RentCard({
 	securityDeposit,
 	propertyFees,
 	setPropertyId,
-	freeMonthsLeft,
 	buttonOnClick,
 }: RentCardProps) {
 	useEffect(() => {
@@ -101,7 +99,7 @@ export function RentCard({
 		propertyRent?.rent_price ?? 0,
 	);
 	const [hasSecurityDeposit, setHasSecurityDeposit] = useState(
-		securityDeposit ? true : false,
+		!!securityDeposit,
 	);
 	const [securityDepositFee, setSecurityDepositFee] = useState<number>(
 		securityDeposit ? securityDeposit.deposit_amount : 0,
@@ -117,18 +115,15 @@ export function RentCard({
 	const [editFeeOpen, setEditFeeOpen] = React.useState(false);
 	const [feeEdit, setFeeEdit] = React.useState<Fee>();
 
-	const [date, setDate] = React.useState<DateRange | undefined>({
-		from: propertyRent
-			? parseISO(propertyRent.rent_start)
-			: addWeeks(new Date(), 1),
-		to: propertyRent
-			? parseISO(propertyRent.rent_end)
-			: addDays(addYears(new Date(), 1), 6),
-	});
+	const [startDate, setStartDate] = useState<string>(
+		propertyRent ? format(parseISO(propertyRent.rent_start), "yyyy-MM-dd") : "",
+	);
+	const [endDate, setEndDate] = useState<string>(
+		propertyRent ? format(parseISO(propertyRent.rent_end), "yyyy-MM-dd") : "",
+	);
 
 	const [fadeOut, setFadeOut] = React.useState(false);
 	const animationClass = fadeOut ? " animate__fadeOut" : "animate__fadeIn";
-	const daysBetweenDates = daysBetween(date?.from ?? new Date(), new Date());
 
 	const [initialRentAmount, setInitialRentAmount] = useState<number>(
 		propertyRent?.rent_price ?? 0,
@@ -137,22 +132,20 @@ export function RentCard({
 		useState<number>(securityDeposit ? securityDeposit.deposit_amount : 0);
 	// const [initialFees, setInitialFees] = React.useState<any[]>(propertyFees ?? [])
 
-	const [initialStartDate, setInitialStartDate] = useState<Date | undefined>(
-		propertyRent ? parseISO(propertyRent.rent_start) : undefined,
+	const [initialStartDate, setInitialStartDate] = useState<string>(
+		propertyRent ? format(parseISO(propertyRent.rent_start), "yyyy-MM-dd") : "",
 	);
-	const [initialEndDate, setInitialEndDate] = useState<Date | undefined>(
-		propertyRent ? parseISO(propertyRent.rent_end) : undefined,
+	const [initialEndDate, setInitialEndDate] = useState<string>(
+		propertyRent ? format(parseISO(propertyRent.rent_end), "yyyy-MM-dd") : "",
 	);
 
 	const hasChanges =
 		rentAmount !== initialRentAmount ||
 		securityDepositFee !== initialSecurityDepositFee ||
-		(date?.from &&
-			initialStartDate &&
-			date.from.getTime() !== initialStartDate.getTime()) ||
-		(date?.to &&
-			initialEndDate &&
-			date.to.getTime() !== initialEndDate.getTime());
+		startDate !== initialStartDate ||
+		endDate !== initialEndDate;
+
+	const daysBetweenDates = daysBetween(parseISO(startDate), new Date());
 
 	return (
 		<>
@@ -162,20 +155,26 @@ export function RentCard({
 				<form
 					action={async (formData) => {
 						toast.promise(
+							// biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
 							new Promise(async (resolve, reject) => {
 								try {
 									const data = await addPropertyFees(formData);
 									if (buttonOnClick) {
 										setFadeOut(true);
+										resolve("Success");
 										setTimeout(() => {
 											buttonOnClick();
-											resolve("Success");
 										}, 300);
 									} else {
 										resolve("Success");
 									}
 								} catch (error) {
 									reject(error);
+								} finally {
+									setInitialRentAmount(rentAmount);
+									setInitialSecurityDepositFee(securityDepositFee);
+									setInitialStartDate(startDate);
+									setInitialEndDate(endDate);
 								}
 							}),
 							{
@@ -195,63 +194,38 @@ export function RentCard({
 						</Text>
 					</CardHeader>
 					<CardContent>
-						<div className="mb-5 flex flex-col md:flex-row md:items-center md:gap-4">
+						<div className="relative space-y-4">
 							<Headless.Field className="relative flex flex-col md:flex-row md:items-center md:gap-4">
 								<Label className="mb-2 md:mb-0 md:w-40 md:flex-shrink-0">
-									Start and end date
+									Lease start and end
 								</Label>
-								<div className="flex-grow">
-									<Popover>
-										<PopoverTrigger asChild>
-											<Button
-												id="date"
-												outline
-												className={cn(
-													"w-full",
-													!date && "text-muted-foreground",
-												)}
-												disabled={daysBetweenDates <= 0}
-											>
-												<CalendarIcon className="mr-2 h-4 w-4" />
-												{date?.from && format(date?.from, "LLL dd, y")} -{" "}
-												{date?.to && format(date?.to, "LLL dd, y")}
-												{/* {date?.from ? (
-                        date.to ? (
-                          <>
-                          </>
-                        ) : (
-                          format(date.from, 'LLL dd, y')
-                        )
-                      ) : (
-                        <span>Pick a date</span>
-                      )} */}
-											</Button>
-										</PopoverTrigger>
-										<PopoverContent className="w-auto p-0" align="start">
-											<div className="block sm:hidden">
-												<Calendar
-													initialFocus
-													mode="range"
-													defaultMonth={date?.from}
-													selected={date}
-													onSelect={setDate}
-													numberOfMonths={1}
-													disabled={(date) => date < new Date()}
-												/>
-											</div>
-											<div className="hidden sm:block">
-												<Calendar
-													initialFocus
-													mode="range"
-													defaultMonth={date?.from}
-													selected={date}
-													onSelect={setDate}
-													numberOfMonths={2}
-													disabled={(date) => date < new Date()}
-												/>
-											</div>
-										</PopoverContent>
-									</Popover>
+								<div className="flex flex-col flex-grow sm:flex-row gap-2 w-full md:flex-1">
+									<Input
+										type="date"
+										id="startDate"
+										name="startDate"
+										value={startDate}
+										onChange={(e) => setStartDate(e.target.value)}
+										min={format(new Date(), "yyyy-MM-dd")}
+										className="w-full flex-grow"
+										required
+									/>
+									<span className="hidden sm:flex text-gray-700 text-sm items-center justify-center select-none">
+										to
+									</span>
+									<Input
+										type="date"
+										id="endDate"
+										name="endDate"
+										// compare start and end date and make sure start date is before end date
+										// if not, set start date to end date
+										// if start date is after end date, set start date to end date
+										value={endDate > startDate ? endDate : ""}
+										onChange={(e) => setEndDate(e.target.value)}
+										min={startDate}
+										required
+										className="w-full flex-grow"
+									/>
 								</div>
 							</Headless.Field>
 
@@ -265,19 +239,17 @@ export function RentCard({
 							<input
 								name="dateFrom"
 								required
-								value={date?.from ? format(date?.from, "MM/dd/yyyy") : ""}
+								value={startDate ? startDate : ""}
 								readOnly
 								type="hidden"
 							/>
 							<input
 								name="dateTo"
 								required
-								value={date?.to ? format(date?.to, "MM/dd/yyyy") : ""}
+								value={endDate ? endDate : ""}
 								readOnly
 								type="hidden"
 							/>
-						</div>
-						<div className="relative space-y-4">
 							<Headless.Field className="relative flex flex-col md:flex-row md:items-center md:gap-4">
 								<Label
 									htmlFor="rentAmount"
@@ -359,7 +331,7 @@ export function RentCard({
 									<TableBody>
 										{fees.map((fee, index) => (
 											<TableRow
-												key={index}
+												key={fee.id}
 												className="cursor-default"
 												onClick={() => {
 													setFeeEdit(fee);
@@ -379,17 +351,6 @@ export function RentCard({
 								</Table>
 							</div>
 						)}
-						{/* {fees.length > 0 &&
-              fees.map((fee, index) => (
-                <input
-                  key={index}
-                  className="hidden"
-                  name={`fee${index}`}
-                  id={`fee${index}`}
-                  defaultValue={JSON.stringify(fee)}
-                  readOnly
-                />
-              ))} */}
 						<input
 							name="propertyId"
 							defaultValue={propertyId}
@@ -438,6 +399,7 @@ export function RentCard({
 				<form
 					action={async (formData) => {
 						toast.promise(
+							// biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
 							new Promise(async (resolve, reject) => {
 								try {
 									const data = await addFee(formData, propertyId);
@@ -574,12 +536,12 @@ export function RentCard({
 					setFees={setFees}
 				/>
 			)}
-			{date && date.to && date.from && (
+			{startDate && endDate && (
 				<ScheduleDialog
 					isOpen={isScheduleOpen}
 					setIsOpen={setIsScheduleOpen}
-					startDate={date.from}
-					endDate={date.to}
+					startDate={parseISO(startDate)}
+					endDate={parseISO(endDate)}
 					rentAmount={rentAmount}
 					securityDeposit={securityDeposit}
 					securityDepositFee={securityDepositFee}

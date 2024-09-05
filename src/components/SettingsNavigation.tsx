@@ -61,6 +61,9 @@ export default function SettingsNavigation({
 						propertyRent={propertyRent}
 						securityDeposit={securityDeposit}
 						propertyFees={propertyFees}
+						buttonOnClick={() => {
+							setActiveTab("Tenants");
+						}}
 					/>
 				);
 			case "Tenants":
