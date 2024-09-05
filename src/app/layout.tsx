@@ -77,7 +77,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 		<html
 			lang="en"
 			className={clsx(
-				"h-full scroll-smooth",
+				"h-full scroll-smooth lg:bg-zinc-100 dark:bg-zinc-900 text-zinc-950 dark:text-white dark:lg:bg-zinc-950",
 				inter.variable,
 				lexend.variable,
 				openRunde.variable,
