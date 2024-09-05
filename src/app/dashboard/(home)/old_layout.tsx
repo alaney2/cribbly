@@ -1,4 +1,3 @@
-// import '@/styles/no-overscroll.css'
 import Link from "next/link";
 import { MobileSidebarDashboard } from "@/components/MobileSidebarDashboard";
 import { DesktopSidebarDashboard } from "@/components/DesktopSidebarDashboard";

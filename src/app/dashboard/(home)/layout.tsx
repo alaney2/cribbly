@@ -1,5 +1,4 @@
 // "use server"
-// import '@/styles/no-overscroll.css'
 import { MobileSidebar } from "@/components/MobileSidebar";
 import { DesktopSidebar } from "@/components/DesktopSidebar";
 import { createClient } from "@/utils/supabase/server";
