@@ -59,6 +59,7 @@ import type { DateRange } from "react-day-picker";
 import { daysBetween } from "@/utils/helpers";
 import { parseISO } from "date-fns";
 import { Divider } from "@/components/catalyst/divider";
+import styles from "@/styles/InputCenter.module.css";
 
 export interface Fee {
 	id: string;
@@ -207,7 +208,6 @@ export function RentCard({
 										value={startDate}
 										onChange={(e) => setStartDate(e.target.value)}
 										min={format(new Date(), "yyyy-MM-dd")}
-										className="w-full flex-grow"
 										required
 									/>
 									<span className="hidden sm:flex text-gray-700 text-sm items-center justify-center select-none">
@@ -217,14 +217,10 @@ export function RentCard({
 										type="date"
 										id="endDate"
 										name="endDate"
-										// compare start and end date and make sure start date is before end date
-										// if not, set start date to end date
-										// if start date is after end date, set start date to end date
 										value={endDate > startDate ? endDate : ""}
 										onChange={(e) => setEndDate(e.target.value)}
 										min={startDate}
 										required
-										className="w-full flex-grow"
 									/>
 								</div>
 							</Headless.Field>
