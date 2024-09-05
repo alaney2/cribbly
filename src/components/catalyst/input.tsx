@@ -46,8 +46,8 @@ export const Input = forwardRef(function Input(
 		<span
 			data-slot="control"
 			className={clsx([
-				className,
 				// Basic layout
+				className,
 				"relative block w-full",
 				// Background color + shadow applied to inset pseudo element, so shadow blends with border in light mode
 				"before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow-none",

@@ -1,12 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { RentCard } from "@/components/PropertySettings/RentCard";
 import { InviteCard } from "@/components/PropertySettings/InviteCard";
 import { DeleteCard } from "@/components/PropertySettings/DeleteCard";
 import { Heading } from "@/components/catalyst/heading";
 import { Divider } from "@/components/catalyst/divider";
 import { Text, Strong } from "@/components/catalyst/text";
-
+import { useRouter } from "next/navigation";
 interface SettingsNavigationProps {
 	currentPropertyId: string;
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -30,9 +30,7 @@ const NavButton = ({
 }) => (
 	<button
 		type="button"
-		className={
-			"w-full cursor-default rounded-md px-4 py-2 text-left text-sm transition-colors hover:bg-gray-100 dark:hover:bg-black"
-		}
+		className={`w-full cursor-default rounded-md px-4 py-2 text-left text-sm transition-colors ${active ? "bg-gray-100" : "dark:bg-black"}`}
 		onClick={onClick}
 	>
 		<Text>{active ? <Strong>{children}</Strong> : children}</Text>
@@ -47,33 +45,69 @@ export default function SettingsNavigation({
 	initialTab,
 }: SettingsNavigationProps) {
 	const [activeTab, setActiveTab] = useState(initialTab || "General");
+	const router = useRouter();
+	router.prefetch("/dashboard/settings/tenants");
+	router.prefetch("/dashboard/settings/delete");
+	router.prefetch("/dashboard/settings/general");
 
-	const handleTabChange = (tab: string) => {
-		setActiveTab(tab);
-	};
+	const handleTabChange = useCallback(
+		(tab: string) => {
+			router.replace(`/dashboard/settings/${tab.toLowerCase()}`);
+			setActiveTab(tab);
+		},
+		[router],
+	);
 
-	const renderContent = () => {
+	const tabs = useMemo(
+		() => [
+			{ name: "General", component: RentCard },
+			{ name: "Tenants", component: InviteCard },
+			{ name: "Delete", component: DeleteCard },
+		],
+		[],
+	);
+
+	const memoizedRentCard = useMemo(
+		() => (
+			<RentCard
+				propertyId={currentPropertyId}
+				propertyRent={propertyRent}
+				securityDeposit={securityDeposit}
+				propertyFees={propertyFees}
+				buttonOnClick={() => handleTabChange("Tenants")}
+			/>
+		),
+		[
+			currentPropertyId,
+			propertyRent,
+			securityDeposit,
+			propertyFees,
+			handleTabChange,
+		],
+	);
+
+	const memoizedInviteCard = useMemo(
+		() => <InviteCard propertyId={currentPropertyId} />,
+		[currentPropertyId],
+	);
+
+	const memoizedDeleteCard = useMemo(
+		() => <DeleteCard propertyId={currentPropertyId} />,
+		[currentPropertyId],
+	);
+
+	const renderContent = useCallback(() => {
 		switch (activeTab) {
 			case "General":
-				return (
-					<RentCard
-						propertyId={currentPropertyId}
-						propertyRent={propertyRent}
-						securityDeposit={securityDeposit}
-						propertyFees={propertyFees}
-						buttonOnClick={() => {
-							setActiveTab("Tenants");
-						}}
-					/>
-				);
+				return memoizedRentCard;
 			case "Tenants":
-				return <InviteCard propertyId={currentPropertyId} />;
+				return memoizedInviteCard;
 			case "Delete":
-				return <DeleteCard propertyId={currentPropertyId} />;
+				return memoizedDeleteCard;
 			default:
 				return null;
 		}
-	};
+	}, [activeTab, memoizedRentCard, memoizedInviteCard, memoizedDeleteCard]);
 
 	return (
 		<div className="">
@@ -88,24 +122,15 @@ export default function SettingsNavigation({
 				{/* Vertical Navbar */}
 				<nav className="mr-6 w-64 overflow-y-auto pb-4 pt-12">
 					<div className="space-y-1 px-3">
-						<NavButton
-							active={activeTab === "General"}
-							onClick={() => handleTabChange("General")}
-						>
-							General
-						</NavButton>
-						<NavButton
-							active={activeTab === "Tenants"}
-							onClick={() => handleTabChange("Tenants")}
-						>
-							Invite Tenants
-						</NavButton>
-						<NavButton
-							active={activeTab === "Delete"}
-							onClick={() => handleTabChange("Delete")}
-						>
-							Delete
-						</NavButton>
+						{tabs.map((tab) => (
+							<NavButton
+								key={tab.name}
+								active={activeTab === tab.name}
+								onClick={() => handleTabChange(tab.name)}
+							>
+								{tab.name}
+							</NavButton>
+						))}
 					</div>
 				</nav>
 
