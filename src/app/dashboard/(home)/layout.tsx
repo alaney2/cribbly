@@ -1,66 +1,76 @@
 // "use server"
 // import '@/styles/no-overscroll.css'
-import { MobileSidebar } from '@/components/MobileSidebar';
-import { DesktopSidebar } from '@/components/DesktopSidebar'
-import { createClient } from '@/utils/supabase/server'
-import { redirect } from 'next/navigation';
-import type { Metadata, ResolvingMetadata } from 'next'
-import { PropertyBreadcrumbs } from '@/components/Dashboard/PropertyBreadcrumbs'
-import { AppLayout } from '@/components/AppLayout'
+import { MobileSidebar } from "@/components/MobileSidebar";
+import { DesktopSidebar } from "@/components/DesktopSidebar";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
+import type { Metadata, ResolvingMetadata } from "next";
+import { PropertyBreadcrumbs } from "@/components/Dashboard/PropertyBreadcrumbs";
+import { AppLayout } from "@/components/AppLayout";
 
 type Props = {
-  params: { property_id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
-}
+	params: { property_id: string };
+	searchParams: { [key: string]: string | string[] | undefined };
+};
 
 export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata
+	{ params, searchParams }: Props,
+	parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const supabase = createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) redirect('/sign-in')
-  const currentPropertyId = user.user_metadata.currentPropertyId
+	const supabase = createClient();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+	if (!user) redirect("/sign-in");
+	const currentPropertyId = user.user_metadata.currentPropertyId;
 
-  const { data: propertyData, error } = await supabase.from('properties')
-    .select()
-    .eq('id', currentPropertyId)
+	const { data: propertyData, error } = await supabase
+		.from("properties")
+		.select()
+		.eq("id", currentPropertyId);
 
-  if (error || propertyData.length === 0) {
-    console.log(error)
-    console.log(propertyData)
-    redirect('/dashboard')
-  }
+	if (error || propertyData.length === 0) {
+		console.log(error);
+		console.log(propertyData);
+		redirect("/dashboard");
+	}
 
-  return {
-    title: propertyData[0]?.street_address,
-  }
+	return {
+		title: propertyData[0]?.street_address,
+	};
 }
 
 export default async function PropertyDashboardLayout({
-  params,
-  children,
+	params,
+	children,
 }: {
-  params: { property_id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-  children: React.ReactNode;
+	params: { property_id: string };
+	searchParams: { [key: string]: string | string[] | undefined };
+	children: React.ReactNode;
 }) {
-  const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/sign-in')
+	const supabase = createClient();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+	if (!user) redirect("/sign-in");
 
-  const { data, error } = await supabase.from('users').select()
-    .eq('id', user.id)
-    .single()
+	const { data, error } = await supabase
+		.from("users")
+		.select()
+		.eq("id", user.id)
+		.single();
 
-  return (
-    <>
-      <div className='h-full flex flex-col'>
-        <AppLayout userEmail={data?.email} fullName={data?.full_name ?? undefined} userId={user.id}>{children}
-        </AppLayout>
-        {/* <MobileSidebar userEmail={data?.email} fullName={data?.full_name} />
+	return (
+		<>
+			<div className="lg:bg-zinc-100 dark:bg-zinc-900 text-zinc-950 dark:text-white dark:lg:bg-zinc-950">
+				<AppLayout
+					userEmail={data?.email}
+					fullName={data?.full_name ?? undefined}
+					userId={user.id}
+				>
+					{children}
+				</AppLayout>
+				{/* <MobileSidebar userEmail={data?.email} fullName={data?.full_name} />
         <div className="absolute left-64 top-4 overflow-hidden hidden lg:block">
           <PropertyBreadcrumbs />
         </div>
@@ -72,8 +82,7 @@ export default async function PropertyDashboardLayout({
             {children}
           </main>
         </div> */}
-      </div>
-    </>
-  )
+			</div>
+		</>
+	);
 }
-
