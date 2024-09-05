@@ -99,7 +99,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         `}
 			</Script>
 
-			<body className="h-full bg-gray-50 subpixel-antialiased">
+			<body className="h-full subpixel-antialiased">
 				{children}
 
 				<Analytics />
