@@ -1,8 +1,6 @@
-/* [type='text']:focus {
-  border-color: none;
-  border: none;
-  --tw-ring-color: transparent;
-} */
+button {
+  cursor: default;
+}
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -55,12 +53,4 @@ input[type=number] {
 }
 .openmenu .line-3 {
   transform: translate(-100%, 0) rotate(-45deg);
-}
-
-.content-container {
-  min-height: calc(100svh - theme('height.32'));
-}
-
-button {
-  cursor: default;
 }
