@@ -30,7 +30,7 @@ import { toast } from "sonner";
 export function DeleteCard({ propertyId }: { propertyId: string }) {
 	const router = useRouter();
 	const [deleteInput, setDeleteInput] = React.useState("");
-	let [isOpen, setIsOpen] = React.useState(false);
+	const [isOpen, setIsOpen] = React.useState(false);
 	const { mutate } = useSWRConfig();
 	const [isDeleting, setIsDeleting] = React.useState(false);
 
@@ -40,7 +40,6 @@ export function DeleteCard({ propertyId }: { propertyId: string }) {
 		setIsDeleting(true);
 		const toastId = toast.loading("Deleting property...");
 		try {
-			// toast.loading('Deleting property...')
 			await deleteProperty(propertyId);
 			mutate("properties");
 			toast.success("Property has been deleted", {
@@ -62,9 +61,7 @@ export function DeleteCard({ propertyId }: { propertyId: string }) {
 		<>
 			<Card className="w-full border border-red-500/25">
 				<CardHeader>
-					{/* <CardTitle> */}
 					<Heading>Delete property</Heading>
-					{/* </CardTitle> */}
 				</CardHeader>
 				<CardContent>
 					<Text>
@@ -93,14 +90,17 @@ export function DeleteCard({ propertyId }: { propertyId: string }) {
 								className="bg-red-300/75 px-3 py-2 mb-4 font-semibold text-sm rounded-lg"
 							>
 								<AlertTitle>
-									<span className="text-gray-50">Warning: </span>This action is
-									not reversible. Please be certain.
+									<span className="text-white">Warning: </span>
+									<span>This action is not reversible. Please be certain.</span>
 								</AlertTitle>
 							</Alert>
 							<Field className="items-center">
 								<Label htmlFor="verifyDelete" className="">
-									To verify, type{" "}
-									<span className="font-bold">delete my property</span> below:
+									<span className="">To verify, type </span>
+									<span className="font-bold dark:text-white">
+										delete my property
+									</span>{" "}
+									below:
 								</Label>
 								<Input
 									type="text"

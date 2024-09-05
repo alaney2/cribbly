@@ -53,7 +53,7 @@ export async function editFee(formData: FormData) {
 		.update({
 			fee_name,
 			fee_type,
-			fee_cost: Number(parseFloat(fee_cost).toFixed(2)),
+			fee_cost: Number(Number.parseFloat(fee_cost).toFixed(2)),
 		})
 		.eq("id", fee_id);
 	if (error) {
@@ -93,7 +93,7 @@ export async function addFee(formData: FormData, propertyId: string) {
 				property_id: propertyId,
 				fee_name,
 				fee_type,
-				fee_cost: Number(parseFloat(fee_cost).toFixed(2)),
+				fee_cost: Number(Number.parseFloat(fee_cost).toFixed(2)),
 			},
 		])
 		.select()
@@ -109,8 +109,8 @@ export async function addPropertyFees(formData: FormData) {
 	const propertyId = formData.get("propertyId");
 	if (!propertyId) return;
 	const securityDepositSwitch = formData.get("securityDepositSwitch");
-	let dateFrom = new Date(String(formData.get("dateFrom")));
-	let dateTo = new Date(String(formData.get("dateTo")));
+	const dateFrom = new Date(String(formData.get("dateFrom")));
+	const dateTo = new Date(String(formData.get("dateTo")));
 	// console.log(dateFrom, dateTo)
 	const rent_id = String(formData.get("rent_id"));
 	const rentInfo = calculateRentDates(dateFrom, dateTo);
@@ -124,7 +124,7 @@ export async function addPropertyFees(formData: FormData) {
 				{
 					id: rent_id ? rent_id : generateId(),
 					property_id: propertyId.toString(),
-					rent_price: Number(parseFloat(pair[1].toString()).toFixed(2)),
+					rent_price: Number(Number.parseFloat(pair[1].toString()).toFixed(2)),
 					rent_start: dateFrom,
 					rent_end: dateTo,
 					months_left: monthsOfRent,
@@ -149,7 +149,9 @@ export async function addPropertyFees(formData: FormData) {
 					{
 						id: generateId(),
 						property_id: propertyId.toString(),
-						deposit_amount: Number(parseFloat(pair[1].toString()).toFixed(2)),
+						deposit_amount: Number(
+							Number.parseFloat(pair[1].toString()).toFixed(2),
+						),
 						status: "unpaid",
 					},
 					{
@@ -163,7 +165,6 @@ export async function addPropertyFees(formData: FormData) {
 					message: "Error adding security deposit",
 				};
 			}
-			continue;
 		}
 		// if (pair[0].startsWith('fee')) {
 		//   const fee = JSON.parse(pair[1].toString())
