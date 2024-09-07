@@ -111,7 +111,7 @@ export function InviteCard({
 				<CardHeader>
 					<Heading>Invite tenants</Heading>
 					<Text className="">
-						Invite a tenant through email to this property
+						Invite a tenant to this property to pay rent online
 					</Text>
 				</CardHeader>
 				<form
