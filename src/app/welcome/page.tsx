@@ -24,12 +24,19 @@ export default async function WelcomePage() {
 		.eq("id", user.id)
 		.single();
 
+	const { data: propertyData, error: propertyError } = await supabase
+		.from("properties")
+		.select("*, property_fees(*), property_security_deposits(*)")
+		.eq("user_id", user.id)
+		.order("created_at", { ascending: false });
+
 	return (
 		<WelcomeLayout
 			user={user}
 			subscription={subscription}
 			products={products}
 			customer={customerData}
+			property={propertyData?.[0]}
 		/>
 	);
 }

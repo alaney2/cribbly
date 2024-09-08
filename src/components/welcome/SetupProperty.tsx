@@ -1,5 +1,7 @@
 "use client";
 import { RentCard } from "@/components/PropertySettings/RentCard";
+import useSWR from "swr";
+import { getUser, getCurrentProperty } from "@/utils/supabase/actions";
 
 type SetupPropertyProps = {
 	propertyId: string;

@@ -20,14 +20,32 @@ export default function WelcomeLayout({
 	subscription,
 	products,
 	customer,
+	property,
+}: {
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-}: { user: any; subscription: any; products: any; customer: any }) {
+	user: any;
+	subscription: any;
+	products: any;
+	customer: any;
+	property: any;
+}) {
 	const [currentStep, setCurrentStep] = useState(customer ? 5 : 0);
 	const [propertyId, setPropertyId] = useState("");
 	const [fullName, setFullName] = useState("");
 	const [finishWelcome, setFinishWelcome] = useState(false);
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	const [currentProperty, setCurrentProperty] = useState({
+		street_address: property?.street_address || "",
+		apt: property?.apt || "",
+		city: property?.city || "",
+		state: property?.state || "",
+		zip: property?.zip || "",
+		rent: property?.rent || 0,
+		property_fees: property?.property_fees || [],
+		property_security_deposits:
+			property?.property_security_deposits?.deposit_amount || 0,
+	});
 
 	const supabase = createClient();
 	const fetcher = async () => {
@@ -102,7 +120,12 @@ export default function WelcomeLayout({
 					//   buttonOnClick={() => setCurrentStep(currentStep + 1)}
 					//   setPropertyId={setPropertyId}
 					// />
-					<GoogleMap buttonOnClick={() => setCurrentStep(currentStep + 1)} />
+					<div className="mt-4 sm:mt-0">
+						<GoogleMap
+							currentProperty={currentProperty}
+							buttonOnClick={() => setCurrentStep(currentStep + 1)}
+						/>
+					</div>
 				);
 			case 3:
 				return (
@@ -122,7 +145,11 @@ export default function WelcomeLayout({
 				);
 			case 5:
 				return (
-					<div className="flex flex-col justify-center">
+					<div
+						className={
+							"relative flex h-full flex-col items-center justify-center gap-y-4 px-2 pt-8 sm:pt-4"
+						}
+					>
 						<InviteCard
 							propertyId={propertyId}
 							setPropertyId={setPropertyId}

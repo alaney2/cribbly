@@ -206,6 +206,7 @@ export function RentCard({
 										id="startDate"
 										name="startDate"
 										value={startDate}
+										placeholder="MM/DD/YYYY"
 										onChange={(e) => setStartDate(e.target.value)}
 										min={format(new Date(), "yyyy-MM-dd")}
 										required
@@ -217,6 +218,7 @@ export function RentCard({
 										type="date"
 										id="endDate"
 										name="endDate"
+										placeholder="MM/DD/YYYY"
 										value={endDate > startDate ? endDate : ""}
 										onChange={(e) => setEndDate(e.target.value)}
 										min={startDate}

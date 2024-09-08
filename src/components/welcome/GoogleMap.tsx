@@ -24,6 +24,8 @@ import React from "react";
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 type FunctionProps = {
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	currentProperty: any;
 	buttonOnClick?: () => void;
 };
 interface Address {
@@ -56,16 +58,25 @@ const fetcher = async () => {
 	return data;
 };
 
-const AddressAutocomplete = ({ buttonOnClick }: FunctionProps) => {
+const AddressAutocomplete = ({
+	currentProperty,
+	buttonOnClick,
+}: FunctionProps) => {
 	const { data: property, error } = useSWR("property", fetcher);
 	const [address, setAddress] = useState<Address>({
-		street: "",
-		apt: "",
-		city: "",
-		state: "",
-		zip: "",
+		street: currentProperty?.street_address || "",
+		apt: currentProperty?.apt || "",
+		city: currentProperty?.city || "",
+		state: currentProperty?.state || "",
+		zip: currentProperty?.zip || "",
 		country: "United States",
 	});
+	const [inputDisabled, setInputDisabled] = useState(
+		currentProperty?.street_address !== "" &&
+			currentProperty?.city !== "" &&
+			currentProperty?.state !== "" &&
+			currentProperty?.zip !== "",
+	);
 	const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
 	const [isAddressFocused, setIsAddressFocused] = useState(false);
 	const [showSuggestions, setShowSuggestions] = useState(false);
@@ -74,7 +85,6 @@ const AddressAutocomplete = ({ buttonOnClick }: FunctionProps) => {
 	const suggestionsRef = useRef<HTMLUListElement>(null);
 	const places = useMapsLibrary("places");
 	const router = useRouter();
-	const { mutate } = useSWRConfig();
 
 	useEffect(() => {
 		if (property) {
@@ -267,6 +277,7 @@ const AddressAutocomplete = ({ buttonOnClick }: FunctionProps) => {
 									onFocus={handleInputFocus}
 									autoComplete="off"
 									autoFocus
+									disabled={inputDisabled}
 									required
 								/>
 							</Field>
@@ -307,6 +318,7 @@ const AddressAutocomplete = ({ buttonOnClick }: FunctionProps) => {
 								value={address.apt}
 								onChange={handleInputChange}
 								autoComplete="off"
+								disabled={inputDisabled}
 							/>
 						</Field>
 						<Field>
@@ -318,6 +330,7 @@ const AddressAutocomplete = ({ buttonOnClick }: FunctionProps) => {
 								onChange={handleInputChange}
 								autoComplete="off"
 								required
+								disabled={inputDisabled}
 							/>
 						</Field>
 						<div className="flex space-x-4">
@@ -329,6 +342,7 @@ const AddressAutocomplete = ({ buttonOnClick }: FunctionProps) => {
 									value={address.state}
 									onChange={handleInputChange}
 									autoComplete="off"
+									disabled={inputDisabled}
 									required
 								/>
 							</Field>
@@ -340,6 +354,7 @@ const AddressAutocomplete = ({ buttonOnClick }: FunctionProps) => {
 									value={address.zip}
 									onChange={handleInputChange}
 									autoComplete="off"
+									disabled={inputDisabled}
 									required
 								/>
 							</Field>
@@ -353,24 +368,36 @@ const AddressAutocomplete = ({ buttonOnClick }: FunctionProps) => {
 								onChange={handleInputChange}
 								autoComplete="off"
 								readOnly
+								disabled={inputDisabled}
 								required
 							/>
 						</Field>
 					</FieldGroup>
 				</Fieldset>
-				<Button
-					type="submit"
-					color="blue"
-					className="w-full h-10 text-sm mt-8 py-2 px-4 rounded-md"
-				>
-					Add property
-				</Button>
+				{inputDisabled ? (
+					<Button
+						type="button"
+						color="blue"
+						onClick={buttonOnClick}
+						className="w-full h-10 text-sm mt-8 py-2 px-4 rounded-md"
+					>
+						Continue
+					</Button>
+				) : (
+					<Button
+						type="submit"
+						color="blue"
+						className="w-full h-10 text-sm mt-8 py-2 px-4 rounded-md"
+					>
+						Add property
+					</Button>
+				)}
 			</form>
 		</div>
 	);
 };
 
-const App = ({ buttonOnClick }: FunctionProps) => {
+const App = ({ currentProperty, buttonOnClick }: FunctionProps) => {
 	const [fadeOut, setFadeOut] = useState(false);
 	const animationClass = fadeOut
 		? "animate__animated animate__fadeOut animate__faster"
@@ -385,7 +412,10 @@ const App = ({ buttonOnClick }: FunctionProps) => {
 				<Subheading className="mb-6">
 					Get started with entering your property address
 				</Subheading>
-				<AddressAutocomplete buttonOnClick={buttonOnClick} />
+				<AddressAutocomplete
+					currentProperty={currentProperty}
+					buttonOnClick={buttonOnClick}
+				/>
 			</div>
 		</APIProvider>
 	);

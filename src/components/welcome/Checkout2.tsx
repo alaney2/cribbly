@@ -201,7 +201,7 @@ export function Checkout2({ user, subscription, products }: Props) {
 				<div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-24 lg:px-8">
 					<div className="mx-auto max-w-4xl">
 						<p className="mt-2 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-							Choose the right plan for you
+							Choose your plan
 						</p>
 						<p className="mt-4 text-md font-medium">
 							This is a perpetual license with a one-time payment.
@@ -322,8 +322,8 @@ export function Checkout2({ user, subscription, products }: Props) {
 					</div>
 				</div>
 			</div>
-			<Text className="mx-auto mt-6">
-				30 day money-back guarantee. No questions asked.
+			<Text className="text-center sm:mt-6">
+				We partner with Stripe to offer a 30 day money-back guarantee.
 			</Text>
 			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
 				<DialogBody>
