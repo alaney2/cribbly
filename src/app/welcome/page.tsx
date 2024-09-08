@@ -12,6 +12,7 @@ export default async function WelcomePage() {
 		console.log(error);
 	}
 	const products = await getProducts();
+	console.log(products, "products");
 
 	return (
 		<WelcomeLayout

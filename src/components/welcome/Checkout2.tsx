@@ -86,12 +86,7 @@ const tiers = [
 		href: "",
 		price: null,
 		description: "Tailored solutions for larger businesses with custom needs.",
-		features: [
-			// "Custom integrations",
-			"Dedicated account manager",
-			// "Advanced analytics",
-			"Priority support",
-		],
+		features: ["Dedicated account manager", "Priority support"],
 		contactUs: true,
 	},
 ];
@@ -111,6 +106,7 @@ export function Checkout2({ user, subscription, products }: Props) {
 	const [isInnerOpen, setIsInnerOpen] = useState(false);
 
 	const [clientSecret, setClientSecret] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	const handleStripeCheckout = async (price: Price) => {
 		if (!user) {
@@ -135,43 +131,39 @@ export function Checkout2({ user, subscription, products }: Props) {
 		const stripe = await getStripe();
 		stripe?.redirectToCheckout({ sessionId });
 	};
-	const subscriptionProduct = products.find(
-		(product) => product.name?.toLowerCase() === "test",
-	);
+	// const subscriptionProduct = products.find(
+	// 	(product) => product.name?.toLowerCase() === "test",
+	// );
 	const lifetimeProduct = products.find(
 		(product) => product.name?.toLowerCase() === "lifetime",
 	);
 	const product = products[0];
-	const priceMonthly =
-		subscriptionProduct?.prices[0].interval === "month"
-			? product.prices[0]
-			: product.prices[1];
-	const priceYearly =
-		subscriptionProduct?.prices[0].interval === "year"
-			? product.prices[0]
-			: product.prices[1];
+	// const priceMonthly =
+	// 	subscriptionProduct?.prices[0].interval === "month"
+	// 		? product.prices[0]
+	// 		: product.prices[1];
+	// const priceYearly =
+	// 	subscriptionProduct?.prices[0].interval === "year"
+	// 		? product.prices[0]
+	// 		: product.prices[1];
 	const priceLifetime = lifetimeProduct?.prices[0];
 
+	console.log(products, "products");
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	const handleButtonClick = (tier: any) => {
+	const handleButtonClick = async (tier: any) => {
 		if (user) {
-			if (tier.name === "Subscription") {
-				setSubSelected(true);
-				if (yearly) {
-					handleStripeCheckout(priceYearly);
-				} else {
-					handleStripeCheckout(priceMonthly);
-				}
-			} else {
-				setLifetimeSelected(true);
-				if (priceLifetime) {
-					handleStripeCheckout(priceLifetime);
-				} else {
-					console.error("Lifetime price not found");
-				}
+			setLoading(true);
+			let price: Price | null = null;
+			if (tier.name === "Standard") {
+				price = priceLifetime || null;
 			}
-		} else {
-			router.push("/sign-in");
+
+			if (price) {
+				await handleStripeCheckout(price);
+			} else {
+				console.error("Price not found");
+			}
+			setLoading(false);
 		}
 	};
 
@@ -283,10 +275,10 @@ export function Checkout2({ user, subscription, products }: Props) {
 													</span>
 												</div>
 											)}
-											<p className="mt-6 text-base leading-7 text-gray-600 dark:text-white">
+											<p className="mt-6 text-base leading-7 text-gray-600 dark:text-gray-100">
 												{tier.description}
 											</p>
-											<ul className="mt-10 space-y-4 text-sm leading-6 text-gray-600 dark:text-white">
+											<ul className="mt-10 space-y-4 text-sm leading-6 text-gray-600 dark:text-gray-100">
 												{tier.features.map((feature) => (
 													<li key={feature} className="flex gap-x-3">
 														<CheckIcon
@@ -300,9 +292,14 @@ export function Checkout2({ user, subscription, products }: Props) {
 										</div>
 										<Button
 											color="blue"
-											// onClick={() => tier.contactUs ? window.location.href = 'mailto:sales@example.com' : setIsOpen(true)}
+											onClick={() =>
+												tier.contactUs
+													? router.push("mailto:support@cribbly.io")
+													: handleButtonClick(tier)
+											}
 											aria-describedby={tier.id}
 											className="mt-8 block rounded-md px-3.5 py-2 text-center text-sm font-semibold leading-6 h-10"
+											disabled={loading}
 										>
 											{tier.contactUs ? "Contact Us" : "Select"}
 										</Button>
@@ -316,7 +313,7 @@ export function Checkout2({ user, subscription, products }: Props) {
 			<Text className="mx-auto mt-6">
 				30 day money-back guarantee. No questions asked.
 			</Text>
-			{/* <Dialog size={"3xl"} open={isOpen} onClose={setIsOpen}>
+			<Dialog size={"3xl"} open={isOpen} onClose={setIsOpen}>
 				<DialogTitle>Confirm payment</DialogTitle>
 				<DialogBody>
 					<div className="grid grid-cols-1 md:grid-cols-2">
@@ -339,7 +336,7 @@ export function Checkout2({ user, subscription, products }: Props) {
 					</Button>
 					<Button onClick={() => setIsOpen(false)}>Confirm</Button>
 				</DialogActions>
-			</Dialog> */}
+			</Dialog>
 		</div>
 	);
 }
