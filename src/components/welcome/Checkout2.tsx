@@ -2,12 +2,9 @@
 
 import { useState } from "react";
 import { CheckIcon } from "@heroicons/react/20/solid";
-import clsx from "clsx";
 import { Button } from "@/components/catalyst/button";
 import { Switch, SwitchField } from "@/components/catalyst/switch";
-import { Field as HeadlessField } from "@headlessui/react";
 import { Field, Label } from "@/components/catalyst/fieldset";
-import Link from "next/link";
 import { getStripe } from "@/utils/stripe/client";
 import { checkoutWithStripe } from "@/utils/stripe/server";
 import { useRouter, usePathname } from "next/navigation";
@@ -18,30 +15,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Spinner } from "@/components/Spinners/Spinner";
 import { Text } from "@/components/catalyst/text";
 import { Heading, Subheading } from "@/components/catalyst/heading";
-
 import {
-	Dialog,
-	DialogActions,
-	DialogBody,
-	DialogDescription,
-	DialogTitle,
-} from "@/components/catalyst/dialog";
-import { Input } from "@/components/catalyst/input";
-import { loadStripe } from "@stripe/stripe-js";
+	createCheckoutSession,
+	createPaymentIntent,
+} from "@/utils/stripe/server";
 import {
 	Elements,
-	EmbeddedCheckout,
-	EmbeddedCheckoutProvider,
-} from "@stripe/react-stripe-js";
-import {
 	PaymentElement,
 	useStripe,
 	useElements,
 } from "@stripe/react-stripe-js";
-import { CheckoutForm } from "@/components/welcome/CheckoutForm";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+	Dialog,
+	DialogBody,
+	DialogActions,
+} from "@/components/catalyst/dialog";
 
 const stripePromise = loadStripe(
-	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "",
+	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "",
 );
 
 type Subscription = Tables<"subscriptions">;
@@ -91,7 +83,54 @@ const tiers = [
 	},
 ];
 
+function CheckoutForm({ clientSecret }: { clientSecret: string }) {
+	const stripe = useStripe();
+	const elements = useElements();
+	const [error, setError] = useState<string | null>(null);
+	const [processing, setProcessing] = useState(false);
+
+	const handleSubmit = async (event: React.FormEvent) => {
+		event.preventDefault();
+
+		if (!stripe || !elements) {
+			return;
+		}
+
+		setProcessing(true);
+
+		const { error: submitError } = await stripe.confirmPayment({
+			elements,
+			confirmParams: {
+				return_url: `http://localhost:3000/welcome`,
+			},
+		});
+
+		if (submitError) {
+			setError(submitError.message || "An unexpected error occurred.");
+		}
+
+		setProcessing(false);
+	};
+
+	return (
+		<form onSubmit={handleSubmit}>
+			<PaymentElement />
+			{error && <div className="text-red-500 mt-2 text-sm">{error}</div>}
+			<Button
+				type="submit"
+				color="blue"
+				className="mt-4 w-full"
+				disabled={!stripe || processing}
+			>
+				{processing ? "Processing..." : "Pay now"}
+			</Button>
+		</form>
+	);
+}
+
 export function Checkout2({ user, subscription, products }: Props) {
+	const [clientSecret, setClientSecret] = useState("");
+
 	const router = useRouter();
 	const currentPath = usePathname();
 
@@ -105,35 +144,8 @@ export function Checkout2({ user, subscription, products }: Props) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isInnerOpen, setIsInnerOpen] = useState(false);
 
-	const [clientSecret, setClientSecret] = useState("");
 	const [loading, setLoading] = useState(false);
 
-	const handleStripeCheckout = async (price: Price) => {
-		if (!user) {
-			return router.push("/sign-in");
-		}
-
-		const { errorRedirect, sessionId } = await checkoutWithStripe(
-			price,
-			currentPath,
-		);
-
-		if (errorRedirect) {
-			return router.push(errorRedirect);
-		}
-
-		if (!sessionId) {
-			return;
-			// return router.push(
-			//   getErrorRedirect(
-		}
-
-		const stripe = await getStripe();
-		stripe?.redirectToCheckout({ sessionId });
-	};
-	// const subscriptionProduct = products.find(
-	// 	(product) => product.name?.toLowerCase() === "test",
-	// );
 	const lifetimeProduct = products.find(
 		(product) => product.name?.toLowerCase() === "lifetime",
 	);
@@ -148,21 +160,21 @@ export function Checkout2({ user, subscription, products }: Props) {
 	// 		: product.prices[1];
 	const priceLifetime = lifetimeProduct?.prices[0];
 
-	console.log(products, "products");
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	const handleButtonClick = async (tier: any) => {
-		if (user) {
-			setLoading(true);
-			let price: Price | null = null;
-			if (tier.name === "Standard") {
-				price = priceLifetime || null;
-			}
+	// console.log(products, "products");
 
-			if (price) {
-				await handleStripeCheckout(price);
+	const handleCheckout = async (priceId: string) => {
+		setLoading(true);
+		try {
+			const { clientSecret } = await createPaymentIntent(priceId);
+			if (clientSecret) {
+				setClientSecret(clientSecret);
+				setIsOpen(true);
 			} else {
-				console.error("Price not found");
+				throw new Error("Failed to create payment intent");
 			}
+		} catch (error) {
+			console.error("Error creating payment intent:", error);
+		} finally {
 			setLoading(false);
 		}
 	};
@@ -295,7 +307,7 @@ export function Checkout2({ user, subscription, products }: Props) {
 											onClick={() =>
 												tier.contactUs
 													? router.push("mailto:support@cribbly.io")
-													: handleButtonClick(tier)
+													: handleCheckout(priceLifetime?.id || "")
 											}
 											aria-describedby={tier.id}
 											className="mt-8 block rounded-md px-3.5 py-2 text-center text-sm font-semibold leading-6 h-10"
@@ -313,29 +325,44 @@ export function Checkout2({ user, subscription, products }: Props) {
 			<Text className="mx-auto mt-6">
 				30 day money-back guarantee. No questions asked.
 			</Text>
-			<Dialog size={"3xl"} open={isOpen} onClose={setIsOpen}>
-				<DialogTitle>Confirm payment</DialogTitle>
+			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
 				<DialogBody>
-					<div className="grid grid-cols-1 md:grid-cols-2">
-						<div>Hello World</div>
-						<Elements
-							options={{
-								clientSecret:
-									"pi_3OxKzHAdjJ26bYbu0jB3Vyjz_secret_a9mtIxDmpClxcAE1NhrbNpRNQ",
-								appearance: { theme: "stripe" },
-							}}
-							stripe={stripePromise}
-						>
-							<CheckoutForm />
-						</Elements>
+					<Heading>Checkout</Heading>
+					<div className="mt-4 hidden dark:block">
+						{clientSecret && (
+							<Elements
+								stripe={stripePromise}
+								options={{
+									clientSecret,
+									appearance: {
+										theme: "night",
+									},
+								}}
+							>
+								<CheckoutForm clientSecret={clientSecret} />
+							</Elements>
+						)}
 					</div>
+					<div className="mt-4 dark:hidden">
+						{clientSecret && (
+							<Elements
+								stripe={stripePromise}
+								options={{
+									clientSecret,
+									appearance: {
+										theme: "stripe",
+									},
+								}}
+							>
+								<CheckoutForm clientSecret={clientSecret} />
+							</Elements>
+						)}
+					</div>
+					{/* <Text>Please enter your payment information.</Text> */}
 				</DialogBody>
-				<DialogActions>
-					<Button plain onClick={() => setIsOpen(false)}>
-						Cancel
-					</Button>
-					<Button onClick={() => setIsOpen(false)}>Confirm</Button>
-				</DialogActions>
+				{/* <DialogActions>
+					<Button onClick={() => setIsOpen(false)}>Cancel</Button>
+				</DialogActions> */}
 			</Dialog>
 		</div>
 	);
