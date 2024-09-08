@@ -24,8 +24,7 @@ import React from "react";
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 type FunctionProps = {
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	currentProperty: any;
+	currentProperty?: any;
 	buttonOnClick?: () => void;
 };
 interface Address {

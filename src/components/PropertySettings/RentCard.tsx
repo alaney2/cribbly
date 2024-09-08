@@ -78,11 +78,9 @@ type RentCardProps = {
 	propertyFees?: any[] | null;
 	setPropertyId?: (propertyId: string) => void;
 	buttonOnClick?: () => void;
-	currentProperty: any;
 };
 
 export function RentCard({
-	currentProperty,
 	propertyId,
 	propertyRent,
 	securityDeposit,
@@ -90,8 +88,6 @@ export function RentCard({
 	setPropertyId,
 	buttonOnClick,
 }: RentCardProps) {
-	console.log("currentProperty", currentProperty);
-	console.log("propertyId", propertyId);
 	useEffect(() => {
 		if (typeof window !== "undefined" && setPropertyId && !propertyId) {
 			setPropertyId(localStorage.getItem("propertyId") || "");
