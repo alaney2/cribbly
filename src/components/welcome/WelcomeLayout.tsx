@@ -22,7 +22,6 @@ export default function WelcomeLayout({
 	customer,
 	property,
 }: {
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	user: any;
 	subscription: any;
 	products: any;
@@ -30,7 +29,7 @@ export default function WelcomeLayout({
 	property: any;
 }) {
 	const [currentStep, setCurrentStep] = useState(customer ? 5 : 0);
-	const [propertyId, setPropertyId] = useState("");
+	const [propertyId, setPropertyId] = useState(property?.id || "");
 	const [fullName, setFullName] = useState("");
 	const [finishWelcome, setFinishWelcome] = useState(false);
 	const router = useRouter();
@@ -41,10 +40,9 @@ export default function WelcomeLayout({
 		city: property?.city || "",
 		state: property?.state || "",
 		zip: property?.zip || "",
-		rent: property?.rent || 0,
+		property_rent: property?.property_rents || null,
+		property_security_deposit: property?.property_security_deposits || null,
 		property_fees: property?.property_fees || [],
-		property_security_deposits:
-			property?.property_security_deposits?.deposit_amount || 0,
 	});
 
 	const supabase = createClient();
@@ -67,20 +65,14 @@ export default function WelcomeLayout({
 
 	useEffect(() => {
 		const redirectStatus = searchParams.get("redirect_status");
-		console.log("redirectStatus", redirectStatus);
 		if (redirectStatus === "succeeded") {
 			mutate();
 			//clear search params
 			router.replace("/welcome");
-			// console.log("customerData", customerData);
-			// if (customerData) {
-			// 	setCurrentStep(5);
-			// }
 		}
 	}, [searchParams, mutate, router]);
 
 	useEffect(() => {
-		console.log("customerData", customerData);
 		if (customerData) {
 			setCurrentStep(5);
 		}
@@ -130,6 +122,7 @@ export default function WelcomeLayout({
 			case 3:
 				return (
 					<SetupProperty
+						currentProperty={currentProperty}
 						propertyId={propertyId}
 						setPropertyId={setPropertyId}
 						buttonOnClick={() => setCurrentStep(currentStep + 1)}

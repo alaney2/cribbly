@@ -7,12 +7,14 @@ type SetupPropertyProps = {
 	propertyId: string;
 	setPropertyId: (propertyId: string) => void;
 	buttonOnClick: () => void;
+	currentProperty: any;
 };
 
 export function SetupProperty({
 	propertyId,
 	setPropertyId,
 	buttonOnClick,
+	currentProperty,
 }: SetupPropertyProps) {
 	return (
 		<>
@@ -25,9 +27,10 @@ export function SetupProperty({
 					propertyId={propertyId}
 					setPropertyId={setPropertyId}
 					buttonOnClick={buttonOnClick}
-					propertyFees={null}
-					propertyRent={null}
-					securityDeposit={null}
+					propertyFees={currentProperty?.property_fees || null}
+					propertyRent={currentProperty?.property_rent || null}
+					securityDeposit={currentProperty?.property_security_deposits || null}
+					currentProperty={currentProperty}
 				/>
 			</div>
 		</>

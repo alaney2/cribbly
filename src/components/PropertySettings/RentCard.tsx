@@ -78,9 +78,11 @@ type RentCardProps = {
 	propertyFees?: any[] | null;
 	setPropertyId?: (propertyId: string) => void;
 	buttonOnClick?: () => void;
+	currentProperty: any;
 };
 
 export function RentCard({
+	currentProperty,
 	propertyId,
 	propertyRent,
 	securityDeposit,
@@ -88,6 +90,8 @@ export function RentCard({
 	setPropertyId,
 	buttonOnClick,
 }: RentCardProps) {
+	console.log("currentProperty", currentProperty);
+	console.log("propertyId", propertyId);
 	useEffect(() => {
 		if (typeof window !== "undefined" && setPropertyId && !propertyId) {
 			setPropertyId(localStorage.getItem("propertyId") || "");
@@ -131,7 +135,6 @@ export function RentCard({
 	);
 	const [initialSecurityDepositFee, setInitialSecurityDepositFee] =
 		useState<number>(securityDeposit ? securityDeposit.deposit_amount : 0);
-	// const [initialFees, setInitialFees] = React.useState<any[]>(propertyFees ?? [])
 
 	const [initialStartDate, setInitialStartDate] = useState<string>(
 		propertyRent ? format(parseISO(propertyRent.rent_start), "yyyy-MM-dd") : "",

@@ -26,7 +26,9 @@ export default async function WelcomePage() {
 
 	const { data: propertyData, error: propertyError } = await supabase
 		.from("properties")
-		.select("*, property_fees(*), property_security_deposits(*)")
+		.select(
+			"*, property_rents(*), property_fees(*), property_security_deposits(*)",
+		)
 		.eq("user_id", user.id)
 		.order("created_at", { ascending: false });
 
