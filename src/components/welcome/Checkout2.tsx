@@ -190,15 +190,15 @@ export function Checkout2({ user, subscription, products }: Props) {
 	return (
 		<div
 			className={
-				"flex flex-col lg:mt-8 md:py-8 justify-center items-center relative md:h-full w-full"
+				"flex flex-col md:py-8 justify-center items-center relative md:h-full w-full"
 			}
 		>
 			<div
 				className={
-					"isolate overflow-hidden flex flex-col items-center mx-auto align-center justify-center w-full md:w-4/5 2xl:w-2/3 transition-opacity appearance-none animate__animated animate__fadeIn  md:rounded-2xl pb-24 sm:pb-32"
+					"isolate overflow-hidden flex flex-col mx-auto align-center justify-center w-full md:w-4/5 2xl:w-2/3 transition-opacity appearance-none animate__animated animate__fadeIn  md:rounded-2xl pb-24 sm:pb-32"
 				}
 			>
-				<div className="mx-auto max-w-7xl px-6 pb-96 pt-24 text-center sm:pt-24 lg:px-8">
+				<div className="mx-auto max-w-7xl px-6 pb-96 pt-8 text-center sm:pt-8 lg:px-8">
 					<div className="mx-auto max-w-4xl">
 						<p className="mt-2 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
 							Choose your plan
@@ -321,10 +321,13 @@ export function Checkout2({ user, subscription, products }: Props) {
 						</div>
 					</div>
 				</div>
+				<p className="text-center text-white text-sm sm:mt-6">
+					We partner with Stripe to offer a 30 day money-back guarantee.
+				</p>
 			</div>
-			<Text className="text-center sm:mt-6">
+			{/* <Text className="text-center sm:mt-6">
 				We partner with Stripe to offer a 30 day money-back guarantee.
-			</Text>
+			</Text> */}
 			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
 				<DialogBody>
 					<Heading>Checkout</Heading>
