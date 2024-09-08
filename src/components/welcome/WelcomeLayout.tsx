@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/catalyst/button";
 import { Step0 } from "@/components/welcome/Step0";
 import { InputName } from "@/components/welcome/InputName";
@@ -11,20 +11,61 @@ import { Checkout2 } from "@/components/welcome/Checkout2";
 import { SetupProperty } from "@/components/welcome/SetupProperty";
 import { InviteCard } from "@/components/PropertySettings/InviteCard";
 import { setWelcomeScreen } from "@/utils/supabase/actions";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import GoogleMap from "@/components/welcome/GoogleMap";
-
+import useSWR from "swr";
+import { createClient } from "@/utils/supabase/client";
 export default function WelcomeLayout({
 	user,
 	subscription,
 	products,
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 }: { user: any; subscription: any; products: any }) {
-	const [currentStep, setCurrentStep] = useState(5);
+	const [currentStep, setCurrentStep] = useState(4);
 	const [propertyId, setPropertyId] = useState("");
 	const [fullName, setFullName] = useState("");
 	const [finishWelcome, setFinishWelcome] = useState(false);
 	const router = useRouter();
+	const searchParams = useSearchParams();
+
+	const supabase = createClient();
+	const fetcher = async () => {
+		const { data, error } = await supabase
+			.from("customers")
+			.select("*")
+			.eq("id", user.id)
+			.single();
+
+		if (error) throw error;
+		return data;
+	};
+
+	const {
+		data: customerData,
+		error: customerError,
+		mutate,
+	} = useSWR(user?.id ? `customers-${user.id}` : null, () => fetcher());
+
+	useEffect(() => {
+		const redirectStatus = searchParams.get("redirect_status");
+		console.log("redirectStatus", redirectStatus);
+		if (redirectStatus === "succeeded") {
+			mutate();
+			//clear search params
+			router.replace("/welcome");
+			// console.log("customerData", customerData);
+			// if (customerData) {
+			// 	setCurrentStep(5);
+			// }
+		}
+	}, [searchParams, mutate, router]);
+
+	useEffect(() => {
+		console.log("customerData", customerData);
+		if (customerData) {
+			setCurrentStep(5);
+		}
+	}, [customerData]);
 
 	const steps = [
 		{ name: "Step 0" },
@@ -72,6 +113,14 @@ export default function WelcomeLayout({
 				);
 			case 4:
 				return (
+					<Checkout2
+						user={user}
+						subscription={subscription}
+						products={products}
+					/>
+				);
+			case 5:
+				return (
 					<div className="flex flex-col justify-center">
 						<InviteCard
 							propertyId={propertyId}
@@ -110,14 +159,7 @@ export default function WelcomeLayout({
 						</Button>
 					</div>
 				);
-			case 5:
-				return (
-					<Checkout2
-						user={user}
-						subscription={subscription}
-						products={products}
-					/>
-				);
+
 			// case 6:
 			// 	return (
 			// 		<Checkout

@@ -101,7 +101,7 @@ function CheckoutForm({ clientSecret }: { clientSecret: string }) {
 		const { error: submitError } = await stripe.confirmPayment({
 			elements,
 			confirmParams: {
-				return_url: `http://localhost:3000/welcome`,
+				return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/welcome`,
 			},
 		});
 
