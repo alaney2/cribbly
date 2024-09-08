@@ -19,9 +19,10 @@ export default function WelcomeLayout({
 	user,
 	subscription,
 	products,
+	customer,
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-}: { user: any; subscription: any; products: any }) {
-	const [currentStep, setCurrentStep] = useState(4);
+}: { user: any; subscription: any; products: any; customer: any }) {
+	const [currentStep, setCurrentStep] = useState(customer ? 5 : 0);
 	const [propertyId, setPropertyId] = useState("");
 	const [fullName, setFullName] = useState("");
 	const [finishWelcome, setFinishWelcome] = useState(false);
