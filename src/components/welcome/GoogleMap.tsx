@@ -71,11 +71,13 @@ const AddressAutocomplete = ({
 		country: "United States",
 	});
 	const [inputDisabled, setInputDisabled] = useState(
-		currentProperty?.street_address !== "" &&
+		currentProperty &&
+			currentProperty?.street_address !== "" &&
 			currentProperty?.city !== "" &&
 			currentProperty?.state !== "" &&
 			currentProperty?.zip !== "",
 	);
+
 	const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
 	const [isAddressFocused, setIsAddressFocused] = useState(false);
 	const [showSuggestions, setShowSuggestions] = useState(false);
