@@ -151,7 +151,7 @@ export default function WelcomeLayout({
 						/>
 						<Button
 							disabled={!finishWelcome}
-							className="mt-8 "
+							className="mt-4 sm:mt-8"
 							color="blue"
 							onClick={async () => {
 								// setFadeOut(true)
@@ -165,7 +165,7 @@ export default function WelcomeLayout({
 							Finish setup
 						</Button>
 						<Button
-							className="mt-4"
+							className="sm:mt-4"
 							plain
 							onClick={async () => {
 								// setFadeOut(true)
