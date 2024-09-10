@@ -219,7 +219,7 @@ export function RentCard({
 								<Label className="mb-2 md:mb-0 md:w-40 md:flex-shrink-0">
 									Lease start and end
 								</Label>
-								<div className="flex flex-col flex-grow sm:flex-row gap-2 w-full md:flex-1">
+								<div className="flex flex-grow flex-row gap-1 sm:gap-2 w-full md:flex-1">
 									<Input
 										type="date"
 										id="startDate"
@@ -230,8 +230,8 @@ export function RentCard({
 										min={format(new Date(), "yyyy-MM-dd")}
 										required
 									/>
-									<span className="hidden sm:flex text-gray-700 text-sm items-center justify-center select-none">
-										to
+									<span className="hidden sm:flex text-gray-700 items-center justify-center select-none">
+										-
 									</span>
 									<Input
 										type="date"

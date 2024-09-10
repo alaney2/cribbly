@@ -14,6 +14,7 @@ import "animate.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { Spinner } from "@/components/Spinners/Spinner";
 import { Text } from "@/components/catalyst/text";
+import { Input } from "@/components/catalyst/input";
 import { Heading, Subheading } from "@/components/catalyst/heading";
 import {
 	createCheckoutSession,
@@ -83,11 +84,16 @@ const tiers = [
 	},
 ];
 
-function CheckoutForm({ clientSecret }: { clientSecret: string }) {
+function CheckoutForm({
+	clientSecret,
+	price,
+}: { clientSecret: string; price: number }) {
 	const stripe = useStripe();
 	const elements = useElements();
 	const [error, setError] = useState<string | null>(null);
 	const [processing, setProcessing] = useState(false);
+	const [discountCode, setDiscountCode] = useState("");
+	const [discountedPrice, setDiscountedPrice] = useState(price);
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -109,8 +115,32 @@ function CheckoutForm({ clientSecret }: { clientSecret: string }) {
 		setProcessing(false);
 	};
 
+	const handleDiscountCode = async () => {
+		// Here you would typically make an API call to your backend to validate the discount code
+		// and get the discounted price. For this example, we'll just simulate it.
+		if (discountCode === "DISCOUNT10") {
+			setDiscountedPrice(price * 0.9); // 10% discount
+		} else {
+			setError("Invalid discount code");
+		}
+	};
+
 	return (
 		<form onSubmit={handleSubmit}>
+			<div className="mb-4">
+				<Text>Total: ${discountedPrice.toFixed(2)}</Text>
+			</div>
+			<div className="mb-4">
+				<Input
+					type="text"
+					value={discountCode}
+					onChange={(e) => setDiscountCode(e.target.value)}
+					placeholder="Discount code"
+				/>
+				<Button type="button" onClick={handleDiscountCode} className="mt-2">
+					Apply Discount
+				</Button>
+			</div>
 			<PaymentElement />
 			{error && <div className="text-red-500 mt-2 text-sm">{error}</div>}
 			<Button
@@ -119,7 +149,7 @@ function CheckoutForm({ clientSecret }: { clientSecret: string }) {
 				className="mt-4 w-full"
 				disabled={!stripe || processing}
 			>
-				{processing ? "Processing..." : "Pay now"}
+				{processing ? "Processing..." : `Pay $${discountedPrice.toFixed(2)}`}
 			</Button>
 		</form>
 	);
@@ -318,7 +348,7 @@ export function Checkout2({ user, subscription, products }: Props) {
 						</div>
 					</div>
 				</div>
-				<p className="text-center absolute bottom-6 md:bottom-12 lg:bottom-20 left-0 right-0 text-zinc-500 lg:text-white text-sm">
+				<p className="text-center absolute bottom-0 sm:bottom-6 md:bottom-12 lg:bottom-20 left-0 right-0 text-zinc-500 lg:text-white text-sm">
 					We partner with Stripe to offer a 30 day money-back guarantee.
 				</p>
 			</div>
@@ -339,7 +369,10 @@ export function Checkout2({ user, subscription, products }: Props) {
 									},
 								}}
 							>
-								<CheckoutForm clientSecret={clientSecret} />
+								<CheckoutForm
+									clientSecret={clientSecret}
+									price={tiers[0].price || 0}
+								/>
 							</Elements>
 						)}
 					</div>
@@ -354,7 +387,10 @@ export function Checkout2({ user, subscription, products }: Props) {
 									},
 								}}
 							>
-								<CheckoutForm clientSecret={clientSecret} />
+								<CheckoutForm
+									clientSecret={clientSecret}
+									price={tiers[0].price || 0}
+								/>
 							</Elements>
 						)}
 					</div>
