@@ -22,7 +22,6 @@ import {
 	Legend as HeadlessLegend,
 	RadioGroup as HeadlessRadioGroup,
 } from "@headlessui/react";
-import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/catalyst/switch";
 import {
 	Dialog,
@@ -33,11 +32,6 @@ import {
 } from "@/components/catalyst/dialog";
 import { Radio, RadioField, RadioGroup } from "@/components/catalyst/radio";
 import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
-import {
 	Table,
 	TableBody,
 	TableCell,
@@ -46,20 +40,16 @@ import {
 	TableRow,
 } from "@/components/catalyst/table";
 import { EditFeeDialog } from "@/components/PropertySettings/EditFeeDialog";
-// import { generateId } from "@/lib/utils"
 import { addPropertyFees, addFee } from "@/utils/supabase/actions";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
 import { format, addYears, subDays, addDays, addWeeks } from "date-fns";
 import { cn } from "@/lib/utils";
 import { ScheduleDialog } from "@/components/PropertySettings/ScheduleDialog";
 import { toast } from "sonner";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
-import type { DateRange } from "react-day-picker";
 import { daysBetween } from "@/utils/helpers";
 import { parseISO } from "date-fns";
 import { Divider } from "@/components/catalyst/divider";
-import styles from "@/styles/InputCenter.module.css";
+import { motion, AnimatePresence } from "framer-motion";
 
 export interface Fee {
 	id: string;
@@ -311,28 +301,44 @@ export function RentCard({
 										}}
 									/>
 								</div>
-								<div className="flex-grow">
-									<InputGroup className="w-full">
-										<CurrencyDollarIcon className="h-5 w-5 text-gray-400" />
-										<Input
-											type="number"
-											id="depositAmount"
-											name="depositAmount"
-											placeholder="0"
-											disabled={!hasSecurityDeposit || daysBetweenDates <= 0}
-											className="w-full flex-grow"
-											autoComplete="off"
-											value={securityDepositFee === 0 ? "" : securityDepositFee}
-											required={hasSecurityDeposit}
-											onChange={(e) => {
-												setSecurityDepositFee(Number(e.target.value));
-											}}
-											step="1"
-											min="0"
-											pattern="^\d+(?:\.\d{1,2})?$"
-										/>
-									</InputGroup>
-								</div>
+								<AnimatePresence>
+									{hasSecurityDeposit && (
+										<motion.div
+											className="flex-grow"
+											initial={{ opacity: 0, height: 0 }}
+											animate={{ opacity: 1, height: "auto" }}
+											exit={{ opacity: 0, height: 0 }}
+											transition={{ duration: 0.25 }}
+										>
+											<div className="flex-grow">
+												<InputGroup className="w-full">
+													<CurrencyDollarIcon className="h-5 w-5 text-gray-400" />
+													<Input
+														type="number"
+														id="depositAmount"
+														name="depositAmount"
+														placeholder="0"
+														disabled={
+															!hasSecurityDeposit || daysBetweenDates <= 0
+														}
+														className="w-full flex-grow"
+														autoComplete="off"
+														value={
+															securityDepositFee === 0 ? "" : securityDepositFee
+														}
+														required={hasSecurityDeposit}
+														onChange={(e) => {
+															setSecurityDepositFee(Number(e.target.value));
+														}}
+														step="1"
+														min="0"
+														pattern="^\d+(?:\.\d{1,2})?$"
+													/>
+												</InputGroup>
+											</div>
+										</motion.div>
+									)}
+								</AnimatePresence>
 							</Headless.Field>
 						</div>
 						{fees.length > 0 && (
@@ -374,7 +380,7 @@ export function RentCard({
 							readOnly
 							className="hidden"
 						/>
-						<div className="-mb-2 mt-4 flex justify-between">
+						<div className="-mb-1 mt-6 flex justify-between">
 							<Button
 								type="button"
 								color="blue"
