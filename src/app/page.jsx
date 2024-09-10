@@ -19,7 +19,7 @@ import backgroundImage from "@/images/background-call-to-action.jpg";
 
 export default function Home() {
 	return (
-		<>
+		<div className="bg-gray-50">
 			<Header />
 			<main>
 				<WavyBackground>
@@ -68,6 +68,6 @@ export default function Home() {
 				<Faqs />
 			</main>
 			<Footer />
-		</>
+		</div>
 	);
 }
