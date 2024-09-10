@@ -5,16 +5,16 @@ import { getUser, getCurrentProperty } from "@/utils/supabase/actions";
 
 type SetupPropertyProps = {
 	propertyId: string;
-	setPropertyId: (propertyId: string) => void;
 	buttonOnClick: () => void;
 	currentProperty?: any;
+	setCurrentProperty?: (property: any) => void;
 };
 
 export function SetupProperty({
 	propertyId,
-	setPropertyId,
 	buttonOnClick,
 	currentProperty,
+	setCurrentProperty,
 }: SetupPropertyProps) {
 	return (
 		<>
@@ -25,11 +25,11 @@ export function SetupProperty({
 			>
 				<RentCard
 					propertyId={propertyId}
-					setPropertyId={setPropertyId}
 					buttonOnClick={buttonOnClick}
 					propertyFees={currentProperty?.property_fees || null}
 					propertyRent={currentProperty?.property_rent || null}
 					securityDeposit={currentProperty?.property_security_deposits || null}
+					setCurrentProperty={setCurrentProperty}
 				/>
 			</div>
 		</>

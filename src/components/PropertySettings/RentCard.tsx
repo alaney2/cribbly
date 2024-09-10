@@ -76,6 +76,7 @@ type RentCardProps = {
 	propertyRent?: any | null;
 	securityDeposit?: any | null;
 	propertyFees?: any[] | null;
+	setCurrentProperty?: (property: any) => void;
 	setPropertyId?: (propertyId: string) => void;
 	buttonOnClick?: () => void;
 };
@@ -85,15 +86,9 @@ export function RentCard({
 	propertyRent,
 	securityDeposit,
 	propertyFees,
-	setPropertyId,
+	setCurrentProperty,
 	buttonOnClick,
 }: RentCardProps) {
-	useEffect(() => {
-		if (typeof window !== "undefined" && setPropertyId && !propertyId) {
-			setPropertyId(localStorage.getItem("propertyId") || "");
-		}
-	}, [propertyId, setPropertyId]);
-
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 	const [rentAmount, setRentAmount] = useState<number>(
@@ -116,11 +111,18 @@ export function RentCard({
 	const [editFeeOpen, setEditFeeOpen] = React.useState(false);
 	const [feeEdit, setFeeEdit] = React.useState<Fee>();
 
+	const defaultStartDate = addDays(new Date(), 1);
+	const defaultEndDate = addYears(new Date(), 1);
+
 	const [startDate, setStartDate] = useState<string>(
-		propertyRent ? format(parseISO(propertyRent.rent_start), "yyyy-MM-dd") : "",
+		propertyRent
+			? format(parseISO(propertyRent.rent_start), "yyyy-MM-dd")
+			: format(defaultStartDate, "yyyy-MM-dd"),
 	);
 	const [endDate, setEndDate] = useState<string>(
-		propertyRent ? format(parseISO(propertyRent.rent_end), "yyyy-MM-dd") : "",
+		propertyRent
+			? format(parseISO(propertyRent.rent_end), "yyyy-MM-dd")
+			: format(defaultEndDate, "yyyy-MM-dd"),
 	);
 
 	const [fadeOut, setFadeOut] = React.useState(false);
@@ -175,6 +177,26 @@ export function RentCard({
 									setInitialSecurityDepositFee(securityDepositFee);
 									setInitialStartDate(startDate);
 									setInitialEndDate(endDate);
+									setCurrentProperty?.((prevProperty: any) => ({
+										...prevProperty,
+										property_rent: {
+											...prevProperty.property_rent,
+											rent_price: rentAmount,
+											rent_start: startDate,
+											rent_end: endDate,
+										},
+										property_security_deposits:
+											hasSecurityDeposit && securityDepositFee !== 0
+												? {
+														...prevProperty.property_security_deposits,
+														deposit_amount: securityDepositFee,
+													}
+												: prevProperty.property_security_deposits,
+										property_fees: {
+											...prevProperty.property_fees,
+											fee_cost: fees,
+										},
+									}));
 								}
 							}),
 							{

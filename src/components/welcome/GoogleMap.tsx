@@ -25,6 +25,7 @@ const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 type FunctionProps = {
 	currentProperty?: any;
+	setCurrentProperty?: (property: any) => void;
 	buttonOnClick?: () => void;
 };
 interface Address {
@@ -59,9 +60,10 @@ const fetcher = async () => {
 
 const AddressAutocomplete = ({
 	currentProperty,
+	setCurrentProperty,
 	buttonOnClick,
 }: FunctionProps) => {
-	const { data: property, error } = useSWR("property", fetcher);
+	// const { data: property, error } = useSWR("property", fetcher);
 	const [address, setAddress] = useState<Address>({
 		street: currentProperty?.street_address || "",
 		apt: currentProperty?.apt || "",
@@ -70,6 +72,7 @@ const AddressAutocomplete = ({
 		zip: currentProperty?.zip || "",
 		country: "United States",
 	});
+
 	const [inputDisabled, setInputDisabled] = useState(
 		currentProperty &&
 			currentProperty?.street_address !== "" &&
@@ -79,7 +82,6 @@ const AddressAutocomplete = ({
 	);
 
 	const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-	const [isAddressFocused, setIsAddressFocused] = useState(false);
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(-1);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -87,18 +89,18 @@ const AddressAutocomplete = ({
 	const places = useMapsLibrary("places");
 	const router = useRouter();
 
-	useEffect(() => {
-		if (property) {
-			setAddress({
-				street: property.street_address,
-				apt: property.apt || "",
-				city: property.city,
-				state: property.state,
-				zip: property.zip,
-				country: property.country,
-			});
-		}
-	}, [property]);
+	// useEffect(() => {
+	// 	if (property) {
+	// 		setAddress({
+	// 			street: property.street_address,
+	// 			apt: property.apt || "",
+	// 			city: property.city,
+	// 			state: property.state,
+	// 			zip: property.zip,
+	// 			country: property.country,
+	// 		});
+	// 	}
+	// }, [property]);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -243,7 +245,17 @@ const AddressAutocomplete = ({
 					toast.promise(promise, {
 						loading: "Adding property...",
 						success: (result) => {
+							console.log("result", result);
 							if (buttonOnClick) {
+								setCurrentProperty?.({
+									street_address: result.street_address,
+									apt: result.apt,
+									city: result.city,
+									state: result.state,
+									zip: result.zip,
+									country: result.country,
+								});
+								setInputDisabled(true);
 								buttonOnClick();
 							} else {
 								router.push("/dashboard/settings");
@@ -278,7 +290,7 @@ const AddressAutocomplete = ({
 									onFocus={handleInputFocus}
 									autoComplete="off"
 									autoFocus
-									disabled={inputDisabled}
+									readOnly={inputDisabled}
 									required
 								/>
 							</Field>
@@ -319,7 +331,7 @@ const AddressAutocomplete = ({
 								value={address.apt}
 								onChange={handleInputChange}
 								autoComplete="off"
-								disabled={inputDisabled}
+								readOnly={inputDisabled}
 							/>
 						</Field>
 						<Field>
@@ -331,7 +343,7 @@ const AddressAutocomplete = ({
 								onChange={handleInputChange}
 								autoComplete="off"
 								required
-								disabled={inputDisabled}
+								readOnly={inputDisabled}
 							/>
 						</Field>
 						<div className="flex space-x-4">
@@ -343,7 +355,7 @@ const AddressAutocomplete = ({
 									value={address.state}
 									onChange={handleInputChange}
 									autoComplete="off"
-									disabled={inputDisabled}
+									readOnly={inputDisabled}
 									required
 								/>
 							</Field>
@@ -355,7 +367,7 @@ const AddressAutocomplete = ({
 									value={address.zip}
 									onChange={handleInputChange}
 									autoComplete="off"
-									disabled={inputDisabled}
+									readOnly={inputDisabled}
 									required
 								/>
 							</Field>
@@ -369,7 +381,6 @@ const AddressAutocomplete = ({
 								onChange={handleInputChange}
 								autoComplete="off"
 								readOnly
-								disabled={inputDisabled}
 								required
 							/>
 						</Field>
@@ -398,7 +409,11 @@ const AddressAutocomplete = ({
 	);
 };
 
-const App = ({ currentProperty, buttonOnClick }: FunctionProps) => {
+const App = ({
+	currentProperty,
+	setCurrentProperty,
+	buttonOnClick,
+}: FunctionProps) => {
 	const [fadeOut, setFadeOut] = useState(false);
 	const animationClass = fadeOut
 		? "animate__animated animate__fadeOut animate__faster"
@@ -415,6 +430,7 @@ const App = ({ currentProperty, buttonOnClick }: FunctionProps) => {
 				</Subheading>
 				<AddressAutocomplete
 					currentProperty={currentProperty}
+					setCurrentProperty={setCurrentProperty}
 					buttonOnClick={buttonOnClick}
 				/>
 			</div>

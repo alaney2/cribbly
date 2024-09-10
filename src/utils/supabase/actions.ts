@@ -145,7 +145,11 @@ export async function addPropertyFees(formData: FormData) {
 			}
 			continue;
 		}
-		if (pair[0] === "depositAmount" && securityDepositSwitch === "on") {
+		if (
+			pair[0] === "depositAmount" &&
+			securityDepositSwitch === "on" &&
+			Number.parseFloat(pair[1].toString()).toFixed(2) !== "0.00"
+		) {
 			const { error } = await supabase
 				.from("property_security_deposits")
 				.upsert(
@@ -418,9 +422,8 @@ export async function updateCurrentProperty(propertyId: string) {
 	if (updateError) {
 		console.error("Error updating current property:", updateError);
 		throw new Error("Error updating current property");
-	} else {
-		return "Success";
 	}
+	return "Success";
 }
 
 export async function getCurrentProperty(): Promise<string> {
@@ -501,27 +504,26 @@ export async function createTask(formData: FormData) {
 			throw new Error("Error creating task");
 		}
 		return data;
-	} else {
-		const { data, error } = await supabase
-			.from("maintenance")
-			.update({
-				title,
-				description,
-				priority,
-				status,
-				notify,
-				user_id: user.id,
-				property_id: currentPropertyId,
-				updated_at: new Date(),
-			})
-			.eq("id", id)
-			.select()
-			.single();
-
-		if (error) {
-			console.error("Error creating task:", error);
-			throw new Error("Error creating task");
-		}
-		return data;
 	}
+	const { data, error } = await supabase
+		.from("maintenance")
+		.update({
+			title,
+			description,
+			priority,
+			status,
+			notify,
+			user_id: user.id,
+			property_id: currentPropertyId,
+			updated_at: new Date(),
+		})
+		.eq("id", id)
+		.select()
+		.single();
+
+	if (error) {
+		console.error("Error creating task:", error);
+		throw new Error("Error creating task");
+	}
+	return data;
 }

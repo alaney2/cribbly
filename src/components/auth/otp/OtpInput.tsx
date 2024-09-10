@@ -103,7 +103,7 @@ function OtpInputWithParams({ email }: { email: string }) {
 						toast.error("An error occurred, please try again.");
 						return;
 					} finally {
-						setIsSubmitting(false);
+						// setIsSubmitting(false);
 					}
 				}}
 				className=""

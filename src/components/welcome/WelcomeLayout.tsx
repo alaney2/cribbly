@@ -28,7 +28,9 @@ export default function WelcomeLayout({
 	customer: any;
 	property: any;
 }) {
-	const [currentStep, setCurrentStep] = useState(customer ? 5 : 0);
+	const [currentStep, setCurrentStep] = useState(
+		customer ? 5 : property ? 2 : 0,
+	);
 	const [propertyId, setPropertyId] = useState(property?.id || "");
 	const [fullName, setFullName] = useState("");
 	const [finishWelcome, setFinishWelcome] = useState(false);
@@ -115,6 +117,7 @@ export default function WelcomeLayout({
 					<div className="mt-4 sm:mt-0">
 						<GoogleMap
 							currentProperty={currentProperty}
+							setCurrentProperty={setCurrentProperty}
 							buttonOnClick={() => setCurrentStep(currentStep + 1)}
 						/>
 					</div>
@@ -123,8 +126,8 @@ export default function WelcomeLayout({
 				return (
 					<SetupProperty
 						currentProperty={currentProperty}
+						setCurrentProperty={setCurrentProperty}
 						propertyId={propertyId}
-						setPropertyId={setPropertyId}
 						buttonOnClick={() => setCurrentStep(currentStep + 1)}
 					/>
 				);
