@@ -130,7 +130,7 @@ function CheckoutForm({
 			<div className="mb-4">
 				<Text>Total: ${discountedPrice.toFixed(2)}</Text>
 			</div>
-			<div className="mb-4">
+			{/* <div className="mb-4">
 				<Input
 					type="text"
 					value={discountCode}
@@ -140,7 +140,7 @@ function CheckoutForm({
 				<Button type="button" onClick={handleDiscountCode} className="mt-2">
 					Apply Discount
 				</Button>
-			</div>
+			</div> */}
 			<PaymentElement />
 			{error && <div className="text-red-500 mt-2 text-sm">{error}</div>}
 			<Button
