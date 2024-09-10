@@ -110,7 +110,7 @@ export function PrimaryFeatures() {
 														"font-display text-lg ui-not-focus-visible:outline-none cursor-pointer select-none ring-0 outline-none ",
 														selectedIndex === featureIndex
 															? "text-blue-600 lg:text-white"
-															: "text-blue-100 hover:text-white lg:text-white",
+															: "text-blue-100 sm:hover:text-white lg:text-white",
 													)}
 												>
 													<span className="absolute inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none" />{" "}
@@ -122,7 +122,7 @@ export function PrimaryFeatures() {
 													"mt-2 hidden text-sm lg:block",
 													selectedIndex === featureIndex
 														? "text-white"
-														: "text-blue-100 group-hover:text-white",
+														: "text-blue-100 sm:group-hover:text-white",
 												)}
 											>
 												{feature.description}
