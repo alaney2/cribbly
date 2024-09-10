@@ -91,10 +91,7 @@ function CheckoutForm({ clientSecret }: { clientSecret: string }) {
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
-
-		if (!stripe || !elements) {
-			return;
-		}
+		if (!stripe || !elements) return;
 
 		setProcessing(true);
 
@@ -200,10 +197,10 @@ export function Checkout2({ user, subscription, products }: Props) {
 			>
 				<div className="mx-auto max-w-7xl px-6 pb-96 pt-8 text-center sm:pt-8 lg:px-8">
 					<div className="mx-auto max-w-4xl">
-						<p className="mt-2 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
+						<p className="mt-2 text-3xl md:text-4xl font-bold tracking-tight">
 							Choose your plan
 						</p>
-						<p className="mt-4 text-md font-medium">
+						<p className="mt-2 text-md font-medium">
 							This is a perpetual license with a one-time payment.
 						</p>
 					</div>
@@ -230,8 +227,8 @@ export function Checkout2({ user, subscription, products }: Props) {
 						</svg>
 					</div>
 				</div>
-				<div className=" ">
-					<div className="-mt-80">
+				<div className="-mb-8">
+					<div className="-mt-[22rem]">
 						<div className="mx-auto max-w-7xl px-6 lg:px-8">
 							<div className="mx-auto grid max-w-md grid-cols-1 gap-8 lg:max-w-4xl lg:grid-cols-2">
 								{tiers.map((tier) => (
@@ -321,7 +318,7 @@ export function Checkout2({ user, subscription, products }: Props) {
 						</div>
 					</div>
 				</div>
-				<p className="text-center text-white text-sm sm:mt-6">
+				<p className="text-center absolute bottom-6 md:bottom-12 lg:bottom-20 left-0 right-0 text-zinc-500 lg:text-white text-sm">
 					We partner with Stripe to offer a 30 day money-back guarantee.
 				</p>
 			</div>
