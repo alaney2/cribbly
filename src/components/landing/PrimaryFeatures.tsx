@@ -12,26 +12,23 @@ import {
 import { Container } from "@/components/default/Container";
 import backgroundImage from "@/images/background-features.jpg";
 import screenshotExpenses from "@/images/screenshots/expenses.png";
-import screenshotPayroll from "@/images/screenshots/payroll.png";
-import screenshotReporting from "@/images/screenshots/reporting.png";
-import screenshotVatReturns from "@/images/screenshots/vat-returns.png";
-import propertyDashboard from "@/images/screenshots/propertyDashboardScreely.png";
-import dashboard from "@/images/screenshots/dashboardScreely.png";
-import maintenanceRequest from "@/images/screenshots/maintenanceRequestScreely.png";
-import enterProperty from "@/images/screenshots/enterPropertyScreely.png";
+import analyticsDashboard from "@/images/screenshots/analyticsDashboard.png";
+import inviteTenants from "@/images/screenshots/inviteTenants.png";
+import maintenanceRequest from "@/images/screenshots/maintenanceRequest.png";
+import taxDocuments from "@/images/screenshots/taxDocuments.png";
 
 const features = [
 	{
 		title: "Rent payments",
 		description:
 			"Live in a world where rent collects itself. No more manual transfers or misplaced checks.",
-		image: dashboard,
+		image: inviteTenants,
 	},
 	{
 		title: "Analytics",
 		description:
 			"The analytics dashboard gives you real-time insights into your earnings and expenses. Stay informed, stay ahead. ",
-		image: propertyDashboard,
+		image: analyticsDashboard,
 	},
 	{
 		title: "Maintenance requests",
@@ -43,7 +40,7 @@ const features = [
 		title: "Tax reports",
 		description:
 			"Forget the year-end tax scramble. Cribbly makes it simple to track expenses and income for seamless tax filing.",
-		image: enterProperty,
+		image: taxDocuments,
 	},
 ];
 
@@ -143,7 +140,7 @@ export function PrimaryFeatures() {
 												{feature.description}
 											</p>
 										</div>
-										<div className="mt-10 w-[45rem] overflow-hidden rounded-xl bg-gray-100 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
+										<div className="mt-10 w-[45rem] overflow-hidden rounded-2xl bg-gray-100 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
 											<Image
 												className="w-full rounded-2xl"
 												src={feature.image}

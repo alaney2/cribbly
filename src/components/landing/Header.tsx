@@ -169,7 +169,7 @@ export function Header() {
 					</div>
 					<div
 						ref={containerRef}
-						className="relative flex items-center gap-x-5 md:gap-x-8"
+						className="relative flex items-center gap-x-4 md:gap-x-6"
 					>
 						<div className="hidden md:block">
 							<NavLink href="/sign-in">Sign in</NavLink>

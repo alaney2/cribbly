@@ -93,7 +93,7 @@ export function InputName({
 						onChange={handleInputChange}
 						// biome-ignore lint/a11y/noAutofocus: <explanation>
 						autoFocus
-						defaultValue={fullName}
+						defaultValue={fullName || ""}
 						autoComplete="off"
 					/>
 					<Button

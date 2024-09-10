@@ -104,7 +104,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 				<Analytics />
 				<SpeedInsights />
 				<Toaster position="top-center" />
-				<TailwindIndicator />
+				{/* <TailwindIndicator /> */}
 			</body>
 		</html>
 	);
