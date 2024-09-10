@@ -57,7 +57,7 @@ export function Hero() {
 				className="relative mt-10 flex justify-center gap-x-6"
 			>
 				<Button onClick={handleClick} className="cursor-pointer">
-					Get started for free
+					Get started
 				</Button>
 				{sparks.map((spark) => (
 					<div
