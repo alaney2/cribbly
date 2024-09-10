@@ -2,6 +2,7 @@
 import { RentCard } from "@/components/PropertySettings/RentCard";
 import useSWR from "swr";
 import { getUser, getCurrentProperty } from "@/utils/supabase/actions";
+import { Button } from "@/components/catalyst/button";
 
 type SetupPropertyProps = {
 	propertyId: string;
@@ -16,6 +17,7 @@ export function SetupProperty({
 	currentProperty,
 	setCurrentProperty,
 }: SetupPropertyProps) {
+	console.log("currentProperty", currentProperty.property_rent);
 	return (
 		<>
 			<div
@@ -31,6 +33,19 @@ export function SetupProperty({
 					securityDeposit={currentProperty?.property_security_deposits || null}
 					setCurrentProperty={setCurrentProperty}
 				/>
+				<Button
+					color="blue"
+					onClick={buttonOnClick}
+					disabled={
+						!currentProperty &&
+						!currentProperty.property_rent.rent_amount &&
+						!currentProperty.property_rent.rent_start &&
+						!currentProperty.property_rent.rent_end
+					}
+					className="mt-4 sm:mt-6 w-40 h-11"
+				>
+					Continue
+				</Button>
 			</div>
 		</>
 	);

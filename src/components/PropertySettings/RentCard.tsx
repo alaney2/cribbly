@@ -108,6 +108,8 @@ export function RentCard({
 		fee_cost: 0,
 	});
 	const [fees, setFees] = React.useState<any[]>(propertyFees ?? []);
+	console.log("propertyFees", propertyFees);
+	console.log("fees", fees);
 	const [editFeeOpen, setEditFeeOpen] = React.useState(false);
 	const [feeEdit, setFeeEdit] = React.useState<Fee>();
 
@@ -192,10 +194,6 @@ export function RentCard({
 														deposit_amount: securityDepositFee,
 													}
 												: prevProperty.property_security_deposits,
-										property_fees: {
-											...prevProperty.property_fees,
-											fee_cost: fees,
-										},
 									}));
 								}
 							}),
@@ -211,8 +209,8 @@ export function RentCard({
 					<CardHeader>
 						<Heading>Property setup</Heading>
 						<Text className="">
-							Set the rent and fees to charge for this property per month. Rent
-							is billed on the start date, and then the first of each month.
+							Rent is billed on the start date, and then the first of each
+							month.
 						</Text>
 					</CardHeader>
 					<CardContent>
@@ -438,6 +436,10 @@ export function RentCard({
 										fee_name: "",
 										fee_cost: 0,
 									});
+									setCurrentProperty?.((prevProperty: any) => ({
+										...prevProperty,
+										property_fees: [...fees, newFee],
+									}));
 									resolve("Success");
 								} catch (error) {
 									reject(error);
@@ -553,6 +555,7 @@ export function RentCard({
 					fee={feeEdit}
 					fees={fees}
 					setFees={setFees}
+					setCurrentProperty={setCurrentProperty}
 				/>
 			)}
 			{startDate && endDate && (

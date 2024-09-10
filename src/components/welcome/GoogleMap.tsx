@@ -42,28 +42,11 @@ interface Suggestion {
 	description: string;
 }
 
-const fetcher = async () => {
-	const supabase = createClient();
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-	if (!user) throw new Error("Not authenticated");
-	const { data, error } = await supabase
-		.from("properties")
-		.select("*")
-		.eq("user_id", user.id)
-		.single();
-
-	if (error) throw error;
-	return data;
-};
-
 const AddressAutocomplete = ({
 	currentProperty,
 	setCurrentProperty,
 	buttonOnClick,
 }: FunctionProps) => {
-	// const { data: property, error } = useSWR("property", fetcher);
 	const [address, setAddress] = useState<Address>({
 		street: currentProperty?.street_address || "",
 		apt: currentProperty?.apt || "",
@@ -88,19 +71,6 @@ const AddressAutocomplete = ({
 	const suggestionsRef = useRef<HTMLUListElement>(null);
 	const places = useMapsLibrary("places");
 	const router = useRouter();
-
-	// useEffect(() => {
-	// 	if (property) {
-	// 		setAddress({
-	// 			street: property.street_address,
-	// 			apt: property.apt || "",
-	// 			city: property.city,
-	// 			state: property.state,
-	// 			zip: property.zip,
-	// 			country: property.country,
-	// 		});
-	// 	}
-	// }, [property]);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
