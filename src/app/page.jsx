@@ -20,14 +20,14 @@ import backgroundImage from "@/images/background-call-to-action.jpg";
 export default function Home() {
 	return (
 		<div className="bg-gray-50">
-			{/* <Header /> */}
+			<Header />
 			<main>
-				{/* <WavyBackground>
+				<WavyBackground>
 					<Hero />
-				</WavyBackground> */}
+				</WavyBackground>
 				<PrimaryFeatures />
-				{/* <BeforeAfter />
-				<Testimonials /> */}
+				<BeforeAfter />
+				<Testimonials />
 				{/* <FollowerPointerCard title="🏠 Future Property Manager"> */}
 				{/* <CallToAction /> */}
 				{/* <section
