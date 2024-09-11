@@ -51,7 +51,7 @@ export function PrimaryFeatures() {
 		<section
 			id="features"
 			aria-label="Features for running your books"
-			className="relative bg-blue-600 pb-28 pt-20 sm:py-32"
+			className="relative overflow-x-hidden bg-blue-600 pb-28 pt-20 sm:py-32"
 			style={{
 				backgroundImage: `url(${backgroundImage.src})`,
 				backgroundSize: "cover",
@@ -122,7 +122,7 @@ export function PrimaryFeatures() {
 										{feature.description}
 									</p>
 								</div>
-								<div className="mt-10 overflow-hidden rounded-md sm:rounded-2xl bg-gray-100 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
+								<div className="mt-10 overflow-hidden rounded-md sm:rounded-2xl bg-gray-100 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 w-[45rem] lg:w-[67.8125rem]">
 									<Image
 										className="w-full rounded-md sm:rounded-2xl "
 										src={feature.image}
