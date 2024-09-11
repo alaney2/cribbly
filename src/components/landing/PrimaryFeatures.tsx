@@ -51,7 +51,7 @@ export function PrimaryFeatures() {
 		<section
 			id="features"
 			aria-label="Features for running your books"
-			className="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32"
+			className="relative overflow-x-hidden bg-blue-600 pb-28 pt-20 sm:py-32"
 			style={{
 				backgroundImage: `url(${backgroundImage.src})`,
 				backgroundSize: "cover",
@@ -68,8 +68,8 @@ export function PrimaryFeatures() {
 						automate tax forms
 					</p>
 				</div>
-				<div className="mt-16 grid grid-cols-1 overflow-x-auto items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-12 lg:pt-0">
-					<div className="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-5">
+				<div className="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-12 lg:pt-0">
+					<div className="-mx-4 flex overflow-x-scroll pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-5">
 						<div className="relative z-10 flex gap-x-4 whitespace-nowrap px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:gap-x-0 lg:gap-y-1 lg:whitespace-normal touch-pan-x">
 							{features.map((feature, featureIndex) => (
 								<div
@@ -122,9 +122,9 @@ export function PrimaryFeatures() {
 										{feature.description}
 									</p>
 								</div>
-								<div className="mt-10 w-[45rem] overflow-x-hidden rounded-2xl bg-gray-100 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
+								<div className="mt-10 overflow-hidden rounded-md sm:rounded-2xl bg-gray-100 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 w-[45rem] lg:w-[67.8125rem]">
 									<Image
-										className="w-full rounded-2xl"
+										className="w-full rounded-md sm:rounded-2xl "
 										src={feature.image}
 										alt=""
 										priority
