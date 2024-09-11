@@ -19,72 +19,72 @@ import { loadMoov, type Drops } from "@moovio/moov-js";
 import { useState } from "react";
 
 export function BentoStats({ tasks }: { tasks: any }) {
-	const [moovjs, setMoovjs] = useState<any>(null);
-	const [moovToken, setMoovToken] = useState<string | null>(null);
+	// const [moovjs, setMoovjs] = useState<any>(null);
+	// const [moovToken, setMoovToken] = useState<string | null>(null);
 
-	const openOnboardingDrop = async () => {
-		try {
-			const dropsInstance = await moovjs?.drops();
+	// const openOnboardingDrop = async () => {
+	// 	try {
+	// 		const dropsInstance = await moovjs?.drops();
 
-			dropsInstance.onboarding({
-				token: moovToken,
-				open: true,
-				onResourceCreated: ({ resourceType, resource }) => {
-					console.log(`Resource created: ${resourceType}`, resource);
-				},
-				onError: ({ errorType, error }) => {
-					console.error(`Error in ${errorType}:`, error);
-				},
-				onCancel: () => {
-					console.log("Onboarding cancelled");
-				},
-				onSuccess: () => {
-					console.log("Onboarding completed successfully");
-				},
-			});
-		} catch (error) {
-			console.error("Error loading Moov:", error);
-		}
-	};
+	// 		dropsInstance.onboarding({
+	// 			token: moovToken,
+	// 			open: true,
+	// 			onResourceCreated: ({ resourceType, resource }) => {
+	// 				console.log(`Resource created: ${resourceType}`, resource);
+	// 			},
+	// 			onError: ({ errorType, error }) => {
+	// 				console.error(`Error in ${errorType}:`, error);
+	// 			},
+	// 			onCancel: () => {
+	// 				console.log("Onboarding cancelled");
+	// 			},
+	// 			onSuccess: () => {
+	// 				console.log("Onboarding completed successfully");
+	// 			},
+	// 		});
+	// 	} catch (error) {
+	// 		console.error("Error loading Moov:", error);
+	// 	}
+	// };
 
-	const openTOSDrop = async () => {
-		try {
-			const dropsInstance = await moovjs?.drops();
-			const token = await moovjs.accounts.getTermsOfServiceToken();
-			console.log("Terms of Service token:", token);
+	// const openTOSDrop = async () => {
+	// 	try {
+	// 		const dropsInstance = await moovjs?.drops();
+	// 		const token = await moovjs.accounts.getTermsOfServiceToken();
+	// 		console.log("Terms of Service token:", token);
 
-			const result = await moovjs.accounts.acceptTermsOfService({
-				accountId: process.env.NEXT_PUBLIC_MOOV_ACCOUNT_ID as string,
-				termsOfServiceToken: token,
-			});
+	// 		const result = await moovjs.accounts.acceptTermsOfService({
+	// 			accountId: process.env.NEXT_PUBLIC_MOOV_ACCOUNT_ID as string,
+	// 			termsOfServiceToken: token,
+	// 		});
 
-			console.log("Terms of Service accepted:", result);
-			dropsInstance.termsOfService({
-				token: token,
-				textColor: "#000",
-				linkColor: "#0000ff",
-				backgroundColor: "#fff",
-				fontSize: "16px",
-				customActionCopy: "I agree to the terms of service",
+	// 		console.log("Terms of Service accepted:", result);
+	// 		dropsInstance.termsOfService({
+	// 			token: token,
+	// 			textColor: "#000",
+	// 			linkColor: "#0000ff",
+	// 			backgroundColor: "#fff",
+	// 			fontSize: "16px",
+	// 			customActionCopy: "I agree to the terms of service",
 
-				// onResourceCreated: ({ resourceType, resource }) => {
-				// 	console.log(`Resource created: ${resourceType}`, resource);
-				// },
-				// onError: ({ errorType, error }) => {
-				// 	console.error(`Error in ${errorType}:`, error);
-				// },
-				onTermsOfServiceReady: (termsOfServiceToken) => {
-					console.log("Terms of Service ready", termsOfServiceToken);
-				},
-				onTermsOfServiceError: (error) => {
-					console.error("Error loading terms of service:", error);
-					console.log(error);
-				},
-			});
-		} catch (error) {
-			console.error("Error loading Moov:", error);
-		}
-	};
+	// 			// onResourceCreated: ({ resourceType, resource }) => {
+	// 			// 	console.log(`Resource created: ${resourceType}`, resource);
+	// 			// },
+	// 			// onError: ({ errorType, error }) => {
+	// 			// 	console.error(`Error in ${errorType}:`, error);
+	// 			// },
+	// 			onTermsOfServiceReady: (termsOfServiceToken) => {
+	// 				console.log("Terms of Service ready", termsOfServiceToken);
+	// 			},
+	// 			onTermsOfServiceError: (error) => {
+	// 				console.error("Error loading terms of service:", error);
+	// 				console.log(error);
+	// 			},
+	// 		});
+	// 	} catch (error) {
+	// 		console.error("Error loading Moov:", error);
+	// 	}
+	// };
 
 	const SkeletonOne = () => {
 		const variants = {
@@ -196,7 +196,7 @@ export function BentoStats({ tasks }: { tasks: any }) {
 					/>
 				))}
 			</BentoGrid>
-			<Button
+			{/* <Button
 				onClick={async () => {
 					const token = await createMoovAccount();
 					console.log(token);
@@ -214,7 +214,7 @@ export function BentoStats({ tasks }: { tasks: any }) {
 			</Button>
 			<Button onClick={openTOSDrop} disabled={!moovjs}>
 				Open TOS
-			</Button>
+			</Button> */}
 		</>
 	);
 }
