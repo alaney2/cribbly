@@ -92,12 +92,12 @@ export function PrimaryFeatures() {
 					{({ selectedIndex }) => (
 						<>
 							<div className="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-5">
-								<TabList className="relative z-10 flex gap-x-4 whitespace-nowrap px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:gap-x-0 lg:gap-y-1 lg:whitespace-normal">
+								<div className="relative z-10 flex gap-x-4 whitespace-nowrap px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:gap-x-0 lg:gap-y-1 lg:whitespace-normal">
 									{features.map((feature, featureIndex) => (
 										<div
 											key={feature.title}
 											className={clsx(
-												"group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-6",
+												"group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-6 select-none focus:outline-none",
 												selectedIndex === featureIndex
 													? "bg-white lg:bg-white/10 lg:ring-inset lg:ring-white/10"
 													: "sm:hover:bg-white/10 lg:hover:bg-white/5",
@@ -106,7 +106,7 @@ export function PrimaryFeatures() {
 											<h3>
 												<Tab
 													className={clsx(
-														"font-display text-lg ui-not-focus-visible:outline-none",
+														"font-display text-lg ui-not-focus-visible:outline-none focus:outline-none select-none",
 														selectedIndex === featureIndex
 															? "text-blue-600 lg:text-white"
 															: "text-blue-100 sm:hover:text-white lg:text-white",
@@ -128,7 +128,7 @@ export function PrimaryFeatures() {
 											</p>
 										</div>
 									))}
-								</TabList>
+								</div>
 							</div>
 							<TabPanels className="lg:col-span-7">
 								{features.map((feature) => (
