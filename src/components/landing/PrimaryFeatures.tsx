@@ -4,11 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Tab, TabList, TabGroup, TabPanels, TabPanel } from "@headlessui/react";
 import clsx from "clsx";
-import {
-	CardContainer,
-	CardBody,
-	CardItem,
-} from "@/components/aceternity/3d-card";
 import { Container } from "@/components/default/Container";
 import backgroundImage from "@/images/background-features.jpg";
 import screenshotExpenses from "@/images/screenshots/expenses.png";
@@ -86,7 +81,7 @@ export function PrimaryFeatures() {
 											type="button"
 											onClick={() => setSelectedIndex(featureIndex)}
 											className={clsx(
-												"font-display text-lg ui-not-focus-visible:outline-none focus:outline-none select-none",
+												"font-display text-lg ui-not-focus-visible:outline-none",
 												selectedIndex === featureIndex
 													? "text-blue-600 lg:text-white"
 													: "text-blue-100 sm:hover:text-white lg:text-white",
