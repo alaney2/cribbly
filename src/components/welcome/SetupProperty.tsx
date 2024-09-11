@@ -42,7 +42,7 @@ export function SetupProperty({
 						!currentProperty.property_rent.rent_start &&
 						!currentProperty.property_rent.rent_end
 					}
-					className="mt-4 sm:mt-6 w-40 h-11"
+					className="mt-4 sm:mt-4 w-48"
 				>
 					Continue
 				</Button>
