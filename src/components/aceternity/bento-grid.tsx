@@ -67,7 +67,7 @@ export const BentoGridItem = ({
 		<Link
 			href={href}
 			className={cn(
-				"row-span-1 rounded-xl group group/bento hover:shadow-xl transition duration-200 dark:shadow-none p-4 dark:bg-black ring-1 ring-inset bg-white ring-gray-200 dark:ring-gray-400 hover:ring-0 justify-between flex flex-col space-y-4 overflow-y-auto select-none cursor-default",
+				"row-span-1 rounded-xl group group/bento hover:shadow-xl transition duration-200 dark:shadow-none p-4 dark:bg-black sm:ring-1 ring-inset bg-white ring-gray-200 dark:ring-gray-400 hover:ring-0 justify-between flex flex-col space-y-4 overflow-y-auto select-none cursor-default",
 				className,
 			)}
 		>
@@ -76,7 +76,7 @@ export const BentoGridItem = ({
 	) : (
 		<div
 			className={cn(
-				"row-span-1 rounded-xl group group/bento hover:shadow-xl transition duration-200 dark:shadow-none p-4 dark:bg-black ring-1 ring-inset bg-white ring-gray-200 dark:ring-gray-400 hover:ring-0 justify-between flex flex-col space-y-4 overflow-y-auto select-none",
+				"row-span-1 rounded-xl group group/bento hover:shadow-xl transition duration-200 dark:shadow-none p-4 dark:bg-black sm:ring-1 ring-inset bg-white ring-gray-200 dark:ring-gray-400 hover:ring-0 justify-between flex flex-col space-y-4 overflow-y-auto select-none",
 				className,
 			)}
 		>

@@ -138,7 +138,7 @@ export function PropertyStats({ currentPropertyId }: PropertyStatsProps) {
 					<Link
 						href={item.href || "#"}
 						key={item.name}
-						className="group cursor-default overflow-hidden rounded-xl bg-white dark:bg-black px-4 py-5 ring-1 ring-inset ring-gray-200 dark:ring-gray-400 sm:p-6"
+						className="group cursor-default overflow-hidden rounded-xl bg-white dark:bg-black px-4 py-5 sm:ring-1 ring-inset ring-gray-200 dark:ring-gray-400 sm:p-6"
 					>
 						<div className="flex justify-between">
 							<dt className="truncate text-sm font-medium text-gray-500">

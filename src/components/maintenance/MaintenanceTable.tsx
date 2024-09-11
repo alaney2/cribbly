@@ -169,7 +169,7 @@ export function MaintenanceTable({
 							<TableRow
 								key={request.id}
 								onClick={() => handleRowClick(request)}
-								className="cursor-default hover:bg-gray-50"
+								className="cursor-default hover:bg-gray-50 dark:hover:bg-black"
 							>
 								{/* <TableCell>
 									{new Date(
