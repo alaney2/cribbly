@@ -20,17 +20,17 @@ import backgroundImage from "@/images/background-call-to-action.jpg";
 export default function Home() {
 	return (
 		<div className="bg-gray-50">
-			<Header />
+			{/* <Header /> */}
 			<main>
-				<WavyBackground>
+				{/* <WavyBackground>
 					<Hero />
-				</WavyBackground>
+				</WavyBackground> */}
 				<PrimaryFeatures />
-				<BeforeAfter />
-				<Testimonials />
-				<FollowerPointerCard title="🏠 Future Property Manager">
-					{/* <CallToAction /> */}
-					<section
+				{/* <BeforeAfter />
+				<Testimonials /> */}
+				{/* <FollowerPointerCard title="🏠 Future Property Manager"> */}
+				{/* <CallToAction /> */}
+				{/* <section
 						id="get-started-today"
 						className="relative overflow-hidden bg-blue-600 py-32"
 					>
@@ -41,8 +41,8 @@ export default function Home() {
 							width={2347}
 							height={1244}
 							unoptimized
-						/>
-						<Container className="relative">
+						/> */}
+				{/* <Container className="relative">
 							<div className="mx-auto max-w-lg text-center">
 								<h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl">
 									Let’s get started
@@ -59,15 +59,15 @@ export default function Home() {
 									Get started today
 								</Button>
 							</div>
-						</Container>
-					</section>
-				</FollowerPointerCard>
+						</Container> */}
+				{/* </section>
+				</FollowerPointerCard> */}
 
 				{/* <SecondaryFeatures /> */}
 				{/* <Pricing /> */}
-				<Faqs />
+				{/* <Faqs /> */}
 			</main>
-			<Footer />
+			{/* <Footer /> */}
 		</div>
 	);
 }
