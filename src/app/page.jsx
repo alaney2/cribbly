@@ -22,9 +22,9 @@ export default function Home() {
 		<div className="bg-gray-50">
 			<Header />
 			<main>
-				<WavyBackground>
+				{/* <WavyBackground>
 					<Hero />
-				</WavyBackground>
+				</WavyBackground> */}
 				<PrimaryFeatures />
 				<BeforeAfter />
 				<Testimonials />
