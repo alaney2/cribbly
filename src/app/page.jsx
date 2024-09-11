@@ -22,15 +22,15 @@ export default function Home() {
 		<div className="bg-gray-50">
 			<Header />
 			<main>
-				{/* <WavyBackground>
-					<Hero />
-				</WavyBackground> */}
+				{/* <WavyBackground> */}
+				<Hero />
+				{/* </WavyBackground> */}
 				<PrimaryFeatures />
 				<BeforeAfter />
 				<Testimonials />
-				{/* <FollowerPointerCard title="🏠 Future Property Manager"> */}
-				{/* <CallToAction /> */}
-				{/* <section
+				<FollowerPointerCard title="🏠 Future Property Manager">
+					<CallToAction />
+					<section
 						id="get-started-today"
 						className="relative overflow-hidden bg-blue-600 py-32"
 					>
@@ -41,8 +41,8 @@ export default function Home() {
 							width={2347}
 							height={1244}
 							unoptimized
-						/> */}
-				{/* <Container className="relative">
+						/>
+						<Container className="relative">
 							<div className="mx-auto max-w-lg text-center">
 								<h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl">
 									Let’s get started
@@ -59,15 +59,15 @@ export default function Home() {
 									Get started today
 								</Button>
 							</div>
-						</Container> */}
-				{/* </section>
-				</FollowerPointerCard> */}
+						</Container>
+					</section>
+				</FollowerPointerCard>
 
-				{/* <SecondaryFeatures /> */}
-				{/* <Pricing /> */}
-				{/* <Faqs /> */}
+				<SecondaryFeatures />
+				<Pricing />
+				<Faqs />
 			</main>
-			{/* <Footer /> */}
+			<Footer />
 		</div>
 	);
 }
