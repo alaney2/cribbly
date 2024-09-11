@@ -48,6 +48,7 @@ export function PrimaryFeatures() {
 	const [tabOrientation, setTabOrientation] = useState<
 		"horizontal" | "vertical"
 	>("horizontal");
+	const [selectedIndex, setSelectedIndex] = useState(0);
 
 	useEffect(() => {
 		const lgMediaQuery = window.matchMedia("(min-width: 1024px)");
@@ -85,75 +86,73 @@ export function PrimaryFeatures() {
 						automate tax forms
 					</p>
 				</div>
-				<TabGroup
-					className="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-12 lg:pt-0"
-					vertical={tabOrientation === "vertical"}
-				>
-					{({ selectedIndex }) => (
-						<>
-							<div className="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-5">
-								<div className="relative z-10 flex gap-x-4 whitespace-nowrap px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:gap-x-0 lg:gap-y-1 lg:whitespace-normal">
-									{features.map((feature, featureIndex) => (
-										<div
-											key={feature.title}
+				<div className="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-12 lg:pt-0">
+					<div className="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-5">
+						<div className="relative z-10 flex gap-x-4 whitespace-nowrap px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:gap-x-0 lg:gap-y-1 lg:whitespace-normal">
+							{features.map((feature, featureIndex) => (
+								<div
+									key={feature.title}
+									className={clsx(
+										"group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-6 select-none focus:outline-none",
+										selectedIndex === featureIndex
+											? "bg-white lg:bg-white/10 lg:ring-inset lg:ring-white/10"
+											: "sm:hover:bg-white/10 lg:hover:bg-white/5",
+									)}
+								>
+									<h3>
+										<button
+											type="button"
+											onClick={() => setSelectedIndex(featureIndex)}
 											className={clsx(
-												"group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-6 select-none focus:outline-none",
+												"font-display text-lg ui-not-focus-visible:outline-none focus:outline-none select-none",
 												selectedIndex === featureIndex
-													? "bg-white lg:bg-white/10 lg:ring-inset lg:ring-white/10"
-													: "sm:hover:bg-white/10 lg:hover:bg-white/5",
+													? "text-blue-600 lg:text-white"
+													: "text-blue-100 sm:hover:text-white lg:text-white",
 											)}
 										>
-											<h3>
-												<Tab
-													className={clsx(
-														"font-display text-lg ui-not-focus-visible:outline-none focus:outline-none select-none",
-														selectedIndex === featureIndex
-															? "text-blue-600 lg:text-white"
-															: "text-blue-100 sm:hover:text-white lg:text-white",
-													)}
-												>
-													<span className="absolute inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none" />{" "}
-													{feature.title}
-												</Tab>
-											</h3>
-											<p
-												className={clsx(
-													"mt-2 hidden text-sm lg:block",
-													selectedIndex === featureIndex
-														? "text-white"
-														: "text-blue-100 sm:group-hover:text-white",
-												)}
-											>
-												{feature.description}
-											</p>
-										</div>
-									))}
+											<span className="absolute inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none" />{" "}
+											{feature.title}
+										</button>
+									</h3>
+									<p
+										className={clsx(
+											"mt-2 hidden text-sm lg:block",
+											selectedIndex === featureIndex
+												? "text-white"
+												: "text-blue-100 sm:group-hover:text-white",
+										)}
+									>
+										{feature.description}
+									</p>
+								</div>
+							))}
+						</div>
+					</div>
+					<div className="lg:col-span-7">
+						{features.map((feature, index) => (
+							<div
+								key={feature.title}
+								className={index === selectedIndex ? "" : "hidden"}
+							>
+								<div className="relative sm:px-6 lg:hidden">
+									<div className="absolute -inset-x-4 bottom-[-4.25rem] top-[-6.5rem] bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl" />
+									<p className="relative mx-auto max-w-2xl text-base text-white sm:text-center">
+										{feature.description}
+									</p>
+								</div>
+								<div className="mt-10 w-[45rem] overflow-hidden rounded-2xl bg-gray-100 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
+									<Image
+										className="w-full rounded-2xl"
+										src={feature.image}
+										alt=""
+										priority
+										sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
+									/>
 								</div>
 							</div>
-							<TabPanels className="lg:col-span-7">
-								{features.map((feature) => (
-									<TabPanel key={feature.title} unmount={false}>
-										<div className="relative sm:px-6 lg:hidden">
-											<div className="absolute -inset-x-4 bottom-[-4.25rem] top-[-6.5rem] bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl" />
-											<p className="relative mx-auto max-w-2xl text-base text-white sm:text-center">
-												{feature.description}
-											</p>
-										</div>
-										<div className="mt-10 w-[45rem] overflow-hidden rounded-2xl bg-gray-100 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]">
-											<Image
-												className="w-full rounded-2xl"
-												src={feature.image}
-												alt=""
-												priority
-												sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
-											/>
-										</div>
-									</TabPanel>
-								))}{" "}
-							</TabPanels>
-						</>
-					)}
-				</TabGroup>
+						))}{" "}
+					</div>
+				</div>
 			</Container>
 		</section>
 	);

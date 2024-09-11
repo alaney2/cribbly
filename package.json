@@ -93,7 +93,7 @@
     "react-loading-skeleton": "^3.4.0",
     "react-plaid-link": "^3.5.2",
     "react-use": "^17.5.0",
-    "recharts": "^2.12.7",
+    "recharts": "2.13.0-alpha.5",
     "resend": "^3.4.0",
     "server-only": "^0.0.1",
     "simplex-noise": "^4.0.1",
