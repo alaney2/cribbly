@@ -17,6 +17,7 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+	const shapesRef = useRef<Shape[]>([]);
 
 	useEffect(() => {
 		const updateDimensions = () => {
@@ -44,7 +45,6 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 		canvas.width = dimensions.width;
 		canvas.height = dimensions.height;
 
-		const shapes: Shape[] = [];
 		const colors = [
 			"#FF6B6B",
 			"#4ECDC4",
@@ -63,23 +63,23 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 			"#ef4444",
 		];
 
-		const baseShapes = 5;
-		const additionalShapes = Math.floor(dimensions.width / 100); // Add one shape per 100px width
-		const totalShapes = Math.max(baseShapes, baseShapes + additionalShapes);
+		// Create initial shapes only if they don't exist
+		if (shapesRef.current.length === 0) {
+			const totalShapes = window.innerWidth < 768 ? 5 : 10; // Use 5 for mobile, 10 for larger screens
 
-		// Create initial shapes
-		for (let i = 0; i < totalShapes; i++) {
-			shapes.push({
-				x: Math.random() * canvas.width,
-				y: Math.random() * canvas.height,
-				size: Math.random() * 20 + 20,
-				color: colors[Math.floor(Math.random() * colors.length)],
-				speedX: (Math.random() - 0.5) * 1.5,
-				speedY: (Math.random() - 0.5) * 1.5,
-				type: ["circle", "square", "triangle"][
-					Math.floor(Math.random() * 3)
-				] as Shape["type"],
-			});
+			for (let i = 0; i < totalShapes; i++) {
+				shapesRef.current.push({
+					x: Math.random() * canvas.width,
+					y: Math.random() * canvas.height,
+					size: Math.random() * 20 + 20,
+					color: colors[Math.floor(Math.random() * colors.length)],
+					speedX: (Math.random() - 0.5) * 1.5,
+					speedY: (Math.random() - 0.5) * 1.5,
+					type: ["circle", "square", "triangle"][
+						Math.floor(Math.random() * 3)
+					] as Shape["type"],
+				});
+			}
 		}
 
 		const drawShape = (shape: Shape) => {
@@ -114,7 +114,7 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 			if (!ctx || !canvas) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			for (const shape of shapes) {
+			for (const shape of shapesRef.current) {
 				shape.x += shape.speedX;
 				shape.y += shape.speedY;
 
