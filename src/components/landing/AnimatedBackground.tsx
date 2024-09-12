@@ -12,22 +12,69 @@ interface Shape {
 	mass: number;
 }
 
+const createShapes = (width: number, height: number): Shape[] => {
+	const shapes: Shape[] = [];
+	const colors = [
+		"#FF6B6B",
+		"#4ECDC4",
+		"#45B7D1",
+		"#FFA07A",
+		"#98D8C8",
+		"#f97316",
+		"#a3e635",
+		"#22c55e",
+		"#3b82f6",
+		"#8b5cf6",
+		"#a855f7",
+		"#ec4899",
+		"#f43f5e",
+		"#eab308",
+		"#ef4444",
+	];
+
+	const baseShapes = 5;
+	const additionalShapes = Math.floor(width / 100);
+	const totalShapes = Math.max(baseShapes, baseShapes + additionalShapes);
+
+	for (let i = 0; i < totalShapes; i++) {
+		shapes.push({
+			x: Math.random() * width,
+			y: Math.random() * height,
+			size: Math.random() * 20 + 20,
+			color: colors[Math.floor(Math.random() * colors.length)],
+			speedX: (Math.random() - 0.5) * 1.5,
+			speedY: (Math.random() - 0.5) * 1.5,
+			type: ["circle", "square", "triangle"][
+				Math.floor(Math.random() * 3)
+			] as Shape["type"],
+			mass: Math.random() * 0.5 + 0.5,
+		});
+	}
+
+	return shapes;
+};
+
 const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-	const shapesRef = useRef<Shape[]>([]);
-	const animationRef = useRef<number>();
+	const [shapes, setShapes] = useState<Shape[]>([]);
 
 	useEffect(() => {
 		const updateDimensions = () => {
 			if (containerRef.current) {
-				setDimensions({
+				const newDimensions = {
 					width: containerRef.current.offsetWidth,
 					height: containerRef.current.offsetHeight,
-				});
+				};
+				setDimensions(newDimensions);
+
+				// Only create shapes if they haven't been created yet
+				if (shapes.length === 0) {
+					setShapes(createShapes(newDimensions.width, newDimensions.height));
+				}
 			}
 		};
 
@@ -35,7 +82,7 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 		window.addEventListener("resize", updateDimensions);
 
 		return () => window.removeEventListener("resize", updateDimensions);
-	}, []);
+	}, [shapes.length]);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -46,55 +93,6 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 
 		canvas.width = dimensions.width;
 		canvas.height = dimensions.height;
-
-		// const shapes: Shape[] = [];
-		if (
-			shapesRef.current.length === 0 ||
-			Math.abs(shapesRef.current[0].x - dimensions.width / 2) >
-				dimensions.width / 4 ||
-			Math.abs(shapesRef.current[0].y - dimensions.height / 2) >
-				dimensions.height / 4
-		) {
-			const colors = [
-				"#FF6B6B",
-				"#4ECDC4",
-				"#45B7D1",
-				"#FFA07A",
-				"#98D8C8",
-				"#f97316",
-				"#a3e635",
-				"#22c55e",
-				"#3b82f6",
-				"#8b5cf6",
-				"#a855f7",
-				"#ec4899",
-				"#f43f5e",
-				"#eab308",
-				"#ef4444",
-			];
-
-			const baseShapes = 5;
-			const additionalShapes = Math.floor(dimensions.width / 100); // Add one shape per 100px width
-			const totalShapes = Math.max(baseShapes, baseShapes + additionalShapes);
-
-			shapesRef.current = [];
-
-			// Create initial shapes
-			for (let i = 0; i < totalShapes; i++) {
-				shapesRef.current.push({
-					x: Math.random() * dimensions.width,
-					y: Math.random() * dimensions.height,
-					size: Math.random() * 20 + 20,
-					color: colors[Math.floor(Math.random() * colors.length)],
-					speedX: (Math.random() - 0.5) * 1.5,
-					speedY: (Math.random() - 0.5) * 1.5,
-					type: ["circle", "square", "triangle"][
-						Math.floor(Math.random() * 3)
-					] as Shape["type"],
-					mass: Math.random() * 0.5 + 0.5, // Random mass between 0.5 and 1
-				});
-			}
-		}
 
 		const drawShape = (shape: Shape) => {
 			if (!ctx) return;
@@ -167,12 +165,14 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 			shape2.speedY = ty * dpTan2 + ny * m2;
 		};
 
+		let animationFrameId: number;
+
 		const animate = () => {
 			if (!ctx || !canvas) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			for (let i = 0; i < shapesRef.current.length; i++) {
-				const shape = shapesRef.current[i];
+			for (let i = 0; i < shapes.length; i++) {
+				const shape = shapes[i];
 				shape.x += shape.speedX;
 				shape.y += shape.speedY;
 
@@ -199,25 +199,23 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 				}
 
 				// Shape collision
-				for (let j = i + 1; j < shapesRef.current.length; j++) {
-					if (checkCollision(shape, shapesRef.current[j])) {
-						resolveCollision(shape, shapesRef.current[j]);
+				for (let j = i + 1; j < shapes.length; j++) {
+					if (checkCollision(shape, shapes[j])) {
+						resolveCollision(shape, shapes[j]);
 					}
 				}
 
 				drawShape(shape);
 			}
 
-			animationRef.current = requestAnimationFrame(animate);
+			animationFrameId = requestAnimationFrame(animate);
 		};
 
 		animate();
 		return () => {
-			if (animationRef.current) {
-				cancelAnimationFrame(animationRef.current);
-			}
+			cancelAnimationFrame(animationFrameId);
 		};
-	}, [dimensions]);
+	}, [dimensions, shapes]);
 
 	return (
 		<div ref={containerRef} className="relative overflow-hidden">
