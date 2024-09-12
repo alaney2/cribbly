@@ -9,6 +9,7 @@ interface Shape {
 	speedX: number;
 	speedY: number;
 	type: "circle" | "square" | "triangle";
+	mass: number;
 }
 
 const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
@@ -17,7 +18,6 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-	const shapesRef = useRef<Shape[]>([]);
 
 	useEffect(() => {
 		const updateDimensions = () => {
@@ -45,6 +45,7 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 		canvas.width = dimensions.width;
 		canvas.height = dimensions.height;
 
+		const shapes: Shape[] = [];
 		const colors = [
 			"#FF6B6B",
 			"#4ECDC4",
@@ -63,23 +64,24 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 			"#ef4444",
 		];
 
-		// Create initial shapes only if they don't exist
-		if (shapesRef.current.length === 0) {
-			const totalShapes = window.innerWidth < 768 ? 5 : 10; // Use 5 for mobile, 10 for larger screens
+		const baseShapes = 5;
+		const additionalShapes = Math.floor(dimensions.width / 100); // Add one shape per 100px width
+		const totalShapes = Math.max(baseShapes, baseShapes + additionalShapes);
 
-			for (let i = 0; i < totalShapes; i++) {
-				shapesRef.current.push({
-					x: Math.random() * canvas.width,
-					y: Math.random() * canvas.height,
-					size: Math.random() * 20 + 20,
-					color: colors[Math.floor(Math.random() * colors.length)],
-					speedX: (Math.random() - 0.5) * 1.5,
-					speedY: (Math.random() - 0.5) * 1.5,
-					type: ["circle", "square", "triangle"][
-						Math.floor(Math.random() * 3)
-					] as Shape["type"],
-				});
-			}
+		// Create initial shapes
+		for (let i = 0; i < totalShapes; i++) {
+			shapes.push({
+				x: Math.random() * canvas.width,
+				y: Math.random() * canvas.height,
+				size: Math.random() * 20 + 20,
+				color: colors[Math.floor(Math.random() * colors.length)],
+				speedX: (Math.random() - 0.5) * 1.5,
+				speedY: (Math.random() - 0.5) * 1.5,
+				type: ["circle", "square", "triangle"][
+					Math.floor(Math.random() * 3)
+				] as Shape["type"],
+				mass: Math.random() * 0.5 + 0.5, // Random mass between 0.5 and 1
+			});
 		}
 
 		const drawShape = (shape: Shape) => {
@@ -110,15 +112,59 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 			ctx.fill();
 		};
 
+		const checkCollision = (shape1: Shape, shape2: Shape) => {
+			const dx = shape2.x - shape1.x;
+			const dy = shape2.y - shape1.y;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+			return distance < (shape1.size + shape2.size) / 2;
+		};
+
+		const resolveCollision = (shape1: Shape, shape2: Shape) => {
+			const dx = shape2.x - shape1.x;
+			const dy = shape2.y - shape1.y;
+			const distance = Math.sqrt(dx * dx + dy * dy);
+
+			// Normal vector
+			const nx = dx / distance;
+			const ny = dy / distance;
+
+			// Tangent vector
+			const tx = -ny;
+			const ty = nx;
+
+			// Dot product tangent
+			const dpTan1 = shape1.speedX * tx + shape1.speedY * ty;
+			const dpTan2 = shape2.speedX * tx + shape2.speedY * ty;
+
+			// Dot product normal
+			const dpNorm1 = shape1.speedX * nx + shape1.speedY * ny;
+			const dpNorm2 = shape2.speedX * nx + shape2.speedY * ny;
+
+			// Conservation of momentum in 1D
+			const m1 =
+				(dpNorm1 * (shape1.mass - shape2.mass) + 2 * shape2.mass * dpNorm2) /
+				(shape1.mass + shape2.mass);
+			const m2 =
+				(dpNorm2 * (shape2.mass - shape1.mass) + 2 * shape1.mass * dpNorm1) /
+				(shape1.mass + shape2.mass);
+
+			// Update velocities
+			shape1.speedX = tx * dpTan1 + nx * m1;
+			shape1.speedY = ty * dpTan1 + ny * m1;
+			shape2.speedX = tx * dpTan2 + nx * m2;
+			shape2.speedY = ty * dpTan2 + ny * m2;
+		};
+
 		const animate = () => {
 			if (!ctx || !canvas) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			for (const shape of shapesRef.current) {
+			for (let i = 0; i < shapes.length; i++) {
+				const shape = shapes[i];
 				shape.x += shape.speedX;
 				shape.y += shape.speedY;
 
-				// Improved bouncing logic
+				// Wall collision
 				if (
 					shape.x - shape.size / 2 < 0 ||
 					shape.x + shape.size / 2 > canvas.width
@@ -138,6 +184,13 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 						shape.size / 2,
 						Math.min(canvas.height - shape.size / 2, shape.y),
 					);
+				}
+
+				// Shape collision
+				for (let j = i + 1; j < shapes.length; j++) {
+					if (checkCollision(shape, shapes[j])) {
+						resolveCollision(shape, shapes[j]);
+					}
 				}
 
 				drawShape(shape);
