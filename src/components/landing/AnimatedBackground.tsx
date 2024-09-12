@@ -18,6 +18,8 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+	const shapesRef = useRef<Shape[]>([]);
+	const animationRef = useRef<number>();
 
 	useEffect(() => {
 		const updateDimensions = () => {
@@ -45,43 +47,53 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 		canvas.width = dimensions.width;
 		canvas.height = dimensions.height;
 
-		const shapes: Shape[] = [];
-		const colors = [
-			"#FF6B6B",
-			"#4ECDC4",
-			"#45B7D1",
-			"#FFA07A",
-			"#98D8C8",
-			"#f97316",
-			"#a3e635",
-			"#22c55e",
-			"#3b82f6",
-			"#8b5cf6",
-			"#a855f7",
-			"#ec4899",
-			"#f43f5e",
-			"#eab308",
-			"#ef4444",
-		];
+		// const shapes: Shape[] = [];
+		if (
+			shapesRef.current.length === 0 ||
+			Math.abs(shapesRef.current[0].x - dimensions.width / 2) >
+				dimensions.width / 4 ||
+			Math.abs(shapesRef.current[0].y - dimensions.height / 2) >
+				dimensions.height / 4
+		) {
+			const colors = [
+				"#FF6B6B",
+				"#4ECDC4",
+				"#45B7D1",
+				"#FFA07A",
+				"#98D8C8",
+				"#f97316",
+				"#a3e635",
+				"#22c55e",
+				"#3b82f6",
+				"#8b5cf6",
+				"#a855f7",
+				"#ec4899",
+				"#f43f5e",
+				"#eab308",
+				"#ef4444",
+			];
 
-		const baseShapes = 5;
-		const additionalShapes = Math.floor(dimensions.width / 100); // Add one shape per 100px width
-		const totalShapes = Math.max(baseShapes, baseShapes + additionalShapes);
+			const baseShapes = 5;
+			const additionalShapes = Math.floor(dimensions.width / 100); // Add one shape per 100px width
+			const totalShapes = Math.max(baseShapes, baseShapes + additionalShapes);
 
-		// Create initial shapes
-		for (let i = 0; i < totalShapes; i++) {
-			shapes.push({
-				x: Math.random() * canvas.width,
-				y: Math.random() * canvas.height,
-				size: Math.random() * 20 + 20,
-				color: colors[Math.floor(Math.random() * colors.length)],
-				speedX: (Math.random() - 0.5) * 1.5,
-				speedY: (Math.random() - 0.5) * 1.5,
-				type: ["circle", "square", "triangle"][
-					Math.floor(Math.random() * 3)
-				] as Shape["type"],
-				mass: Math.random() * 0.5 + 0.5, // Random mass between 0.5 and 1
-			});
+			shapesRef.current = [];
+
+			// Create initial shapes
+			for (let i = 0; i < totalShapes; i++) {
+				shapesRef.current.push({
+					x: Math.random() * dimensions.width,
+					y: Math.random() * dimensions.height,
+					size: Math.random() * 20 + 20,
+					color: colors[Math.floor(Math.random() * colors.length)],
+					speedX: (Math.random() - 0.5) * 1.5,
+					speedY: (Math.random() - 0.5) * 1.5,
+					type: ["circle", "square", "triangle"][
+						Math.floor(Math.random() * 3)
+					] as Shape["type"],
+					mass: Math.random() * 0.5 + 0.5, // Random mass between 0.5 and 1
+				});
+			}
 		}
 
 		const drawShape = (shape: Shape) => {
@@ -159,8 +171,8 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 			if (!ctx || !canvas) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			for (let i = 0; i < shapes.length; i++) {
-				const shape = shapes[i];
+			for (let i = 0; i < shapesRef.current.length; i++) {
+				const shape = shapesRef.current[i];
 				shape.x += shape.speedX;
 				shape.y += shape.speedY;
 
@@ -187,19 +199,24 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 				}
 
 				// Shape collision
-				for (let j = i + 1; j < shapes.length; j++) {
-					if (checkCollision(shape, shapes[j])) {
-						resolveCollision(shape, shapes[j]);
+				for (let j = i + 1; j < shapesRef.current.length; j++) {
+					if (checkCollision(shape, shapesRef.current[j])) {
+						resolveCollision(shape, shapesRef.current[j]);
 					}
 				}
 
 				drawShape(shape);
 			}
 
-			requestAnimationFrame(animate);
+			animationRef.current = requestAnimationFrame(animate);
 		};
 
 		animate();
+		return () => {
+			if (animationRef.current) {
+				cancelAnimationFrame(animationRef.current);
+			}
+		};
 	}, [dimensions]);
 
 	return (
