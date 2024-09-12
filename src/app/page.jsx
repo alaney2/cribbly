@@ -16,14 +16,17 @@ import { BeforeAfter } from "@/components/landing/BeforeAfter";
 import Image from "next/image";
 import { Button } from "@/components/catalyst/button";
 import backgroundImage from "@/images/background-call-to-action.jpg";
+import { AnimatedBackground } from "@/components/landing/AnimatedBackground";
 
 export default function Home() {
 	return (
 		<div className="bg-gray-50">
-			<Header />
-			<main>
+			<AnimatedBackground>
+				<Header />
 				{/* <WavyBackground> */}
 				<Hero />
+			</AnimatedBackground>
+			<main>
 				{/* </WavyBackground> */}
 				<PrimaryFeatures />
 				<BeforeAfter />

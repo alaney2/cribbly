@@ -97,7 +97,6 @@ export default function RootLayout({ children }: PropsWithChildren) {
           gtag('config', 'G-MTXEMYC4EM');
         `}
 			</Script>
-
 			<body className="h-full antialiased">
 				{children}
 
