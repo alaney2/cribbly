@@ -9,7 +9,6 @@ interface Shape {
 	speedX: number;
 	speedY: number;
 	type: "circle" | "square" | "triangle";
-	mass: number;
 }
 
 const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
@@ -80,7 +79,6 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 				type: ["circle", "square", "triangle"][
 					Math.floor(Math.random() * 3)
 				] as Shape["type"],
-				mass: Math.random() * 0.5 + 0.5, // Random mass between 0.5 and 1
 			});
 		}
 
@@ -112,59 +110,15 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 			ctx.fill();
 		};
 
-		const checkCollision = (shape1: Shape, shape2: Shape) => {
-			const dx = shape2.x - shape1.x;
-			const dy = shape2.y - shape1.y;
-			const distance = Math.sqrt(dx * dx + dy * dy);
-			return distance < (shape1.size + shape2.size) / 2;
-		};
-
-		const resolveCollision = (shape1: Shape, shape2: Shape) => {
-			const dx = shape2.x - shape1.x;
-			const dy = shape2.y - shape1.y;
-			const distance = Math.sqrt(dx * dx + dy * dy);
-
-			// Normal vector
-			const nx = dx / distance;
-			const ny = dy / distance;
-
-			// Tangent vector
-			const tx = -ny;
-			const ty = nx;
-
-			// Dot product tangent
-			const dpTan1 = shape1.speedX * tx + shape1.speedY * ty;
-			const dpTan2 = shape2.speedX * tx + shape2.speedY * ty;
-
-			// Dot product normal
-			const dpNorm1 = shape1.speedX * nx + shape1.speedY * ny;
-			const dpNorm2 = shape2.speedX * nx + shape2.speedY * ny;
-
-			// Conservation of momentum in 1D
-			const m1 =
-				(dpNorm1 * (shape1.mass - shape2.mass) + 2 * shape2.mass * dpNorm2) /
-				(shape1.mass + shape2.mass);
-			const m2 =
-				(dpNorm2 * (shape2.mass - shape1.mass) + 2 * shape1.mass * dpNorm1) /
-				(shape1.mass + shape2.mass);
-
-			// Update velocities
-			shape1.speedX = tx * dpTan1 + nx * m1;
-			shape1.speedY = ty * dpTan1 + ny * m1;
-			shape2.speedX = tx * dpTan2 + nx * m2;
-			shape2.speedY = ty * dpTan2 + ny * m2;
-		};
-
 		const animate = () => {
 			if (!ctx || !canvas) return;
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-			for (let i = 0; i < shapes.length; i++) {
-				const shape = shapes[i];
+			for (const shape of shapes) {
 				shape.x += shape.speedX;
 				shape.y += shape.speedY;
 
-				// Wall collision
+				// Improved bouncing logic
 				if (
 					shape.x - shape.size / 2 < 0 ||
 					shape.x + shape.size / 2 > canvas.width
@@ -184,13 +138,6 @@ const AnimatedBackground: React.FC<{ children: React.ReactNode }> = ({
 						shape.size / 2,
 						Math.min(canvas.height - shape.size / 2, shape.y),
 					);
-				}
-
-				// Shape collision
-				for (let j = i + 1; j < shapes.length; j++) {
-					if (checkCollision(shape, shapes[j])) {
-						resolveCollision(shape, shapes[j]);
-					}
 				}
 
 				drawShape(shape);
