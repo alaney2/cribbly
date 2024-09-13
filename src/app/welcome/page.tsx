@@ -32,8 +32,6 @@ export default async function WelcomePage() {
 		.eq("user_id", user.id)
 		.order("created_at", { ascending: false });
 
-	console.log(subscriptionData);
-
 	return (
 		<WelcomeLayout
 			user={user}
