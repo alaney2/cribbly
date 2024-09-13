@@ -217,47 +217,50 @@ const copyBillingDetailsToCustomer = async (
 const handleOneTimePayment = async (
 	checkoutSession: Stripe.Checkout.Session,
 ) => {
-	const customerId = checkoutSession.customer as string;
-	console.log("customerId", customerId);
-	// Get customer's UUID from mapping table.
-	const { data: customerData, error: noCustomerError } = await supabaseAdmin
-		.from("customers")
-		.select("id")
-		.eq("stripe_customer_id", customerId)
-		.single();
+	let uuid: string | null = null;
+	let customerId: string;
 
-	console.log("customerData", customerData);
-
-	if (noCustomerError)
-		throw new Error(`Customer lookup failed: ${noCustomerError.message}`);
-
-	const { id: uuid } = customerData;
-	// Ensure line items are expanded and exist
-	const lineItems = checkoutSession.line_items?.data;
-	if (!lineItems || lineItems.length === 0) {
-		throw new Error("No line items found in the checkout session");
+	// Determine if customer is an object or a string
+	if (typeof checkoutSession.customer === "string") {
+		customerId = checkoutSession.customer;
+	} else if (checkoutSession.customer) {
+		customerId = checkoutSession.customer.id;
+	} else {
+		throw new Error("Customer not found in checkout session.");
 	}
 
-	console.log("lineItems", lineItems);
+	let customer: Stripe.Customer;
+	if (
+		typeof checkoutSession.customer === "object" &&
+		checkoutSession.customer !== null
+	) {
+		customer = checkoutSession.customer as Stripe.Customer;
+	} else {
+		const retrievedCustomer = await stripe.customers.retrieve(customerId);
+		if (retrievedCustomer.deleted) {
+			throw new Error("Customer was deleted in Stripe.");
+		}
+		customer = retrievedCustomer as Stripe.Customer;
+	}
 
-	const lineItem = lineItems[0];
-	console.log("lineItem", lineItem);
+	if ("deleted" in customer && customer.deleted) {
+		throw new Error("Customer was deleted in Stripe.");
+	}
 
-	const price = lineItem.price;
-	console.log("price", price);
+	// Retrieve the Supabase UUID from customer metadata
+	uuid = customer.metadata.supabaseUUID;
+
+	if (!uuid) {
+		throw new Error("No Supabase UUID found in customer metadata.");
+	}
+
+	const lineItem = checkoutSession.line_items?.data[0];
+	const price = lineItem?.price;
 
 	if (!price) {
 		throw new Error("Price information is missing from the line item");
 	}
-
 	const product = price.product;
-	console.log("product", product);
-
-	if (typeof product === "string") {
-		throw new Error("Product information is not expanded");
-	}
-
-	console.log("price.id", price.id);
 
 	// Create a 'subscription' entry with lifetime access
 	const subscriptionData: TablesInsert<"subscriptions"> = {
