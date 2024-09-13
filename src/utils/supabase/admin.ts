@@ -169,26 +169,25 @@ const createOrRetrieveCustomer = async ({
 					`Supabase customer record update failed: ${updateError.message}`,
 				);
 			console.warn(
-				`Supabase customer record mismatched Stripe ID. Supabase record updated.`,
+				"Supabase customer record mismatched Stripe ID. Supabase record updated.",
 			);
 		}
 		// If Supabase has a record and matches Stripe, return Stripe customer ID
 		return stripeCustomerId;
-	} else {
-		console.warn(
-			`Supabase customer record was missing. A new record was created.`,
-		);
-
-		// If Supabase has no record, create a new record and return Stripe customer ID
-		const upsertedStripeCustomer = await upsertCustomerToSupabase(
-			uuid,
-			stripeIdToInsert,
-		);
-		if (!upsertedStripeCustomer)
-			throw new Error("Supabase customer record creation failed.");
-
-		return upsertedStripeCustomer;
 	}
+	console.warn(
+		"Supabase customer record was missing. A new record was created.",
+	);
+
+	// If Supabase has no record, create a new record and return Stripe customer ID
+	const upsertedStripeCustomer = await upsertCustomerToSupabase(
+		uuid,
+		stripeIdToInsert,
+	);
+	if (!upsertedStripeCustomer)
+		throw new Error("Supabase customer record creation failed.");
+
+	return upsertedStripeCustomer;
 };
 
 /**
@@ -215,6 +214,82 @@ const copyBillingDetailsToCustomer = async (
 		throw new Error(`Customer update failed: ${updateError.message}`);
 };
 
+const handleOneTimePayment = async (
+	checkoutSession: Stripe.Checkout.Session,
+) => {
+	const customerId = checkoutSession.customer as string;
+	console.log("customerId", customerId);
+	// Get customer's UUID from mapping table.
+	const { data: customerData, error: noCustomerError } = await supabaseAdmin
+		.from("customers")
+		.select("id")
+		.eq("stripe_customer_id", customerId)
+		.single();
+
+	console.log("customerData", customerData);
+
+	if (noCustomerError)
+		throw new Error(`Customer lookup failed: ${noCustomerError.message}`);
+
+	const { id: uuid } = customerData;
+	// Ensure line items are expanded and exist
+	const lineItems = checkoutSession.line_items?.data;
+	if (!lineItems || lineItems.length === 0) {
+		throw new Error("No line items found in the checkout session");
+	}
+
+	console.log("lineItems", lineItems);
+
+	const lineItem = lineItems[0];
+	console.log("lineItem", lineItem);
+
+	const price = lineItem.price;
+	console.log("price", price);
+
+	if (!price) {
+		throw new Error("Price information is missing from the line item");
+	}
+
+	const product = price.product;
+	console.log("product", product);
+
+	if (typeof product === "string") {
+		throw new Error("Product information is not expanded");
+	}
+
+	console.log("price.id", price.id);
+
+	// Create a 'subscription' entry with lifetime access
+	const subscriptionData: TablesInsert<"subscriptions"> = {
+		id: checkoutSession.id,
+		user_id: uuid,
+		metadata: checkoutSession.metadata || {},
+		status: "active",
+		price_id: price.id,
+		quantity: lineItem.quantity || 1,
+		cancel_at_period_end: false,
+		cancel_at: null,
+		canceled_at: null,
+		current_period_start: new Date().toISOString(),
+		current_period_end: undefined,
+		created: new Date().toISOString(),
+		ended_at: null,
+		trial_start: null,
+		trial_end: null,
+	};
+
+	const { error: upsertError } = await supabaseAdmin
+		.from("subscriptions")
+		.upsert([subscriptionData]);
+
+	if (upsertError)
+		throw new Error(
+			`Subscription insert/update failed: ${upsertError.message}`,
+		);
+
+	console.log(`Inserted lifetime subscription for user [${uuid}]`);
+};
+
 const manageSubscriptionStatusChange = async (
 	subscriptionId: string,
 	customerId: string,
@@ -230,7 +305,7 @@ const manageSubscriptionStatusChange = async (
 	if (noCustomerError)
 		throw new Error(`Customer lookup failed: ${noCustomerError.message}`);
 
-	const { id: uuid } = customerData!;
+	const { id: uuid } = customerData;
 
 	const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
 		expand: ["default_payment_method"],
@@ -298,4 +373,5 @@ export {
 	deletePriceRecord,
 	createOrRetrieveCustomer,
 	manageSubscriptionStatusChange,
+	handleOneTimePayment,
 };

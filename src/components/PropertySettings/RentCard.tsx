@@ -282,7 +282,7 @@ export function RentCard({
 											required
 											min="0"
 											pattern="^\d+(?:\.\d{1,2})?$"
-											disabled={daysBetweenDates <= 0}
+											// disabled={daysBetweenDates <= 0}
 										/>
 									</InputGroup>
 								</div>
@@ -318,9 +318,7 @@ export function RentCard({
 														id="depositAmount"
 														name="depositAmount"
 														placeholder="0"
-														disabled={
-															!hasSecurityDeposit || daysBetweenDates <= 0
-														}
+														disabled={!hasSecurityDeposit}
 														className="w-full flex-grow"
 														autoComplete="off"
 														value={
@@ -402,11 +400,7 @@ export function RentCard({
 					<CardFooter className="flex items-center justify-end">
 						<div className="flex gap-x-3">
 							{/* <Button color="white">Edit</Button> */}
-							<Button
-								type="submit"
-								color="blue"
-								disabled={daysBetweenDates <= 0 || !hasChanges}
-							>
+							<Button type="submit" color="blue" disabled={!hasChanges}>
 								Save
 							</Button>
 						</div>

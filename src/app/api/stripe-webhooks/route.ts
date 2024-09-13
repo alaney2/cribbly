@@ -6,6 +6,7 @@ import {
 	manageSubscriptionStatusChange,
 	deleteProductRecord,
 	deletePriceRecord,
+	handleOneTimePayment,
 } from "@/utils/supabase/admin";
 
 const relevantEvents = new Set([
@@ -69,6 +70,12 @@ export async function POST(req: Request) {
 				}
 				case "checkout.session.completed": {
 					const checkoutSession = event.data.object as Stripe.Checkout.Session;
+					const sessionWithDetails = await stripe.checkout.sessions.retrieve(
+						checkoutSession.id,
+						{
+							expand: ["line_items.data.price", "customer"],
+						},
+					);
 					if (checkoutSession.mode === "subscription") {
 						const subscriptionId = checkoutSession.subscription;
 						await manageSubscriptionStatusChange(
@@ -76,6 +83,9 @@ export async function POST(req: Request) {
 							checkoutSession.customer as string,
 							true,
 						);
+					} else if (checkoutSession.mode === "payment") {
+						// Handle one-time payment
+						await handleOneTimePayment(sessionWithDetails);
 					}
 					break;
 				}

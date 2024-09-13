@@ -1,41 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { CheckIcon } from "@heroicons/react/20/solid";
 import { Button } from "@/components/catalyst/button";
-import { Switch, SwitchField } from "@/components/catalyst/switch";
-import { Field, Label } from "@/components/catalyst/fieldset";
-import { getStripe } from "@/utils/stripe/client";
-import { checkoutWithStripe } from "@/utils/stripe/server";
 import { useRouter, usePathname } from "next/navigation";
 import type { Tables } from "@/types_db";
 import type { User } from "@supabase/supabase-js";
 import "animate.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { Spinner } from "@/components/Spinners/Spinner";
-import { Text } from "@/components/catalyst/text";
-import { Input } from "@/components/catalyst/input";
-import { Heading, Subheading } from "@/components/catalyst/heading";
-import {
-	createCheckoutSession,
-	createPaymentIntent,
-} from "@/utils/stripe/server";
-import {
-	Elements,
-	PaymentElement,
-	useStripe,
-	useElements,
-} from "@stripe/react-stripe-js";
-import { loadStripe } from "@stripe/stripe-js";
-import {
-	Dialog,
-	DialogBody,
-	DialogActions,
-} from "@/components/catalyst/dialog";
-
-const stripePromise = loadStripe(
-	process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "",
-);
+import { CheckIcon } from "@heroicons/react/20/solid";
 
 type Subscription = Tables<"subscriptions">;
 type Product = Tables<"products">;
@@ -55,8 +27,6 @@ interface Props {
 	products: ProductWithPrices[];
 	subscription: SubscriptionWithProduct | null;
 }
-
-type BillingInterval = "lifetime" | "year" | "month";
 
 const tiers = [
 	{
@@ -84,134 +54,41 @@ const tiers = [
 	},
 ];
 
-function CheckoutForm({
-	clientSecret,
-	price,
-}: { clientSecret: string; price: number }) {
-	const stripe = useStripe();
-	const elements = useElements();
-	const [error, setError] = useState<string | null>(null);
-	const [processing, setProcessing] = useState(false);
-	const [discountCode, setDiscountCode] = useState("");
-	const [discountedPrice, setDiscountedPrice] = useState(price);
-
-	const handleSubmit = async (event: React.FormEvent) => {
-		event.preventDefault();
-		if (!stripe || !elements) return;
-
-		setProcessing(true);
-
-		const { error: submitError } = await stripe.confirmPayment({
-			elements,
-			confirmParams: {
-				return_url: `${process.env.NEXT_PUBLIC_SITE_URL}/welcome`,
-			},
-		});
-
-		if (submitError) {
-			setError(submitError.message || "An unexpected error occurred.");
-		}
-
-		setProcessing(false);
-	};
-
-	const handleDiscountCode = async () => {
-		// Here you would typically make an API call to your backend to validate the discount code
-		// and get the discounted price. For this example, we'll just simulate it.
-		if (discountCode === "DISCOUNT10") {
-			setDiscountedPrice(price * 0.9); // 10% discount
-		} else {
-			setError("Invalid discount code");
-		}
-	};
-
-	return (
-		<form onSubmit={handleSubmit}>
-			<div className="mb-4">
-				<Text>Total: ${discountedPrice.toFixed(2)}</Text>
-			</div>
-			{/* <div className="mb-4">
-				<Input
-					type="text"
-					value={discountCode}
-					onChange={(e) => setDiscountCode(e.target.value)}
-					placeholder="Discount code"
-				/>
-				<Button type="button" onClick={handleDiscountCode} className="mt-2">
-					Apply Discount
-				</Button>
-			</div> */}
-			<PaymentElement />
-			{error && <div className="text-red-500 mt-2 text-sm">{error}</div>}
-			<Button
-				type="submit"
-				color="blue"
-				className="mt-4 w-full"
-				disabled={!stripe || processing}
-			>
-				{processing ? "Processing..." : `Pay $${discountedPrice.toFixed(2)}`}
-			</Button>
-		</form>
-	);
-}
-
 export function Checkout2({ user, subscription, products }: Props) {
-	const [clientSecret, setClientSecret] = useState("");
-
-	const router = useRouter();
-	const currentPath = usePathname();
-
-	const [yearly, setYearly] = useState(true);
-	const [subSelected, setSubSelected] = useState(false);
-	const [lifetimeSelected, setLifetimeSelected] = useState(false);
-
-	const [billingInterval, setBillingInterval] =
-		useState<BillingInterval>("year");
-
-	const [isOpen, setIsOpen] = useState(false);
-	const [isInnerOpen, setIsInnerOpen] = useState(false);
-
 	const [loading, setLoading] = useState(false);
 
-	const lifetimeProduct = products.find(
-		(product) => product.name?.toLowerCase() === "lifetime",
-	);
-	const product = products[0];
-	// const priceMonthly =
-	// 	subscriptionProduct?.prices[0].interval === "month"
-	// 		? product.prices[0]
-	// 		: product.prices[1];
-	// const priceYearly =
-	// 	subscriptionProduct?.prices[0].interval === "year"
-	// 		? product.prices[0]
-	// 		: product.prices[1];
-	const priceLifetime = lifetimeProduct?.prices[0];
+	const router = useRouter();
 
-	// console.log(products, "products");
+	const priceLifetime = products.find(
+		(product) => product.name?.toLowerCase() === "lifetime",
+	)?.prices[0];
 
 	const handleCheckout = async (priceId: string) => {
 		setLoading(true);
 		try {
-			const { clientSecret } = await createPaymentIntent(priceId);
-			if (clientSecret) {
-				setClientSecret(clientSecret);
-				setIsOpen(true);
+			const response = await fetch("/api/create-checkout-session", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ priceId }),
+			});
+
+			console.log("response", response);
+
+			const data = await response.json();
+
+			if (data.url) {
+				// Redirect to the Stripe-hosted checkout page
+				window.location.href = data.url;
 			} else {
-				throw new Error("Failed to create payment intent");
+				throw new Error("Failed to create checkout session");
 			}
 		} catch (error) {
-			console.error("Error creating payment intent:", error);
+			console.error("Error creating checkout session:", error);
 		} finally {
 			setLoading(false);
 		}
-	};
-
-	const appearance = {
-		theme: "stripe",
-	};
-	const options = {
-		clientSecret,
-		appearance,
 	};
 
 	return (
@@ -267,7 +144,7 @@ export function Checkout2({ user, subscription, products }: Props) {
 										className="flex flex-col relative justify-between w-auto rounded-3xl bg-white dark:bg-black p-8 shadow-xl ring-1 ring-gray-900/10 sm:p-10"
 									>
 										<AnimatePresence>
-											{yearly === true && tier.name === "Subscription" && (
+											{tier.name === "Subscription" && (
 												<motion.span
 													initial={{ opacity: 0, y: -20 }}
 													animate={{ opacity: 1, y: -15 }}
@@ -352,54 +229,6 @@ export function Checkout2({ user, subscription, products }: Props) {
 					We partner with Stripe to offer a 30 day money-back guarantee.
 				</p>
 			</div>
-			{/* <Text className="text-center sm:mt-6">
-				We partner with Stripe to offer a 30 day money-back guarantee.
-			</Text> */}
-			<Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-				<DialogBody>
-					<Heading>Checkout</Heading>
-					<div className="mt-4 hidden dark:block">
-						{clientSecret && (
-							<Elements
-								stripe={stripePromise}
-								options={{
-									clientSecret,
-									appearance: {
-										theme: "night",
-									},
-								}}
-							>
-								<CheckoutForm
-									clientSecret={clientSecret}
-									price={tiers[0].price || 0}
-								/>
-							</Elements>
-						)}
-					</div>
-					<div className="mt-4 dark:hidden">
-						{clientSecret && (
-							<Elements
-								stripe={stripePromise}
-								options={{
-									clientSecret,
-									appearance: {
-										theme: "stripe",
-									},
-								}}
-							>
-								<CheckoutForm
-									clientSecret={clientSecret}
-									price={tiers[0].price || 0}
-								/>
-							</Elements>
-						)}
-					</div>
-					{/* <Text>Please enter your payment information.</Text> */}
-				</DialogBody>
-				{/* <DialogActions>
-					<Button onClick={() => setIsOpen(false)}>Cancel</Button>
-				</DialogActions> */}
-			</Dialog>
 		</div>
 	);
 }

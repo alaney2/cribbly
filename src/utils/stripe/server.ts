@@ -140,9 +140,8 @@ export async function checkoutWithStripe(
 		// Instead of returning a Response, just return the data or error.
 		if (session) {
 			return { sessionId: session.id };
-		} else {
-			throw new Error("Unable to create checkout session.");
 		}
+		throw new Error("Unable to create checkout session.");
 	} catch (error) {
 		if (error instanceof Error) {
 			return {
@@ -152,15 +151,14 @@ export async function checkoutWithStripe(
 					"Please try again later or contact a system administrator.",
 				),
 			};
-		} else {
-			return {
-				errorRedirect: getErrorRedirect(
-					redirectPath,
-					"An unknown error occurred.",
-					"Please try again later or contact a system administrator.",
-				),
-			};
 		}
+		return {
+			errorRedirect: getErrorRedirect(
+				redirectPath,
+				"An unknown error occurred.",
+				"Please try again later or contact a system administrator.",
+			),
+		};
 	}
 }
 

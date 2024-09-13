@@ -29,7 +29,7 @@ export default function WelcomeLayout({
 	property: any;
 }) {
 	const [currentStep, setCurrentStep] = useState(
-		customer ? 5 : property ? 2 : 0,
+		customer ? 4 : property ? 2 : 0,
 	);
 	const [propertyId, setPropertyId] = useState(property?.id || "");
 	const [fullName, setFullName] = useState("");
@@ -74,11 +74,11 @@ export default function WelcomeLayout({
 		}
 	}, [searchParams, mutate, router]);
 
-	useEffect(() => {
-		if (customerData) {
-			setCurrentStep(5);
-		}
-	}, [customerData]);
+	// useEffect(() => {
+	// 	if (customerData) {
+	// 		setCurrentStep(5);
+	// 	}
+	// }, [customerData]);
 
 	const steps = [
 		{ name: "Step 0" },
