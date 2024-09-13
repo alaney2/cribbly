@@ -19,17 +19,17 @@ export default function WelcomeLayout({
 	user,
 	subscription,
 	products,
-	customer,
+	subscriptionActive,
 	property,
 }: {
 	user: any;
 	subscription: any;
 	products: any;
-	customer: any;
+	subscriptionActive: boolean;
 	property: any;
 }) {
 	const [currentStep, setCurrentStep] = useState(
-		customer ? 4 : property ? 2 : 0,
+		subscriptionActive ? 5 : property ? 2 : 0,
 	);
 	const [propertyId, setPropertyId] = useState(property?.id || "");
 	const [fullName, setFullName] = useState("");
@@ -91,6 +91,10 @@ export default function WelcomeLayout({
 	];
 
 	const handleStepClick = (stepIndex: number) => {
+		if (subscriptionActive) {
+			setCurrentStep(5);
+			return;
+		}
 		if (stepIndex < currentStep) {
 			setCurrentStep(stepIndex);
 		}

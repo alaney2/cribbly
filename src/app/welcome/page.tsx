@@ -18,10 +18,10 @@ export default async function WelcomePage() {
 	}
 	const products = await getProducts();
 
-	const { data: customerData, error: customerError } = await supabase
-		.from("customers")
+	const { data: subscriptionData, error: subscriptionError } = await supabase
+		.from("subscriptions")
 		.select("*")
-		.eq("id", user.id)
+		.eq("user_id", user.id)
 		.single();
 
 	const { data: propertyData, error: propertyError } = await supabase
@@ -32,12 +32,16 @@ export default async function WelcomePage() {
 		.eq("user_id", user.id)
 		.order("created_at", { ascending: false });
 
+	console.log(subscriptionData);
+
 	return (
 		<WelcomeLayout
 			user={user}
 			subscription={subscription}
 			products={products}
-			customer={customerData}
+			subscriptionActive={
+				subscriptionData?.status === "active" && !subscriptionError
+			}
 			property={propertyData?.[0]}
 		/>
 	);
