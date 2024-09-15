@@ -4,8 +4,14 @@ import { BentoStats } from "@/components/Dashboard/BentoStats";
 import { redirect } from "next/navigation";
 import { PropertyStats } from "@/components/Dashboard/PropertyStats";
 import { Strong, Text, TextLink } from "@/components/catalyst/text";
-import { getTasks, getCurrentProperty } from "@/utils/supabase/actions";
+import {
+	getTasks,
+	getCurrentProperty,
+	getNameAndEmail,
+} from "@/utils/supabase/actions";
 import { Heading } from "@/components/catalyst/heading";
+import { getVerificationInfo } from "@/utils/supabase/actions";
+import { Verification } from "@/components/Dashboard/Verification";
 
 export default async function CurrentProperty({
 	params,
@@ -16,13 +22,9 @@ export default async function CurrentProperty({
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
-	if (!user) redirect("/sign-in");
+	if (!user) return;
 
 	const currentPropertyId = user.user_metadata.currentPropertyId;
-	// const { data: tasks } = await supabase
-	//   .from('maintenance')
-	//   .select('*')
-	//   .eq('property_id', currentPropertyId)
 
 	const tasks = await getTasks();
 
@@ -48,11 +50,26 @@ export default async function CurrentProperty({
 		);
 	}
 
-	const propertyAddress = propertyData[0]?.street_address;
+	const result = await getNameAndEmail();
+	console.log(result);
+	const full_name = result?.full_name;
+	const email = result?.email;
+
+	const propertyAddress = `${propertyData[0]?.street_address}, ${propertyData[0]?.city} ${propertyData[0]?.state} ${propertyData[0]?.zip}`;
+
+	const verificationInfo = await getVerificationInfo();
+
+	if (!verificationInfo) {
+		return (
+			<div className="sm:mt-16">
+				<Verification full_name={full_name} email={email} />
+			</div>
+		);
+	}
 
 	return (
 		<>
-			<div className="content-container mb-8 lg:mb-0">
+			<div className="h-full">
 				{showBankText && (
 					<Text className="mb-4 rounded-lg bg-red-500/25 px-4 py-1">
 						To enable payouts, please link a primary bank account in your{" "}
@@ -60,8 +77,7 @@ export default async function CurrentProperty({
 					</Text>
 				)}
 				<Heading className="mb-8 ml-4 text-xl font-semibold tracking-tight lg:hidden">
-					{propertyData[0]?.street_address}, {propertyData[0]?.city}{" "}
-					{propertyData[0]?.state} {propertyData[0]?.apt}
+					{propertyAddress}
 				</Heading>
 				<div className="mb-4 cursor-default">
 					<PropertyStats currentPropertyId={currentPropertyId} />

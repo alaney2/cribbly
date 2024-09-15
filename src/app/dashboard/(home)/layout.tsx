@@ -20,7 +20,7 @@ export async function generateMetadata(
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
-	if (!user) redirect("/sign-in");
+	if (!user) return {};
 	const currentPropertyId = user.user_metadata.currentPropertyId;
 
 	const { data: propertyData, error } = await supabase
@@ -51,7 +51,7 @@ export default async function PropertyDashboardLayout({
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
-	if (!user) redirect("/sign-in");
+	if (!user) return;
 
 	const { data, error } = await supabase
 		.from("users")
@@ -61,7 +61,7 @@ export default async function PropertyDashboardLayout({
 
 	return (
 		<>
-			<div className="lg:bg-zinc-100 dark:bg-zinc-900 text-zinc-950 dark:text-white dark:lg:bg-zinc-950">
+			<div className="lg:bg-zinc-100 dark:bg-zinc-900 text-zinc-950 dark:text-white dark:lg:bg-zinc-950 h-full">
 				<AppLayout
 					userEmail={data?.email}
 					fullName={data?.full_name ?? undefined}

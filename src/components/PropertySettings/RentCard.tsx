@@ -42,7 +42,6 @@ import {
 import { EditFeeDialog } from "@/components/PropertySettings/EditFeeDialog";
 import { addPropertyFees, addFee } from "@/utils/supabase/actions";
 import { format, addYears, subDays, addDays, addWeeks } from "date-fns";
-import { cn } from "@/lib/utils";
 import { ScheduleDialog } from "@/components/PropertySettings/ScheduleDialog";
 import { toast } from "sonner";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";

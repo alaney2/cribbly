@@ -9,11 +9,8 @@ import { Text, Strong } from "@/components/catalyst/text";
 import { useRouter } from "next/navigation";
 interface SettingsNavigationProps {
 	currentPropertyId: string;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	propertyRent: any | null;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	securityDeposit: any | null;
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	propertyFees: any[] | null;
 	key: string;
 	initialTab?: string;
@@ -46,9 +43,9 @@ export default function SettingsNavigation({
 }: SettingsNavigationProps) {
 	const [activeTab, setActiveTab] = useState(initialTab || "General");
 	const router = useRouter();
-	router.prefetch("/dashboard/settings/tenants");
-	router.prefetch("/dashboard/settings/delete");
-	router.prefetch("/dashboard/settings/general");
+	// router.prefetch("/dashboard/settings/tenants");
+	// router.prefetch("/dashboard/settings/delete");
+	// router.prefetch("/dashboard/settings/general");
 
 	const handleTabChange = useCallback(
 		(tab: string) => {

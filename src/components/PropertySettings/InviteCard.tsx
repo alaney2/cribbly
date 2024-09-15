@@ -35,8 +35,6 @@ import {
 	TableRow,
 } from "@/components/catalyst/table";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import { Heading } from "@/components/catalyst/heading";
 import { Strong, Text, TextLink } from "@/components/catalyst/text";
 
@@ -182,11 +180,6 @@ export function InviteCard({
 							readOnly
 							className="hidden"
 						/>
-						{isLoading && !invites && (
-							<div className="mt-6">
-								<Skeleton count={2} />
-							</div>
-						)}
 						{invites && invites.length > 0 && (
 							<div className="mt-6">
 								<h3 className="text-md font-semibold mb-2">Invites Sent</h3>

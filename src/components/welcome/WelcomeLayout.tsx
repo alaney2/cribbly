@@ -28,9 +28,7 @@ export default function WelcomeLayout({
 	subscriptionActive: boolean;
 	property: any;
 }) {
-	const [currentStep, setCurrentStep] = useState(
-		subscriptionActive ? 5 : property ? 2 : 0,
-	);
+	const [currentStep, setCurrentStep] = useState(property ? 2 : 0);
 	const [propertyId, setPropertyId] = useState(property?.id || "");
 	const [fullName, setFullName] = useState("");
 	const [finishWelcome, setFinishWelcome] = useState(false);
@@ -86,15 +84,15 @@ export default function WelcomeLayout({
 		{ name: "Step 2" },
 		{ name: "Step 3" },
 		{ name: "Step 4" },
-		{ name: "Step 5" },
+		// { name: "Step 5" },
 		// { name: "Step 6" },
 	];
 
 	const handleStepClick = (stepIndex: number) => {
-		if (subscriptionActive) {
-			setCurrentStep(5);
-			return;
-		}
+		// if (subscriptionActive) {
+		// 	setCurrentStep(5);
+		// 	return;
+		// }
 		if (stepIndex < currentStep) {
 			setCurrentStep(stepIndex);
 		}
@@ -135,15 +133,15 @@ export default function WelcomeLayout({
 						buttonOnClick={() => setCurrentStep(currentStep + 1)}
 					/>
 				);
+			// case 4:
+			// 	return (
+			// 		<Checkout2
+			// 			user={user}
+			// 			subscription={subscription}
+			// 			products={products}
+			// 		/>
+			// 	);
 			case 4:
-				return (
-					<Checkout2
-						user={user}
-						subscription={subscription}
-						products={products}
-					/>
-				);
-			case 5:
 				return (
 					<div
 						className={

@@ -40,6 +40,24 @@ export async function updateFullName(formData: FormData) {
 	}
 }
 
+export async function getNameAndEmail() {
+	const supabase = createClient();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+	if (!user) return;
+	const { data, error } = await supabase
+		.from("users")
+		.select("full_name, email")
+		.eq("id", user.id)
+		.single();
+	if (error) {
+		console.error(error);
+		throw new Error("Error fetching full name");
+	}
+	return data;
+}
+
 export async function editFee(formData: FormData) {
 	const supabase = createClient();
 	const feeType = String(formData.get("feeType"));
@@ -526,4 +544,25 @@ export async function createTask(formData: FormData) {
 		throw new Error("Error creating task");
 	}
 	return data;
+}
+
+export async function getVerificationInfo() {
+	const supabase = createClient();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+	if (!user) return;
+
+	const { data: verificationData, error: verificationError } = await supabase
+		.from("verification_info")
+		.select("*")
+		.eq("user_id", user.id)
+		.single();
+
+	if (verificationError) {
+		// console.error("Error fetching verification info:", verificationError);
+		return null;
+	}
+
+	return verificationData;
 }

@@ -21,7 +21,7 @@ export default async function Documents() {
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
-	if (!user) redirect("/sign-in");
+	if (!user) return;
 	const currentPropertyId = user.user_metadata.currentPropertyId;
 
 	let documents = await fetchDocuments(currentPropertyId);
