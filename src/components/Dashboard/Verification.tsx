@@ -34,20 +34,20 @@ const VerificationForm = ({
 	const totalSteps = 3; // Total number of steps (0 to 3)
 	const [formData, setFormData] = useState({
 		address: {
-			addressLine1: "123 Main Street",
-			addressLine2: "Apt 302",
-			city: "Boulder",
-			stateOrProvince: "CO",
-			zipCode: "80301",
+			addressLine1: "",
+			addressLine2: "",
+			city: "",
+			stateOrProvince: "",
+			zipCode: "",
 			country: "US",
 		},
-		accountType: "",
-		birthDate: "1985-05-09", // Use ISO date format for simplicity
+		accountType: "individual",
+		birthDate: new Date().toISOString(), // Use ISO date format for simplicity
 		email: email,
 		governmentID: {
 			ssn: {
-				full: "111111111",
-				lastFour: "1111",
+				full: "",
+				lastFour: "",
 			},
 		},
 		name: {
@@ -55,7 +55,7 @@ const VerificationForm = ({
 			lastName: full_name?.split(" ")[1],
 		},
 		phone: {
-			number: "8185551212",
+			number: "",
 			countryCode: "1",
 		},
 	});
@@ -81,10 +81,7 @@ const VerificationForm = ({
 	};
 
 	return (
-		<form
-			onSubmit={handleSubmit}
-			className="flex flex-col min-h-[650px] sm:min-h-[500px]"
-		>
+		<form onSubmit={handleSubmit} className="flex flex-col min-h-[550px]">
 			<div className="grow h-full sm:mt-4">
 				{step === 0 && (
 					<div className="h-full flex flex-col gap-4">
@@ -253,16 +250,19 @@ const VerificationForm = ({
 				{step === 1 && (
 					<>
 						<Fieldset>
-							<Legend>Let's start with the basics</Legend>
+							<Legend className="text-lg font-bold mb-4">
+								Let's start with the basics.
+							</Legend>
 							<FieldGroup>
-								<div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
+								<div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-4">
 									<Field>
-										<Label>First Name</Label>
+										<Label>Legal first Name</Label>
 										<Input
 											id="name.firstName"
 											name="name.firstName"
 											value={formData.name.firstName}
 											onChange={handleChange}
+											required
 										/>
 									</Field>
 									<Field>
@@ -272,6 +272,7 @@ const VerificationForm = ({
 											name="name.lastName"
 											value={formData.name.lastName}
 											onChange={handleChange}
+											required
 										/>
 									</Field>
 								</div>
@@ -285,9 +286,33 @@ const VerificationForm = ({
 										type="email"
 										value={formData.email}
 										onChange={handleChange}
+										required
 									/>
 								</Field>
 							</FieldGroup>
+							<FieldGroup>
+								<Field>
+									<Label>Phone Number</Label>
+									<Input
+										id="phone.number"
+										name="phone.number"
+										pattern="\d{10}"
+										value={formData.phone.number}
+										onChange={handleChange}
+										required
+									/>
+								</Field>
+							</FieldGroup>
+						</Fieldset>
+					</>
+				)}
+
+				{step === 2 && (
+					<>
+						<Fieldset>
+							<Legend className="text-lg font-bold mb-4">
+								Now add your personal details.
+							</Legend>
 							<FieldGroup>
 								<Field>
 									<Headless.Fieldset className="w-full">
@@ -296,8 +321,8 @@ const VerificationForm = ({
 										</Headless.Legend>
 										<Headless.RadioGroup
 											name="accountType"
-											defaultValue={""}
-											className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4"
+											defaultValue={formData.accountType}
+											className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-4"
 											onChange={(accountType: "individual" | "business") =>
 												setFormData({
 													...formData,
@@ -310,7 +335,7 @@ const VerificationForm = ({
 												className={clsx([
 													"flex grow justify-between items-center gap-2",
 													"ring-1 ring-inset ring-zinc-950/10 hover:ring-zinc-950/20 dark:ring-white/10 dark:hover:ring-white/20 rounded-lg px-4 py-4",
-													"before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow-none",
+													// "before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow-none",
 													"dark:before:hidden",
 													"bg-transparent dark:bg-white/5",
 													formData.accountType === "individual" &&
@@ -321,7 +346,14 @@ const VerificationForm = ({
 													<Headless.Label className="select-none text-base/6 sm:text-sm/6 font-medium">
 														Individual
 													</Headless.Label>
-													<Headless.Radio value="individual" />
+													<Radio
+														value="individual"
+														color={
+															formData.accountType === "individual"
+																? "blue"
+																: "zinc"
+														}
+													/>
 												</Headless.Field>
 											</Headless.RadioGroup.Option>
 
@@ -330,7 +362,7 @@ const VerificationForm = ({
 												className={clsx([
 													"flex grow justify-between items-center gap-2",
 													"ring-1 ring-inset ring-zinc-950/10 hover:ring-zinc-950/20 dark:ring-white/10 dark:hover:ring-white/20 rounded-lg px-4 py-4",
-													"before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow-none",
+													// "before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow-none",
 													"dark:before:hidden",
 													"bg-transparent dark:bg-white/5",
 													formData.accountType === "business" &&
@@ -341,21 +373,20 @@ const VerificationForm = ({
 													<Headless.Label className="select-none text-base/6 sm:text-sm/6 font-medium">
 														Business
 													</Headless.Label>
-													<Headless.Radio value="business" />
+													<Radio
+														value="business"
+														color={
+															formData.accountType === "business"
+																? "blue"
+																: "zinc"
+														}
+													/>
 												</Headless.Field>
 											</Headless.RadioGroup.Option>
 										</Headless.RadioGroup>
 									</Headless.Fieldset>
 								</Field>
 							</FieldGroup>
-						</Fieldset>
-					</>
-				)}
-
-				{step === 2 && (
-					<>
-						<Fieldset>
-							<Legend>Step 2: Birth Date and Phone Number</Legend>
 							<FieldGroup>
 								<Field>
 									<Label htmlFor="birthDate">Birth Date</Label>
@@ -365,16 +396,17 @@ const VerificationForm = ({
 										name="birthDate"
 										value={formData.birthDate}
 										onChange={handleChange}
+										required
 									/>
 								</Field>
 							</FieldGroup>
 							<FieldGroup>
 								<Field>
-									<Label>Phone Number</Label>
+									<Label htmlFor="governmentID.ssn.full">Full SSN</Label>
 									<Input
-										id="phone.number"
-										name="phone.number"
-										value={formData.phone.number}
+										id="governmentID.ssn.full"
+										name="governmentID.ssn.full"
+										value={formData.governmentID.ssn.full}
 										onChange={handleChange}
 									/>
 								</Field>
@@ -386,10 +418,10 @@ const VerificationForm = ({
 				{step === 3 && (
 					<>
 						<Fieldset>
-							<Legend>Step 3: Address</Legend>
+							<Legend>Last thing! Add your address.</Legend>
 							<FieldGroup>
 								<Field>
-									<Label htmlFor="address.addressLine1">Address Line 1</Label>
+									<Label htmlFor="address.addressLine1">Street Address</Label>
 									<Input
 										id="address.addressLine1"
 										name="address.addressLine1"
@@ -398,7 +430,7 @@ const VerificationForm = ({
 									/>
 								</Field>
 								<Field>
-									<Label htmlFor="address.addressLine2">Address Line 2</Label>
+									<Label htmlFor="address.addressLine2">Apt, Suite, etc.</Label>
 									<Input
 										id="address.addressLine2"
 										name="address.addressLine2"
@@ -417,7 +449,7 @@ const VerificationForm = ({
 										onChange={handleChange}
 									/>
 								</Field>
-								<div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-4">
+								<div className="grid gap-8 grid-cols-2 sm:gap-4">
 									<Field>
 										<Label htmlFor="address.stateOrProvince">State</Label>
 										<Input
@@ -586,7 +618,7 @@ export function Verification({
 
 	return (
 		<div className="h-full">
-			<div className="max-w-lg mx-auto ring-1 ring-gray-200 rounded-lg p-4">
+			<div className="max-w-lg mx-auto sm:ring-1 ring-gray-200 rounded-lg sm:p-4">
 				<VerificationForm full_name={full_name} email={email} />
 			</div>
 

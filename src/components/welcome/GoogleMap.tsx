@@ -202,7 +202,7 @@ const AddressAutocomplete = ({
 	};
 
 	return (
-		<div className="space-y-4">
+		<div className="">
 			<form
 				autoComplete="off"
 				action={async (formData) => {
@@ -391,12 +391,10 @@ const App = ({
 
 	return (
 		<APIProvider apiKey={GOOGLE_MAPS_API_KEY || ""}>
-			<div
-				className={`p-4 animate__animated animate__fadeIn ${animationClass}`}
-			>
-				<Heading>Property address</Heading>
-				<Subheading className="mb-6">
-					Get started with entering your property address
+			<div className={`animate__animated animate__fadeIn ${animationClass}`}>
+				<Heading>Add new property</Heading>
+				<Subheading className="mb-6 mt-1">
+					Get started by entering your property address
 				</Subheading>
 				<AddressAutocomplete
 					currentProperty={currentProperty}

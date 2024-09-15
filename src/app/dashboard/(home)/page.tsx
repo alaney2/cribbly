@@ -51,7 +51,6 @@ export default async function CurrentProperty({
 	}
 
 	const result = await getNameAndEmail();
-	console.log(result);
 	const full_name = result?.full_name;
 	const email = result?.email;
 

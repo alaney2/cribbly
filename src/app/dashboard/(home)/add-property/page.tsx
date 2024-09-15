@@ -5,7 +5,6 @@ export default function AddProperty() {
 	return (
 		<>
 			<div className="flex justify-center">
-				{/* <MapBox /> */}
 				<GoogleMap />
 			</div>
 		</>
