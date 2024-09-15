@@ -2,8 +2,8 @@
 import { IconBolt, IconLock } from "@tabler/icons-react";
 import { Button } from "@/components/catalyst/button";
 import { motion } from "framer-motion";
-import { createMoovAccount } from "@/utils/moov/actions";
-import { loadMoov, type Drops } from "@moovio/moov-js";
+import { createMoovAccount, createMoovToken } from "@/utils/moov/actions";
+import { loadMoov, TermsOfServiceToken, type Drops } from "@moovio/moov-js";
 import { useState } from "react";
 import { Input } from "@/components/catalyst/input";
 import {
@@ -33,6 +33,7 @@ export const VerificationForm = ({
 	const [step, setStep] = useState(0);
 	const totalSteps = 3; // Total number of steps (0 to 3)
 	const [formData, setFormData] = useState({
+		tosToken: "",
 		address: {
 			addressLine1: "",
 			addressLine2: "",
@@ -160,12 +161,35 @@ export const VerificationForm = ({
 		}
 	};
 
-	const handleSubmit = (e: { preventDefault: () => void }) => {
+	const handleSubmit = async (e: { preventDefault: () => void }) => {
 		e.preventDefault();
-		if (validateStep()) {
-			// Handle form submission logic here
-			console.log("Form data submitted:", formData);
-		}
+		const token = await createMoovToken();
+		if (!token) return;
+		const moovjs = await loadMoov(token);
+		await createMoovAccount(formData);
+		// try {
+		// 	const response = await fetch("/api/moov/create_moov_account", {
+		// 		method: "POST",
+		// 		headers: {
+		// 			"Content-Type": "application/json",
+		// 		},
+		// 		body: JSON.stringify(formData),
+		// 	});
+
+		// 	if (!response.ok) {
+		// 		const errorData = await response.json();
+		// 		console.error("Error creating Moov account:", errorData);
+		// 		// Handle the error as needed (e.g., display a message to the user)
+		// 		return;
+		// 	}
+
+		// 	const account = await response.json();
+		// 	console.log("Moov account created:", account);
+		// 	// Proceed with the account data (e.g., redirect the user or update the UI)
+		// } catch (err) {
+		// 	console.error("Error submitting form:", err);
+		// 	// Handle the error as needed
+		// }
 	};
 
 	const validateSSN = (value: string) => {
@@ -235,6 +259,7 @@ export const VerificationForm = ({
 	return (
 		<form
 			onSubmit={handleSubmit}
+			// action={createMoovAccount}
 			className="flex flex-col min-h-[550px] w-full max-w-lg mx-auto sm:ring-1 ring-gray-200 rounded-lg sm:p-4"
 		>
 			<div className="w-full h-1.5 bg-gray-200 dark:bg-zinc-700 sm:rounded-full absolute top-0 left-0 sm:relative sm:mb-4 flex">
@@ -600,14 +625,16 @@ export const VerificationForm = ({
 
 											<Headless.RadioGroup.Option
 												value="business"
+												disabled
 												className={clsx([
 													"flex grow justify-between items-center gap-2",
-													"ring-1 ring-inset ring-zinc-950/10 hover:ring-zinc-950/20 dark:ring-white/10 dark:hover:ring-white/20 rounded-lg px-4 py-4",
+													"ring-1 ring-inset ring-zinc-950/10 hover:ring-zinc-950/20 dark:ring-white/10 dark:hover:ring-white/20 disabled:hover:ring-zinc-950/10 dark:disabled:hover:ring-white/10 rounded-lg px-4 py-4",
 													// "before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow-none",
 													"dark:before:hidden",
 													"bg-transparent dark:bg-white/5",
 													formData.accountType === "business" &&
 														"ring-2 hover:ring-blue-500 dark:hover:ring-blue-500 ring-blue-500 dark:ring-blue-500",
+													"opacity-50",
 												])}
 											>
 												<Headless.Field className="flex grow justify-between items-center gap-x-3">
@@ -897,7 +924,23 @@ export const VerificationForm = ({
 							</TextLink>
 							.
 						</Text>
-						<Button className="w-full" color="blue" onClick={() => setStep(1)}>
+						<Button
+							className="w-full"
+							color="blue"
+							onClick={async () => {
+								const token = await createMoovToken();
+								if (!token) return;
+								const moovjs = await loadMoov(token);
+								if (!moovjs) return;
+								const tosToken = await moovjs.accounts.getTermsOfServiceToken();
+								setFormData({
+									...formData,
+									tosToken: tosToken.token,
+								});
+								console.log("Terms of Service token:", tosToken.token);
+								setStep(1);
+							}}
+						>
 							Let's Start
 						</Button>
 					</div>
@@ -1013,7 +1056,7 @@ export function Verification({
 
 			<Button
 				onClick={async () => {
-					const token = await createMoovAccount();
+					const token = await createMoovToken();
 					console.log(token);
 					if (!token) return;
 					setMoovToken(token);
