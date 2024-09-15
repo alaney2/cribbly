@@ -23,7 +23,7 @@ import { Heading, Subheading } from "@/components/catalyst/heading";
 import moovSvg from "@/images/moov.svg";
 import Image from "next/image";
 
-const VerificationForm = ({
+export const VerificationForm = ({
 	full_name,
 	email,
 }: {
@@ -45,10 +45,9 @@ const VerificationForm = ({
 		birthDate: new Date().toISOString(), // Use ISO date format for simplicity
 		email: email,
 		governmentID: {
-			ssn: {
-				full: "",
-				lastFour: "",
-			},
+			ssn: "",
+			useITIN: false,
+			itin: "",
 		},
 		name: {
 			firstName: full_name?.split(" ")[0],
@@ -59,6 +58,80 @@ const VerificationForm = ({
 			countryCode: "1",
 		},
 	});
+	const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+	// Validation functions for each step
+	const getValidationErrors = () => {
+		const newErrors: { [key: string]: string } = {};
+		if (step === 1) {
+			// Step 1 validations
+			if (!formData.name.firstName?.trim()) {
+				newErrors["name.firstName"] = "First name is required";
+			}
+			if (!formData.name.lastName?.trim()) {
+				newErrors["name.lastName"] = "Last name is required";
+			}
+			if (!formData.email?.trim()) {
+				newErrors["email"] = "Email is required";
+			} else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+				newErrors["email"] = "Email is invalid";
+			}
+			if (!formData.phone.number.trim()) {
+				newErrors["phone.number"] = "Phone number is required";
+			} else if (!/^\d{3}-\d{3}-\d{4}$/.test(formData.phone.number)) {
+				newErrors["phone.number"] = "Phone number is invalid";
+			}
+		} else if (step === 2) {
+			// Step 2 validations
+			if (!formData.birthDate) {
+				newErrors["birthDate"] = "Birth date is required";
+			} else {
+				const birthDate = new Date(formData.birthDate);
+				const today = new Date();
+				const age = today.getFullYear() - birthDate.getFullYear();
+				if (age < 18) {
+					newErrors["birthDate"] = "You must be at least 18 years old";
+				}
+			}
+			const govID = formData.governmentID.useITIN
+				? formData.governmentID.itin
+				: formData.governmentID.ssn;
+			if (!govID.trim()) {
+				newErrors["governmentID"] = "This field is required";
+			} else if (!/^\d{3}-\d{2}-\d{4}$/.test(govID)) {
+				newErrors["governmentID"] = "Number is invalid";
+			}
+		} else if (step === 3) {
+			// Step 3 validations
+			if (!formData.address.addressLine1.trim()) {
+				newErrors["address.addressLine1"] = "Street address is required";
+			}
+			if (!formData.address.city.trim()) {
+				newErrors["address.city"] = "City is required";
+			}
+			if (!formData.address.stateOrProvince.trim()) {
+				newErrors["address.stateOrProvince"] = "State is required";
+			}
+			if (!formData.address.zipCode.trim()) {
+				newErrors["address.zipCode"] = "Zip code is required";
+			} else if (!/^\d{5}$/.test(formData.address.zipCode)) {
+				newErrors["address.zipCode"] = "Zip code is invalid";
+			}
+		}
+		return newErrors;
+	};
+
+	const validateStep = () => {
+		const newErrors = getValidationErrors();
+		setErrors(newErrors);
+		return Object.keys(newErrors).length === 0;
+	};
+
+	const handleNext = () => {
+		if (validateStep()) {
+			setStep(step + 1);
+		}
+	};
 
 	const handleChange = (e: { target: { name: any; value: any } }) => {
 		const { name, value } = e.target;
@@ -72,16 +145,117 @@ const VerificationForm = ({
 			temp[keys[keys.length - 1]] = value;
 			return data;
 		});
+
+		if (value.trim() === "") {
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: "This field is required",
+			}));
+		} else {
+			setErrors((prevErrors) => {
+				const newErrors = { ...prevErrors };
+				delete newErrors[name];
+				return newErrors;
+			});
+		}
 	};
 
 	const handleSubmit = (e: { preventDefault: () => void }) => {
 		e.preventDefault();
-		// Handle form submission logic here
-		console.log("Form data submitted:", formData);
+		if (validateStep()) {
+			// Handle form submission logic here
+			console.log("Form data submitted:", formData);
+		}
+	};
+
+	const validateSSN = (value: string) => {
+		const cleanedValue = value.replace(/\D/g, "");
+		const blacklist = ["078051120", "219099999", "457555462"];
+
+		// Check if the length is exactly 9 digits
+		if (cleanedValue.length !== 9) {
+			return "SSN/ITIN must be exactly 9 digits";
+		}
+
+		// Check against the blacklist
+		if (blacklist.includes(cleanedValue)) {
+			return "Invalid SSN/ITIN";
+		}
+
+		// Validate against the SSN pattern
+		const ssnRegex = /^(?!666|000|9\d{2})\d{3}(?!00)\d{2}(?!0{4})\d{4}$/;
+		if (!ssnRegex.test(cleanedValue)) {
+			return "Invalid SSN/ITIN format";
+		}
+
+		return "";
+	};
+
+	const today = new Date();
+	const maxDate = new Date(
+		today.getFullYear() - 18,
+		today.getMonth(),
+		today.getDate(),
+	);
+
+	const validateBirthDate = (value: string) => {
+		if (!value) {
+			return "Birth date is required";
+		}
+
+		const selectedDate = new Date(value);
+		const today = new Date();
+
+		// Check if the date is valid
+		if (Number.isNaN(selectedDate.getTime())) {
+			return "Invalid date format";
+		}
+
+		// Check if the date is before January 1, 1900
+		const minDate = new Date("1900-01-01");
+		if (selectedDate < minDate) {
+			return "Date cannot be before January 1, 1900";
+		}
+
+		// Check if the user is at least 18 years old
+		if (selectedDate > maxDate) {
+			return "You must be at least 18 years old";
+		}
+
+		// All validations passed
+		return "";
+	};
+
+	const handleProgressBarClick = (clickedStep: number) => {
+		if (clickedStep < step) {
+			setStep(clickedStep);
+		}
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="flex flex-col min-h-[550px]">
+		<form
+			onSubmit={handleSubmit}
+			className="flex flex-col min-h-[550px] w-full max-w-lg mx-auto sm:ring-1 ring-gray-200 rounded-lg sm:p-4"
+		>
+			<div className="w-full h-1.5 bg-gray-200 dark:bg-zinc-700 sm:rounded-full absolute top-0 left-0 sm:relative sm:mb-4 flex">
+				{[0, 1, 2, 3].map((i) => (
+					<div
+						key={i}
+						className={`h-full transition-all duration-300 cursor-default ${
+							i > 0 ? "ml-1" : ""
+						} ${i <= step ? "bg-blue-500" : "bg-gray-200 dark:bg-zinc-700"}`}
+						style={{ width: `${100 / (totalSteps + 1)}%` }}
+						onClick={() => handleProgressBarClick(i)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" || e.key === " ") {
+								handleProgressBarClick(i);
+							}
+						}}
+						role="button"
+						tabIndex={i < step ? 0 : -1}
+					/>
+				))}
+			</div>
 			<div className="grow h-full sm:mt-4">
 				{step === 0 && (
 					<div className="h-full flex flex-col gap-4">
@@ -262,6 +436,19 @@ const VerificationForm = ({
 											name="name.firstName"
 											value={formData.name.firstName}
 											onChange={handleChange}
+											invalid={!!errors["name.firstName"]}
+											onBlur={(e) => {
+												const { value } = e.target;
+												if (value.trim() === "") {
+													setErrors({
+														...errors,
+														"name.firstName": "First name is required",
+													});
+												} else {
+													const { "name.firstName": _, ...rest } = errors;
+													setErrors(rest);
+												}
+											}}
 											required
 										/>
 									</Field>
@@ -272,6 +459,19 @@ const VerificationForm = ({
 											name="name.lastName"
 											value={formData.name.lastName}
 											onChange={handleChange}
+											invalid={!!errors["name.lastName"]}
+											onBlur={(e) => {
+												const { value } = e.target;
+												if (value.trim() === "") {
+													setErrors({
+														...errors,
+														"name.lastName": "Last name is required",
+													});
+												} else {
+													const { "name.lastName": _, ...rest } = errors;
+													setErrors(rest);
+												}
+											}}
 											required
 										/>
 									</Field>
@@ -286,19 +486,60 @@ const VerificationForm = ({
 										type="email"
 										value={formData.email}
 										onChange={handleChange}
+										readOnly
+										invalid={!!errors.email}
 										required
 									/>
 								</Field>
 							</FieldGroup>
 							<FieldGroup>
 								<Field>
-									<Label>Phone Number</Label>
+									<Label>Phone Number (US)</Label>
 									<Input
 										id="phone.number"
 										name="phone.number"
-										pattern="\d{10}"
+										type="tel"
+										pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
 										value={formData.phone.number}
-										onChange={handleChange}
+										onChange={(e) => {
+											const { value } = e.target;
+											// Remove all non-digit characters
+											const cleanedValue = value.replace(/\D/g, "");
+											// Format the number
+											let formattedValue = "";
+											if (cleanedValue.length > 0) {
+												formattedValue = cleanedValue.slice(0, 3);
+											}
+											if (cleanedValue.length >= 4) {
+												formattedValue += `-${cleanedValue.slice(3, 6)}`;
+											}
+											if (cleanedValue.length >= 7) {
+												formattedValue += `-${cleanedValue.slice(6, 10)}`;
+											}
+
+											setFormData({
+												...formData,
+												phone: {
+													...formData.phone,
+													number: formattedValue,
+												},
+											});
+										}}
+										onBlur={(e) => {
+											const { value } = e.target;
+											const cleanedValue = value.replace(/\D/g, "");
+											if (cleanedValue.length !== 10) {
+												setErrors({
+													...errors,
+													"phone.number":
+														"Phone number must be exactly 10 digits",
+												});
+											} else {
+												const { "phone.number": _, ...rest } = errors;
+												setErrors(rest);
+											}
+										}}
+										invalid={!!errors["phone.number"]}
 										required
 									/>
 								</Field>
@@ -396,18 +637,125 @@ const VerificationForm = ({
 										name="birthDate"
 										value={formData.birthDate}
 										onChange={handleChange}
+										min="1900-01-01"
+										max={maxDate.toISOString().split("T")[0]}
+										invalid={!!errors["birthDate"]}
+										onBlur={(e) => {
+											const { value } = e.target;
+											const error = validateBirthDate(value);
+											if (error) {
+												setErrors((prevErrors) => ({
+													...prevErrors,
+													birthDate: error,
+												}));
+											}
+										}}
 										required
 									/>
 								</Field>
 							</FieldGroup>
 							<FieldGroup>
 								<Field>
-									<Label htmlFor="governmentID.ssn.full">Full SSN</Label>
+									<Label className="flex justify-between">
+										<span>
+											{formData.governmentID.useITIN ? "Full ITIN" : "Full SSN"}
+										</span>
+										<span
+											onClick={() =>
+												setFormData({
+													...formData,
+													governmentID: {
+														...formData.governmentID,
+														useITIN: !formData.governmentID.useITIN,
+													},
+												})
+											}
+											onKeyDown={(e) => {
+												if (e.key === "Enter" || e.key === " ") {
+													setFormData({
+														...formData,
+														governmentID: {
+															...formData.governmentID,
+															useITIN: !formData.governmentID.useITIN,
+														},
+													});
+												}
+											}}
+											role="button"
+											tabIndex={0}
+										>
+											{formData.governmentID.useITIN ? "Use SSN" : "Use ITIN"}
+										</span>
+									</Label>
 									<Input
-										id="governmentID.ssn.full"
-										name="governmentID.ssn.full"
-										value={formData.governmentID.ssn.full}
-										onChange={handleChange}
+										id={
+											formData.governmentID.useITIN
+												? "governmentID.itin"
+												: "governmentID.ssn"
+										}
+										name={
+											formData.governmentID.useITIN
+												? "governmentID.itin"
+												: "governmentID.ssn"
+										}
+										value={
+											formData.governmentID.useITIN
+												? formData.governmentID.itin
+												: formData.governmentID.ssn
+										}
+										pattern="/^(?!666|000|9\d{2})\d{3}[- ]{0,1}(?!00)\d{2}[- ]{0,1}(?!0{4})\d{4}$/"
+										// onChange={handleChange}
+										onChange={(e) => {
+											const { value } = e.target;
+											// Remove all non-digit characters
+											const cleanedValue = value.replace(/\D/g, "");
+											// Format the number
+											let formattedValue = "";
+											if (cleanedValue.length > 0) {
+												formattedValue = cleanedValue.slice(0, 3);
+											}
+											if (cleanedValue.length >= 4) {
+												formattedValue += `-${cleanedValue.slice(3, 5)}`;
+											}
+											if (cleanedValue.length >= 6) {
+												formattedValue += `-${cleanedValue.slice(5, 9)}`;
+											}
+											if (formData.governmentID.useITIN) {
+												setFormData({
+													...formData,
+													governmentID: {
+														...formData.governmentID,
+														itin: formattedValue,
+													},
+												});
+											} else {
+												setFormData({
+													...formData,
+													governmentID: {
+														...formData.governmentID,
+														ssn: formattedValue,
+													},
+												});
+											}
+										}}
+										onBlur={(e) => {
+											const { value } = e.target;
+											const error = validateSSN(value);
+											if (error) {
+												setErrors((prevErrors) => ({
+													...prevErrors,
+													governmentID: error,
+												}));
+											} else {
+												setErrors((prevErrors) => {
+													const { governmentID: _, ...rest } = prevErrors;
+													return rest;
+												});
+											}
+										}}
+										placeholder="000-00-0000"
+										invalid={!!errors["governmentID"]}
+										required
 									/>
 								</Field>
 							</FieldGroup>
@@ -418,7 +766,9 @@ const VerificationForm = ({
 				{step === 3 && (
 					<>
 						<Fieldset>
-							<Legend>Last thing! Add your address.</Legend>
+							<Legend className="text-lg font-bold mb-4">
+								Last thing! Add your address.
+							</Legend>
 							<FieldGroup>
 								<Field>
 									<Label htmlFor="address.addressLine1">Street Address</Label>
@@ -427,6 +777,20 @@ const VerificationForm = ({
 										name="address.addressLine1"
 										value={formData.address.addressLine1}
 										onChange={handleChange}
+										invalid={!!errors["address.addressLine1"]}
+										onBlur={(e) => {
+											const { value } = e.target;
+											if (value.trim() === "") {
+												setErrors({
+													...errors,
+													"address.addressLine1": "Street address is required",
+												});
+											} else {
+												const { "address.addressLine1": _, ...rest } = errors;
+												setErrors(rest);
+											}
+										}}
+										required
 									/>
 								</Field>
 								<Field>
@@ -447,6 +811,20 @@ const VerificationForm = ({
 										name="address.city"
 										value={formData.address.city}
 										onChange={handleChange}
+										invalid={!!errors["address.city"]}
+										onBlur={(e) => {
+											const { value } = e.target;
+											if (value.trim() === "") {
+												setErrors({
+													...errors,
+													"address.city": "City is required",
+												});
+											} else {
+												const { "address.city": _, ...rest } = errors;
+												setErrors(rest);
+											}
+										}}
+										required
 									/>
 								</Field>
 								<div className="grid gap-8 grid-cols-2 sm:gap-4">
@@ -457,6 +835,21 @@ const VerificationForm = ({
 											name="address.stateOrProvince"
 											value={formData.address.stateOrProvince}
 											onChange={handleChange}
+											invalid={!!errors["address.stateOrProvince"]}
+											onBlur={(e) => {
+												const { value } = e.target;
+												if (value.trim() === "") {
+													setErrors({
+														...errors,
+														"address.stateOrProvince": "State is required",
+													});
+												} else {
+													const { "address.stateOrProvince": _, ...rest } =
+														errors;
+													setErrors(rest);
+												}
+											}}
+											required
 										/>
 									</Field>
 									<Field>
@@ -466,37 +859,23 @@ const VerificationForm = ({
 											name="address.zipCode"
 											value={formData.address.zipCode}
 											onChange={handleChange}
+											invalid={!!errors["address.zipCode"]}
+											onBlur={(e) => {
+												const { value } = e.target;
+												if (value.trim() === "") {
+													setErrors({
+														...errors,
+														"address.zipCode": "Zip code is required",
+													});
+												} else {
+													const { "address.zipCode": _, ...rest } = errors;
+													setErrors(rest);
+												}
+											}}
+											required
 										/>
 									</Field>
 								</div>
-								{/* <Field>
-								<Label htmlFor="address.country">Country</Label>
-								<Input
-									id="address.country"
-									name="address.country"
-									value={formData.address.country}
-									onChange={handleChange}
-								/>
-							</Field> */}
-							</FieldGroup>
-						</Fieldset>
-					</>
-				)}
-
-				{step === 4 && (
-					<>
-						<Fieldset>
-							<Legend>Step 4: Government ID</Legend>
-							<FieldGroup>
-								<Field>
-									<Label htmlFor="governmentID.ssn.full">SSN Full</Label>
-									<Input
-										id="governmentID.ssn.full"
-										name="governmentID.ssn.full"
-										value={formData.governmentID.ssn.full}
-										onChange={handleChange}
-									/>
-								</Field>
 							</FieldGroup>
 						</Fieldset>
 					</>
@@ -523,7 +902,7 @@ const VerificationForm = ({
 						</Button>
 					</div>
 				)}
-				{step > 0 && (
+				{/* {step > 0 && (
 					<Button
 						type="button"
 						onClick={() => setStep(step - 1)}
@@ -532,18 +911,28 @@ const VerificationForm = ({
 					>
 						Previous
 					</Button>
-				)}
+				)} */}
 				{step !== 0 && step < totalSteps && (
 					<Button
 						type="button"
 						color="blue"
-						onClick={() => setStep(step + 1)}
-						className="px-8"
+						onClick={handleNext}
+						className="w-full"
+						disabled={Object.keys(getValidationErrors()).length > 0}
 					>
 						Next
 					</Button>
 				)}
-				{step === 4 && <button type="submit">Submit</button>}
+				{step === totalSteps && (
+					<Button
+						type="submit"
+						color="blue"
+						className="w-full"
+						disabled={Object.keys(getValidationErrors()).length > 0}
+					>
+						Submit
+					</Button>
+				)}
 			</div>
 		</form>
 	);
@@ -617,8 +1006,8 @@ export function Verification({
 	};
 
 	return (
-		<div className="h-full">
-			<div className="max-w-lg mx-auto sm:ring-1 ring-gray-200 rounded-lg sm:p-4">
+		<div className="h-full max-w-lg">
+			<div className="max-w-lg mx-auto">
 				<VerificationForm full_name={full_name} email={email} />
 			</div>
 

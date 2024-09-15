@@ -15,6 +15,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import GoogleMap from "@/components/welcome/GoogleMap";
 import useSWR from "swr";
 import { createClient } from "@/utils/supabase/client";
+import {
+	Verification,
+	VerificationForm,
+} from "@/components/Dashboard/Verification";
+
 export default function WelcomeLayout({
 	user,
 	subscription,
@@ -81,9 +86,9 @@ export default function WelcomeLayout({
 	const steps = [
 		{ name: "Step 0" },
 		{ name: "Step 1" },
-		{ name: "Step 2" },
-		{ name: "Step 3" },
-		{ name: "Step 4" },
+		// { name: "Step 2" },
+		// { name: "Step 3" },
+		// { name: "Step 4" },
 		// { name: "Step 5" },
 		// { name: "Step 6" },
 	];
@@ -104,18 +109,22 @@ export default function WelcomeLayout({
 				return <Step0 buttonOnClick={() => setCurrentStep(currentStep + 1)} />;
 			case 1:
 				return (
-					<InputName
-						fullName={fullName}
-						setFullName={setFullName}
-						buttonOnClick={() => setCurrentStep(currentStep + 1)}
+					<VerificationForm
+						full_name={""}
+						email={user.email}
+						// buttonOnClick={() => setCurrentStep(currentStep + 1)}
 					/>
 				);
+			// case 1:
+			// 	return (
+			// 		<InputName
+			// 			fullName={fullName}
+			// 			setFullName={setFullName}
+			// 			buttonOnClick={() => setCurrentStep(currentStep + 1)}
+			// 		/>
+			// 	);
 			case 2:
 				return (
-					// <WelcomeMap
-					//   buttonOnClick={() => setCurrentStep(currentStep + 1)}
-					//   setPropertyId={setPropertyId}
-					// />
 					<div className="mt-4 sm:mt-0">
 						<GoogleMap
 							currentProperty={currentProperty}
@@ -201,13 +210,13 @@ export default function WelcomeLayout({
 
 	return (
 		<>
-			<div className="flex flex-col h-full w-full">
-				<div className="flex-grow flex flex-col items-center justify-center ">
+			<div className="flex flex-col h-full w-full bg-white dark:bg-zinc-900">
+				<div className="flex-grow flex flex-col items-center justify-center p-2">
 					{renderStepContent(currentStep)}
 				</div>
 
 				{/* Nav dots */}
-				<nav
+				{/* <nav
 					className="flex items-center justify-center z-0 py-16"
 					aria-label="Progress"
 				>
@@ -237,7 +246,7 @@ export default function WelcomeLayout({
 							</li>
 						))}
 					</ol>
-				</nav>
+				</nav> */}
 			</div>
 		</>
 	);
