@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import type { Metadata, ResolvingMetadata } from "next";
 import { PropertyBreadcrumbs } from "@/components/Dashboard/PropertyBreadcrumbs";
 import { AppLayout } from "@/components/AppLayout";
+import { updateCurrentProperty } from "@/utils/supabase/actions";
 
 type Props = {
 	params: { property_id: string };
@@ -29,6 +30,9 @@ export async function generateMetadata(
 		.eq("id", currentPropertyId);
 
 	if (error || propertyData.length === 0) {
+		if (currentPropertyId) {
+			await updateCurrentProperty("");
+		}
 		return {
 			title: "Home",
 		};

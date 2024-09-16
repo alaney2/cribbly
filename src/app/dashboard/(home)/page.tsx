@@ -8,8 +8,10 @@ import {
 	getTasks,
 	getCurrentProperty,
 	getNameAndEmail,
+	updateCurrentProperty,
 } from "@/utils/supabase/actions";
 import { Heading } from "@/components/catalyst/heading";
+import GoogleMap from "@/components/welcome/GoogleMap";
 // import { getVerificationInfo } from "@/utils/supabase/actions";
 // import { Verification } from "@/components/Dashboard/Verification";
 
@@ -25,6 +27,15 @@ export default async function CurrentProperty({
 	if (!user) return;
 
 	const currentPropertyId = user.user_metadata.currentPropertyId;
+	if (!currentPropertyId) {
+		return (
+			<>
+				<div className="flex justify-center">
+					<GoogleMap />
+				</div>
+			</>
+		);
+	}
 
 	const tasks = await getTasks();
 
@@ -34,8 +45,7 @@ export default async function CurrentProperty({
 		.eq("id", currentPropertyId);
 
 	if (error || propertyData.length === 0) {
-		// redirect("/dashboard");
-		return <div>No property found</div>;
+		return;
 	}
 
 	let showBankText = false;

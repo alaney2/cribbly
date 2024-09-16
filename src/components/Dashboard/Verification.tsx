@@ -928,11 +928,17 @@ export const VerificationForm = ({
 					<div className="flex flex-col gap-4">
 						<Text className="mx-2 sm:mx-12 text-sm">
 							By clicking "Let's Start", you agree to the terms of Moov's{" "}
-							<TextLink href="https://moov.io/legal/privacy-policy/">
+							<TextLink
+								href="https://moov.io/legal/privacy-policy/"
+								target="_blank"
+							>
 								Privacy Policy
 							</TextLink>{" "}
 							and{" "}
-							<TextLink href="https://moov.io/legal/platform-agreement/">
+							<TextLink
+								href="https://moov.io/legal/platform-agreement/"
+								target="_blank"
+							>
 								Platform Agreement
 							</TextLink>
 							.

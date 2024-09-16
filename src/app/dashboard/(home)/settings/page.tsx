@@ -7,6 +7,10 @@ export default async function CurrentPropertySettings() {
 	const supabase = createClient();
 	const currentPropertyId = await getCurrentProperty();
 
+	if (!currentPropertyId) {
+		return;
+	}
+
 	const { data: property_rent, error: rentError } = await supabase
 		.from("property_rents")
 		.select("*")

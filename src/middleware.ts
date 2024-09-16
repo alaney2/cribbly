@@ -41,13 +41,17 @@ export async function middleware(request: NextRequest) {
 			) {
 				return NextResponse.redirect(new URL("/dashboard", request.url));
 			}
-			// const { data: propertyData, error } = await supabase
-			// 	.from("properties")
-			// 	.select()
-			// 	.eq("user_id", user.id);
-			// if (!propertyData || propertyData.length === 0) {
-			// 	return NextResponse.next();
-			// }
+			const { data: propertyData, error } = await supabase
+				.from("properties")
+				.select()
+				.eq("user_id", user.id);
+			if (!propertyData || propertyData.length === 0) {
+				if (pathname !== "/dashboard") {
+					return NextResponse.redirect(new URL("/dashboard", request.url));
+				}
+				return NextResponse.next();
+			}
+
 			// if (user.user_metadata.currentPropertyId) {
 			// 	const propertyIds = propertyData.map((property) => property.id);
 			// 	if (!propertyIds.includes(user.user_metadata.currentPropertyId)) {

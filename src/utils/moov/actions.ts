@@ -27,6 +27,9 @@ export async function createMoovAccount(formData: any) {
 		secretKey: process.env.MOOV_SECRET_KEY as string,
 		domain: process.env.NEXT_PUBLIC_SITE_URL as string,
 	});
+
+	const useItin = formData["governmentID"]["useITIN"];
+
 	try {
 		const [year, month, day] = formData["birthDate"].split("-");
 		const accountPayload = {
@@ -49,10 +52,18 @@ export async function createMoovAccount(formData: any) {
 					birthDateProvided: true,
 					email: formData["email"],
 					governmentID: {
-						ssn: {
-							full: formData["governmentID"]["ssn"].replace(/-/g, ""),
-							lastFour: formData["governmentID"]["ssn"]?.slice(-4),
-						},
+						ssn: useItin
+							? null
+							: {
+									full: formData["governmentID"]["ssn"].replace(/-/g, ""),
+									lastFour: formData["governmentID"]["ssn"]?.slice(-4),
+								},
+						itin: useItin
+							? {
+									full: formData["governmentID"]["itin"].replace(/-/g, ""),
+									lastFour: formData["governmentID"]["itin"]?.slice(-4),
+								}
+							: null,
 					},
 					governmentIDProvided: true,
 					name: {

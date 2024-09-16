@@ -1,3 +1,4 @@
+"use client";
 import { useState, useRef, useEffect, type KeyboardEvent } from "react";
 import { APIProvider, useMapsLibrary } from "@vis.gl/react-google-maps";
 import { Heading, Subheading } from "@/components/catalyst/heading";
@@ -13,8 +14,6 @@ import {
 import { Button } from "@/components/catalyst/button";
 import { Divider } from "@/components/catalyst/divider";
 import "animate.css";
-import { createClient } from "@/utils/supabase/client";
-import useSWR, { useSWRConfig } from "swr";
 import { toast } from "sonner";
 import { addPropertyNew } from "@/utils/supabase/actions";
 import { useRouter } from "next/navigation";
@@ -138,7 +137,7 @@ const AddressAutocomplete = ({
 		}
 	};
 
-	const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+	const handleKeyDown = async (event: KeyboardEvent<HTMLInputElement>) => {
 		if (event.key === "ArrowDown") {
 			event.preventDefault();
 			setSelectedIndex((prevIndex) =>
@@ -151,46 +150,50 @@ const AddressAutocomplete = ({
 			setShowSuggestions(true);
 		} else if (event.key === "Enter" && selectedIndex !== -1) {
 			event.preventDefault();
-			handleSuggestionClick(suggestions[selectedIndex]);
+			await handleSuggestionClick(suggestions[selectedIndex]);
 		} else if (event.key === "Escape") {
 			setShowSuggestions(false);
 		}
 	};
 
-	const handleSuggestionClick = (suggestion: Suggestion) => {
+	const handleSuggestionClick = async (suggestion: Suggestion) => {
 		if (!places) return;
 
-		const placesService = new places.PlacesService(
-			document.createElement("div"),
-		);
-		placesService.getDetails(
-			{ placeId: suggestion.place_id },
-			(
-				place: google.maps.places.PlaceResult | null,
-				status: google.maps.places.PlacesServiceStatus,
-			) => {
-				if (
-					status === google.maps.places.PlacesServiceStatus.OK &&
-					place &&
-					place.address_components
-				) {
-					const addressComponents = place.address_components;
-					const newAddress: Address = {
-						street: `${getComponent(addressComponents, "street_number")} ${getComponent(addressComponents, "route")}`,
-						apt: "",
-						city: getComponent(addressComponents, "locality"),
-						state: getComponent(
-							addressComponents,
-							"administrative_area_level_1",
-						),
-						zip: getComponent(addressComponents, "postal_code"),
-						country: "United States",
-					};
-					setAddress(newAddress);
-				}
-			},
-		);
-		setSuggestions([]);
+		return new Promise<void>((resolve) => {
+			const placesService = new places.PlacesService(
+				document.createElement("div"),
+			);
+			placesService.getDetails(
+				{ placeId: suggestion.place_id },
+				(
+					place: google.maps.places.PlaceResult | null,
+					status: google.maps.places.PlacesServiceStatus,
+				) => {
+					if (
+						status === google.maps.places.PlacesServiceStatus.OK &&
+						place &&
+						place.address_components
+					) {
+						const addressComponents = place.address_components;
+						const newAddress: Address = {
+							street: `${getComponent(addressComponents, "street_number")} ${getComponent(addressComponents, "route")}`,
+							apt: "",
+							city: getComponent(addressComponents, "locality"),
+							state: getComponent(
+								addressComponents,
+								"administrative_area_level_1",
+							),
+							zip: getComponent(addressComponents, "postal_code"),
+							country: "United States",
+						};
+						setAddress(newAddress);
+					}
+					setSuggestions([]);
+					setShowSuggestions(false);
+					resolve();
+				},
+			);
+		});
 	};
 
 	const getComponent = (
@@ -272,7 +275,9 @@ const AddressAutocomplete = ({
 									{suggestions.map((suggestion, index) => (
 										<React.Fragment key={suggestion.place_id}>
 											<li
-												onClick={() => handleSuggestionClick(suggestion)}
+												onClick={async () => {
+													await handleSuggestionClick(suggestion);
+												}}
 												onKeyDown={(e) => {
 													if (e.key === "Enter" || e.key === " ") {
 														handleSuggestionClick(suggestion);
