@@ -1,5 +1,6 @@
 "use server";
 import { Moov, SCOPES } from "@moovio/node";
+import { createClient } from "@/utils/supabase/server";
 // import { MoovOnboarding } from "@moovio/moov-js";
 
 export async function createMoovToken() {
@@ -77,14 +78,26 @@ export async function createMoovAccount(formData: any) {
 			},
 		};
 
-		// console.log("ACCOUNT PAYLOAD", accountPayload.profile.individual.birthDate);
-		console.log(formData["tosToken"]);
-
 		const account = await moov.accounts.create(accountPayload);
-		console.log(account);
+		if (account.accountID) {
+			const supabase = createClient();
+			const {
+				data: { user },
+				error: userError,
+			} = await supabase.auth.getUser();
+			const { data, error } = await supabase.from("moov_accounts").insert([
+				{
+					user_id: user?.id,
+					account_id: account.accountID,
+					account_type: account.accountType,
+				},
+			]);
+			if (error) {
+				console.error("Error inserting moov account:", error);
+			}
+		}
 		return account;
 	} catch (err: any) {
-		// console.error("Error creating Moov account:", err);
 		if (err.response) {
 			console.error("Response headers:", err.response.headers);
 		}

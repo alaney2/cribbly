@@ -26,14 +26,14 @@ export function Step0({ buttonOnClick }: { buttonOnClick: () => void }) {
 						alt="Cribbly logo"
 					/>
 					<h1
-						className="text-2xl sm:text-5xl select-none tracking-tighter font-semibold mt-4 delay-500 animate__animated animate__fadeIn animate__fast"
-						style={{ animationDelay: "1.1s" }}
+						className="text-2xl sm:text-5xl select-none tracking-tighter font-semibold mt-4 animate__animated animate__fadeIn animate__fast"
+						style={{ animationDelay: "1.0s" }}
 					>
 						Welcome to Cribbly
 					</h1>
 					<Text
 						className="mt-6 select-none animate__animated animate__fadeIn animate__fast"
-						style={{ animationDelay: "1.3s" }}
+						style={{ animationDelay: "1.15s" }}
 					>
 						Cribbly helps you streamline rent collection and property analytics
 						for all your homes.
@@ -42,7 +42,7 @@ export function Step0({ buttonOnClick }: { buttonOnClick: () => void }) {
 						onClick={handleButtonClick}
 						color="blue"
 						className="w-64 sm:w-80 h-12 text-4xl mt-8 py-2 px-4 rounded-lg animate__animated animate__fadeIn animate__fast"
-						style={{ animationDelay: "1.5s" }}
+						style={{ animationDelay: "1.3s" }}
 					>
 						Get Started
 					</Button>

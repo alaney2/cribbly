@@ -10,8 +10,8 @@ import {
 	getNameAndEmail,
 } from "@/utils/supabase/actions";
 import { Heading } from "@/components/catalyst/heading";
-import { getVerificationInfo } from "@/utils/supabase/actions";
-import { Verification } from "@/components/Dashboard/Verification";
+// import { getVerificationInfo } from "@/utils/supabase/actions";
+// import { Verification } from "@/components/Dashboard/Verification";
 
 export default async function CurrentProperty({
 	params,
@@ -34,7 +34,8 @@ export default async function CurrentProperty({
 		.eq("id", currentPropertyId);
 
 	if (error || propertyData.length === 0) {
-		redirect("/dashboard");
+		// redirect("/dashboard");
+		return <div>No property found</div>;
 	}
 
 	let showBankText = false;
@@ -50,21 +51,21 @@ export default async function CurrentProperty({
 		);
 	}
 
-	const result = await getNameAndEmail();
-	const full_name = result?.full_name;
-	const email = result?.email;
+	// const result = await getNameAndEmail();
+	// const full_name = result?.full_name;
+	// const email = result?.email;
 
 	const propertyAddress = `${propertyData[0]?.street_address}, ${propertyData[0]?.city} ${propertyData[0]?.state} ${propertyData[0]?.zip}`;
 
-	const verificationInfo = await getVerificationInfo();
+	// const verificationInfo = await getVerificationInfo();
 
-	if (!verificationInfo) {
-		return (
-			<div className="sm:mt-16">
-				<Verification full_name={full_name} email={email} />
-			</div>
-		);
-	}
+	// if (!verificationInfo) {
+	// 	return (
+	// 		<div className="sm:mt-16">
+	// 			<Verification full_name={full_name} email={email} />
+	// 		</div>
+	// 	);
+	// }
 
 	return (
 		<>

@@ -29,9 +29,9 @@ export async function generateMetadata(
 		.eq("id", currentPropertyId);
 
 	if (error || propertyData.length === 0) {
-		console.log(error);
-		console.log(propertyData);
-		redirect("/dashboard");
+		return {
+			title: "Home",
+		};
 	}
 
 	return {

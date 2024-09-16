@@ -109,11 +109,13 @@ export default function WelcomeLayout({
 				return <Step0 buttonOnClick={() => setCurrentStep(currentStep + 1)} />;
 			case 1:
 				return (
-					<VerificationForm
-						full_name={""}
-						email={user.email}
-						// buttonOnClick={() => setCurrentStep(currentStep + 1)}
-					/>
+					<>
+						<VerificationForm
+							full_name={""}
+							email={user.email}
+							// buttonOnClick={() => setCurrentStep(currentStep + 1)}
+						/>
+					</>
 				);
 			// case 1:
 			// 	return (

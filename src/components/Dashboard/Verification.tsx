@@ -19,6 +19,9 @@ import { Text, Strong, TextLink } from "@/components/catalyst/text";
 import * as Headless from "@headlessui/react";
 import { Radio } from "@/components/catalyst/radio";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
+import { setWelcomeScreen } from "@/utils/supabase/actions";
+import { toast } from "sonner";
 import { Heading, Subheading } from "@/components/catalyst/heading";
 import moovSvg from "@/images/moov.svg";
 import Image from "next/image";
@@ -30,6 +33,7 @@ export const VerificationForm = ({
 	full_name: string | undefined;
 	email: string | undefined;
 }) => {
+	const router = useRouter();
 	const [step, setStep] = useState(0);
 	const totalSteps = 3; // Total number of steps (0 to 3)
 	const [formData, setFormData] = useState({
@@ -60,6 +64,7 @@ export const VerificationForm = ({
 		},
 	});
 	const [errors, setErrors] = useState<{ [key: string]: string }>({});
+	const [buttonLoading, setButtonLoading] = useState(false);
 
 	// Validation functions for each step
 	const getValidationErrors = () => {
@@ -163,33 +168,18 @@ export const VerificationForm = ({
 
 	const handleSubmit = async (e: { preventDefault: () => void }) => {
 		e.preventDefault();
-		const token = await createMoovToken();
-		if (!token) return;
-		const moovjs = await loadMoov(token);
-		await createMoovAccount(formData);
-		// try {
-		// 	const response = await fetch("/api/moov/create_moov_account", {
-		// 		method: "POST",
-		// 		headers: {
-		// 			"Content-Type": "application/json",
-		// 		},
-		// 		body: JSON.stringify(formData),
-		// 	});
-
-		// 	if (!response.ok) {
-		// 		const errorData = await response.json();
-		// 		console.error("Error creating Moov account:", errorData);
-		// 		// Handle the error as needed (e.g., display a message to the user)
-		// 		return;
-		// 	}
-
-		// 	const account = await response.json();
-		// 	console.log("Moov account created:", account);
-		// 	// Proceed with the account data (e.g., redirect the user or update the UI)
-		// } catch (err) {
-		// 	console.error("Error submitting form:", err);
-		// 	// Handle the error as needed
-		// }
+		const loadingToast = toast.loading("Creating account...");
+		try {
+			const account = await createMoovAccount(formData);
+			await setWelcomeScreen(false);
+			toast.dismiss(loadingToast);
+			toast.success("Account created successfully");
+			router.push("/dashboard");
+		} catch (error) {
+			console.error("Error creating account:", error);
+			toast.dismiss(loadingToast);
+			toast.error("Failed to create account. Please try again.");
+		}
 	};
 
 	const validateSSN = (value: string) => {
@@ -259,7 +249,6 @@ export const VerificationForm = ({
 	return (
 		<form
 			onSubmit={handleSubmit}
-			// action={createMoovAccount}
 			className="flex flex-col min-h-[550px] w-full max-w-lg mx-auto sm:ring-1 ring-gray-200 rounded-lg sm:p-4"
 		>
 			<div className="w-full h-1.5 bg-gray-200 dark:bg-zinc-700 sm:rounded-full absolute top-0 left-0 sm:relative sm:mb-4 flex">
@@ -268,9 +257,14 @@ export const VerificationForm = ({
 						key={i}
 						className={`h-full transition-all duration-300 cursor-default ${
 							i > 0 ? "ml-1" : ""
-						} ${i <= step ? "bg-blue-500" : "bg-gray-200 dark:bg-zinc-700"}`}
+						} ${i < step ? "bg-blue-500" : "bg-gray-200 dark:bg-zinc-700"} 
+						${
+							i === 0 || i === totalSteps - 1
+								? "sm:rounded-full"
+								: "sm:rounded-none"
+						}`}
 						style={{ width: `${100 / (totalSteps + 1)}%` }}
-						onClick={() => handleProgressBarClick(i)}
+						onClick={() => handleProgressBarClick(i + 1)}
 						onKeyDown={(e) => {
 							if (e.key === "Enter" || e.key === " ") {
 								handleProgressBarClick(i);
@@ -884,15 +878,34 @@ export const VerificationForm = ({
 										<Input
 											id="address.zipCode"
 											name="address.zipCode"
+											maxLength={5}
+											pattern="\d{5}"
+											inputMode="numeric"
 											value={formData.address.zipCode}
-											onChange={handleChange}
+											onChange={(e) => {
+												const { value } = e.target;
+												const cleanedValue = value.replace(/\D/g, "");
+												setFormData({
+													...formData,
+													address: {
+														...formData.address,
+														zipCode: cleanedValue,
+													},
+												});
+											}}
 											invalid={!!errors["address.zipCode"]}
 											onBlur={(e) => {
 												const { value } = e.target;
+
 												if (value.trim() === "") {
 													setErrors({
 														...errors,
 														"address.zipCode": "Zip code is required",
+													});
+												} else if (value.length !== 5) {
+													setErrors({
+														...errors,
+														"address.zipCode": "Zip code must be 5 digits",
 													});
 												} else {
 													const { "address.zipCode": _, ...rest } = errors;
@@ -928,6 +941,7 @@ export const VerificationForm = ({
 							className="w-full"
 							color="blue"
 							onClick={async () => {
+								setButtonLoading(true);
 								const token = await createMoovToken();
 								if (!token) return;
 								const moovjs = await loadMoov(token);
@@ -939,7 +953,9 @@ export const VerificationForm = ({
 								});
 								console.log("Terms of Service token:", tosToken.token);
 								setStep(1);
+								setButtonLoading(false);
 							}}
+							disabled={buttonLoading}
 						>
 							Let's Start
 						</Button>
