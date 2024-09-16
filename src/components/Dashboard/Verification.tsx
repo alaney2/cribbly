@@ -724,7 +724,8 @@ export const VerificationForm = ({
 												? formData.governmentID.itin
 												: formData.governmentID.ssn
 										}
-										pattern="/^(?!666|000|9\d{2})\d{3}[- ]{0,1}(?!00)\d{2}[- ]{0,1}(?!0{4})\d{4}$/"
+										// pattern="/^(?!666|000|9\d{2})\d{3}[- ]{0,1}(?!00)\d{2}[- ]{0,1}(?!0{4})\d{4}$/"
+										inputMode="numeric"
 										// onChange={handleChange}
 										onChange={(e) => {
 											const { value } = e.target;
