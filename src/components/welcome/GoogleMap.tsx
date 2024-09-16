@@ -23,6 +23,8 @@ import React from "react";
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 type FunctionProps = {
+	heading?: string;
+	subheading?: string;
 	currentProperty?: any;
 	setCurrentProperty?: (property: any) => void;
 	buttonOnClick?: () => void;
@@ -41,7 +43,7 @@ interface Suggestion {
 	description: string;
 }
 
-const AddressAutocomplete = ({
+export const AddressAutocomplete = ({
 	currentProperty,
 	setCurrentProperty,
 	buttonOnClick,
@@ -205,7 +207,7 @@ const AddressAutocomplete = ({
 	};
 
 	return (
-		<div className="">
+		<div className="w-full max-w-xl mx-auto">
 			<form
 				autoComplete="off"
 				action={async (formData) => {
@@ -322,7 +324,7 @@ const AddressAutocomplete = ({
 							/>
 						</Field>
 						<div className="flex space-x-4">
-							<Field>
+							<Field className="grow">
 								<Label>State</Label>
 								<Input
 									type="text"
@@ -334,7 +336,7 @@ const AddressAutocomplete = ({
 									required
 								/>
 							</Field>
-							<Field>
+							<Field className="grow">
 								<Label>ZIP Code</Label>
 								<Input
 									type="text"
@@ -388,6 +390,8 @@ const App = ({
 	currentProperty,
 	setCurrentProperty,
 	buttonOnClick,
+	heading,
+	subheading,
 }: FunctionProps) => {
 	const [fadeOut, setFadeOut] = useState(false);
 	const animationClass = fadeOut
@@ -396,10 +400,12 @@ const App = ({
 
 	return (
 		<APIProvider apiKey={GOOGLE_MAPS_API_KEY || ""}>
-			<div className={`animate__animated animate__fadeIn ${animationClass}`}>
-				<Heading>Add new property</Heading>
+			<div
+				className={`w-full max-w-xl mx-auto animate__animated animate__fadeIn ${animationClass}`}
+			>
+				<Heading>{heading || "Add new property"}</Heading>
 				<Subheading className="mb-6 mt-1">
-					Get started by entering your property address
+					{subheading || "Get started by entering your property address"}
 				</Subheading>
 				<AddressAutocomplete
 					currentProperty={currentProperty}

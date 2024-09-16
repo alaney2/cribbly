@@ -10,8 +10,8 @@ import {
 	getNameAndEmail,
 	updateCurrentProperty,
 } from "@/utils/supabase/actions";
-import { Heading } from "@/components/catalyst/heading";
-import GoogleMap from "@/components/welcome/GoogleMap";
+import { Heading, Subheading } from "@/components/catalyst/heading";
+import GoogleMap, { AddressAutocomplete } from "@/components/welcome/GoogleMap";
 // import { getVerificationInfo } from "@/utils/supabase/actions";
 // import { Verification } from "@/components/Dashboard/Verification";
 
@@ -30,8 +30,11 @@ export default async function CurrentProperty({
 	if (!currentPropertyId) {
 		return (
 			<>
-				<div className="flex justify-center">
-					<GoogleMap />
+				<div className="mx-auto w-full max-w-xl">
+					<GoogleMap
+						heading="Welcome to Cribbly"
+						subheading="Get started by adding your first property"
+					/>
 				</div>
 			</>
 		);
