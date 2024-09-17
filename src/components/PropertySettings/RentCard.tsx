@@ -264,13 +264,13 @@ export function RentCard({
 									Rent per month
 								</Label>
 								<div className="flex-grow">
-									<InputGroup className="w-full">
+									<InputGroup className="w-full relative">
 										{/* <CurrencyDollarIcon className="h-5 w-5 text-gray-400" /> */}
-										<span className="text-gray-400 h-5 w-5 inline absolute">
+										<span className="text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 select-none">
 											$
 										</span>
 										<Input
-											type="number"
+											// type="number"
 											id="rentAmount"
 											name="rentAmount"
 											placeholder="0"
@@ -278,8 +278,16 @@ export function RentCard({
 											autoComplete="off"
 											value={rentAmount === 0 ? "" : rentAmount}
 											onChange={(e) => {
-												setRentAmount(Number(e.target.value));
+												const value = e.target.value;
+												const cleanedValue = value.replace(/[^0-9.]/g, "");
+												const numericValue = Number.parseFloat(cleanedValue);
+												if (!Number.isNaN(numericValue)) {
+													setRentAmount(numericValue);
+												} else if (value === "") {
+													setRentAmount(0);
+												}
 											}}
+											inputMode="numeric"
 											step="1"
 											required
 											min="0"
@@ -314,9 +322,12 @@ export function RentCard({
 										>
 											<div className="flex-grow">
 												<InputGroup className="w-full">
-													<CurrencyDollarIcon className="h-5 w-5 text-gray-400" />
+													<span className="text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 select-none">
+														$
+													</span>
 													<Input
-														type="number"
+														// type="number"
+														inputMode="numeric"
 														id="depositAmount"
 														name="depositAmount"
 														placeholder="0"
@@ -328,7 +339,18 @@ export function RentCard({
 														}
 														required={hasSecurityDeposit}
 														onChange={(e) => {
-															setSecurityDepositFee(Number(e.target.value));
+															const value = e.target.value;
+															const cleanedValue = value.replace(
+																/[^0-9.]/g,
+																"",
+															);
+															const numericValue =
+																Number.parseFloat(cleanedValue);
+															if (!Number.isNaN(numericValue)) {
+																setSecurityDepositFee(numericValue);
+															} else if (value === "") {
+																setSecurityDepositFee(0);
+															}
 														}}
 														step="1"
 														min="0"
