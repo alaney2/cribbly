@@ -951,7 +951,7 @@ export const VerificationForm = ({
 			</div>
 
 			{/* Navigation Buttons */}
-			<div className="flex flex-none justify-between pt-4 mt-4">
+			<div className="absolute bottom-8 left-0 right-0 mx-2 sm:flex sm:pt-4 sm:mt-4">
 				{step === 0 && (
 					<div className="flex flex-col gap-4">
 						<Text className="mx-2 sm:mx-12 text-sm">
@@ -972,7 +972,7 @@ export const VerificationForm = ({
 							.
 						</Text>
 						<Button
-							className="w-full"
+							className=""
 							color="blue"
 							onClick={async () => {
 								setButtonLoading(true);
@@ -1013,7 +1013,7 @@ export const VerificationForm = ({
 						className="w-full"
 						disabled={Object.keys(getValidationErrors()).length > 0}
 					>
-						Next
+						Continue
 					</Button>
 				)}
 				{step === totalSteps && (
