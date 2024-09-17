@@ -30,7 +30,7 @@ export default async function CurrentPropertySettings() {
 
 	return (
 		<>
-			<main className="flex max-w-7xl flex-col justify-center space-y-4 sm:space-y-8">
+			<main className="flex flex-col justify-center space-y-4 sm:space-y-8 w-full mx-auto">
 				<SettingsNavigation
 					currentPropertyId={currentPropertyId}
 					propertyRent={property_rent}

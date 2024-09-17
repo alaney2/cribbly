@@ -115,9 +115,9 @@ export default function SettingsNavigation({
 				<Divider className="my-8" />
 			</div>
 
-			<div className="hidden xl:flex">
+			<div className="hidden xl:flex max-w-5xl mx-auto">
 				{/* Vertical Navbar */}
-				<nav className="mr-6 w-64 overflow-y-auto pb-4 pt-12">
+				<nav className="ml-4 w-64 overflow-y-auto pb-4 pt-12">
 					<div className="space-y-1 px-3">
 						{tabs.map((tab) => (
 							<NavButton
@@ -133,12 +133,12 @@ export default function SettingsNavigation({
 
 				{/* Main Content */}
 				<main className="flex-1 overflow-y-auto focus:outline-none">
-					<div className="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
+					<div className="mx-auto px-4 py-6 sm:px-6 lg:px-8">
 						{renderContent()}
 					</div>
 				</main>
 			</div>
-			<div className="block space-y-6 xl:hidden">
+			<div className="block space-y-6 xl:hidden max-w-xl mx-auto">
 				<RentCard
 					propertyId={currentPropertyId}
 					propertyRent={propertyRent}

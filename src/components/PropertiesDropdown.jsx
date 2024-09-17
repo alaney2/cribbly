@@ -32,7 +32,7 @@ export function PropertiesDropdown({
 				<ChevronDownIcon />
 			</DropdownButton>
 
-			<DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
+			<DropdownMenu className="w-80 lg:w-64" anchor="bottom start">
 				{properties?.map((property, index) => (
 					<DropdownItem
 						key={property.id}
@@ -47,10 +47,12 @@ export function PropertiesDropdown({
 						{property.id === currentPropertyId && (
 							<div className="bg-blue-500 h-4 w-4 rounded-full" />
 						)}
-						<DropdownLabel>{property.street_address}</DropdownLabel>
+						<DropdownLabel className="truncate">
+							{property.street_address}
+						</DropdownLabel>
 					</DropdownItem>
 				))}
-				<DropdownDivider />
+				{properties && properties.length > 0 && <DropdownDivider />}
 				<DropdownItem
 					href="/dashboard/add-property"
 					// className="w-full min-w-80 lg:min-w-64"

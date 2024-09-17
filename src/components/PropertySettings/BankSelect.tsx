@@ -113,11 +113,11 @@ export function BankSelect() {
 
 	return (
 		<Dropdown>
-			<DropdownButton>
+			<DropdownButton outline className="w-full">
 				<SidebarLabel>Select Bank</SidebarLabel>
 				<ChevronDownIcon />
 			</DropdownButton>
-			<DropdownMenu>
+			<DropdownMenu className="w-80 lg:w-64">
 				<DropdownItem>
 					<DropdownLabel>Chase</DropdownLabel>
 				</DropdownItem>

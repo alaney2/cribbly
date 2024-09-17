@@ -361,7 +361,15 @@ export function RentCard({
 									)}
 								</AnimatePresence>
 							</Headless.Field>
-							<BankSelect />
+							<Headless.Field className="relative flex flex-col md:flex-row md:items-center md:gap-4">
+								<Label
+									htmlFor="rentAmount"
+									className="mb-2 md:mb-0 md:w-40 md:flex-shrink-0"
+								>
+									Bank account
+								</Label>
+								<BankSelect />
+							</Headless.Field>
 						</div>
 						{fees.length > 0 && (
 							<div className="mt-3">
