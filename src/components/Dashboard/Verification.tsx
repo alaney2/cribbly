@@ -288,7 +288,7 @@ export const VerificationForm = ({
 						initial="hidden"
 						animate="visible"
 						exit="exit"
-						transition={{ duration: 0.2 }}
+						transition={{ duration: 0.25 }}
 						className="grow h-full sm:mt-4"
 					>
 						{step === 0 && (
