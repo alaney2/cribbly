@@ -190,11 +190,11 @@ export const AddressAutocomplete = ({
 						};
 						setAddress(newAddress);
 					}
-					setSuggestions([]);
-					setShowSuggestions(false);
 					resolve();
 				},
 			);
+			setSuggestions([]);
+			setShowSuggestions(false);
 		});
 	};
 
@@ -277,7 +277,8 @@ export const AddressAutocomplete = ({
 									{suggestions.map((suggestion, index) => (
 										<React.Fragment key={suggestion.place_id}>
 											<li
-												onClick={async () => {
+												onMouseDown={async (e) => {
+													e.preventDefault();
 													await handleSuggestionClick(suggestion);
 												}}
 												onKeyDown={(e) => {

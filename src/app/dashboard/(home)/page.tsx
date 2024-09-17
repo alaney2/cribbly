@@ -11,15 +11,10 @@ import {
 	updateCurrentProperty,
 } from "@/utils/supabase/actions";
 import { Heading, Subheading } from "@/components/catalyst/heading";
-import GoogleMap, { AddressAutocomplete } from "@/components/welcome/GoogleMap";
-// import { getVerificationInfo } from "@/utils/supabase/actions";
+import { NewProperty } from "@/components/Dashboard/NewProperty"; // import { getVerificationInfo } from "@/utils/supabase/actions";
 // import { Verification } from "@/components/Dashboard/Verification";
 
-export default async function CurrentProperty({
-	params,
-}: {
-	params: { property_id: string };
-}) {
+export default async function CurrentProperty() {
 	const supabase = createClient();
 	const {
 		data: { user },
@@ -30,12 +25,7 @@ export default async function CurrentProperty({
 	if (!currentPropertyId) {
 		return (
 			<>
-				<div className="mx-auto w-full max-w-xl">
-					<GoogleMap
-						heading="Welcome to Cribbly"
-						subheading="Get started by adding your first property"
-					/>
-				</div>
+				<NewProperty />
 			</>
 		);
 	}
