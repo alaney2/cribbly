@@ -198,8 +198,8 @@ export function RentCard({
 					<CardHeader>
 						<Heading>Property setup</Heading>
 						<Text className="">
-							Rent is billed on the start date, and then the first of each
-							month.
+							Rent and any fees are billed on the start date, and then the first
+							of each month.
 						</Text>
 					</CardHeader>
 					<CardContent>
@@ -265,7 +265,10 @@ export function RentCard({
 								</Label>
 								<div className="flex-grow">
 									<InputGroup className="w-full">
-										<CurrencyDollarIcon className="h-5 w-5 text-gray-400" />
+										{/* <CurrencyDollarIcon className="h-5 w-5 text-gray-400" /> */}
+										<span className="text-gray-400 h-5 w-5 inline absolute">
+											$
+										</span>
 										<Input
 											type="number"
 											id="rentAmount"

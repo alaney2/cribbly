@@ -33,7 +33,7 @@ export default function WelcomeLayout({
 	subscriptionActive: boolean;
 	property: any;
 }) {
-	const [currentStep, setCurrentStep] = useState(property ? 2 : 0);
+	const [currentStep, setCurrentStep] = useState(0);
 	const [propertyId, setPropertyId] = useState(property?.id || "");
 	const [fullName, setFullName] = useState("");
 	const [finishWelcome, setFinishWelcome] = useState(false);
@@ -51,31 +51,31 @@ export default function WelcomeLayout({
 	});
 
 	const supabase = createClient();
-	const fetcher = async () => {
-		const { data, error } = await supabase
-			.from("customers")
-			.select("*")
-			.eq("id", user.id)
-			.single();
+	// const fetcher = async () => {
+	// 	const { data, error } = await supabase
+	// 		.from("customers")
+	// 		.select("*")
+	// 		.eq("id", user.id)
+	// 		.single();
 
-		if (error) throw error;
-		return data;
-	};
+	// 	if (error) throw error;
+	// 	return data;
+	// };
 
-	const {
-		data: customerData,
-		error: customerError,
-		mutate,
-	} = useSWR(user?.id ? `customers-${user.id}` : null, () => fetcher());
+	// const {
+	// 	data: customerData,
+	// 	error: customerError,
+	// 	mutate,
+	// } = useSWR(user?.id ? `customers-${user.id}` : null, () => fetcher());
 
-	useEffect(() => {
-		const redirectStatus = searchParams.get("redirect_status");
-		if (redirectStatus === "succeeded") {
-			mutate();
-			//clear search params
-			router.replace("/welcome");
-		}
-	}, [searchParams, mutate, router]);
+	// useEffect(() => {
+	// 	const redirectStatus = searchParams.get("redirect_status");
+	// 	if (redirectStatus === "succeeded") {
+	// 		mutate();
+	// 		//clear search params
+	// 		router.replace("/welcome");
+	// 	}
+	// }, [searchParams, mutate, router]);
 
 	// useEffect(() => {
 	// 	if (customerData) {
@@ -93,15 +93,15 @@ export default function WelcomeLayout({
 		// { name: "Step 6" },
 	];
 
-	const handleStepClick = (stepIndex: number) => {
-		// if (subscriptionActive) {
-		// 	setCurrentStep(5);
-		// 	return;
-		// }
-		if (stepIndex < currentStep) {
-			setCurrentStep(stepIndex);
-		}
-	};
+	// const handleStepClick = (stepIndex: number) => {
+	// 	// if (subscriptionActive) {
+	// 	// 	setCurrentStep(5);
+	// 	// 	return;
+	// 	// }
+	// 	if (stepIndex < currentStep) {
+	// 		setCurrentStep(stepIndex);
+	// 	}
+	// };
 
 	const renderStepContent = (stepIndex: number) => {
 		switch (stepIndex) {
@@ -125,25 +125,25 @@ export default function WelcomeLayout({
 			// 			buttonOnClick={() => setCurrentStep(currentStep + 1)}
 			// 		/>
 			// 	);
-			case 2:
-				return (
-					<div className="mt-4 sm:mt-0">
-						<GoogleMap
-							currentProperty={currentProperty}
-							setCurrentProperty={setCurrentProperty}
-							buttonOnClick={() => setCurrentStep(currentStep + 1)}
-						/>
-					</div>
-				);
-			case 3:
-				return (
-					<SetupProperty
-						currentProperty={currentProperty}
-						setCurrentProperty={setCurrentProperty}
-						propertyId={propertyId}
-						buttonOnClick={() => setCurrentStep(currentStep + 1)}
-					/>
-				);
+			// case 2:
+			// 	return (
+			// 		<div className="mt-4 sm:mt-0">
+			// 			<GoogleMap
+			// 				currentProperty={currentProperty}
+			// 				setCurrentProperty={setCurrentProperty}
+			// 				buttonOnClick={() => setCurrentStep(currentStep + 1)}
+			// 			/>
+			// 		</div>
+			// 	);
+			// case 3:
+			// 	return (
+			// 		<SetupProperty
+			// 			currentProperty={currentProperty}
+			// 			setCurrentProperty={setCurrentProperty}
+			// 			propertyId={propertyId}
+			// 			buttonOnClick={() => setCurrentStep(currentStep + 1)}
+			// 		/>
+			// 	);
 			// case 4:
 			// 	return (
 			// 		<Checkout2
@@ -152,50 +152,50 @@ export default function WelcomeLayout({
 			// 			products={products}
 			// 		/>
 			// 	);
-			case 4:
-				return (
-					<div
-						className={
-							"relative flex h-full flex-col items-center justify-center gap-y-4 px-2 pt-8 sm:pt-4"
-						}
-					>
-						<InviteCard
-							propertyId={propertyId}
-							setPropertyId={setPropertyId}
-							finishWelcome={finishWelcome}
-							setFinishWelcome={setFinishWelcome}
-						/>
-						<Button
-							disabled={!finishWelcome}
-							className="mt-4 sm:mt-8"
-							color="blue"
-							onClick={async () => {
-								// setFadeOut(true)
-								localStorage.removeItem("propertyId");
-								localStorage.removeItem("fullName");
-								localStorage.removeItem("email");
-								await setWelcomeScreen(false);
-								router.push("/dashboard");
-							}}
-						>
-							Finish setup
-						</Button>
-						<Button
-							className="sm:mt-4"
-							plain
-							onClick={async () => {
-								// setFadeOut(true)
-								localStorage.removeItem("propertyId");
-								localStorage.removeItem("fullName");
-								localStorage.removeItem("email");
-								await setWelcomeScreen(false);
-								router.push("/dashboard");
-							}}
-						>
-							Skip, do later
-						</Button>
-					</div>
-				);
+			// case 4:
+			// 	return (
+			// 		<div
+			// 			className={
+			// 				"relative flex h-full flex-col items-center justify-center gap-y-4 px-2 pt-8 sm:pt-4"
+			// 			}
+			// 		>
+			// 			<InviteCard
+			// 				propertyId={propertyId}
+			// 				setPropertyId={setPropertyId}
+			// 				finishWelcome={finishWelcome}
+			// 				setFinishWelcome={setFinishWelcome}
+			// 			/>
+			// 			<Button
+			// 				disabled={!finishWelcome}
+			// 				className="mt-4 sm:mt-8"
+			// 				color="blue"
+			// 				onClick={async () => {
+			// 					// setFadeOut(true)
+			// 					localStorage.removeItem("propertyId");
+			// 					localStorage.removeItem("fullName");
+			// 					localStorage.removeItem("email");
+			// 					await setWelcomeScreen(false);
+			// 					router.push("/dashboard");
+			// 				}}
+			// 			>
+			// 				Finish setup
+			// 			</Button>
+			// 			<Button
+			// 				className="sm:mt-4"
+			// 				plain
+			// 				onClick={async () => {
+			// 					// setFadeOut(true)
+			// 					localStorage.removeItem("propertyId");
+			// 					localStorage.removeItem("fullName");
+			// 					localStorage.removeItem("email");
+			// 					await setWelcomeScreen(false);
+			// 					router.push("/dashboard");
+			// 				}}
+			// 			>
+			// 				Skip, do later
+			// 			</Button>
+			// 		</div>
+			// 	);
 
 			// case 6:
 			// 	return (

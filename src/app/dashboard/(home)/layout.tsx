@@ -13,10 +13,7 @@ type Props = {
 	searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export async function generateMetadata(
-	{ params, searchParams }: Props,
-	parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
 	const supabase = createClient();
 	const {
 		data: { user },
@@ -44,11 +41,8 @@ export async function generateMetadata(
 }
 
 export default async function PropertyDashboardLayout({
-	params,
 	children,
 }: {
-	params: { property_id: string };
-	searchParams: { [key: string]: string | string[] | undefined };
 	children: React.ReactNode;
 }) {
 	const supabase = createClient();
