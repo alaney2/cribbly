@@ -951,7 +951,7 @@ export const VerificationForm = ({
 			</div>
 
 			{/* Navigation Buttons */}
-			<div className="absolute bottom-8 left-0 right-0 mx-2 sm:flex sm:pt-4 sm:mt-4">
+			<div className="absolute sm:relative bottom-8 sm:bottom-0 left-0 right-0 mx-2 sm:mx-0 sm:flex sm:flex-none sm:pt-4 sm:mt-4">
 				{step === 0 && (
 					<div className="flex flex-col gap-4">
 						<Text className="mx-2 sm:mx-12 text-sm">
@@ -985,7 +985,6 @@ export const VerificationForm = ({
 									...formData,
 									tosToken: tosToken.token,
 								});
-								console.log("Terms of Service token:", tosToken.token);
 								setStep(1);
 								setButtonLoading(false);
 							}}
