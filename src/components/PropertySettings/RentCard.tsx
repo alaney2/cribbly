@@ -49,6 +49,7 @@ import { daysBetween } from "@/utils/helpers";
 import { parseISO } from "date-fns";
 import { Divider } from "@/components/catalyst/divider";
 import { motion, AnimatePresence } from "framer-motion";
+import { BankSelect } from "@/components/PropertySettings/BankSelect";
 
 export interface Fee {
 	id: string;
@@ -97,8 +98,6 @@ export function RentCard({
 		fee_cost: 0,
 	});
 	const [fees, setFees] = React.useState<any[]>(propertyFees ?? []);
-	console.log("propertyFees", propertyFees);
-	console.log("fees", fees);
 	const [editFeeOpen, setEditFeeOpen] = React.useState(false);
 	const [feeEdit, setFeeEdit] = React.useState<Fee>();
 
@@ -362,6 +361,7 @@ export function RentCard({
 									)}
 								</AnimatePresence>
 							</Headless.Field>
+							<BankSelect />
 						</div>
 						{fees.length > 0 && (
 							<div className="mt-3">
