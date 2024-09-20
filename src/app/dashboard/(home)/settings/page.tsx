@@ -39,7 +39,7 @@ export default async function CurrentPropertySettings() {
 					securityDeposit={sd_data}
 					propertyFees={property_fees}
 					key={currentPropertyId}
-					plaidAccounts={plaidAccounts}
+					plaidAccounts={plaidAccounts ?? []}
 				/>
 			</main>
 		</>

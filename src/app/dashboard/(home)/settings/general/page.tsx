@@ -36,7 +36,7 @@ export default async function TenantSettings() {
 				propertyFees={property_fees}
 				key={currentPropertyId}
 				initialTab="General"
-				plaidAccounts={plaidAccounts}
+				plaidAccounts={plaidAccounts ?? []}
 			/>
 		</main>
 	);
