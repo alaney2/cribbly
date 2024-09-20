@@ -117,26 +117,6 @@ export function Listbox<T>({
 	);
 }
 
-export function ListboxDivider({
-	className,
-	...props
-}: React.ComponentPropsWithoutRef<"div">) {
-	return (
-		<div
-			role="separator"
-			aria-valuemax={100}
-			aria-valuemin={0}
-			aria-valuenow={50}
-			{...props}
-			className={clsx(
-				className,
-				"mx-1 my-1 h-px",
-				"bg-zinc-950/5 dark:bg-white/5",
-			)}
-		/>
-	);
-}
-
 export function ListboxOption<T>({
 	children,
 	className,

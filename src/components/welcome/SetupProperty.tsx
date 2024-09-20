@@ -32,6 +32,7 @@ export function SetupProperty({
 					propertyRent={currentProperty?.property_rent || null}
 					securityDeposit={currentProperty?.property_security_deposits || null}
 					setCurrentProperty={setCurrentProperty}
+					plaidAccounts={[]}
 				/>
 				<Button
 					color="blue"

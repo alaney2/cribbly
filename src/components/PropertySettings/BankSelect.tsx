@@ -3,26 +3,11 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Field, Label } from "@/components/catalyst/fieldset";
 import {
-	Dropdown,
-	DropdownButton,
-	DropdownDivider,
-	DropdownItem,
-	DropdownLabel,
-	DropdownMenu,
-} from "@/components/catalyst/dropdown";
-import {
 	Listbox,
 	ListboxLabel,
 	ListboxOption,
-	ListboxDivider,
 } from "@/components/catalyst/listbox";
-import { SidebarItem, SidebarLabel } from "@/components/catalyst/sidebar";
-import { Divider } from "@/components/catalyst/divider";
-import {
-	ArrowRightStartOnRectangleIcon,
-	ChevronDownIcon,
-	PlusIcon,
-} from "@heroicons/react/16/solid";
+import { ChevronDownIcon, PlusIcon } from "@heroicons/react/16/solid";
 import { usePlaidLink } from "react-plaid-link";
 import type {
 	PlaidLinkError,
@@ -174,41 +159,11 @@ export function BankSelect({ plaidAccounts }: { plaidAccounts: any[] | null }) {
 					<ListboxLabel>{bank.name}</ListboxLabel>
 				</ListboxOption>
 			))}
+			{banks.length > 0 && <ListboxOption value="Add bank" disabled />}
 			<ListboxOption value="Add bank">
 				<ListboxLabel className="mr-2">Add bank</ListboxLabel>
 				<PlusIcon className="w-4 h-4" />
 			</ListboxOption>
 		</Listbox>
-		// <Dropdown>
-		// {/* <DropdownButton outline className="w-full">
-		// 	<SidebarLabel>
-		// 		{selectedBank ? selectedBank.name : "Select Bank"}
-		// 	</SidebarLabel>
-		// 	<ChevronDownIcon />
-		// </DropdownButton> */}
-
-		// {/* <ListboxOption onClick={handleAddBank}>
-		// 	<PlusIcon />
-		// 	<ListboxLabel>Add bank</ListboxLabel>
-		// </ListboxOption> */}
-		// {/* <DropdownMenu className="w-80 lg:w-64">
-		// 	{banks.map((bank) => (
-		// 		<DropdownItem
-		// 			key={bank.account_id}
-		// 			onClick={() => setPrimaryAccount(bank.account_id)}
-		// 		>
-		// 			{bank.account_id === selectedBank?.account_id && (
-		// 				<div className="bg-blue-500 h-4 w-4 mr-3 rounded-full" />
-		// 			)}
-		// 			<DropdownLabel>{bank.name}</DropdownLabel>
-		// 		</DropdownItem>
-		// 	))}
-		// 	{banks.length > 0 && <DropdownDivider />}
-		// 	<DropdownItem onClick={handleAddBank}>
-		// 		<PlusIcon />
-		// 		<DropdownLabel>Add bank</DropdownLabel>
-		// 	</DropdownItem>
-		// </DropdownMenu> */}
-		// </Dropdown>
 	);
 }
