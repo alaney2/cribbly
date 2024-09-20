@@ -311,8 +311,8 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 												<button
 													type="button"
 													className="text-sm md:px-2 font-semibold text-blue-600 hover:text-blue-500"
-													onClick={() =>
-														setPrimaryAccount(bank_account.account_id)
+													onClick={async () =>
+														await setPrimaryAccount(bank_account.account_id)
 													}
 												>
 													Set as primary
