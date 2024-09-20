@@ -45,7 +45,7 @@ export function PropertiesDropdown({
 						}}
 					>
 						{property.id === currentPropertyId && (
-							<div className="bg-blue-500 h-4 w-4 rounded-full" />
+							<div className="bg-blue-500 h-4 w-4 mr-3 rounded-full" />
 						)}
 						<DropdownLabel className="truncate">
 							{property.street_address}

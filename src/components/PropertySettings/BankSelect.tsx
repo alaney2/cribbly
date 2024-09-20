@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { createClient } from "@/utils/supabase/client";
 import { Field, Label } from "@/components/catalyst/fieldset";
 import {
 	Dropdown,
@@ -9,7 +10,14 @@ import {
 	DropdownLabel,
 	DropdownMenu,
 } from "@/components/catalyst/dropdown";
+import {
+	Listbox,
+	ListboxLabel,
+	ListboxOption,
+	ListboxDivider,
+} from "@/components/catalyst/listbox";
 import { SidebarItem, SidebarLabel } from "@/components/catalyst/sidebar";
+import { Divider } from "@/components/catalyst/divider";
 import {
 	ArrowRightStartOnRectangleIcon,
 	ChevronDownIcon,
@@ -23,12 +31,24 @@ import type {
 } from "react-plaid-link";
 import { toast } from "sonner";
 import { useSearchParams, usePathname } from "next/navigation";
+import { setPrimaryAccount } from "@/utils/supabase/actions";
 
-export function BankSelect() {
+export function BankSelect({ plaidAccounts }: { plaidAccounts: any[] | null }) {
 	const [linkToken, setLinkToken] = useState<string | null>(null);
-	const [banks, setBanks] = useState<string[]>([]); // You'll need to fetch this from your backend
+	const [banks, setBanks] = useState<any[]>(plaidAccounts || []);
+	const [selectedBank, setSelectedBank] = useState<any | null>(
+		banks.filter((bank) => bank.use_for_payouts)[0] || null,
+	);
 	const searchParams = useSearchParams();
 	const pathname = usePathname();
+
+	const handleAddBank = async () => {
+		await generateToken();
+		setSelectedBank(null);
+		if (linkToken && ready) {
+			open();
+		}
+	};
 
 	const generateToken = async () => {
 		console.log("generateToken");
@@ -71,8 +91,31 @@ export function BankSelect() {
 				localStorage.removeItem("link_token");
 				setLinkToken(null);
 
-				// Fetch updated bank list here
-				// setBanks([...]);
+				// Fetch updated banks
+				const supabase = createClient();
+				const {
+					data: { user },
+				} = await supabase.auth.getUser();
+
+				if (!user) {
+					return;
+				}
+				const { data: existingAccounts } = await supabase
+					.from("plaid_accounts")
+					.select("*")
+					.eq("user_id", user.id)
+					.order("use_for_payouts", { ascending: false });
+
+				setBanks(existingAccounts || []);
+				setSelectedBank(existingAccounts?.[0]);
+
+				if (existingAccounts && existingAccounts.length > 0) {
+					const primaryAccount =
+						existingAccounts.find((account) => account.use_for_payouts) ||
+						existingAccounts[0];
+					setSelectedBank(primaryAccount);
+					await setPrimaryAccount(primaryAccount.account_id);
+				}
 
 				return success;
 			},
@@ -112,21 +155,60 @@ export function BankSelect() {
 	}, [linkToken, ready, open]);
 
 	return (
-		<Dropdown>
-			<DropdownButton outline className="w-full">
-				<SidebarLabel>Select Bank</SidebarLabel>
-				<ChevronDownIcon />
-			</DropdownButton>
-			<DropdownMenu className="w-80 lg:w-64">
-				<DropdownItem>
-					<DropdownLabel>Chase</DropdownLabel>
-				</DropdownItem>
-				<DropdownDivider />
-				<DropdownItem onClick={generateToken}>
-					<PlusIcon />
-					<DropdownLabel>Add bank</DropdownLabel>
-				</DropdownItem>
-			</DropdownMenu>
-		</Dropdown>
+		<Listbox
+			name="bank-select"
+			value={selectedBank ? selectedBank.name : "Select Bank"}
+			defaultValue={"Select Bank"}
+			onChange={(value) => {
+				if (value === "Add bank") {
+					handleAddBank();
+				} else {
+					const selected = banks.find((bank) => bank.name === value);
+					setSelectedBank(selected);
+					setPrimaryAccount(selected.account_id);
+				}
+			}}
+		>
+			{banks.map((bank) => (
+				<ListboxOption key={bank.account_id} value={bank.name}>
+					<ListboxLabel>{bank.name}</ListboxLabel>
+				</ListboxOption>
+			))}
+			<ListboxOption value="Add bank">
+				<ListboxLabel className="mr-2">Add bank</ListboxLabel>
+				<PlusIcon className="w-4 h-4" />
+			</ListboxOption>
+		</Listbox>
+		// <Dropdown>
+		// {/* <DropdownButton outline className="w-full">
+		// 	<SidebarLabel>
+		// 		{selectedBank ? selectedBank.name : "Select Bank"}
+		// 	</SidebarLabel>
+		// 	<ChevronDownIcon />
+		// </DropdownButton> */}
+
+		// {/* <ListboxOption onClick={handleAddBank}>
+		// 	<PlusIcon />
+		// 	<ListboxLabel>Add bank</ListboxLabel>
+		// </ListboxOption> */}
+		// {/* <DropdownMenu className="w-80 lg:w-64">
+		// 	{banks.map((bank) => (
+		// 		<DropdownItem
+		// 			key={bank.account_id}
+		// 			onClick={() => setPrimaryAccount(bank.account_id)}
+		// 		>
+		// 			{bank.account_id === selectedBank?.account_id && (
+		// 				<div className="bg-blue-500 h-4 w-4 mr-3 rounded-full" />
+		// 			)}
+		// 			<DropdownLabel>{bank.name}</DropdownLabel>
+		// 		</DropdownItem>
+		// 	))}
+		// 	{banks.length > 0 && <DropdownDivider />}
+		// 	<DropdownItem onClick={handleAddBank}>
+		// 		<PlusIcon />
+		// 		<DropdownLabel>Add bank</DropdownLabel>
+		// 	</DropdownItem>
+		// </DropdownMenu> */}
+		// </Dropdown>
 	);
 }

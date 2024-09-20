@@ -14,6 +14,7 @@ interface SettingsNavigationProps {
 	propertyFees: any[] | null;
 	key: string;
 	initialTab?: string;
+	plaidAccounts: any[] | null;
 }
 
 const NavButton = ({
@@ -40,6 +41,7 @@ export default function SettingsNavigation({
 	securityDeposit,
 	propertyFees,
 	initialTab,
+	plaidAccounts,
 }: SettingsNavigationProps) {
 	const [activeTab, setActiveTab] = useState(initialTab || "General");
 	const router = useRouter();
@@ -72,6 +74,7 @@ export default function SettingsNavigation({
 				securityDeposit={securityDeposit}
 				propertyFees={propertyFees}
 				buttonOnClick={() => handleTabChange("Tenants")}
+				plaidAccounts={plaidAccounts}
 			/>
 		),
 		[
@@ -80,6 +83,7 @@ export default function SettingsNavigation({
 			securityDeposit,
 			propertyFees,
 			handleTabChange,
+			plaidAccounts,
 		],
 	);
 
@@ -144,6 +148,7 @@ export default function SettingsNavigation({
 					propertyRent={propertyRent}
 					securityDeposit={securityDeposit}
 					propertyFees={propertyFees}
+					plaidAccounts={plaidAccounts}
 				/>
 				<InviteCard propertyId={currentPropertyId} />
 				<DeleteCard propertyId={currentPropertyId} />

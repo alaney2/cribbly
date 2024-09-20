@@ -69,6 +69,7 @@ type RentCardProps = {
 	setCurrentProperty?: (property: any) => void;
 	setPropertyId?: (propertyId: string) => void;
 	buttonOnClick?: () => void;
+	plaidAccounts: any[] | null;
 };
 
 export function RentCard({
@@ -78,6 +79,7 @@ export function RentCard({
 	propertyFees,
 	setCurrentProperty,
 	buttonOnClick,
+	plaidAccounts,
 }: RentCardProps) {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [isScheduleOpen, setIsScheduleOpen] = useState(false);
@@ -368,7 +370,7 @@ export function RentCard({
 								>
 									Bank account
 								</Label>
-								<BankSelect />
+								<BankSelect plaidAccounts={plaidAccounts} />
 							</Headless.Field>
 						</div>
 						{fees.length > 0 && (

@@ -566,3 +566,34 @@ export async function getVerificationInfo() {
 
 	return verificationData;
 }
+
+export async function getPlaidAccounts() {
+	const supabase = createClient();
+	const user = await getUser();
+	if (!user) return;
+	const { data: plaidAccounts, error: plaidAccountsError } = await supabase
+		.from("plaid_accounts")
+		.select()
+		.eq("user_id", user.id)
+		.order("use_for_payouts", { ascending: false });
+
+	return plaidAccounts || [];
+}
+
+export async function setPrimaryAccount(accountId: string) {
+	const supabase = createClient();
+	const user = await getUser();
+	if (!user) return;
+
+	// First, set all accounts to not be primary
+	await supabase
+		.from("plaid_accounts")
+		.update({ use_for_payouts: false })
+		.eq("user_id", user.id);
+
+	// Then, set the selected account as primary
+	const { error } = await supabase
+		.from("plaid_accounts")
+		.update({ use_for_payouts: true })
+		.eq("account_id", accountId);
+}

@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import SettingsNavigation from "@/components/SettingsNavigation";
-import { getCurrentProperty } from "@/utils/supabase/actions";
+import { getCurrentProperty, getPlaidAccounts } from "@/utils/supabase/actions";
 
 export default async function CurrentPropertySettings() {
 	const supabase = createClient();
@@ -28,6 +28,8 @@ export default async function CurrentPropertySettings() {
 		.select("*")
 		.eq("property_id", currentPropertyId);
 
+	const plaidAccounts = await getPlaidAccounts();
+
 	return (
 		<>
 			<main className="flex flex-col justify-center space-y-4 sm:space-y-8 w-full mx-auto">
@@ -37,6 +39,7 @@ export default async function CurrentPropertySettings() {
 					securityDeposit={sd_data}
 					propertyFees={property_fees}
 					key={currentPropertyId}
+					plaidAccounts={plaidAccounts}
 				/>
 			</main>
 		</>
