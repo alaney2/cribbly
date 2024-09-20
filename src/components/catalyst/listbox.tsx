@@ -29,7 +29,7 @@ export function Listbox<T>({
 					// Basic layout
 					"group relative block w-full",
 					// Background color + shadow applied to inset pseudo element, so shadow blends with border in light mode
-					"before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow",
+					"before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white",
 					// Background color is moved to control and shadow is removed in dark mode so hide `before` pseudo
 					"dark:before:hidden",
 					// Hide default focus styles
@@ -38,6 +38,7 @@ export function Listbox<T>({
 					"after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:ring-inset after:ring-transparent after:data-[focus]:ring-2 after:data-[focus]:ring-blue-500",
 					// Disabled state
 					"data-[disabled]:opacity-50 before:data-[disabled]:bg-zinc-950/5 before:data-[disabled]:shadow-none",
+					"cursor-default",
 				])}
 			>
 				<Headless.ListboxSelectedOption
@@ -106,7 +107,7 @@ export function Listbox<T>({
 					// Popover background
 					"bg-white/75 backdrop-blur-xl dark:bg-zinc-800/75",
 					// Shadows
-					"shadow-lg ring-1 ring-zinc-950/10 dark:ring-inset dark:ring-white/10",
+					"ring-1 ring-zinc-950/10 dark:ring-inset dark:ring-white/10",
 					// Transitions
 					"transition-opacity duration-100 ease-in data-[transition]:pointer-events-none data-[closed]:data-[leave]:opacity-0",
 				)}

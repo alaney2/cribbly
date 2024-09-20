@@ -3,11 +3,20 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Field, Label } from "@/components/catalyst/fieldset";
 import {
+	Dialog,
+	DialogActions,
+	DialogBody,
+	DialogDescription,
+	DialogTitle,
+} from "@/components/catalyst/dialog";
+import {
 	Listbox,
 	ListboxLabel,
 	ListboxOption,
 } from "@/components/catalyst/listbox";
+import { Button } from "@/components/catalyst/button";
 import { ChevronDownIcon, PlusIcon } from "@heroicons/react/16/solid";
+import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { usePlaidLink } from "react-plaid-link";
 import type {
 	PlaidLinkError,
@@ -21,6 +30,7 @@ import { setPrimaryAccount } from "@/utils/supabase/actions";
 export function BankSelect({ plaidAccounts }: { plaidAccounts: any[] | null }) {
 	const [linkToken, setLinkToken] = useState<string | null>(null);
 	const [banks, setBanks] = useState<any[]>(plaidAccounts || []);
+	const [isBankDialogOpen, setIsBankDialogOpen] = useState(false);
 	const [selectedBank, setSelectedBank] = useState<any | null>(
 		banks.filter((bank) => bank.use_for_payouts)[0] || null,
 	);
@@ -140,30 +150,63 @@ export function BankSelect({ plaidAccounts }: { plaidAccounts: any[] | null }) {
 	}, [linkToken, ready, open]);
 
 	return (
-		<Listbox
-			name="bank-select"
-			value={selectedBank ? selectedBank.name : "Select Bank"}
-			defaultValue={"Select Bank"}
-			onChange={(value) => {
-				if (value === "Add bank") {
-					handleAddBank();
-				} else {
-					const selected = banks.find((bank) => bank.name === value);
-					setSelectedBank(selected);
-					setPrimaryAccount(selected.account_id);
-				}
-			}}
-		>
-			{banks.map((bank) => (
-				<ListboxOption key={bank.account_id} value={bank.name}>
-					<ListboxLabel>{bank.name}</ListboxLabel>
+		<>
+			<Listbox
+				name="bank-select"
+				value={selectedBank?.name}
+				placeholder="Select bank..."
+				onChange={(value) => {
+					if (value === "Add bank") {
+						setIsBankDialogOpen(true);
+					} else {
+						const selected = banks.find((bank) => bank.name === value);
+						setSelectedBank(selected);
+						setPrimaryAccount(selected.account_id);
+					}
+				}}
+			>
+				{banks.map((bank) => (
+					<ListboxOption key={bank.account_id} value={bank.name}>
+						<ListboxLabel>{bank.name}</ListboxLabel>
+					</ListboxOption>
+				))}
+				{/* {banks.length > 0 && <ListboxOption value="Add bank" disabled />} */}
+				<ListboxOption value="Add bank" className="">
+					<ListboxLabel className="mr-2 font-medium">Add bank</ListboxLabel>
+					<PlusIcon className="w-4 h-4 " color="black" />
 				</ListboxOption>
-			))}
-			{banks.length > 0 && <ListboxOption value="Add bank" disabled />}
-			<ListboxOption value="Add bank">
-				<ListboxLabel className="mr-2">Add bank</ListboxLabel>
-				<PlusIcon className="w-4 h-4" />
-			</ListboxOption>
-		</Listbox>
+			</Listbox>
+			<Dialog open={isBankDialogOpen} onClose={setIsBankDialogOpen}>
+				<div className="flex items-center gap-x-4 mb-4">
+					<LockClosedIcon className="w-6 text-gray-500" />
+					<DialogTitle className="text-xl font-semibold">
+						Link Bank Account
+					</DialogTitle>
+				</div>
+				<DialogDescription className="mb-4">
+					In order to verify your bank account information, you will be
+					redirected to our third-party partner, Plaid.
+				</DialogDescription>
+				<DialogDescription>
+					The transfer of your data is encrypted end-to-end and your credentials
+					will never be made accessible to Cribbly.
+				</DialogDescription>
+				<DialogActions>
+					<Button plain onClick={() => setIsBankDialogOpen(false)}>
+						Cancel
+					</Button>
+					<Button
+						color="blue"
+						onClick={async () => {
+							await generateToken();
+							await handleAddBank();
+							setIsBankDialogOpen(false);
+						}}
+					>
+						Continue
+					</Button>
+				</DialogActions>
+			</Dialog>
+		</>
 	);
 }

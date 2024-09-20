@@ -267,7 +267,7 @@ export function RentCard({
 								<div className="flex-grow">
 									<InputGroup className="w-full relative">
 										{/* <CurrencyDollarIcon className="h-5 w-5 text-gray-400" /> */}
-										<span className="text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 select-none">
+										<span className="text-zinc-500 dark:text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 select-none pointer-events-none z-20">
 											$
 										</span>
 										<Input
@@ -322,12 +322,11 @@ export function RentCard({
 											transition={{ duration: 0.25 }}
 										>
 											<div className="flex-grow">
-												<InputGroup className="w-full">
-													<span className="text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 select-none">
+												<InputGroup className="w-full relative">
+													<span className="text-zinc-500 dark:text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 select-none pointer-events-none z-20">
 														$
 													</span>
 													<Input
-														// type="number"
 														inputMode="numeric"
 														id="depositAmount"
 														name="depositAmount"
@@ -448,7 +447,7 @@ export function RentCard({
 					next month. Enter a negative amount to apply a discount.
 				</DialogDescription>
 				<form
-					action={async (formData) => {
+					action={async (formData: FormData) => {
 						toast.promise(
 							// biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
 							new Promise(async (resolve, reject) => {
