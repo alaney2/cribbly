@@ -16,7 +16,6 @@ function OtpInputWithParams({ email }: { email: string }) {
 	const [allInputsFilled, setAllInputsFilled] = useState(false);
 
 	const checkAndSubmit = () => {
-		// if (hasError) return;
 		const allFilled = inputsRef.current.every((input) => input.value !== "");
 		if (allFilled) {
 			setAllInputsFilled(true);
@@ -88,15 +87,15 @@ function OtpInputWithParams({ email }: { email: string }) {
 		setAllInputsFilled(false);
 	};
 
-	useEffect(() => {
-		inputsRef.current[0]?.focus();
-	}, []);
-
 	const handleError = () => {
 		setIsSubmitting(false);
 		setAllInputsFilled(false);
 		inputsRef.current[5].focus();
 	};
+
+	// useEffect(() => {
+	// 	inputsRef.current[0]?.focus();
+	// }, []);
 
 	return (
 		<>

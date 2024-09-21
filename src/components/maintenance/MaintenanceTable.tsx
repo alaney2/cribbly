@@ -309,6 +309,7 @@ export function MaintenanceTable({
 									onChange={handleInputChange}
 									required
 									disabled={!isCurrentUserRequest}
+									autoFocus={currentRequest.id === "0"}
 								/>
 							</Field>
 							<Field>

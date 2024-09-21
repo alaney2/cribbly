@@ -528,7 +528,6 @@ export async function createTask(formData: FormData) {
 		updated_at: new Date(),
 	};
 
-	// Only include fields that are present in the form data
 	if (title) updateData.title = title;
 	if (description) updateData.description = description;
 	if (priority) updateData.priority = priority;
@@ -541,22 +540,6 @@ export async function createTask(formData: FormData) {
 		.eq("id", id)
 		.select()
 		.single();
-
-	// const { data, error } = await supabase
-	// .from("maintenance")
-	// .update({
-	// 	title,
-	// 	description,
-	// 	priority,
-	// 	status,
-	// 	notify,
-	// 	user_id: user.id,
-	// 	property_id: currentPropertyId,
-	// 	updated_at: new Date(),
-	// })
-	// .eq("id", id)
-	// .select()
-	// .single();
 
 	if (error) {
 		console.error("Error creating task:", error);
