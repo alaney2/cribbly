@@ -34,23 +34,23 @@ export default function WelcomeLayout({
 	property: any;
 }) {
 	const [currentStep, setCurrentStep] = useState(0);
-	const [propertyId, setPropertyId] = useState(property?.id || "");
-	const [fullName, setFullName] = useState("");
-	const [finishWelcome, setFinishWelcome] = useState(false);
-	const router = useRouter();
-	const searchParams = useSearchParams();
-	const [currentProperty, setCurrentProperty] = useState({
-		street_address: property?.street_address || "",
-		apt: property?.apt || "",
-		city: property?.city || "",
-		state: property?.state || "",
-		zip: property?.zip || "",
-		property_rent: property?.property_rents || null,
-		property_security_deposit: property?.property_security_deposits || null,
-		property_fees: property?.property_fees || [],
-	});
+	// const [propertyId, setPropertyId] = useState(property?.id || "");
+	// const [fullName, setFullName] = useState("");
+	// const [finishWelcome, setFinishWelcome] = useState(false);
+	// const router = useRouter();
+	// const searchParams = useSearchParams();
+	// const [currentProperty, setCurrentProperty] = useState({
+	// 	street_address: property?.street_address || "",
+	// 	apt: property?.apt || "",
+	// 	city: property?.city || "",
+	// 	state: property?.state || "",
+	// 	zip: property?.zip || "",
+	// 	property_rent: property?.property_rents || null,
+	// 	property_security_deposit: property?.property_security_deposits || null,
+	// 	property_fees: property?.property_fees || [],
+	// });
 
-	const supabase = createClient();
+	// const supabase = createClient();
 	// const fetcher = async () => {
 	// 	const { data, error } = await supabase
 	// 		.from("customers")

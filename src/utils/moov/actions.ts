@@ -103,6 +103,12 @@ export async function createMoovAccount(formData: any) {
 					account_type: account.accountType,
 				},
 			]);
+			const capabilities = ["transfers", "send-funds", "wallet"];
+			const response = await moov.capabilities.requestCapabilities(
+				account.accountID,
+				capabilities,
+			);
+			console.log(response);
 			if (error) {
 				console.error("Error inserting moov account:", error);
 			}
