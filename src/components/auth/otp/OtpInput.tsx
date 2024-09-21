@@ -13,15 +13,20 @@ function OtpInputWithParams({ email }: { email: string }) {
 	const searchParams = useSearchParams();
 	const propertyId = searchParams.get("property");
 	const token = searchParams.get("token");
-	// const [hasError, setHasError] = useState(false)
-	const pathname = usePathname();
+	const [allInputsFilled, setAllInputsFilled] = useState(false);
 
 	const checkAndSubmit = () => {
 		// if (hasError) return;
 		const allFilled = inputsRef.current.every((input) => input.value !== "");
 		if (allFilled) {
+			setAllInputsFilled(true);
 			document.getElementById("submitButton")?.click();
 			setIsSubmitting(true);
+			inputsRef.current[5].blur();
+		} else {
+			setAllInputsFilled(false);
+			inputsRef.current[5].focus();
+			setIsSubmitting(false);
 		}
 	};
 
@@ -49,6 +54,8 @@ function OtpInputWithParams({ email }: { email: string }) {
 			currentInput.value = e.key;
 			if (index < 5) {
 				inputsRef.current[index + 1].focus();
+			} else {
+				currentInput.blur();
 			}
 		}
 
@@ -71,39 +78,37 @@ function OtpInputWithParams({ email }: { email: string }) {
 	};
 
 	const handleFocus = (index: number) => {
-		const emptyInputIndex = inputsRef.current.findIndex(
-			(input) => input.value === "",
-		);
-		if (emptyInputIndex !== -1 && index > emptyInputIndex) {
-			inputsRef.current[emptyInputIndex].focus();
-		}
+		const lastFilledIndex =
+			inputsRef.current.findIndex(
+				(input, i) => input.value === "" || i === 5,
+			) || 0;
+
+		const focusIndex = Math.max(0, lastFilledIndex);
+		inputsRef.current[focusIndex]?.focus();
+		setAllInputsFilled(false);
 	};
 
 	useEffect(() => {
 		inputsRef.current[0]?.focus();
 	}, []);
 
+	const handleError = () => {
+		setIsSubmitting(false);
+		setAllInputsFilled(false);
+		inputsRef.current[5].focus();
+	};
+
 	return (
 		<>
 			<form
 				action={async (formData) => {
+					setIsSubmitting(true);
 					try {
-						// if (pathname === '/invite') {
-						//   if (token && email && propertyId) {
-						//     await deleteInvite(formData)
-						//     await insertNewTenant(formData)
-						//   } else {
-						//     throw new Error('Invalid invite link')
-						//   }
-						// }
 						await verifyOtp(formData);
 					} catch (error) {
-						setIsSubmitting(false);
-						// setHasError(true)
+						handleError();
 						toast.error("An error occurred, please try again.");
 						return;
-					} finally {
-						// setIsSubmitting(false);
 					}
 				}}
 				className=""
@@ -136,6 +141,7 @@ function OtpInputWithParams({ email }: { email: string }) {
 							autoComplete="off"
 							required
 							autoFocus={index === 0}
+							disabled={allInputsFilled}
 						/>
 					))}
 				</div>
@@ -151,11 +157,11 @@ function OtpInputWithParams({ email }: { email: string }) {
 					disabled={isSubmitting}
 					color={"blue"}
 					className="w-full h-10 mt-2"
-					onClick={() => {
-						if (inputsRef.current.every((input) => input.value !== "")) {
-							setIsSubmitting(true);
-						}
-					}}
+					// onClick={() => {
+					// if (inputsRef.current.every((input) => input.value !== "")) {
+					// 	setIsSubmitting(true);
+					// }
+					// }}
 				>
 					{isSubmitting ? <Spinner /> : "Submit"}
 				</Button>

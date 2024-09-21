@@ -523,21 +523,40 @@ export async function createTask(formData: FormData) {
 		}
 		return data;
 	}
+
+	const updateData: any = {
+		updated_at: new Date(),
+	};
+
+	// Only include fields that are present in the form data
+	if (title) updateData.title = title;
+	if (description) updateData.description = description;
+	if (priority) updateData.priority = priority;
+	if (status) updateData.status = status;
+	if (formData.has("notify")) updateData.notify = notify;
+
 	const { data, error } = await supabase
 		.from("maintenance")
-		.update({
-			title,
-			description,
-			priority,
-			status,
-			notify,
-			user_id: user.id,
-			property_id: currentPropertyId,
-			updated_at: new Date(),
-		})
+		.update(updateData)
 		.eq("id", id)
 		.select()
 		.single();
+
+	// const { data, error } = await supabase
+	// .from("maintenance")
+	// .update({
+	// 	title,
+	// 	description,
+	// 	priority,
+	// 	status,
+	// 	notify,
+	// 	user_id: user.id,
+	// 	property_id: currentPropertyId,
+	// 	updated_at: new Date(),
+	// })
+	// .eq("id", id)
+	// .select()
+	// .single();
 
 	if (error) {
 		console.error("Error creating task:", error);

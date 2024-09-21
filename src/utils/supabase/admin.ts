@@ -17,6 +17,29 @@ const supabaseAdmin = createClient<Database>(
 	process.env.SUPABASE_SERVICE_ROLE_KEY || "",
 );
 
+export const getTenants = async (propertyId: string) => {
+	const { data, error } = await supabaseAdmin
+		.from("tenants")
+		.select(`
+      id,
+      property_id,
+      user_id,
+      users:users (
+        email,
+        full_name,
+        created_at
+      )
+    `)
+		.eq("property_id", propertyId);
+
+	if (error) {
+		console.error("Error fetching tenants:", error);
+		return [];
+	}
+
+	return data;
+};
+
 const upsertProductRecord = async (product: Stripe.Product) => {
 	const productData: Product = {
 		id: product.id,
