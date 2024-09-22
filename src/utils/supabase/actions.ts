@@ -24,6 +24,19 @@ export async function getUser() {
 	return user;
 }
 
+export async function updateName(name: string) {
+	const user = await getUser();
+	if (!user) return;
+	const supabase = createClient();
+	const { error } = await supabase
+		.from("users")
+		.update({ full_name: name })
+		.eq("id", user.id);
+	if (error) {
+		console.error(error);
+	}
+}
+
 export async function updateFullName(formData: FormData) {
 	const user = await getUser();
 	if (!user) return;

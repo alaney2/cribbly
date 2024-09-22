@@ -24,15 +24,15 @@ const PLAID_REDIRECT_URI = process.env.PLAID_REDIRECT_URI || "";
 // We store the access_token in memory - in production, store it in a secure
 // persistent data store
 let ACCESS_TOKEN = null;
-let PUBLIC_TOKEN = null;
 let ITEM_ID = null;
-let ACCOUNT_ID = null;
+// let PUBLIC_TOKEN = null;
+// let ACCOUNT_ID = null;
 
 // The transfer_id and authorization_id are only relevant for Transfer ACH product.
 // We store the transfer_id in memory - in production, store it in a secure
 // persistent data store
-let AUTHORIZATION_ID = null;
-let TRANSFER_ID = null;
+// let AUTHORIZATION_ID = null;
+// let TRANSFER_ID = null;
 
 const configuration = new Configuration({
 	basePath: PlaidEnvironments[PLAID_ENV],
@@ -79,56 +79,67 @@ export async function POST(request: Request) {
 			numbers: { ach },
 		} = authResponse.data;
 
-		if (!item.available_products.includes(Products.Transfer)) {
+		// if (!item.available_products.includes(Products.Transfer)) {
+		// 	return NextResponse.json({
+		// 		error: "This institution does not have transfer capabilities",
+		// 	});
+		// }
+
+		if (
+			accounts.length === 0 ||
+			accounts.length >= 2 ||
+			accounts.length !== ach.length
+		) {
 			return NextResponse.json({
-				error: "This institution does not have transfer capabilities",
+				error: "Please link only one account",
 			});
 		}
 
-		let accountId = null;
+		const ach0 = ach[0];
+		const account = accounts[0];
+		const { account_id, name, mask, official_name, type, subtype } = account;
+		const { account: account_number, routing, wire_routing } = ach0;
 
-		for (let i = 0; i < accounts.length; i++) {
-			const { account_id, name, mask, official_name, type, subtype } =
-				accounts[i];
-			const { account, routing, wire_routing } = ach[i];
+		const request: ProcessorTokenCreateRequest = {
+			access_token: ACCESS_TOKEN,
+			account_id: account_id,
+			processor: ProcessorTokenCreateRequestProcessorEnum.Moov,
+		};
 
-			const request: ProcessorTokenCreateRequest = {
+		const processorTokenResponse = await client.processorTokenCreate(request);
+		const processorToken = processorTokenResponse.data.processor_token;
+
+		const { error } = await supabase.from("plaid_accounts").insert([
+			{
+				account_id,
+				user_id: user.id,
 				access_token: ACCESS_TOKEN,
-				account_id: account_id,
-				processor: ProcessorTokenCreateRequestProcessorEnum.Moov,
-			};
+				item_id: ITEM_ID,
+				account_number: account_number,
+				routing_number: routing,
+				wire_routing: wire_routing,
+				mask: mask,
+				name: name,
+				processor_token: processorToken,
+				type: type,
+				subtype: subtype,
+				official_name: official_name,
+			},
+		]);
 
-			const processorTokenResponse = await client.processorTokenCreate(request);
-			const processorToken = processorTokenResponse.data.processor_token;
-
-			console.log("processorToken", processorToken);
-			const { error } = await supabase.from("plaid_accounts").insert([
-				{
-					account_id,
-					user_id: user.id,
-					access_token: ACCESS_TOKEN,
-					item_id: ITEM_ID,
-					account_number: account,
-					routing_number: routing,
-					wire_routing: wire_routing,
-					mask: mask,
-					name: name,
-					processor_token: processorToken,
-				},
-			]);
-
-			if (error) {
-				return NextResponse.json({
-					error: error,
-				});
-			}
-
-			accountId = account_id;
+		if (error) {
+			return NextResponse.json({
+				error: error,
+			});
 		}
 
 		return NextResponse.json({
 			success: "Bank linked successfully",
-			accountId: accountId,
+			accountId: account_id,
+			accountNumber: account_number,
+			routingNumber: routing,
+			subtype: subtype,
+			processorToken: processorToken,
 		});
 	} catch (error) {
 		return NextResponse.json({

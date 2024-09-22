@@ -17,6 +17,7 @@ import type {
 } from "react-plaid-link";
 import { toast } from "sonner";
 import { useSearchParams, usePathname } from "next/navigation";
+import { linkBankAccount } from "@/utils/moov/actions";
 
 type PlaidLinkButtonProps = {
 	onSuccess: (accounts: any[]) => void;
@@ -67,7 +68,7 @@ export const PlaidLinkButton = forwardRef<
 				if (!response.ok) {
 					throw new Error("Failed to exchange public token for access token");
 				}
-				const { success } = await response.json();
+				const result = await response.json();
 
 				localStorage.removeItem("link_token");
 				setLinkToken(null);
@@ -86,9 +87,11 @@ export const PlaidLinkButton = forwardRef<
 					.eq("user_id", user.id)
 					.order("use_for_payouts", { ascending: false });
 
+				const linkingResponse = await linkBankAccount(result);
+
 				onSuccess(existingAccounts || []);
 
-				return success;
+				return result.success;
 			},
 			{
 				loading: "Linking bank account...",

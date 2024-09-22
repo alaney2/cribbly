@@ -1,15 +1,19 @@
 "use server";
 import { Moov, SCOPES } from "@moovio/node";
 import { createClient } from "@/utils/supabase/server";
+import { getUser } from "@/utils/supabase/actions";
 // import { MoovOnboarding } from "@moovio/moov-js";
 
+const moov = new Moov({
+	accountID: process.env.NEXT_PUBLIC_MOOV_ACCOUNT_ID as string,
+	publicKey: process.env.NEXT_PUBLIC_MOOV_PUBLIC_KEY as string,
+	secretKey: process.env.MOOV_SECRET_KEY as string,
+	domain: process.env.NEXT_PUBLIC_SITE_URL as string,
+});
+
+const supabase = createClient();
+
 export async function createMoovToken() {
-	const moov = new Moov({
-		accountID: process.env.NEXT_PUBLIC_MOOV_ACCOUNT_ID as string,
-		publicKey: process.env.NEXT_PUBLIC_MOOV_PUBLIC_KEY as string,
-		secretKey: process.env.MOOV_SECRET_KEY as string,
-		domain: process.env.NEXT_PUBLIC_SITE_URL as string,
-	});
 	const scopes = [SCOPES.ACCOUNTS_CREATE];
 	try {
 		const { token } = await moov.generateToken(scopes);
@@ -21,13 +25,6 @@ export async function createMoovToken() {
 }
 
 export async function createMoovAccount(formData: any) {
-	const moov = new Moov({
-		accountID: process.env.NEXT_PUBLIC_MOOV_ACCOUNT_ID as string,
-		publicKey: process.env.NEXT_PUBLIC_MOOV_PUBLIC_KEY as string,
-		secretKey: process.env.MOOV_SECRET_KEY as string,
-		domain: process.env.NEXT_PUBLIC_SITE_URL as string,
-	});
-
 	const useItin = formData["governmentID"]["useITIN"];
 
 	try {
@@ -120,4 +117,52 @@ export async function createMoovAccount(formData: any) {
 		}
 		throw err;
 	}
+}
+
+export async function linkBankAccount(result: any) {
+	const user = await getUser();
+	if (!user) return;
+
+	const { data: userData, error: userError } = await supabase
+		.from("users")
+		.select("*")
+		.eq("id", user.id)
+		.single();
+
+	if (userError) {
+		console.error("Error fetching user in linkBankAccount:", userError);
+		return;
+	}
+
+	const { data: moovAccount, error } = await supabase
+		.from("moov_accounts")
+		.select("*")
+		.eq("user_id", user.id)
+		.single();
+
+	if (error) {
+		console.error("Error fetching moov account in linkBankAccount:", error);
+		return;
+	}
+
+	const bankAccountPayload = {
+		bankAccount: {
+			accountNumber: result.accountNumber,
+			bankAccountType: result.subtype,
+			holderName: userData.full_name,
+			holderType: "individual",
+			routingNumber: result.routingNumber,
+		},
+		processorToken: result.processorToken,
+	};
+
+	const response = await moov.bankAccounts.link(
+		moovAccount.account_id,
+		bankAccountPayload.bankAccount,
+		bankAccountPayload.processorToken,
+	);
+
+	console.log("RESPONSE", response);
+
+	return response;
 }

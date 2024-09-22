@@ -19,7 +19,7 @@ import * as Headless from "@headlessui/react";
 import { Radio } from "@/components/catalyst/radio";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import { setWelcomeScreen } from "@/utils/supabase/actions";
+import { setWelcomeScreen, updateName } from "@/utils/supabase/actions";
 import { toast } from "sonner";
 import { FramerSpinner } from "@/components/Spinners/FramerSpinner";
 import { Heading, Subheading } from "@/components/catalyst/heading";
@@ -176,6 +176,9 @@ export const VerificationForm = ({
 		const loadingToast = toast.loading("Creating account...");
 		try {
 			const account = await createMoovAccount(formData);
+			const fullName =
+				`${formData.name.firstName} ${formData.name.lastName}`.trim();
+			await updateName(fullName);
 			await setWelcomeScreen(false);
 			toast.dismiss(loadingToast);
 			toast.success("Account created successfully");

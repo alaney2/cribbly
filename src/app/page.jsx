@@ -32,7 +32,7 @@ export default function Home() {
 				<BeforeAfter />
 				<Testimonials />
 				<FollowerPointerCard title="🏠 Future Property Manager">
-					<CallToAction />
+					{/* <CallToAction /> */}
 					<section
 						id="get-started-today"
 						className="relative overflow-hidden bg-blue-600 py-32"
@@ -66,8 +66,8 @@ export default function Home() {
 					</section>
 				</FollowerPointerCard>
 
-				<SecondaryFeatures />
-				<Pricing />
+				{/* <SecondaryFeatures /> */}
+				{/* <Pricing /> */}
 				<Faqs />
 			</main>
 			<Footer />

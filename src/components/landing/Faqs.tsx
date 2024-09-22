@@ -36,7 +36,7 @@ const faqs = [
 		{
 			question: "How much does Cribbly cost?",
 			answer:
-				"Cribbly costs $80 to list unlimited properties. Tenants pay a small fee when paying rent to cover the payment processing cost. There are no hidden fees or additional charges. We offer a risk-free 30-day money-back guarantee if you are not satisfied with the service.",
+				"The first property you list is free! If you have additional properties, Cribbly costs $78 for a lifetime license. This includes all features and updates, with no subscription fees.",
 		},
 		{
 			question: "How do I get started with Cribbly?",
@@ -90,10 +90,7 @@ export function Faqs() {
 						</a>
 					</p>
 				</div>
-				<ul
-					role="list"
-					className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-2"
-				>
+				<ul className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-2">
 					{faqs.map((column, columnIndex) => (
 						<li key={columnIndex}>
 							<ul role="list" className="flex flex-col gap-y-6">
