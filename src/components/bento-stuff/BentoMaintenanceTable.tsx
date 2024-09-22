@@ -1,6 +1,5 @@
 import { MaintenanceTable } from "@/components/maintenance/MaintenanceTable";
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function BentoMaintenanceTable({ tasks }: { tasks: any[] }) {
 	return (
 		<div className="mt-0 flow-root overflow-hidden">
