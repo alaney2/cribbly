@@ -1,36 +1,38 @@
-import { createClient } from '@/utils/supabase/server'
-import { NextResponse } from 'next/server'
-
+import { createClient } from "@/utils/supabase/server";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const requestUrl = new URL(request.url)
+	const requestUrl = new URL(request.url);
 
-  const data = await request.json()
-  const email = data.email
+	const data = await request.json();
+	const email = data.email;
 
-  if (email) {
-    const supabase = createClient()
+	console.log("Resending OTP for email:", email);
 
-    const { data, error } = await supabase.auth.resend({
-      type: 'signup',
-      email: email,
-    })
+	if (email) {
+		const supabase = createClient();
 
-    if (error) {
-      return NextResponse.redirect(
-        `${requestUrl.origin}/get-started?error=Could not resend code`,
-        {
-          status: 301,
-        }
-      );
-    }
+		const { error } = await supabase.auth.signInWithOtp({
+			// type: "signup",
+			email: email,
+		});
 
-  }
+		console.log("Resend OTP response:", data, error);
 
-  return NextResponse.redirect(
-    `${requestUrl.origin}/get-started?error=Invalid email`,
-    {
-      status: 301,
-    }
-  )
+		if (error) {
+			return NextResponse.redirect(
+				`${requestUrl.origin}/get-started?error=Could not resend code`,
+				{
+					status: 301,
+				},
+			);
+		}
+		return NextResponse.next();
+	}
+	return NextResponse.redirect(
+		`${requestUrl.origin}/get-started?error=Invalid email`,
+		{
+			status: 301,
+		},
+	);
 }

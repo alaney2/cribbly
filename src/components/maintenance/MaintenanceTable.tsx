@@ -371,16 +371,15 @@ export function MaintenanceTable({
 								</Button>
 							</DialogActions>
 						) : (
-							<DialogActions className="flex w-full items-center justify-between">
-								<Button
-									type="button"
-									color="red"
-									onClick={() => handleDelete(currentRequest.id)}
-									disabled={!isCurrentUserRequest}
-								>
-									Delete
-								</Button>
-								<div className="flex gap-x-2">
+							<DialogActions className="flex flex-col sm:flex-row w-full items-center sm:justify-between gap-y-4 sm:gap-y-0">
+								<div className="flex flex-col sm:flex-row gap-4 sm:gap-x-2 w-full sm:w-auto">
+									<Button
+										type="submit"
+										color="blue"
+										className="w-full sm:w-auto order-first sm:order-last"
+									>
+										Submit
+									</Button>
 									<Button
 										type="button"
 										plain
@@ -388,13 +387,20 @@ export function MaintenanceTable({
 											setIsNewDialogOpen(false);
 											setIsEditDialogOpen(false);
 										}}
+										className="w-full sm:w-auto hidden sm:block"
 									>
 										Cancel
 									</Button>
-									<Button type="submit" color="blue">
-										Submit
-									</Button>
 								</div>
+								<Button
+									type="button"
+									color="red"
+									onClick={() => handleDelete(currentRequest.id)}
+									disabled={!isCurrentUserRequest}
+									className="w-full sm:w-auto order-first"
+								>
+									Delete
+								</Button>
 							</DialogActions>
 						)}
 					</form>
