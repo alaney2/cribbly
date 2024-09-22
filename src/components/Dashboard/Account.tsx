@@ -1,26 +1,13 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/catalyst/button";
-import type {
-	PlaidLinkError,
-	PlaidLinkOnExitMetadata,
-	PlaidLinkOptions,
-} from "react-plaid-link";
-import { usePlaidLink } from "react-plaid-link";
-import { useState, useEffect } from "react";
-import {
-	Dialog,
-	DialogActions,
-	DialogBody,
-	DialogDescription,
-	DialogTitle,
-} from "@/components/catalyst/dialog";
-import { LockClosedIcon, StarIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
+import { StarIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
-import { useSearchParams, usePathname } from "next/navigation";
 import { RemoveBankDialog } from "@/components/Dashboard/RemoveBankDialog";
 import { Input } from "@/components/catalyst/input";
 import { Divider } from "@/components/catalyst/divider";
+import { PlaidLinkButton } from "@/components/PlaidLinkButton";
 
 export type PlaidAccount = {
 	account_id: string;
@@ -43,11 +30,7 @@ type AccountProps = {
 };
 
 export function Account({ fullName, email, plaidAccounts }: AccountProps) {
-	const [linkToken, setLinkToken] = useState<string | null>(null);
-	const [isBankDialogOpen, setIsBankDialogOpen] = useState(false);
 	const [isRemoveBankDialogOpen, setIsRemoveBankDialogOpen] = useState(false);
-	const searchParams = useSearchParams();
-	const pathname = usePathname();
 	const [editedName, setEditedName] = useState(fullName);
 	const [bankDetails, setBankDetails] = useState("");
 	const [accountId, setAccountId] = useState("");
@@ -119,107 +102,12 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 		}
 	};
 
-	const generateToken = async () => {
-		if (searchParams.has("oauth_state_id")) {
-			const link_token = localStorage.getItem("link_token");
-			if (!link_token) {
-				console.error("Link token not found");
-				return;
-			}
-			setLinkToken(link_token);
-			return;
+	const handlePlaidSuccess = (newAccounts: PlaidAccount[]) => {
+		setBankAccounts(newAccounts);
+		if (newAccounts.length === 1) {
+			setPrimaryAccount(newAccounts[0].account_id);
 		}
-		const response = await fetch("/api/plaid/create_link_token", {
-			method: "POST",
-		});
-		if (!response.ok) {
-			console.error("Failed to create link token");
-			return;
-		}
-		const data = await response.json();
-		localStorage.setItem("link_token", data.link_token);
-		setLinkToken(data.link_token);
 	};
-
-	const onSuccess = async (publicToken: string) => {
-		toast.promise(
-			async () => {
-				// Send the public_token to server to exchange for an access_token
-				const response = await fetch("/api/plaid/set_access_token", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({ publicToken }),
-				});
-				if (!response.ok) {
-					// Handle error
-					console.error("Failed to exchange public token for access token");
-					throw new Error("Failed to exchange public token for access token");
-				}
-				const { success, accountId } = await response.json();
-
-				localStorage.removeItem("link_token");
-				setLinkToken(null);
-
-				const supabase = createClient();
-				const {
-					data: { user },
-				} = await supabase.auth.getUser();
-
-				if (!user) {
-					return;
-				}
-
-				const { data: existingAccounts } = await supabase
-					.from("plaid_accounts")
-					.select("*")
-					.eq("user_id", user.id)
-					.order("use_for_payouts", { ascending: false });
-
-				setBankAccounts(existingAccounts || []);
-
-				if (existingAccounts && existingAccounts.length === 1) {
-					// This is the first account, set it as primary
-					await setPrimaryAccount(accountId);
-				}
-
-				return success;
-			},
-			{
-				loading: "Linking bank account...",
-				success: (success) => success,
-				error: (error) => error,
-			},
-		);
-	};
-
-	const config: PlaidLinkOptions = {
-		token: linkToken,
-		onSuccess,
-		onExit: (
-			error: PlaidLinkError | null,
-			metadata: PlaidLinkOnExitMetadata,
-		) => {
-			localStorage.removeItem("link_token");
-			setLinkToken(null);
-			if (error) {
-				toast.error("Bank account linking failed");
-			}
-		},
-	};
-
-	if (searchParams.has("oauth_state_id")) {
-		config.receivedRedirectUri = pathname;
-	}
-
-	const { open, ready } = usePlaidLink(config);
-
-	useEffect(() => {
-		if (linkToken && ready) {
-			open();
-		}
-	}, [linkToken, ready, open]);
 
 	return (
 		<div className="relative justify-center flex">
@@ -349,47 +237,19 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 						/>
 						<Divider />
 						<div className="flex pt-6">
-							<Button
-								type="button"
-								plain
-								className="text-blue-600 hover:text-blue-500"
-								onClick={() => setIsBankDialogOpen(true)}
-							>
-								<span aria-hidden="true">+</span> Add an account
-							</Button>
+							<PlaidLinkButton onSuccess={handlePlaidSuccess}>
+								<Button
+									type="button"
+									plain
+									className="text-blue-600 hover:text-blue-500"
+									// onClick={() => setIsBankDialogOpen(true)}
+								>
+									<span aria-hidden="true">+</span> Add an account
+								</Button>
+							</PlaidLinkButton>
 						</div>
 					</div>
 				</div>
-				<Dialog open={isBankDialogOpen} onClose={setIsBankDialogOpen}>
-					<div className="flex items-center gap-x-4 mb-4">
-						<LockClosedIcon className="w-6 text-gray-500" />
-						<DialogTitle className="text-xl font-semibold">
-							Link Bank Account
-						</DialogTitle>
-					</div>
-					<DialogDescription className="mb-4">
-						In order to verify your bank account information, you will be
-						redirected to our third-party partner, Plaid.
-					</DialogDescription>
-					<DialogDescription>
-						The transfer of your data is encrypted end-to-end and your
-						credentials will never be made accessible to Cribbly.
-					</DialogDescription>
-					<DialogActions>
-						<Button plain onClick={() => setIsBankDialogOpen(false)}>
-							Cancel
-						</Button>
-						<Button
-							color="blue"
-							onClick={async () => {
-								await generateToken();
-								setIsBankDialogOpen(false);
-							}}
-						>
-							Continue
-						</Button>
-					</DialogActions>
-				</Dialog>
 			</main>
 		</div>
 	);
