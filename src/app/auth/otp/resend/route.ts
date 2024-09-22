@@ -27,7 +27,12 @@ export async function POST(request: Request) {
 				},
 			);
 		}
-		return NextResponse.next();
+		return NextResponse.redirect(
+			`${requestUrl.origin}/get-started?success=Code resent`,
+			{
+				status: 301,
+			},
+		);
 	}
 	return NextResponse.redirect(
 		`${requestUrl.origin}/get-started?error=Invalid email`,
