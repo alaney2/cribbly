@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient, updateSession } from "@/utils/supabase/middleware";
-import { updateCurrentProperty } from "./utils/supabase/actions";
+import { updateCurrentProperty } from "@/utils/supabase/actions";
 
 export async function middleware(request: NextRequest) {
 	const url = request.nextUrl.clone();
@@ -28,12 +28,7 @@ export async function middleware(request: NextRequest) {
 		}
 
 		if (!welcome_screen) {
-			const unavailableRoutes = [
-				"/sign-in",
-				"/get-started",
-				"/welcome",
-				"/invite",
-			];
+			const unavailableRoutes = ["/sign-in", "/get-started", "/welcome"];
 			// Can't sign in or sign up if already logged in
 			if (
 				pathname === "/" ||

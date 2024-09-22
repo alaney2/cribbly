@@ -1,4 +1,3 @@
-// Spinner.js
 import { motion } from "framer-motion";
 
 export const FramerSpinner = () => (
