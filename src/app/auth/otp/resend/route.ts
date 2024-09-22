@@ -2,12 +2,8 @@ import { createClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-	const requestUrl = new URL(request.url);
-
 	const data = await request.json();
 	const email = data.email;
-
-	console.log("Resending OTP for email:", email);
 
 	if (email) {
 		const supabase = createClient();
@@ -16,8 +12,6 @@ export async function POST(request: Request) {
 			// type: "signup",
 			email: email,
 		});
-
-		console.log("Resend OTP response:", data, error);
 
 		if (error) {
 			return NextResponse.json(
