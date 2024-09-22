@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import {
 	Dialog,
@@ -23,7 +23,10 @@ type PlaidLinkButtonProps = {
 	children: React.ReactNode;
 };
 
-export function PlaidLinkButton({ onSuccess, children }: PlaidLinkButtonProps) {
+export const PlaidLinkButton = forwardRef<
+	HTMLButtonElement,
+	PlaidLinkButtonProps
+>(({ onSuccess, children }, ref) => {
 	const [linkToken, setLinkToken] = useState<string | null>(null);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const searchParams = useSearchParams();
@@ -124,10 +127,9 @@ export function PlaidLinkButton({ onSuccess, children }: PlaidLinkButtonProps) {
 
 	return (
 		<>
-			<div
+			<button
 				onClick={(e) => {
 					e.preventDefault();
-					e.stopPropagation();
 					setIsDialogOpen(true);
 				}}
 				onKeyDown={(e) => {
@@ -135,12 +137,13 @@ export function PlaidLinkButton({ onSuccess, children }: PlaidLinkButtonProps) {
 						setIsDialogOpen(true);
 					}
 				}}
-				role="button"
+				type="button"
 				tabIndex={0}
 				className="cursor-default"
+				ref={ref}
 			>
 				{children}
-			</div>
+			</button>
 			<Dialog open={isDialogOpen} onClose={setIsDialogOpen}>
 				<div className="flex items-center gap-x-4 mb-4">
 					<LockClosedIcon className="w-6 text-gray-500" />
@@ -173,4 +176,4 @@ export function PlaidLinkButton({ onSuccess, children }: PlaidLinkButtonProps) {
 			</Dialog>
 		</>
 	);
-}
+});

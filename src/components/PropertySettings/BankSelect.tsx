@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
 	Listbox,
 	ListboxLabel,
@@ -13,6 +13,7 @@ export function BankSelect({ plaidAccounts }: { plaidAccounts: any[] | null }) {
 	const [selectedBank, setSelectedBank] = useState<any | null>(
 		banks.filter((bank) => bank.use_for_payouts)[0] || null,
 	);
+	const plaidLinkRef = useRef<HTMLButtonElement>(null);
 
 	const handlePlaidSuccess = (newAccounts: any[]) => {
 		setBanks(newAccounts);
@@ -25,20 +26,23 @@ export function BankSelect({ plaidAccounts }: { plaidAccounts: any[] | null }) {
 		}
 	};
 
+	const handleChange = (value: string) => {
+		if (value === "Add bank") {
+			plaidLinkRef.current?.click();
+			return;
+		}
+		const selected = banks.find((bank) => bank.name === value);
+		setSelectedBank(selected);
+		setPrimaryAccount(selected.account_id);
+	};
+
 	return (
 		<>
 			<Listbox
 				name="bank-select"
 				value={selectedBank?.name}
 				placeholder="Select bank..."
-				onChange={(value) => {
-					if (value === "Add bank") {
-						return;
-					}
-					const selected = banks.find((bank) => bank.name === value);
-					setSelectedBank(selected);
-					setPrimaryAccount(selected.account_id);
-				}}
+				onChange={handleChange}
 			>
 				{banks.map((bank) => (
 					<ListboxOption key={bank.account_id} value={bank.name}>
@@ -46,11 +50,14 @@ export function BankSelect({ plaidAccounts }: { plaidAccounts: any[] | null }) {
 					</ListboxOption>
 				))}
 				<ListboxOption value="Add bank" className="">
-					<PlaidLinkButton onSuccess={handlePlaidSuccess}>
-						<ListboxLabel className="mr-2 font-medium">Add bank +</ListboxLabel>
-					</PlaidLinkButton>
+					<ListboxLabel className="mr-2 font-medium">Add bank +</ListboxLabel>
 				</ListboxOption>
 			</Listbox>
+			<div className="hidden">
+				<PlaidLinkButton onSuccess={handlePlaidSuccess} ref={plaidLinkRef}>
+					<span>Add bank</span>
+				</PlaidLinkButton>
+			</div>
 		</>
 	);
 }
