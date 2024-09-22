@@ -20,24 +20,15 @@ export async function POST(request: Request) {
 		console.log("Resend OTP response:", data, error);
 
 		if (error) {
-			return NextResponse.redirect(
-				`${requestUrl.origin}/get-started?error=Could not resend code`,
-				{
-					status: 301,
-				},
+			return NextResponse.json(
+				{ error: "Could not resend code" },
+				{ status: 400 },
 			);
 		}
-		return NextResponse.redirect(
-			`${requestUrl.origin}/get-started?success=Code resent`,
-			{
-				status: 301,
-			},
+		return NextResponse.json(
+			{ message: "Code resent successfully" },
+			{ status: 200 },
 		);
 	}
-	return NextResponse.redirect(
-		`${requestUrl.origin}/get-started?error=Invalid email`,
-		{
-			status: 301,
-		},
-	);
+	return NextResponse.json({ error: "Invalid email" }, { status: 400 });
 }
