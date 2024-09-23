@@ -177,7 +177,7 @@ export const VerificationForm = ({
 		try {
 			const account = await createMoovAccount(formData);
 			const fullName =
-				`${formData.name.firstName} ${formData.name.lastName}`.trim();
+				`${formData.name.firstName?.trim()} ${formData.name.lastName?.trim()}`.trim();
 			await updateName(fullName);
 			await setWelcomeScreen(false);
 			toast.dismiss(loadingToast);

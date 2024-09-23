@@ -266,12 +266,10 @@ export function RentCard({
 								</Label>
 								<div className="flex-grow">
 									<InputGroup className="w-full relative">
-										{/* <CurrencyDollarIcon className="h-5 w-5 text-gray-400" /> */}
 										<span className="text-zinc-500 dark:text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 select-none pointer-events-none z-20">
 											$
 										</span>
 										<Input
-											// type="number"
 											id="rentAmount"
 											name="rentAmount"
 											placeholder="0"
