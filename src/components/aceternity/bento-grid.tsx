@@ -56,7 +56,7 @@ export const BentoGridItem = ({
 					</div>
 				</div>
 				{edit && (
-					<div className="ml-3 group-hover:opacity-100 p-2 rounded-lg block opacity-20 transition-opacity duration-200 ease-in-out">
+					<div className="ml-3 opacity-20 p-2 rounded-lg block transition-opacity duration-200 ease-in-out @media (hover: hover) {group-hover:opacity-100}">
 						<PencilSquareIcon className="h-5 w-5 text-gray-500" />
 					</div>
 				)}
@@ -67,7 +67,8 @@ export const BentoGridItem = ({
 		<Link
 			href={href}
 			className={cn(
-				"row-span-1 rounded-xl group group/bento hover:shadow-xl transition duration-200 dark:shadow-none p-4 dark:bg-black ring-1 dark:ring-2 ring-inset bg-white ring-gray-200 dark:ring-gray-600 hover:ring-0 justify-between flex flex-col space-y-4 overflow-y-auto select-none cursor-default",
+				"row-span-1 rounded-xl group group/bento transition duration-200 dark:shadow-none p-4 dark:bg-black ring-1 dark:ring-2 ring-inset bg-white ring-gray-200 dark:ring-gray-600 justify-between flex flex-col space-y-4 overflow-y-auto select-none cursor-default",
+				"@media (hover: hover) {hover:shadow-xl hover:ring-0}",
 				className,
 			)}
 		>
@@ -76,7 +77,8 @@ export const BentoGridItem = ({
 	) : (
 		<div
 			className={cn(
-				"row-span-1 rounded-xl group group/bento hover:shadow-xl transition duration-200 dark:shadow-none p-4 dark:bg-black ring-1 dark:ring-2 ring-inset bg-white ring-gray-200 dark:ring-gray-600 hover:ring-0 justify-between flex flex-col space-y-4 overflow-y-auto select-none",
+				"row-span-1 rounded-xl group group/bento transition duration-200 dark:shadow-none p-4 dark:bg-black ring-1 dark:ring-2 ring-inset bg-white ring-gray-200 dark:ring-gray-600 justify-between flex flex-col space-y-4 overflow-y-auto select-none",
+				"@media (hover: hover) {hover:shadow-xl hover:ring-0}",
 				className,
 			)}
 		>
