@@ -87,6 +87,10 @@ export const NavbarItem = forwardRef(function NavbarItem(
 		"dark:text-white dark:data-[slot=icon]:*:fill-zinc-400",
 		"dark:data-[hover]:bg-white/5 dark:data-[slot=icon]:*:data-[hover]:fill-white",
 		"dark:data-[active]:bg-white/5 dark:data-[slot=icon]:*:data-[active]:fill-white",
+
+		"focus:outline-none",
+		"focus-visible:ring-2 focus-visible:ring-blue-500",
+		"active:outline-none",
 	);
 
 	return (
