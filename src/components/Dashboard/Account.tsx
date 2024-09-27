@@ -242,7 +242,6 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 									type="button"
 									plain
 									className="text-blue-600 hover:text-blue-500"
-									// onClick={() => setIsBankDialogOpen(true)}
 								>
 									<span aria-hidden="true">+</span> Add an account
 								</Button>
