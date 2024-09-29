@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/catalyst/button";
 import {
@@ -15,13 +15,6 @@ import { Field, Label } from "@/components/catalyst/fieldset";
 import { Heading } from "@/components/catalyst/heading";
 import { Strong, Text, TextLink } from "@/components/catalyst/text";
 import * as Headless from "@headlessui/react";
-import {
-	Field as HeadlessField,
-	Fieldset as HeadlessFieldset,
-	Label as HeadlessLabel,
-	Legend as HeadlessLegend,
-	RadioGroup as HeadlessRadioGroup,
-} from "@headlessui/react";
 import { Switch } from "@/components/catalyst/switch";
 import {
 	Dialog,
@@ -30,7 +23,6 @@ import {
 	DialogDescription,
 	DialogTitle,
 } from "@/components/catalyst/dialog";
-import { Radio, RadioField, RadioGroup } from "@/components/catalyst/radio";
 import {
 	Table,
 	TableBody,
@@ -39,12 +31,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/catalyst/table";
-import { EditFeeDialog } from "@/components/PropertySettings/EditFeeDialog";
+import { EditFeeDialog } from "@/components/dialogs/EditFeeDialog";
 import { addPropertyFees, addFee } from "@/utils/supabase/actions";
 import { format, addYears, subDays, addDays, addWeeks } from "date-fns";
-import { ScheduleDialog } from "@/components/PropertySettings/ScheduleDialog";
+import { BillingScheduleDialog } from "@/components/dialogs/BillingScheduleDialog";
+import { AddFeeDialog } from "@/components/dialogs/AddFeeDialog";
 import { toast } from "sonner";
-import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { daysBetween } from "@/utils/helpers";
 import { parseISO } from "date-fns";
 import { Divider } from "@/components/catalyst/divider";
@@ -370,7 +362,7 @@ export function RentCard({
 								<BankSelect plaidAccounts={plaidAccounts} />
 							</Headless.Field>
 						</div>
-						{fees.length > 0 && (
+						{/* {fees.length > 0 && (
 							<div className="mt-3">
 								<Table dense={true} className="">
 									<TableHead>
@@ -402,7 +394,7 @@ export function RentCard({
 									</TableBody>
 								</Table>
 							</div>
-						)}
+						)} */}
 						<input
 							name="propertyId"
 							defaultValue={propertyId}
@@ -410,13 +402,13 @@ export function RentCard({
 							className="hidden"
 						/>
 						<div className="-mb-1 mt-6 flex justify-between">
-							<Button
+							{/* <Button
 								type="button"
 								color="blue"
 								onClick={() => setIsDialogOpen(true)}
 							>
 								Add Fee
-							</Button>
+							</Button> */}
 							<Button
 								type="button"
 								outline
@@ -438,151 +430,19 @@ export function RentCard({
 					</CardFooter>
 				</form>
 			</Card>
-			<Dialog open={isDialogOpen} onClose={setIsDialogOpen}>
-				<DialogTitle>Add Fee</DialogTitle>
-				<DialogDescription>
-					Add a one-time or recurring fee for the tenant, billed at the start of
-					next month. Enter a negative amount to apply a discount.
-				</DialogDescription>
-				<form
-					action={async (formData: FormData) => {
-						toast.promise(
-							// biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
-							new Promise(async (resolve, reject) => {
-								try {
-									const data = await addFee(formData, propertyId);
-									const newFee = {
-										id: data.id,
-										property_id: propertyId,
-										fee_type: dialogFee.fee_type,
-										fee_name: dialogFee.fee_name,
-										fee_cost: dialogFee.fee_cost,
-									};
-									setFees([...fees, newFee]);
-									setIsDialogOpen(false);
-									setDialogFee({
-										id: "",
-										property_id: propertyId,
-										fee_type: "one-time",
-										fee_name: "",
-										fee_cost: 0,
-									});
-									setCurrentProperty?.((prevProperty: any) => ({
-										...prevProperty,
-										property_fees: [...fees, newFee],
-									}));
-									resolve("Success");
-								} catch (error) {
-									reject(error);
-								}
-							}),
-							{
-								loading: "Adding fee...",
-								success: "Fee added!",
-								error: "An error occurred while adding the fee.",
-							},
-						);
-					}}
-				>
-					<DialogBody>
-						<div className="items-center">
-							<HeadlessFieldset>
-								<HeadlessLegend className="mb-3 text-base/6 font-medium sm:text-sm/6">
-									Fee type
-								</HeadlessLegend>
-								<HeadlessRadioGroup
-									name="feeType"
-									defaultValue="one-time"
-									className="mt-1 flex items-center gap-x-3"
-									onChange={(feeType: "one-time" | "recurring") =>
-										setDialogFee({ ...dialogFee, fee_type: feeType })
-									}
-								>
-									<HeadlessRadioGroup.Option value="one-time">
-										<HeadlessField className="flex items-center rounded-lg pr-6 outline outline-1 outline-gray-200">
-											<Radio
-												value="one-time"
-												color="blue"
-												className="px-3 py-2"
-											/>
-											<HeadlessLabel className="text-sm">
-												One-time
-											</HeadlessLabel>
-										</HeadlessField>
-									</HeadlessRadioGroup.Option>
-									<HeadlessRadioGroup.Option value="recurring">
-										<HeadlessField className="flex items-center rounded-lg pr-6 outline outline-1 outline-gray-200">
-											<Radio
-												value="recurring"
-												color="blue"
-												className="px-3 py-2"
-											/>
-											<HeadlessLabel className="text-sm">
-												Recurring
-											</HeadlessLabel>
-										</HeadlessField>
-									</HeadlessRadioGroup.Option>
-								</HeadlessRadioGroup>
-							</HeadlessFieldset>
-						</div>
-						<div className="mt-6">
-							<Field>
-								<Label htmlFor="feeName">Fee name</Label>
-								<Input
-									id="feeName"
-									value={dialogFee.fee_name}
-									name="feeName"
-									onChange={(e) =>
-										setDialogFee({ ...dialogFee, fee_name: e.target.value })
-									}
-									// placeholder="Enter fee name"
-									autoComplete="off"
-									required
-								/>
-							</Field>
-						</div>
-						<div className="mt-6">
-							<Field>
-								<Label htmlFor="feeAmount ">Fee amount</Label>
-								<Input
-									id="feeAmount"
-									type="number"
-									value={dialogFee.fee_cost || ""}
-									name="feeAmount"
-									onChange={(e) =>
-										setDialogFee({
-											...dialogFee,
-											fee_cost: Number(e.target.value),
-										})
-									}
-									placeholder="0"
-									autoComplete="off"
-									required
-									// min="0"
-									pattern="^\d+(?:\.\d{1,2})?$"
-									step=".01"
-								/>
-							</Field>
-						</div>
-					</DialogBody>
-					<DialogActions>
-						<Button
-							type="button"
-							outline
-							onClick={() => setIsDialogOpen(false)}
-						>
-							Cancel
-						</Button>
-						<Button type="submit" color="blue" className="">
-							Add
-						</Button>
-					</DialogActions>
-				</form>
-			</Dialog>
-			{editFeeOpen && feeEdit && (
+			<AddFeeDialog
+				isOpen={isDialogOpen}
+				onClose={() => setIsDialogOpen(false)}
+				// fee={dialogFee}
+				propertyId={propertyId}
+				fees={fees}
+				setFees={setFees}
+				setCurrentProperty={setCurrentProperty}
+			/>
+			{feeEdit && (
 				<EditFeeDialog
 					isOpen={editFeeOpen}
-					setIsOpen={setEditFeeOpen}
+					onClose={() => setEditFeeOpen(false)}
 					fee={feeEdit}
 					fees={fees}
 					setFees={setFees}
@@ -590,9 +450,9 @@ export function RentCard({
 				/>
 			)}
 			{startDate && endDate && (
-				<ScheduleDialog
+				<BillingScheduleDialog
 					isOpen={isScheduleOpen}
-					setIsOpen={setIsScheduleOpen}
+					onClose={() => setIsScheduleOpen(false)}
 					startDate={parseISO(startDate)}
 					endDate={parseISO(endDate)}
 					rentAmount={rentAmount}

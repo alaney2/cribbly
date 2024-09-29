@@ -407,6 +407,19 @@ export async function deleteProperty(currentPropertyId: string) {
 		console.error(error);
 		throw new Error("Error deleting property");
 	}
+
+	const { data: propertyData, error: propertyDataError } = await supabase
+		.from("properties")
+		.select()
+		.eq("user_id", user.id);
+	if (propertyDataError) {
+		console.error("Error fetching properties:", propertyDataError);
+		return;
+	}
+	const propertyIds = propertyData.map((property) => property.id);
+	if (!propertyIds.includes(user.user_metadata.currentPropertyId)) {
+		await updateCurrentProperty(propertyData[0].id);
+	}
 }
 
 export async function getSubscription() {

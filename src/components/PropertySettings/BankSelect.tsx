@@ -16,7 +16,6 @@ export function BankSelect({
 	setIsBankSelected,
 }: BankSelectProps) {
 	const [banks, setBanks] = useState<any[]>(plaidAccounts || []);
-	const [isLoading, setIsLoading] = useState(true);
 	const [selectedBank, setSelectedBank] = useState<any | null>(
 		banks.filter((bank) => bank.use_for_payouts)[0] || null,
 	);
@@ -26,7 +25,7 @@ export function BankSelect({
 		if (plaidAccounts) {
 			setBanks(plaidAccounts);
 		}
-		setIsLoading(false);
+		// setIsLoading(false);
 	}, [plaidAccounts]);
 
 	const handlePlaidSuccess = (newAccounts: any[]) => {
@@ -63,24 +62,21 @@ export function BankSelect({
 
 	return (
 		<>
-			{!isLoading && (
-				<Select
-					name="bank-select"
-					defaultValue=""
-					value={selectedBank?.name || ""}
-					onChange={handleChange}
-				>
-					<option value="" disabled>
-						Select a bank&hellip;
+			<Select
+				name="bank-select"
+				value={selectedBank?.name || ""}
+				onChange={handleChange}
+			>
+				<option value="" disabled>
+					Select a bank&hellip;
+				</option>
+				{banks.map((bank) => (
+					<option key={bank.account_id} value={bank.name}>
+						{bank.name}
 					</option>
-					{banks.map((bank) => (
-						<option key={bank.account_id} value={bank.name}>
-							{bank.name}
-						</option>
-					))}
-					<option value="add_bank">Add bank +</option>
-				</Select>
-			)}
+				))}
+				<option value="add_bank">Add bank +</option>
+			</Select>
 			<LinkConfirmDialog
 				isOpen={isLinkConfirmDialogOpen}
 				setIsOpen={setIsLinkConfirmDialogOpen}

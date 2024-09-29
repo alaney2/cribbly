@@ -16,6 +16,8 @@ import {
 import { updateCurrentProperty } from "@/utils/supabase/actions";
 import { useRouter } from "next/navigation";
 import { useSWRConfig } from "swr";
+import { useContext } from "react";
+import { SidebarContext } from "@/components/catalyst/sidebar-layout";
 
 export function PropertiesDropdown({
 	properties,
@@ -23,6 +25,7 @@ export function PropertiesDropdown({
 	streetAddress,
 }) {
 	const { mutate } = useSWRConfig();
+	const { closeSidebar } = useContext(SidebarContext);
 
 	return (
 		<Dropdown>
@@ -36,12 +39,13 @@ export function PropertiesDropdown({
 				{properties?.map((property, index) => (
 					<DropdownItem
 						key={property.id}
-						// href={`/dashboard`}
+						href="/dashboard"
 						onClick={async () => {
 							await updateCurrentProperty(property.id);
 							mutate(["propertyRent", property.id]);
 							mutate(["tenants", property.id]);
 							mutate(`documents-${property.id}`);
+							closeSidebar();
 						}}
 					>
 						{property.id === currentPropertyId && (
@@ -56,6 +60,7 @@ export function PropertiesDropdown({
 				<DropdownItem
 					href="/dashboard/add-property"
 					// className="w-full min-w-80 lg:min-w-64"
+					onClick={() => closeSidebar()}
 				>
 					<PlusIcon />
 					<DropdownLabel>Add property&hellip;</DropdownLabel>
