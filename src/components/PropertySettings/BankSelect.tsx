@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/catalyst/button";
 import { setPrimaryAccount } from "@/utils/supabase/actions";
 import { PlaidLinkButton } from "@/components/PlaidLinkButton";
@@ -9,13 +9,11 @@ import { LinkConfirmDialog } from "@/components/dialogs/LinkConfirmDialog";
 type BankSelectProps = {
 	plaidAccounts: any[] | null;
 	setIsBankSelected?: (isBankSelected: boolean) => void;
-	setIsDialogOpen?: (isDialogOpen: boolean) => void;
 };
 
 export function BankSelect({
 	plaidAccounts,
 	setIsBankSelected,
-	setIsDialogOpen,
 }: BankSelectProps) {
 	const [banks, setBanks] = useState<any[]>(plaidAccounts || []);
 	const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +21,6 @@ export function BankSelect({
 		banks.filter((bank) => bank.use_for_payouts)[0] || null,
 	);
 	const [isLinkConfirmDialogOpen, setIsLinkConfirmDialogOpen] = useState(false);
-	const [buttonDisabled, setButtonDisabled] = useState(false);
 
 	useEffect(() => {
 		if (plaidAccounts) {
@@ -96,9 +93,7 @@ export function BankSelect({
 							onSuccess={handlePlaidSuccess}
 							onClick={handlePlaidLinkClick}
 						>
-							<Button color="blue" disabled={buttonDisabled}>
-								Continue
-							</Button>
+							<Button color="blue">Continue</Button>
 						</PlaidLinkButton>
 					</>
 				}

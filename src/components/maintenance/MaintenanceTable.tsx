@@ -30,23 +30,10 @@ import { Text } from "@/components/catalyst/text";
 import { Textarea } from "@/components/catalyst/textarea";
 import { Radio, RadioField, RadioGroup } from "@/components/catalyst/radio";
 import { Heading, Subheading } from "@/components/catalyst/heading";
-import {
-	Checkbox,
-	CheckboxField,
-	CheckboxGroup,
-} from "@/components/catalyst/checkbox";
-import {
-	Listbox,
-	ListboxLabel,
-	ListboxOption,
-} from "@/components/catalyst/listbox";
 import { createTask, deleteTask } from "@/utils/supabase/actions";
 import { toast } from "sonner";
-// const initialRequests = [
-//   { id: 1, date: '2024-08-18', title: 'Leaky Faucet', description: 'The kitchen faucet is leaking', status: 'Pending', priority: 'Medium' },
-//   { id: 2, date: '2024-08-17', title: 'Broken Window', description: 'Living room window is cracked', status: 'In Progress', priority: 'High' },
-//   { id: 3, date: '2024-08-16', title: 'HVAC Maintenance', description: 'Annual HVAC system check', status: 'Completed', priority: 'Low' },
-// ];
+import { NewTaskDialog } from "@/components/dialogs/NewTaskDialog";
+
 type Request = {
 	id: string;
 	property_id?: string;
@@ -228,23 +215,22 @@ export function MaintenanceTable({
 					</div>
 				</>
 			)}
-
-			<Dialog
-				open={isNewDialogOpen || isEditDialogOpen}
+			<NewTaskDialog
+				isOpen={isNewDialogOpen || isEditDialogOpen}
+				title={
+					currentRequest.id === "0"
+						? "New Maintenance Request"
+						: isCurrentUserRequest
+							? "Edit Maintenance Request"
+							: "View Maintenance Request"
+				}
 				onClose={() => {
 					setIsNewDialogOpen(false);
 					setIsEditDialogOpen(false);
 				}}
-			>
-				<DialogTitle>
-					{currentRequest.id === "0"
-						? "New Maintenance Request"
-						: isCurrentUserRequest
-							? "Edit Maintenance Request"
-							: "View Maintenance Request"}
-				</DialogTitle>
-				<DialogBody>
+				dialogBody={
 					<form
+						className="mt-6"
 						action={async (formData) => {
 							toast.promise(
 								new Promise((resolve, reject) => {
@@ -307,7 +293,6 @@ export function MaintenanceTable({
 									onChange={handleInputChange}
 									required
 									disabled={!isCurrentUserRequest}
-									autoFocus={currentRequest.id === "0"}
 								/>
 							</Field>
 							<Field>
@@ -369,7 +354,7 @@ export function MaintenanceTable({
 								</Button>
 							</DialogActions>
 						) : (
-							<DialogActions className="flex flex-col sm:flex-row w-full items-center sm:justify-between gap-y-4 sm:gap-y-0">
+							<div className="flex flex-col sm:flex-row w-full items-center sm:justify-between gap-y-2 sm:gap-y-0 mt-8">
 								<div className="flex flex-col sm:flex-row gap-4 sm:gap-x-2 w-full sm:w-auto">
 									<Button
 										type="submit"
@@ -395,15 +380,15 @@ export function MaintenanceTable({
 									color="red"
 									onClick={() => handleDelete(currentRequest.id)}
 									disabled={!isCurrentUserRequest}
-									className="w-full sm:w-auto order-first"
+									className="w-full sm:w-auto order-last"
 								>
 									Delete
 								</Button>
-							</DialogActions>
+							</div>
 						)}
 					</form>
-				</DialogBody>
-			</Dialog>
+				}
+			/>
 		</div>
 	);
 }
