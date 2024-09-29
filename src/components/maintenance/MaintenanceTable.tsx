@@ -125,11 +125,9 @@ export function MaintenanceTable({
 		<div className="p-4">
 			<div className="mx-2 mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
 				{!bento && (
-					<Heading className="mb-4 text-center sm:text-left">
-						Maintenance Requests
-					</Heading>
+					<Heading className="mb-4 text-left">Maintenance Requests</Heading>
 				)}
-				{!bento && (
+				{!bento && requests.length > 0 && (
 					<Button
 						onClick={() => {
 							setCurrentRequest({

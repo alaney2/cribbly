@@ -1,19 +1,36 @@
 "use client";
-import { useState, useRef } from "react";
-import {
-	Listbox,
-	ListboxLabel,
-	ListboxOption,
-} from "@/components/catalyst/listbox";
+import { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/catalyst/button";
 import { setPrimaryAccount } from "@/utils/supabase/actions";
 import { PlaidLinkButton } from "@/components/PlaidLinkButton";
+import { Select } from "@/components/catalyst/select";
+import { LinkConfirmDialog } from "@/components/dialogs/LinkConfirmDialog";
 
-export function BankSelect({ plaidAccounts }: { plaidAccounts: any[] | null }) {
+type BankSelectProps = {
+	plaidAccounts: any[] | null;
+	setIsBankSelected?: (isBankSelected: boolean) => void;
+	setIsDialogOpen?: (isDialogOpen: boolean) => void;
+};
+
+export function BankSelect({
+	plaidAccounts,
+	setIsBankSelected,
+	setIsDialogOpen,
+}: BankSelectProps) {
 	const [banks, setBanks] = useState<any[]>(plaidAccounts || []);
+	const [isLoading, setIsLoading] = useState(true);
 	const [selectedBank, setSelectedBank] = useState<any | null>(
 		banks.filter((bank) => bank.use_for_payouts)[0] || null,
 	);
-	const plaidLinkRef = useRef<HTMLButtonElement>(null);
+	const [isLinkConfirmDialogOpen, setIsLinkConfirmDialogOpen] = useState(false);
+	const [buttonDisabled, setButtonDisabled] = useState(false);
+
+	useEffect(() => {
+		if (plaidAccounts) {
+			setBanks(plaidAccounts);
+		}
+		setIsLoading(false);
+	}, [plaidAccounts]);
 
 	const handlePlaidSuccess = (newAccounts: any[]) => {
 		setBanks(newAccounts);
@@ -22,42 +39,70 @@ export function BankSelect({ plaidAccounts }: { plaidAccounts: any[] | null }) {
 				newAccounts.find((account) => account.use_for_payouts) ||
 				newAccounts[0];
 			setSelectedBank(primaryAccount);
+			setIsBankSelected?.(true);
 			setPrimaryAccount(primaryAccount.account_id);
+			setIsLinkConfirmDialogOpen(false);
 		}
 	};
 
-	const handleChange = (value: string) => {
-		if (value === "Add bank") {
-			plaidLinkRef.current?.click();
+	const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		const value = event.target.value;
+		if (value === "add_bank") {
+			setIsLinkConfirmDialogOpen(true);
+			event.target.value = "";
 			return;
 		}
 		const selected = banks.find((bank) => bank.name === value);
+		setIsBankSelected?.(true);
 		setSelectedBank(selected);
 		setPrimaryAccount(selected.account_id);
 	};
 
+	useEffect(() => {
+		setIsBankSelected?.(!!selectedBank);
+	}, [selectedBank, setIsBankSelected]);
+
+	const handlePlaidLinkClick = () => {};
+
 	return (
 		<>
-			<Listbox
-				name="bank-select"
-				value={selectedBank?.name}
-				placeholder="Select bank..."
-				onChange={handleChange}
-			>
-				{banks.map((bank) => (
-					<ListboxOption key={bank.account_id} value={bank.name}>
-						<ListboxLabel>{bank.name}</ListboxLabel>
-					</ListboxOption>
-				))}
-				<ListboxOption value="Add bank" className="">
-					<ListboxLabel className="mr-2 font-medium">Add bank +</ListboxLabel>
-				</ListboxOption>
-			</Listbox>
-			<div className="hidden">
-				<PlaidLinkButton onSuccess={handlePlaidSuccess} ref={plaidLinkRef}>
-					<span>Add bank</span>
-				</PlaidLinkButton>
-			</div>
+			{!isLoading && (
+				<Select
+					name="bank-select"
+					defaultValue=""
+					value={selectedBank?.name || ""}
+					onChange={handleChange}
+				>
+					<option value="" disabled>
+						Select a bank&hellip;
+					</option>
+					{banks.map((bank) => (
+						<option key={bank.account_id} value={bank.name}>
+							{bank.name}
+						</option>
+					))}
+					<option value="add_bank">Add bank +</option>
+				</Select>
+			)}
+			<LinkConfirmDialog
+				isOpen={isLinkConfirmDialogOpen}
+				setIsOpen={setIsLinkConfirmDialogOpen}
+				dialogActions={
+					<>
+						<Button plain onClick={() => setIsLinkConfirmDialogOpen(false)}>
+							Cancel
+						</Button>
+						<PlaidLinkButton
+							onSuccess={handlePlaidSuccess}
+							onClick={handlePlaidLinkClick}
+						>
+							<Button color="blue" disabled={buttonDisabled}>
+								Continue
+							</Button>
+						</PlaidLinkButton>
+					</>
+				}
+			/>
 		</>
 	);
 }
