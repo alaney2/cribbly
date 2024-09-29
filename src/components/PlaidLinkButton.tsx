@@ -1,14 +1,6 @@
 "use client";
-import { useState, useEffect, forwardRef } from "react";
+import { useState, useEffect, forwardRef, cloneElement, useMemo } from "react";
 import { createClient } from "@/utils/supabase/client";
-import {
-	Dialog,
-	DialogActions,
-	DialogDescription,
-	DialogTitle,
-} from "@/components/catalyst/dialog";
-import { Button } from "@/components/catalyst/button";
-import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { usePlaidLink } from "react-plaid-link";
 import type {
 	PlaidLinkError,
@@ -18,20 +10,28 @@ import type {
 import { toast } from "sonner";
 import { useSearchParams, usePathname } from "next/navigation";
 import { linkBankAccount } from "@/utils/moov/actions";
+import React from "react";
+import { useMediaQuery } from "usehooks-ts";
 
 type PlaidLinkButtonProps = {
 	onSuccess: (accounts: any[]) => void;
+	onClick?: () => void;
 	children: React.ReactNode;
 };
 
 export const PlaidLinkButton = forwardRef<
 	HTMLButtonElement,
 	PlaidLinkButtonProps
->(({ onSuccess, children }, ref) => {
+>(({ onSuccess, onClick, children }, ref) => {
 	const [linkToken, setLinkToken] = useState<string | null>(null);
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [isMounted, setIsMounted] = useState(false);
+	const isMobile = useMediaQuery("(max-width: 640px)");
 	const searchParams = useSearchParams();
 	const pathname = usePathname();
+
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
 
 	const generateToken = async () => {
 		if (searchParams.has("oauth_state_id")) {
@@ -90,7 +90,6 @@ export const PlaidLinkButton = forwardRef<
 				const linkingResponse = await linkBankAccount(result);
 
 				onSuccess(existingAccounts || []);
-
 				return result.success;
 			},
 			{
@@ -101,26 +100,47 @@ export const PlaidLinkButton = forwardRef<
 		);
 	};
 
-	const config: PlaidLinkOptions = {
-		token: linkToken,
-		onSuccess: handlePlaidSuccess,
-		onExit: (
-			error: PlaidLinkError | null,
-			metadata: PlaidLinkOnExitMetadata,
-		) => {
-			localStorage.removeItem("link_token");
-			setLinkToken(null);
-			if (error) {
-				toast.error("Bank account linking failed");
-			}
-		},
-	};
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	const config: PlaidLinkOptions = useMemo(() => {
+		const baseConfig: PlaidLinkOptions = {
+			token: linkToken,
+			onSuccess: handlePlaidSuccess,
+			onExit: (
+				error: PlaidLinkError | null,
+				metadata: PlaidLinkOnExitMetadata,
+			) => {
+				localStorage.removeItem("link_token");
+				setLinkToken(null);
+				if (error) {
+					toast.error("Bank account linking failed");
+				}
+			},
+		};
 
-	if (searchParams.has("oauth_state_id")) {
-		config.receivedRedirectUri = pathname;
-	}
+		if (searchParams.has("oauth_state_id")) {
+			baseConfig.receivedRedirectUri = pathname;
+		}
+
+		return baseConfig;
+	}, [linkToken, searchParams, pathname]);
 
 	const { open, ready } = usePlaidLink(config);
+
+	const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		e.stopPropagation();
+		if (isMobile) {
+			if (onClick) {
+				onClick();
+			}
+		}
+		await generateToken();
+		if (!isMobile) {
+			if (onClick) {
+				onClick();
+			}
+		}
+	};
 
 	useEffect(() => {
 		if (linkToken && ready) {
@@ -128,55 +148,16 @@ export const PlaidLinkButton = forwardRef<
 		}
 	}, [linkToken, ready, open]);
 
+	if (!isMounted) {
+		return null;
+	}
+
 	return (
 		<>
-			<button
-				onClick={(e) => {
-					e.preventDefault();
-					setIsDialogOpen(true);
-				}}
-				onKeyDown={(e) => {
-					if (e.key === "Enter" || e.key === " ") {
-						setIsDialogOpen(true);
-					}
-				}}
-				type="button"
-				tabIndex={0}
-				className="cursor-default"
-				ref={ref}
-			>
-				{children}
-			</button>
-			<Dialog open={isDialogOpen} onClose={setIsDialogOpen}>
-				<div className="flex items-center gap-x-4 mb-4">
-					<LockClosedIcon className="w-6 text-gray-500" />
-					<DialogTitle className="text-xl font-semibold">
-						Link Bank Account
-					</DialogTitle>
-				</div>
-				<DialogDescription className="mb-4">
-					In order to verify your bank account information, you will be
-					redirected to our third-party partner, Plaid.
-				</DialogDescription>
-				<DialogDescription>
-					The transfer of your data is encrypted end-to-end and your credentials
-					will never be made accessible to Cribbly.
-				</DialogDescription>
-				<DialogActions>
-					<Button plain onClick={() => setIsDialogOpen(false)}>
-						Cancel
-					</Button>
-					<Button
-						color="blue"
-						onClick={async () => {
-							await generateToken();
-							setIsDialogOpen(false);
-						}}
-					>
-						Continue
-					</Button>
-				</DialogActions>
-			</Dialog>
+			{cloneElement(React.Children.only(children) as React.ReactElement, {
+				onClick: handleClick,
+				ref: ref,
+			})}
 		</>
 	);
 });

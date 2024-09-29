@@ -8,6 +8,7 @@ import { RemoveBankDialog } from "@/components/Dashboard/RemoveBankDialog";
 import { Input } from "@/components/catalyst/input";
 import { Divider } from "@/components/catalyst/divider";
 import { PlaidLinkButton } from "@/components/PlaidLinkButton";
+import { LinkConfirmDialog } from "@/components/dialogs/LinkConfirmDialog";
 
 export type PlaidAccount = {
 	account_id: string;
@@ -36,6 +37,7 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 	const [accountId, setAccountId] = useState("");
 	const [bankAccounts, setBankAccounts] =
 		useState<PlaidAccount[]>(plaidAccounts);
+	const [isLinkConfirmDialogOpen, setIsLinkConfirmDialogOpen] = useState(false);
 
 	const handleSaveName = async (
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -107,6 +109,7 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 		if (newAccounts.length === 1) {
 			setPrimaryAccount(newAccounts[0].account_id);
 		}
+		setIsLinkConfirmDialogOpen(false);
 	};
 
 	return (
@@ -237,15 +240,39 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 						/>
 						<Divider />
 						<div className="flex pt-6">
-							<PlaidLinkButton onSuccess={handlePlaidSuccess}>
-								<Button
-									type="button"
-									plain
-									className="text-blue-600 hover:text-blue-500"
-								>
-									<span aria-hidden="true">+</span> Add an account
-								</Button>
-							</PlaidLinkButton>
+							<Button
+								type="button"
+								plain
+								className="text-blue-600 hover:text-blue-500"
+								onClick={() => setIsLinkConfirmDialogOpen(true)}
+							>
+								<span aria-hidden="true">+</span> Add an account
+							</Button>
+							<LinkConfirmDialog
+								isOpen={isLinkConfirmDialogOpen}
+								setIsOpen={setIsLinkConfirmDialogOpen}
+								dialogActions={
+									<>
+										<Button
+											plain
+											onClick={() => setIsLinkConfirmDialogOpen(false)}
+										>
+											Cancel
+										</Button>
+										<PlaidLinkButton
+											onSuccess={(newAccounts) => {
+												handlePlaidSuccess(newAccounts);
+												setIsLinkConfirmDialogOpen(false);
+											}}
+											onClick={() => {
+												setIsLinkConfirmDialogOpen(false);
+											}}
+										>
+											<Button color="blue">Continue</Button>
+										</PlaidLinkButton>
+									</>
+								}
+							/>
 						</div>
 					</div>
 				</div>
