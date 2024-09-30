@@ -64,6 +64,7 @@ export const VerificationForm = ({
 	});
 	const [errors, setErrors] = useState<{ [key: string]: string }>({});
 	const [buttonLoading, setButtonLoading] = useState(false);
+	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
 	const stepVariants = {
 		hidden: { opacity: 0, y: -20 },
@@ -173,6 +174,7 @@ export const VerificationForm = ({
 
 	const handleSubmit = async (e: { preventDefault: () => void }) => {
 		e.preventDefault();
+		setIsButtonDisabled(true);
 		const loadingToast = toast.loading("Creating account...");
 		try {
 			const account = await createMoovAccount(formData);
@@ -185,6 +187,7 @@ export const VerificationForm = ({
 			router.push("/dashboard");
 		} catch (error) {
 			console.error("Error creating account:", error);
+			setIsButtonDisabled(false);
 			toast.dismiss(loadingToast);
 			toast.error("Failed to create account. Please try again.");
 		}
@@ -811,7 +814,11 @@ export const VerificationForm = ({
 							<>
 								<Fieldset>
 									<Legend className="text-lg font-bold mb-4">
-										Last thing! Add your address.
+										Last thing! Add your home address.
+										<Text>
+											Note: This should be your personal address, not the
+											address of any rental properties you manage.
+										</Text>
 									</Legend>
 									<FieldGroup>
 										<Field>
@@ -1023,7 +1030,9 @@ export const VerificationForm = ({
 						type="submit"
 						color="blue"
 						className="w-full"
-						disabled={Object.keys(getValidationErrors()).length > 0}
+						disabled={
+							Object.keys(getValidationErrors()).length > 0 || isButtonDisabled
+						}
 					>
 						Submit
 					</Button>

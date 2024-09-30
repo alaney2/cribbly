@@ -19,6 +19,7 @@ import { addPropertyNew } from "@/utils/supabase/actions";
 import { useRouter } from "next/navigation";
 import { updateCurrentProperty } from "@/utils/supabase/actions";
 import React from "react";
+import { set } from "lodash";
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -72,6 +73,7 @@ export const AddressAutocomplete = ({
 	const suggestionsRef = useRef<HTMLUListElement>(null);
 	const places = useMapsLibrary("places");
 	const router = useRouter();
+	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -211,6 +213,7 @@ export const AddressAutocomplete = ({
 			<form
 				autoComplete="off"
 				action={async (formData) => {
+					setIsButtonDisabled(true);
 					const promise = (async () => {
 						const result = await addPropertyNew(formData);
 						await updateCurrentProperty(result.id);
@@ -220,7 +223,6 @@ export const AddressAutocomplete = ({
 					toast.promise(promise, {
 						loading: "Adding property...",
 						success: (result) => {
-							console.log("result", result);
 							if (buttonOnClick) {
 								setCurrentProperty?.({
 									street_address: result.street_address,
@@ -243,6 +245,7 @@ export const AddressAutocomplete = ({
 					try {
 						await promise;
 					} catch (error) {
+						setIsButtonDisabled(false);
 						console.error("Error in form submission:", error);
 					}
 				}}
@@ -378,6 +381,7 @@ export const AddressAutocomplete = ({
 						type="submit"
 						color="blue"
 						className="w-full h-10 text-sm mt-8 py-2 px-4 rounded-md"
+						disabled={isButtonDisabled}
 					>
 						Add property
 					</Button>

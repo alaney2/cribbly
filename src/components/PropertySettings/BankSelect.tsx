@@ -1,10 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/catalyst/button";
-import { setPrimaryAccount } from "@/utils/supabase/actions";
+import { setPrimaryAccount, getPlaidAccounts } from "@/utils/supabase/actions";
 import { PlaidLinkButton } from "@/components/PlaidLinkButton";
 import { Select } from "@/components/catalyst/select";
 import { LinkConfirmDialog } from "@/components/dialogs/LinkConfirmDialog";
+import useSWR from "swr";
 
 type BankSelectProps = {
 	plaidAccounts: any[] | null;
@@ -15,30 +16,24 @@ export function BankSelect({
 	plaidAccounts,
 	setIsBankSelected,
 }: BankSelectProps) {
-	const [banks, setBanks] = useState<any[]>(plaidAccounts || []);
-	const [selectedBank, setSelectedBank] = useState<any | null>(
-		banks.filter((bank) => bank.use_for_payouts)[0] || null,
-	);
+	const { data: banks, mutate } = useSWR("plaidAccounts", getPlaidAccounts, {
+		fallbackData: plaidAccounts || [],
+	});
+	const [selectedBank, setSelectedBank] = useState<any | null>(null);
+
 	const [isLinkConfirmDialogOpen, setIsLinkConfirmDialogOpen] = useState(false);
 
 	useEffect(() => {
-		if (plaidAccounts) {
-			setBanks(plaidAccounts);
+		if (banks) {
+			const primaryBank =
+				banks.find((bank) => bank.use_for_payouts) || banks[0];
+			setSelectedBank(primaryBank);
 		}
-		// setIsLoading(false);
-	}, [plaidAccounts]);
+	}, [banks]);
 
 	const handlePlaidSuccess = (newAccounts: any[]) => {
-		setBanks(newAccounts);
-		if (newAccounts.length > 0) {
-			const primaryAccount =
-				newAccounts.find((account) => account.use_for_payouts) ||
-				newAccounts[0];
-			setSelectedBank(primaryAccount);
-			setIsBankSelected?.(true);
-			setPrimaryAccount(primaryAccount.account_id);
-			setIsLinkConfirmDialogOpen(false);
-		}
+		mutate();
+		setSelectedBank(newAccounts[0]);
 	};
 
 	const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -48,7 +43,7 @@ export function BankSelect({
 			event.target.value = "";
 			return;
 		}
-		const selected = banks.find((bank) => bank.name === value);
+		const selected = banks?.find((bank) => bank.name === value);
 		setIsBankSelected?.(true);
 		setSelectedBank(selected);
 		setPrimaryAccount(selected.account_id);
@@ -58,25 +53,29 @@ export function BankSelect({
 		setIsBankSelected?.(!!selectedBank);
 	}, [selectedBank, setIsBankSelected]);
 
-	const handlePlaidLinkClick = () => {};
+	const handlePlaidLinkClick = () => {
+		setIsLinkConfirmDialogOpen(false);
+	};
 
 	return (
 		<>
 			<Select
 				name="bank-select"
+				defaultValue=""
 				value={selectedBank?.name || ""}
 				onChange={handleChange}
 			>
 				<option value="" disabled>
 					Select a bank&hellip;
 				</option>
-				{banks.map((bank) => (
+				{banks?.map((bank) => (
 					<option key={bank.account_id} value={bank.name}>
 						{bank.name}
 					</option>
 				))}
 				<option value="add_bank">Add bank +</option>
 			</Select>
+
 			<LinkConfirmDialog
 				isOpen={isLinkConfirmDialogOpen}
 				setIsOpen={setIsLinkConfirmDialogOpen}

@@ -202,6 +202,7 @@ export function InviteCard({
 														onClick={() => {
 															handleDeleteInvite(invite.token);
 														}}
+														className="cursor-default hover:bg-red-500/30 p-1.5 rounded-sm"
 													>
 														<TrashIcon className="size-5 text-red-600 hover:text-red-500" />
 													</button>
@@ -222,17 +223,6 @@ export function InviteCard({
 					</CardFooter>
 				</form>
 			</Card>
-			{/* <Button disabled={!finishWelcome} className="mt-8" 
-      onClick={async () => {
-        setFadeOut(true)
-        localStorage.removeItem('propertyId')
-        localStorage.removeItem('fullName')
-        localStorage.removeItem('email')
-        await setWelcomeScreen(false)
-        router.push('/dashboard')
-      }}
-    >Finish setup
-    </Button> */}
 		</>
 	);
 }

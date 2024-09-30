@@ -49,13 +49,17 @@ export default function SettingsNavigation({
 	// router.prefetch("/dashboard/settings/delete");
 	// router.prefetch("/dashboard/settings/general");
 
-	const handleTabChange = useCallback(
-		(tab: string) => {
-			router.replace(`/dashboard/settings/${tab.toLowerCase()}`);
-			setActiveTab(tab);
-		},
-		[router],
-	);
+	// const handleTabChange = useCallback(
+	// 	(tab: string) => {
+	// 		router.replace(`/dashboard/settings/${tab.toLowerCase()}`);
+	// 		setActiveTab(tab);
+	// 	},
+	// 	[router],
+	// );
+
+	const handleTabChange = (tab: string) => {
+		setActiveTab(tab);
+	};
 
 	const tabs = useMemo(
 		() => [
@@ -66,26 +70,26 @@ export default function SettingsNavigation({
 		[],
 	);
 
-	const memoizedRentCard = useMemo(
-		() => (
-			<RentCard
-				propertyId={currentPropertyId}
-				propertyRent={propertyRent}
-				securityDeposit={securityDeposit}
-				propertyFees={propertyFees}
-				buttonOnClick={() => handleTabChange("Tenants")}
-				plaidAccounts={plaidAccounts}
-			/>
-		),
-		[
-			currentPropertyId,
-			propertyRent,
-			securityDeposit,
-			propertyFees,
-			handleTabChange,
-			plaidAccounts,
-		],
-	);
+	// const memoizedRentCard = useMemo(
+	// 	() => (
+	// 		<RentCard
+	// 			propertyId={currentPropertyId}
+	// 			propertyRent={propertyRent}
+	// 			securityDeposit={securityDeposit}
+	// 			propertyFees={propertyFees}
+	// 			buttonOnClick={() => handleTabChange("Tenants")}
+	// 			plaidAccounts={plaidAccounts}
+	// 		/>
+	// 	),
+	// 	[
+	// 		currentPropertyId,
+	// 		propertyRent,
+	// 		securityDeposit,
+	// 		propertyFees,
+	// 		// handleTabChange,
+	// 		plaidAccounts,
+	// 	],
+	// );
 
 	const memoizedInviteCard = useMemo(
 		() => <InviteCard propertyId={currentPropertyId} />,
@@ -97,10 +101,19 @@ export default function SettingsNavigation({
 		[currentPropertyId],
 	);
 
-	const renderContent = useCallback(() => {
+	const renderContent = () => {
 		switch (activeTab) {
 			case "General":
-				return memoizedRentCard;
+				return (
+					<RentCard
+						propertyId={currentPropertyId}
+						propertyRent={propertyRent}
+						securityDeposit={securityDeposit}
+						propertyFees={propertyFees}
+						buttonOnClick={() => handleTabChange("Tenants")}
+						plaidAccounts={plaidAccounts}
+					/>
+				);
 			case "Tenants":
 				return memoizedInviteCard;
 			case "Delete":
@@ -108,7 +121,7 @@ export default function SettingsNavigation({
 			default:
 				return null;
 		}
-	}, [activeTab, memoizedRentCard, memoizedInviteCard, memoizedDeleteCard]);
+	};
 
 	return (
 		<div className="">

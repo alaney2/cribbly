@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
 import { Text } from "@/components/catalyst/text";
+import { toast } from "sonner";
 
 export function OtpResend({ email }: { email: string }) {
 	const [cooldownTime, setCooldownTime] = useState(60);
@@ -18,7 +19,7 @@ export function OtpResend({ email }: { email: string }) {
 
 	const handleResendOtp = async () => {
 		setTimeout(() => setCooldownTime(30), 500);
-		console.log("Resending OTP", email);
+		const loading = toast.loading("Sending...");
 		try {
 			const response = await fetch("/auth/otp/resend", {
 				method: "POST",
@@ -28,12 +29,19 @@ export function OtpResend({ email }: { email: string }) {
 				body: JSON.stringify({ email }),
 			});
 			if (response.ok) {
+				toast.dismiss(loading);
+				toast.success("Email sent");
 				setCooldownTime(30);
 			} else {
+				setCooldownTime(0);
+				toast.dismiss(loading);
 				throw new Error("Failed to resend OTP");
 			}
 		} catch (error) {
 			console.error("Error resending OTP:", error);
+			toast.dismiss(loading);
+			toast.error("Failed to resend OTP");
+			setCooldownTime(0);
 		}
 	};
 

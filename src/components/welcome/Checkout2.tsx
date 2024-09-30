@@ -74,8 +74,6 @@ export function Checkout2({ user, subscription, products }: Props) {
 				body: JSON.stringify({ priceId }),
 			});
 
-			console.log("response", response);
-
 			const data = await response.json();
 
 			if (data.url) {

@@ -162,7 +162,5 @@ export async function linkBankAccount(result: any) {
 		bankAccountPayload.processorToken,
 	);
 
-	console.log("RESPONSE", response);
-
 	return response;
 }
