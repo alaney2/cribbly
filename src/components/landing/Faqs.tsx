@@ -14,7 +14,7 @@ const faqs = [
 		{
 			question: "What is Cribbly, and who is it for?",
 			answer:
-				"Cribbly is property management software for small landlords managing homes and apartments. It is the source of truth for all your property management needs, from rent collection to tax preparation. Keep all your data in one place and manage your properties from anywhere.",
+				"Cribbly is property management software for independent landlords managing homes and apartments. It is the source of truth for all your property management needs, from rent collection to tax preparation. Keep all your data in one place and manage your properties from anywhere.",
 		},
 		{
 			question: "Is property management software really necessary?",

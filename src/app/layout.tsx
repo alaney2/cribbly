@@ -14,14 +14,16 @@ import { TailwindIndicator } from "@/components/tailwind-indicator";
 export const metadata: Metadata = {
 	title: {
 		template: "%s - Cribbly 🏡",
-		default: "Cribbly 🏡 - Property Management Software for Small Landlords",
+		default:
+			"Cribbly 🏡 - Property Management Software for Independent Landlords",
 	},
 	description:
-		"Cribbly is the all-in-one property management software designed for small landlords. Its powerful platform automates rent collection, maintenance requests, and more.",
+		"Cribbly is the all-in-one property management software designed for independent landlords. Its powerful platform automates rent collection, maintenance requests, and more.",
 	metadataBase: new URL("https://cribbly.io"),
 	openGraph: {
-		title: "Cribbly 🏡 - Property Management Software for Small Landlords",
-		description: "Property management software for small landlords",
+		title:
+			"Cribbly 🏡 - Property Management Software for Independent Landlords",
+		description: "Property management software for independent landlords",
 		url: "https://cribbly.io",
 		siteName: "Cribbly",
 		images: [

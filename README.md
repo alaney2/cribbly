@@ -13,7 +13,7 @@ lemon squeezy
 Open Runde font
 Can Sans for headlines
 
-property management software for small landlords
+property management software for independent landlords
 
 visx, chart.js
 
