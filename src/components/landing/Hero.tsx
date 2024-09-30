@@ -74,7 +74,7 @@ export function Hero() {
 					href=""
 					variant="outline"
 					className="cursor-pointer"
-					onClick={() => toast.success("Coming soon!")}
+					onClick={() => toast.success("Demo video coming soon")}
 				>
 					<svg
 						aria-hidden="true"
