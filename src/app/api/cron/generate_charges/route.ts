@@ -1,10 +1,10 @@
 import type { NextRequest } from "next/server";
 import { supabaseAdmin } from "@/utils/supabase/admin";
-import { calculateProratedRent } from "@/utils/helpers";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
 	const authHeader = request.headers.get("authorization");
+
 	if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
 		return new Response("Unauthorized", {
 			status: 401,
@@ -19,14 +19,15 @@ export async function GET(request: NextRequest) {
 async function generateMonthlyRentPeriods() {
 	try {
 		const currentDate = new Date();
+		const currentDateString = currentDate.toISOString().split("T")[0]; // Format: YYYY-MM-DD
 		const currentMonth = currentDate.getMonth(); // 0-11
 		const currentYear = currentDate.getFullYear();
 		const { data: activeLeases, error } = await supabaseAdmin
 			.from("leases")
 			.select("*")
 			.eq("status", "active")
-			.lte("start_date", currentDate)
-			.gte("end_date", currentDate);
+			.lte("start_date", currentDateString)
+			.gte("end_date", currentDateString);
 
 		if (error) {
 			throw new Error("Error fetching active leases");
