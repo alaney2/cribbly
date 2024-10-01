@@ -225,8 +225,8 @@ export function RentCard({
 							{leaseExists ? "Lease Details" : "Property Setup"}
 						</Heading>
 						<Text className="">
-							Rent and any fees are billed on the start date, and then the first
-							of each month.
+							Charges are billed on the start date, and then the first of each
+							month. After the lease starts, this information cannot be changed.
 						</Text>
 					</CardHeader>
 					<CardContent>

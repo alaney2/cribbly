@@ -140,7 +140,7 @@ export function Header() {
 
 	return (
 		<header className="py-6">
-			<Container>
+			<Container className="max-w-5xl">
 				<nav className="relative z-50 flex justify-between">
 					<div className="flex items-center md:gap-x-12">
 						<Link
@@ -161,7 +161,7 @@ export function Header() {
 								<span className={"text-blue-500"}>bly</span>
 							</>
 						</Link>
-						<div className="hidden md:flex md:gap-x-4">
+						<div className="hidden md:flex md:gap-x-4 select-none">
 							<NavLink href="#features">Features</NavLink>
 							<NavLink href="#testimonials">Testimonials</NavLink>
 							{/* <NavLink href="#pricing">Pricing</NavLink> */}
@@ -171,7 +171,7 @@ export function Header() {
 						ref={containerRef}
 						className="relative flex items-center gap-x-4 md:gap-x-6"
 					>
-						<div className="hidden md:block">
+						<div className="hidden md:block select-none">
 							<NavLink href="/sign-in">Sign in</NavLink>
 						</div>
 						<Button

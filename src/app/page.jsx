@@ -23,11 +23,9 @@ export default function Home() {
 		<div className="bg-gray-50">
 			<AnimatedBackground>
 				<Header />
-				{/* <WavyBackground> */}
 				<Hero />
 			</AnimatedBackground>
 			<main>
-				{/* </WavyBackground> */}
 				<PrimaryFeatures />
 				<BeforeAfter />
 				<Testimonials />
