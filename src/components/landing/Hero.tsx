@@ -65,10 +65,10 @@ export function Hero() {
 				>
 					<>
 						<p className="font-semibold text-xl tracking-tight text-slate-500">
-							Meet the system for modern property management.
+							Incredibbly simple. Unbeatabbl efficiency.
 						</p>
 						<p className="font-semibold text-xl tracking-tight text-slate-500">
-							Simplify rent, maintenance, and financial tasks.
+							Cribbly makes complex property tasks invisibbl.
 						</p>
 					</>
 				</BoxReveal>
