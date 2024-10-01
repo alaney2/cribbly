@@ -17,13 +17,6 @@ import { Strong, Text, TextLink } from "@/components/catalyst/text";
 import * as Headless from "@headlessui/react";
 import { Switch } from "@/components/catalyst/switch";
 import {
-	Dialog,
-	DialogActions,
-	DialogBody,
-	DialogDescription,
-	DialogTitle,
-} from "@/components/catalyst/dialog";
-import {
 	Table,
 	TableBody,
 	TableCell,
@@ -32,7 +25,7 @@ import {
 	TableRow,
 } from "@/components/catalyst/table";
 import { EditFeeDialog } from "@/components/dialogs/EditFeeDialog";
-import { addPropertyFees, addFee } from "@/utils/supabase/actions";
+import { addPropertyFees, addFee, getLease } from "@/utils/supabase/actions";
 import { format, addYears, subDays, addDays, addWeeks } from "date-fns";
 import { BillingScheduleDialog } from "@/components/dialogs/BillingScheduleDialog";
 import { AddFeeDialog } from "@/components/dialogs/AddFeeDialog";
@@ -42,6 +35,7 @@ import { parseISO } from "date-fns";
 import { Divider } from "@/components/catalyst/divider";
 import { motion, AnimatePresence } from "framer-motion";
 import { BankSelect } from "@/components/PropertySettings/BankSelect";
+import useSWR from "swr";
 
 export interface Fee {
 	id: string;
@@ -55,57 +49,51 @@ export interface Fee {
 
 type RentCardProps = {
 	propertyId: string;
-	propertyRent?: any | null;
-	securityDeposit?: any | null;
-	propertyFees?: any[] | null;
+	lease?: any | null;
 	setCurrentProperty?: (property: any) => void;
 	setPropertyId?: (propertyId: string) => void;
 	buttonOnClick?: () => void;
 	plaidAccounts: any[] | null;
 };
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 export function RentCard({
 	propertyId,
-	propertyRent,
-	securityDeposit,
-	propertyFees,
+	lease: initialLease,
 	setCurrentProperty,
 	buttonOnClick,
 	plaidAccounts,
 }: RentCardProps) {
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const { data: lease, mutate } = useSWR("lease", fetcher, {
+		fallbackData: initialLease,
+	});
+
+	const leaseExists = !!lease || !!initialLease;
+
 	const [isScheduleOpen, setIsScheduleOpen] = useState(false);
-	const [rentAmount, setRentAmount] = useState<number>(
-		propertyRent?.rent_price ?? 0,
-	);
+	const [rentAmount, setRentAmount] = useState<number>(lease?.rent_amount ?? 0);
 	const [hasSecurityDeposit, setHasSecurityDeposit] = useState(
-		!!securityDeposit,
+		lease?.sd_status !== "none",
 	);
 	const [securityDepositFee, setSecurityDepositFee] = useState<number>(
-		securityDeposit ? securityDeposit.deposit_amount : 0,
+		hasSecurityDeposit ? lease?.sd_amount : 0,
 	);
-	const [dialogFee, setDialogFee] = useState<Fee>({
-		id: "",
-		property_id: propertyId,
-		fee_type: "one-time",
-		fee_name: "",
-		fee_cost: 0,
-	});
-	const [fees, setFees] = React.useState<any[]>(propertyFees ?? []);
-	const [editFeeOpen, setEditFeeOpen] = React.useState(false);
-	const [feeEdit, setFeeEdit] = React.useState<Fee>();
+	// const [fees, setFees] = React.useState<any[]>(propertyFees ?? []);
+	// const [editFeeOpen, setEditFeeOpen] = React.useState(false);
+	// const [feeEdit, setFeeEdit] = React.useState<Fee>();
 
 	const defaultStartDate = addDays(new Date(), 1);
 	const defaultEndDate = addYears(new Date(), 1);
 
 	const [startDate, setStartDate] = useState<string>(
-		propertyRent
-			? format(parseISO(propertyRent.rent_start), "yyyy-MM-dd")
+		lease
+			? format(parseISO(lease.start_date), "yyyy-MM-dd")
 			: format(defaultStartDate, "yyyy-MM-dd"),
 	);
 	const [endDate, setEndDate] = useState<string>(
-		propertyRent
-			? format(parseISO(propertyRent.rent_end), "yyyy-MM-dd")
+		lease
+			? format(parseISO(lease.end_date), "yyyy-MM-dd")
 			: format(defaultEndDate, "yyyy-MM-dd"),
 	);
 
@@ -113,16 +101,16 @@ export function RentCard({
 	const animationClass = fadeOut ? " animate__fadeOut" : "animate__fadeIn";
 
 	const [initialRentAmount, setInitialRentAmount] = useState<number>(
-		propertyRent?.rent_price ?? 0,
+		lease?.rent_amount ?? 0,
 	);
 	const [initialSecurityDepositFee, setInitialSecurityDepositFee] =
-		useState<number>(securityDeposit ? securityDeposit.deposit_amount : 0);
+		useState<number>(hasSecurityDeposit ? lease?.sd_amount : 0);
 
 	const [initialStartDate, setInitialStartDate] = useState<string>(
-		propertyRent ? format(parseISO(propertyRent.rent_start), "yyyy-MM-dd") : "",
+		lease ? format(parseISO(lease.start_date), "yyyy-MM-dd") : "",
 	);
 	const [initialEndDate, setInitialEndDate] = useState<string>(
-		propertyRent ? format(parseISO(propertyRent.rent_end), "yyyy-MM-dd") : "",
+		lease ? format(parseISO(lease.end_date), "yyyy-MM-dd") : "",
 	);
 
 	const hasChanges =
@@ -180,8 +168,8 @@ export function RentCard({
 								}
 							}),
 							{
-								loading: "Adding...",
-								success: "Rental setup updated",
+								loading: "Creating...",
+								success: "Lease created",
 								error:
 									"An error occurred, please check the form and try again.",
 							},
@@ -189,7 +177,9 @@ export function RentCard({
 					}}
 				>
 					<CardHeader>
-						<Heading>Property setup</Heading>
+						<Heading>
+							{leaseExists ? "Lease Details" : "Property Setup"}
+						</Heading>
 						<Text className="">
 							Rent and any fees are billed on the start date, and then the first
 							of each month.
@@ -211,6 +201,7 @@ export function RentCard({
 										onChange={(e) => setStartDate(e.target.value)}
 										min={format(new Date(), "yyyy-MM-dd")}
 										required
+										disabled={leaseExists}
 									/>
 									<span className="hidden sm:flex text-gray-700 items-center justify-center select-none">
 										-
@@ -224,17 +215,11 @@ export function RentCard({
 										onChange={(e) => setEndDate(e.target.value)}
 										min={startDate}
 										required
+										disabled={leaseExists}
 									/>
 								</div>
 							</Headless.Field>
 
-							<input
-								name="rent_id"
-								required
-								value={propertyRent?.id ?? ""}
-								readOnly
-								type="hidden"
-							/>
 							<input
 								name="dateFrom"
 								required
@@ -283,6 +268,7 @@ export function RentCard({
 											required
 											min="0"
 											pattern="^\d+(?:\.\d{1,2})?$"
+											disabled={leaseExists}
 											// disabled={daysBetweenDates <= 0}
 										/>
 									</InputGroup>
@@ -300,6 +286,7 @@ export function RentCard({
 										onChange={() => {
 											setHasSecurityDeposit(!hasSecurityDeposit);
 										}}
+										disabled={leaseExists}
 									/>
 								</div>
 								<AnimatePresence>
@@ -321,7 +308,7 @@ export function RentCard({
 														id="depositAmount"
 														name="depositAmount"
 														placeholder="0"
-														disabled={!hasSecurityDeposit}
+														disabled={!hasSecurityDeposit || leaseExists}
 														className="w-full flex-grow"
 														autoComplete="off"
 														value={
@@ -423,14 +410,18 @@ export function RentCard({
 					<CardFooter className="flex items-center justify-end">
 						<div className="flex gap-x-3">
 							{/* <Button color="white">Edit</Button> */}
-							<Button type="submit" color="blue" disabled={!hasChanges}>
-								Save
+							<Button
+								type="submit"
+								color="blue"
+								disabled={!hasChanges || leaseExists}
+							>
+								Create Lease
 							</Button>
 						</div>
 					</CardFooter>
 				</form>
 			</Card>
-			<AddFeeDialog
+			{/* <AddFeeDialog
 				isOpen={isDialogOpen}
 				onClose={() => setIsDialogOpen(false)}
 				// fee={dialogFee}
@@ -438,8 +429,8 @@ export function RentCard({
 				fees={fees}
 				setFees={setFees}
 				setCurrentProperty={setCurrentProperty}
-			/>
-			{feeEdit && (
+			/> */}
+			{/* {feeEdit && (
 				<EditFeeDialog
 					isOpen={editFeeOpen}
 					onClose={() => setEditFeeOpen(false)}
@@ -448,15 +439,15 @@ export function RentCard({
 					setFees={setFees}
 					setCurrentProperty={setCurrentProperty}
 				/>
-			)}
-			{startDate && endDate && (
+			)} */}
+			{startDate && endDate && isScheduleOpen && (
 				<BillingScheduleDialog
 					isOpen={isScheduleOpen}
 					onClose={() => setIsScheduleOpen(false)}
 					startDate={parseISO(startDate)}
 					endDate={parseISO(endDate)}
 					rentAmount={rentAmount}
-					securityDeposit={securityDeposit}
+					hasSecurityDeposit={hasSecurityDeposit}
 					securityDepositFee={securityDepositFee}
 				/>
 			)}

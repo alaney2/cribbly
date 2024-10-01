@@ -29,7 +29,7 @@ type BillingScheduleDialogProps = {
 	startDate: Date;
 	endDate: Date;
 	rentAmount: number;
-	securityDeposit: boolean;
+	hasSecurityDeposit: boolean;
 	securityDepositFee: number;
 };
 
@@ -39,14 +39,16 @@ export function BillingScheduleDialog({
 	startDate,
 	endDate,
 	rentAmount,
-	securityDeposit,
+	hasSecurityDeposit,
 	securityDepositFee,
 }: BillingScheduleDialogProps) {
 	const isMobile = useMediaQuery("(max-width: 640px)");
 	const [isMounted, setIsMounted] = useState(false);
-	const rentInfo = calculateRentDates(startDate, endDate);
-	const monthsOfRent = rentInfo.monthsOfRent;
-	const rentDates = rentInfo.rentDates;
+	const { rentDates, totalRent } = calculateRentDates(
+		startDate,
+		endDate,
+		rentAmount,
+	);
 
 	useEffect(() => {
 		setIsMounted(true);
@@ -55,6 +57,39 @@ export function BillingScheduleDialog({
 	if (!isMounted) {
 		return null;
 	}
+
+	const renderTableContent = () => (
+		<Table bleed>
+			<TableHead>
+				<TableRow>
+					<TableHeader>Date</TableHeader>
+					<TableHeader className="text-right">Amount</TableHeader>
+				</TableRow>
+			</TableHead>
+			<TableBody>
+				{rentDates.map((rentDate, index) => (
+					<TableRow key={String(rentDate.date)}>
+						<TableCell>{format(rentDate.date, "MM/dd/yyyy")}</TableCell>
+						<TableCell className="text-right text-zinc-500">
+							$
+							{rentDate.amount +
+								(index === 0 && hasSecurityDeposit
+									? Number(securityDepositFee) || 0
+									: 0)}{" "}
+							{index === 0 &&
+								hasSecurityDeposit &&
+								securityDepositFee &&
+								"(incl. security deposit)"}
+						</TableCell>
+					</TableRow>
+				))}
+				<TableRow>
+					<TableCell className="font-bold">Total charged</TableCell>
+					<TableCell className="text-right font-bold">${totalRent}</TableCell>
+				</TableRow>
+			</TableBody>
+		</Table>
+	);
 
 	if (isMobile) {
 		return (
@@ -82,37 +117,7 @@ export function BillingScheduleDialog({
 								</Text>
 							</Drawer.Description>
 							<form>
-								<DialogBody>
-									<Table bleed>
-										<TableHead>
-											<TableRow>
-												<TableHeader>Date</TableHeader>
-												<TableHeader className="text-right">
-													Amount due
-												</TableHeader>
-											</TableRow>
-										</TableHead>
-										<TableBody>
-											{rentDates.map((date, index) => (
-												<TableRow key={String(date)}>
-													<TableCell className="">
-														{format(date, "MM/dd/yyyy")}
-													</TableCell>
-													<TableCell className="text-right text-zinc-500">
-														$
-														{Number(rentAmount) +
-															(index === 0 && securityDeposit
-																? Number(securityDepositFee)
-																: 0)}{" "}
-														{index === 0 &&
-															securityDeposit &&
-															"(incl. security deposit)"}
-													</TableCell>
-												</TableRow>
-											))}
-										</TableBody>
-									</Table>
-								</DialogBody>
+								<DialogBody>{renderTableContent()}</DialogBody>
 								<DialogActions className="flex w-full items-center justify-between">
 									<Button type="button" outline onClick={() => onClose()}>
 										Close
@@ -132,38 +137,11 @@ export function BillingScheduleDialog({
 				<DialogDescription>
 					The following table outlines the billing schedule, indicating the
 					specific dates when the corresponding amounts will be charged to the
-					tenant(s).
+					tenant(s). Prorated amounts are included if the lease starts or ends
+					in the middle of the month.
 				</DialogDescription>
 				<form>
-					<DialogBody>
-						<Table bleed>
-							<TableHead>
-								<TableRow>
-									<TableHeader>Date</TableHeader>
-									<TableHeader className="text-right">Amount due</TableHeader>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{rentDates.map((date, index) => (
-									<TableRow key={String(date)}>
-										<TableCell className="">
-											{format(date, "MM/dd/yyyy")}
-										</TableCell>
-										<TableCell className="text-right text-zinc-500">
-											$
-											{Number(rentAmount) +
-												(index === 0 && securityDeposit
-													? Number(securityDepositFee)
-													: 0)}{" "}
-											{index === 0 &&
-												securityDeposit &&
-												"(incl. security deposit)"}
-										</TableCell>
-									</TableRow>
-								))}
-							</TableBody>
-						</Table>
-					</DialogBody>
+					<DialogBody>{renderTableContent()}</DialogBody>
 					<DialogActions className="flex w-full items-center justify-between">
 						<Button
 							type="button"

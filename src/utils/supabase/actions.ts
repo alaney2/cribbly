@@ -3,6 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { generateId } from "@/lib/utils";
 import { calculateRentDates } from "@/utils/helpers";
 import { redirect } from "next/navigation";
+import { supabaseAdmin } from "@/utils/supabase/admin";
 
 export async function deleteInvite(token: string) {
 	const supabase = createClient();
@@ -137,74 +138,49 @@ export async function addFee(formData: FormData, propertyId: string) {
 }
 
 export async function addPropertyFees(formData: FormData) {
+	const user = await getUser();
+	if (!user) {
+		throw new Error("User not found");
+	}
 	const propertyId = formData.get("propertyId");
-	if (!propertyId) return;
+	if (!propertyId) {
+		throw new Error("Property not found");
+	}
 	const securityDepositSwitch = formData.get("securityDepositSwitch");
 	const dateFrom = new Date(String(formData.get("dateFrom")));
 	const dateTo = new Date(String(formData.get("dateTo")));
-
+	const rentAmount = Number.parseFloat(String(formData.get("rentAmount")));
+	const depositAmount = Number.parseFloat(
+		String(formData.get("depositAmount")),
+	);
 	const rent_id = String(formData.get("rent_id"));
-	const rentInfo = calculateRentDates(dateFrom, dateTo);
-	const monthsOfRent = rentInfo.monthsOfRent;
+	// const rentInfo = calculateRentDates(dateFrom, dateTo);
+	// const monthsOfRent = rentInfo.monthsOfRent;
 	if (dateFrom >= dateTo) {
 		throw new Error("Invalid date range");
 	}
-	const rentDates = rentInfo.rentDates;
+	// const rentDates = rentInfo.rentDates;
 	// console.log(rentDates)
 	const supabase = createClient();
-	for (const pair of formData.entries()) {
-		if (pair[0] === "rentAmount") {
-			const { error } = await supabase.from("property_rents").upsert(
-				{
-					id: rent_id ? rent_id : generateId(),
-					property_id: propertyId.toString(),
-					rent_price: Number(Number.parseFloat(pair[1].toString()).toFixed(2)),
-					rent_start: dateFrom,
-					rent_end: dateTo,
-					months_left: monthsOfRent,
-				},
-				{
-					onConflict: "property_id",
-					ignoreDuplicates: false,
-				},
-			);
-			if (error) {
-				console.error(error);
-				return {
-					message: "Error adding rent amount",
-				};
-			}
-			continue;
-		}
-		if (
-			pair[0] === "depositAmount" &&
-			securityDepositSwitch === "on" &&
-			Number.parseFloat(pair[1].toString()).toFixed(2) !== "0.00"
-		) {
-			const { error } = await supabase
-				.from("property_security_deposits")
-				.upsert(
-					{
-						id: generateId(),
-						property_id: propertyId.toString(),
-						deposit_amount: Number(
-							Number.parseFloat(pair[1].toString()).toFixed(2),
-						),
-						status: "unpaid",
-					},
-					{
-						onConflict: "property_id",
-						ignoreDuplicates: false,
-					},
-				);
-			if (error) {
-				console.error(error);
-				return {
-					message: "Error adding security deposit",
-				};
-			}
-		}
+	const { data: leaseData, error: leaseError } = await supabase
+		.from("leases")
+		.insert({
+			user_id: user.id,
+			property_id: propertyId,
+			start_date: dateFrom,
+			end_date: dateTo,
+			rent_amount: rentAmount,
+			sd_amount: securityDepositSwitch === "on" ? depositAmount : 0,
+			sd_status: securityDepositSwitch === "on" ? "unpaid" : "none",
+			status: "active",
+			updated_at: new Date(),
+		});
+
+	if (leaseError) {
+		console.error(leaseError);
+		throw new Error("Error adding lease");
 	}
+
 	return {
 		message: "Success!",
 	};
@@ -624,4 +600,82 @@ export async function setPrimaryAccount(accountId: string) {
 		.from("plaid_accounts")
 		.update({ use_for_payouts: true })
 		.eq("account_id", accountId);
+}
+
+export async function generateMonthlyRentPeriods() {
+	try {
+		// const supabase = createClient();
+		const currentDate = new Date();
+		const currentMonth = currentDate.getMonth(); // 0-11
+		const currentYear = currentDate.getFullYear();
+		const { data: activeLeases, error } = await supabaseAdmin
+			.from("leases")
+			.select("*")
+			.eq("status", "active")
+			.lte("start_date", currentDate)
+			.gte("end_date", currentDate);
+
+		if (error) {
+			throw new Error("Error fetching active leases");
+		}
+
+		for (const lease of activeLeases) {
+			const rentPeriodStart = new Date(
+				currentYear,
+				currentMonth,
+				lease.rent_due_day,
+			);
+			const rentPeriodEnd = new Date(
+				currentYear,
+				currentMonth + 1,
+				lease.rent_due_day - 1,
+			);
+
+			if (rentPeriodEnd > lease.endDate) {
+				rentPeriodEnd.setTime(lease.endDate.getTime());
+			}
+
+			const { data: existingRentPeriods, error: existingRentPeriodsError } =
+				await supabaseAdmin
+					.from("rent_periods")
+					.select("*")
+					.eq("lease_id", lease.id)
+					.eq("start_date", rentPeriodStart)
+					.eq("end_date", rentPeriodEnd);
+
+			if (
+				existingRentPeriodsError ||
+				!existingRentPeriods ||
+				existingRentPeriods.length === 0
+			) {
+				const { error: insertError } = await supabaseAdmin
+					.from("rent_periods")
+					.insert({
+						lease_id: lease.id,
+						property_id: lease.property_id,
+						amount_due: lease.rent_amount,
+						status: "unpaid",
+						start_date: rentPeriodStart,
+						end_date: rentPeriodEnd,
+						updated_at: new Date(),
+					});
+
+				if (insertError) {
+					console.error("Error inserting rent period:", insertError);
+					throw new Error("Error inserting rent period");
+				}
+			}
+		}
+	} catch (error) {
+		console.error("Error generating monthly rent periods:", error);
+	}
+}
+
+export async function getLease(propertyId: string) {
+	const supabase = createClient();
+	const { data: lease, error: leaseError } = await supabase
+		.from("leases")
+		.select("*")
+		.eq("property_id", propertyId)
+		.single();
 }

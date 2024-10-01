@@ -8,22 +8,11 @@ export default async function TenantSettings() {
 	const supabase = createClient();
 	const currentPropertyId = await getCurrentProperty();
 
-	const { data: property_rent, error: rentError } = await supabase
-		.from("property_rents")
+	const { data: lease, error: leaseError } = await supabase
+		.from("leases")
 		.select("*")
 		.eq("property_id", currentPropertyId)
 		.single();
-
-	const { data: sd_data, error: sdError } = await supabase
-		.from("property_security_deposits")
-		.select("*")
-		.eq("property_id", currentPropertyId)
-		.single();
-
-	const { data: property_fees, error: feesError } = await supabase
-		.from("property_fees")
-		.select("*")
-		.eq("property_id", currentPropertyId);
 
 	const plaidAccounts = await getPlaidAccounts();
 
@@ -31,9 +20,7 @@ export default async function TenantSettings() {
 		<main className="flex max-w-7xl flex-col justify-center space-y-4 sm:space-y-8">
 			<SettingsNavigation
 				currentPropertyId={currentPropertyId}
-				propertyRent={property_rent}
-				securityDeposit={sd_data}
-				propertyFees={property_fees}
+				lease={lease}
 				key={currentPropertyId}
 				initialTab="Tenants"
 				plaidAccounts={plaidAccounts ?? []}

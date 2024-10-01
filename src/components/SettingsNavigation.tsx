@@ -9,9 +9,7 @@ import { Text, Strong } from "@/components/catalyst/text";
 import { useRouter } from "next/navigation";
 interface SettingsNavigationProps {
 	currentPropertyId: string;
-	propertyRent: any | null;
-	securityDeposit: any | null;
-	propertyFees: any[] | null;
+	lease: any | null;
 	key: string;
 	initialTab?: string;
 	plaidAccounts: any[] | null;
@@ -37,25 +35,11 @@ const NavButton = ({
 
 export default function SettingsNavigation({
 	currentPropertyId,
-	propertyRent,
-	securityDeposit,
-	propertyFees,
+	lease,
 	initialTab,
 	plaidAccounts,
 }: SettingsNavigationProps) {
 	const [activeTab, setActiveTab] = useState(initialTab || "General");
-	const router = useRouter();
-	// router.prefetch("/dashboard/settings/tenants");
-	// router.prefetch("/dashboard/settings/delete");
-	// router.prefetch("/dashboard/settings/general");
-
-	// const handleTabChange = useCallback(
-	// 	(tab: string) => {
-	// 		router.replace(`/dashboard/settings/${tab.toLowerCase()}`);
-	// 		setActiveTab(tab);
-	// 	},
-	// 	[router],
-	// );
 
 	const handleTabChange = (tab: string) => {
 		setActiveTab(tab);
@@ -69,27 +53,6 @@ export default function SettingsNavigation({
 		],
 		[],
 	);
-
-	// const memoizedRentCard = useMemo(
-	// 	() => (
-	// 		<RentCard
-	// 			propertyId={currentPropertyId}
-	// 			propertyRent={propertyRent}
-	// 			securityDeposit={securityDeposit}
-	// 			propertyFees={propertyFees}
-	// 			buttonOnClick={() => handleTabChange("Tenants")}
-	// 			plaidAccounts={plaidAccounts}
-	// 		/>
-	// 	),
-	// 	[
-	// 		currentPropertyId,
-	// 		propertyRent,
-	// 		securityDeposit,
-	// 		propertyFees,
-	// 		// handleTabChange,
-	// 		plaidAccounts,
-	// 	],
-	// );
 
 	const memoizedInviteCard = useMemo(
 		() => <InviteCard propertyId={currentPropertyId} />,
@@ -107,9 +70,10 @@ export default function SettingsNavigation({
 				return (
 					<RentCard
 						propertyId={currentPropertyId}
-						propertyRent={propertyRent}
-						securityDeposit={securityDeposit}
-						propertyFees={propertyFees}
+						lease={lease}
+						// propertyRent={propertyRent}
+						// securityDeposit={securityDeposit}
+						// propertyFees={propertyFees}
 						buttonOnClick={() => handleTabChange("Tenants")}
 						plaidAccounts={plaidAccounts}
 					/>
@@ -158,9 +122,7 @@ export default function SettingsNavigation({
 			<div className="block space-y-6 xl:hidden max-w-xl mx-auto">
 				<RentCard
 					propertyId={currentPropertyId}
-					propertyRent={propertyRent}
-					securityDeposit={securityDeposit}
-					propertyFees={propertyFees}
+					lease={lease}
 					plaidAccounts={plaidAccounts}
 				/>
 				<InviteCard propertyId={currentPropertyId} />
