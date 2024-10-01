@@ -678,4 +678,12 @@ export async function getLease(propertyId: string) {
 		.select("*")
 		.eq("property_id", propertyId)
 		.single();
+
+	if (leaseError) {
+		return;
+		// console.error("Error fetching lease:", leaseError);
+		// throw new Error("Error fetching lease");
+	}
+
+	return lease;
 }

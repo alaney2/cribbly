@@ -61,7 +61,6 @@ export function BankSelect({
 		<>
 			<Select
 				name="bank-select"
-				defaultValue=""
 				value={selectedBank?.name || ""}
 				onChange={handleChange}
 			>

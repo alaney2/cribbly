@@ -7,6 +7,8 @@ import { Heading } from "@/components/catalyst/heading";
 import { Divider } from "@/components/catalyst/divider";
 import { Text, Strong } from "@/components/catalyst/text";
 import { useRouter } from "next/navigation";
+import { mutate } from "swr";
+
 interface SettingsNavigationProps {
 	currentPropertyId: string;
 	lease: any | null;
@@ -42,6 +44,7 @@ export default function SettingsNavigation({
 	const [activeTab, setActiveTab] = useState(initialTab || "General");
 
 	const handleTabChange = (tab: string) => {
+		mutate("lease");
 		setActiveTab(tab);
 	};
 

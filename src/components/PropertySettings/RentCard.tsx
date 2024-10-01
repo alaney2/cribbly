@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Button } from "@/components/catalyst/button";
 import {
@@ -36,6 +36,7 @@ import { Divider } from "@/components/catalyst/divider";
 import { motion, AnimatePresence } from "framer-motion";
 import { BankSelect } from "@/components/PropertySettings/BankSelect";
 import useSWR from "swr";
+import { set } from "lodash";
 
 export interface Fee {
 	id: string;
@@ -47,16 +48,27 @@ export interface Fee {
 	created_at?: Date;
 }
 
+type Lease = {
+	sd_status: string;
+	sd_amount: number;
+	rent_amount: number;
+	start_date: string;
+	end_date: string;
+};
+
 type RentCardProps = {
 	propertyId: string;
-	lease?: any | null;
+	lease?: Lease | null;
 	setCurrentProperty?: (property: any) => void;
 	setPropertyId?: (propertyId: string) => void;
 	buttonOnClick?: () => void;
 	plaidAccounts: any[] | null;
 };
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = async (propertyId: string) => {
+	const lease = await getLease(propertyId);
+	return lease;
+};
 
 export function RentCard({
 	propertyId,
@@ -65,19 +77,45 @@ export function RentCard({
 	buttonOnClick,
 	plaidAccounts,
 }: RentCardProps) {
-	const { data: lease, mutate } = useSWR("lease", fetcher, {
-		fallbackData: initialLease,
-	});
+	const { data: lease, mutate } = useSWR(
+		propertyId ? ["lease", propertyId] : null,
+		([_, id]) => getLease(id),
+		{
+			fallbackData: initialLease,
+		},
+	);
 
-	const leaseExists = !!lease || !!initialLease;
+	useEffect(() => {
+		if (lease) {
+			setRentAmount(lease.rent_amount ?? 0);
+			setHasSecurityDeposit(lease.sd_status !== "none");
+			setSecurityDepositFee(
+				lease.sd_status !== "none" ? lease.sd_amount ?? 0 : 0,
+			);
+			setStartDate(format(parseISO(lease.start_date), "yyyy-MM-dd"));
+			setEndDate(format(parseISO(lease.end_date), "yyyy-MM-dd"));
+
+			setInitialRentAmount(lease.rent_amount ?? 0);
+			setInitialSecurityDepositFee(
+				lease.sd_status !== "none" ? lease.sd_amount ?? 0 : 0,
+			);
+			setInitialStartDate(format(parseISO(lease.start_date), "yyyy-MM-dd"));
+			setInitialEndDate(format(parseISO(lease.end_date), "yyyy-MM-dd"));
+			setLeaseExists(true);
+		}
+	}, [lease]);
+
+	const [leaseExists, setLeaseExists] = useState(
+		lease !== null || initialLease !== null,
+	);
 
 	const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 	const [rentAmount, setRentAmount] = useState<number>(lease?.rent_amount ?? 0);
 	const [hasSecurityDeposit, setHasSecurityDeposit] = useState(
-		lease?.sd_status !== "none",
+		lease ? lease?.sd_status !== "none" : false,
 	);
 	const [securityDepositFee, setSecurityDepositFee] = useState<number>(
-		hasSecurityDeposit ? lease?.sd_amount : 0,
+		hasSecurityDeposit ? lease?.sd_amount ?? 0 : 0,
 	);
 	// const [fees, setFees] = React.useState<any[]>(propertyFees ?? []);
 	// const [editFeeOpen, setEditFeeOpen] = React.useState(false);
@@ -104,7 +142,7 @@ export function RentCard({
 		lease?.rent_amount ?? 0,
 	);
 	const [initialSecurityDepositFee, setInitialSecurityDepositFee] =
-		useState<number>(hasSecurityDeposit ? lease?.sd_amount : 0);
+		useState<number>(hasSecurityDeposit ? lease?.sd_amount ?? 0 : 0);
 
 	const [initialStartDate, setInitialStartDate] = useState<string>(
 		lease ? format(parseISO(lease.start_date), "yyyy-MM-dd") : "",
@@ -113,11 +151,14 @@ export function RentCard({
 		lease ? format(parseISO(lease.end_date), "yyyy-MM-dd") : "",
 	);
 
+	const [isButtonClicked, setIsButtonClicked] = useState(false);
+
 	const hasChanges =
-		rentAmount !== initialRentAmount ||
-		securityDepositFee !== initialSecurityDepositFee ||
-		startDate !== initialStartDate ||
-		endDate !== initialEndDate;
+		(rentAmount !== initialRentAmount ||
+			securityDepositFee !== initialSecurityDepositFee ||
+			startDate !== initialStartDate ||
+			endDate !== initialEndDate) &&
+		rentAmount !== 0;
 
 	const daysBetweenDates = daysBetween(parseISO(startDate), new Date());
 
@@ -128,6 +169,7 @@ export function RentCard({
 			>
 				<form
 					action={async (formData) => {
+						setIsButtonClicked(true);
 						toast.promise(
 							// biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
 							new Promise(async (resolve, reject) => {
@@ -142,7 +184,9 @@ export function RentCard({
 									} else {
 										resolve("Success");
 									}
+									mutate();
 								} catch (error) {
+									setIsButtonClicked(false);
 									reject(error);
 								} finally {
 									setInitialRentAmount(rentAmount);
@@ -413,9 +457,13 @@ export function RentCard({
 							<Button
 								type="submit"
 								color="blue"
-								disabled={!hasChanges || leaseExists}
+								disabled={!hasChanges || leaseExists || isButtonClicked}
+								// onClick={(e: React.MouseEvent) => {
+								// 	e.preventDefault();
+								// 	setIsButtonClicked(true);
+								// }}
 							>
-								Create Lease
+								{isButtonClicked ? "Creating..." : "Create Lease"}
 							</Button>
 						</div>
 					</CardFooter>
