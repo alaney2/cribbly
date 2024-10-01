@@ -65,10 +65,12 @@ export function Hero() {
 				>
 					<>
 						<p className="font-semibold text-xl tracking-tight text-slate-500">
-							Incredibbly simple. Unbeatabbl efficiency.
+							{/* Incredibbly simple. Unbeatabbl efficiency. */}
+							Unthinkabbl ease. Unstoppabbl support. Inestimabbl value.
 						</p>
 						<p className="font-semibold text-xl tracking-tight text-slate-500">
-							Cribbly makes complex property tasks invisibbl.
+							{/* Cribbly makes complex property tasks invisibbl. */}
+							Cribbly turns property challenges into incredibbly easy tasks.
 						</p>
 					</>
 				</BoxReveal>
