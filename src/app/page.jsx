@@ -46,18 +46,18 @@ export default function Home() {
 						<Container className="relative">
 							<div className="mx-auto max-w-lg text-center">
 								<h2 className="font-display text-3xl tracking-tight text-white sm:text-4xl">
-									Let’s get started
+									May the Rent be with you
 								</h2>
 								<p className="mt-4 text-lg tracking-tight text-white">
-									Join successful property managers on Cribbly and unlock new
-									levels of efficiency
+									Harness the power of effortless property management. Let
+									Cribbly be the force that drives your success.
 								</p>
 								<Button
 									href="/get-started"
 									color="sky"
 									className={"mt-10 cursor-none"}
 								>
-									Get started today
+									Use the Force
 								</Button>
 							</div>
 						</Container>

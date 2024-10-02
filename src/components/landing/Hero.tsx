@@ -22,13 +22,10 @@ export function Hero() {
 		if (!containerRef.current) return;
 
 		const containerRect = containerRef.current.getBoundingClientRect();
-		const clickX = e.pageX - window.scrollX;
-		const clickY = e.pageY - window.scrollY;
+		const clickX = e.clientX - containerRect.left;
+		const clickY = e.clientY - containerRect.top;
 
-		const relativeX = clickX - containerRect.left;
-		const relativeY = clickY - containerRect.top;
-
-		makeBurst({ x: relativeX, y: relativeY });
+		makeBurst({ x: clickX, y: clickY });
 		setTimeout(() => router.push("/get-started"), 50);
 	};
 
@@ -80,11 +77,14 @@ export function Hero() {
 				boxColor={"#2563eb"}
 				duration={0.4}
 				inline={true}
-				className="mt-6 py-2"
+				className="mt-4"
 			>
-				<div ref={containerRef} className="flex justify-center gap-x-6 my-1">
+				<div
+					ref={containerRef}
+					className="flex justify-center gap-x-6 my-1 relative py-4"
+				>
 					<Button onClick={handleClick} className="cursor-pointer">
-						Get started for free
+						Cool, let's dive in
 					</Button>
 					{sparks.map((spark) => (
 						<div
@@ -94,6 +94,7 @@ export function Hero() {
 								left: `${spark.center.x}px`,
 								top: `${spark.center.y}px`,
 								animation: `${spark.aniName} 500ms ease-out both`,
+								zIndex: 9999,
 							}}
 						/>
 					))}
@@ -109,7 +110,7 @@ export function Hero() {
 						>
 							<path d="m9.997 6.91-7.583 3.447A1 1 0 0 1 1 9.447V2.553a1 1 0 0 1 1.414-.91L9.997 5.09c.782.355.782 1.465 0 1.82Z" />
 						</svg>
-						<span className="ml-3">Watch video</span>
+						<span className="ml-3">Show me the ropes</span>
 					</Button>
 				</div>
 			</BoxReveal>
