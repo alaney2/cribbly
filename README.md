@@ -1,5 +1,13 @@
 # Cribbly
 
+transfer payment
+
+set up autopay
+
+tax forms
+
+email notifications for payments, maintenance requests, lease renewals, etc.
+
 <https://docs.mapbox.com/help/tutorials/use-mapbox-js-as-fallback/>
 
 svgomg

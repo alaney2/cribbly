@@ -56,11 +56,11 @@ export function PrimaryFeatures() {
 			<Container className="relative">
 				<div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
 					<h2 className="font-display text-3xl tracking-tight text-white md:text-4xl xl:text-5xl">
-						Automate tasks, Amplify returns
+						{/* Automate tasks, Amplify returns */}
+						Unbelievibbly practical features
 					</h2>
 					<p className="mt-6 max-w-xl lg:max-w-3xl mx-auto text-lg tracking-tight text-blue-100">
-						Collect rent, handle maintenance requests, analyze performance, and
-						automate tax forms
+						It's not rocket science — especially when you have the right tools.
 					</p>
 				</div>
 				<div className="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 md:gap-y-6 md:mt-20 lg:grid-cols-12 lg:pt-0">

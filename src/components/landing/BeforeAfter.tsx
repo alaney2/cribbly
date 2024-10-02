@@ -8,8 +8,8 @@ import {
 import backgroundImage from "@/images/background-faqs.jpg";
 
 const beforeBenefits = [
-	"Spending time and energy keeping track of rent",
-	"Having unorganized documents and feeling unsure about financials",
+	"Spending time and energy keeping track of rent payments",
+	"Having unorganized documents and financials",
 	"Getting calls and texts about maintenance requests at inconvenient times",
 	"Complicated and time-consuming tax preparation",
 ];

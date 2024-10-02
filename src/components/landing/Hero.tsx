@@ -81,7 +81,7 @@ export function Hero() {
 			>
 				<div
 					ref={containerRef}
-					className="flex justify-center gap-x-6 my-1 relative py-3"
+					className="flex justify-center gap-x-4 sm:gap-x-6 relative py-3 my-1"
 				>
 					<Button onClick={handleClick} className="cursor-pointer">
 						Cool, let's dive in
@@ -101,7 +101,7 @@ export function Hero() {
 					<Button
 						href=""
 						variant="outline"
-						className="cursor-pointer select-none"
+						className="cursor-pointer"
 						onClick={() => toast.success("Demo video coming soon")}
 					>
 						<svg
