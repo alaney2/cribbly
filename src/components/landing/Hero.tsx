@@ -59,6 +59,7 @@ export function Hero() {
 					boxColor={"#2563eb"}
 					duration={0.4}
 					className="max-w-xl mt-1 py-2 flex justify-center"
+					delay={0.15}
 				>
 					<>
 						<p className="hidden sm:block font-semibold text-xl tracking-tight text-slate-500">
@@ -78,6 +79,7 @@ export function Hero() {
 				duration={0.4}
 				inline={true}
 				className="mt-4"
+				delay={0.3}
 			>
 				<div
 					ref={containerRef}
