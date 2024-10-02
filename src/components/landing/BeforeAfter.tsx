@@ -5,14 +5,6 @@ import {
 	CheckIcon,
 	ArrowRightIcon,
 } from "@heroicons/react/24/outline";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/catalyst/table";
 import backgroundImage from "@/images/background-faqs.jpg";
 
 const beforeBenefits = [
@@ -36,14 +28,6 @@ export function BeforeAfter() {
 			aria-label="We make property management easy."
 			className="relative bg-slate-100 text-slate-900 pt-20 pb-8 sm:pt-32 overflow-hidden shadow-sm"
 		>
-			{/* <Image
-        className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%] z-0"
-        src={backgroundImage}
-        alt=""
-        width={1558}
-        height={946}
-        unoptimized
-      /> */}
 			<Container>
 				<div className="mx-auto md:max-w-4xl md:text-center z-20">
 					<h2 className="font-display text-3xl sm:text-4xl font-medium tracking-tighter text-slate-800 bg-gradient-to-r to-blue-600 from-[#60a4ff] via-indigo-400 inline-block text-transparent bg-clip-text p-4">
@@ -60,6 +44,7 @@ export function BeforeAfter() {
 							<div className="divide-y">
 								{beforeBenefits.map((beforeBenefit, index) => (
 									<div
+										// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 										key={index}
 										className="text-md sm:text-lg py-4 flex items-start"
 									>
@@ -79,6 +64,7 @@ export function BeforeAfter() {
 							<div className="divide-y">
 								{afterBenefits.map((afterBenefit, index) => (
 									<div
+										// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 										key={index}
 										className="text-md sm:text-lg py-4 flex items-start"
 									>
@@ -98,7 +84,7 @@ export function BeforeAfter() {
 										Without Cribbly
 									</div>
 								</div>
-								<div className="w-1/6 border-b-0"></div>
+								<div className="w-1/6 border-b-0" />
 								<div className="w-5/12 border-b-0">
 									<div className="text-xl mb-1 text-blue-300">To</div>
 									<div className="text-3xl text-gray-800 font-semibold tracking-tight">
@@ -108,6 +94,7 @@ export function BeforeAfter() {
 							</div>
 							<div className="divide-y mt-4">
 								{beforeBenefits.map((beforeBenefit, index) => (
+									// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 									<div key={index} className="text-lg pb-6 pt-4 flex">
 										<div className="w-5/12 border-b-0 gap-x-2 flex items-start">
 											<span className="h-5 w-5 mt-1 mr-1">

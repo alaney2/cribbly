@@ -64,15 +64,6 @@ export function Faqs() {
 			aria-labelledby="faq-title"
 			className="relative overflow-hidden bg-slate-50 pt-8 py-20 sm:py-32 "
 		>
-			{/* <Image
-        className="absolute left-1/2 top-0 max-w-none -translate-y-1/4 translate-x-[-30%]"
-        src={backgroundImage}
-        alt=""
-        width={1558}
-        height={946}
-        unoptimized
-      /> */}
-
 			<Container className="relative">
 				<div className="mx-auto lg:mx-0">
 					<h2
@@ -82,8 +73,8 @@ export function Faqs() {
 						Frequently asked questions
 					</h2>
 					<p className="mt-4 text-lg tracking-tight text-slate-700">
-						We’ve got your questions covered! If you have any additional
-						questions, please feel free to reach out to us at{" "}
+						If you have any additional questions, please feel free to reach out
+						to us at{" "}
 						<a href="mailto:support@cribbly.io " className="text-blue-600">
 							{" "}
 							support@cribbly.io
@@ -92,11 +83,12 @@ export function Faqs() {
 				</div>
 				<ul className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-2">
 					{faqs.map((column, columnIndex) => (
+						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 						<li key={columnIndex}>
-							<ul role="list" className="flex flex-col gap-y-6">
+							<ul className="flex flex-col gap-y-6">
 								{column.map((faq, faqIndex) => (
 									<Accordion
-										key={faqIndex}
+										key={faq.question}
 										type="single"
 										collapsible
 										className=""
