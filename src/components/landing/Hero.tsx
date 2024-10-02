@@ -61,12 +61,12 @@ export function Hero() {
 				<BoxReveal
 					boxColor={"#2563eb"}
 					duration={0.4}
-					className="max-w-xl mt-1 py-2"
+					className="max-w-xl mt-1 py-2 flex justify-center"
 				>
 					<>
-						<p className="font-semibold text-xl tracking-tight text-slate-500">
+						<p className="hidden sm:block font-semibold text-xl tracking-tight text-slate-500">
 							{/* Incredibbly simple. Unbeatabbl efficiency. */}
-							Unthinkabbl ease. Unstoppabbl support. Inestimabbl value.
+							Unthinkabbl ease. Inestimabbl value.
 						</p>
 						<p className="font-semibold text-xl tracking-tight text-slate-500">
 							{/* Cribbly makes complex property tasks invisibbl. */}
