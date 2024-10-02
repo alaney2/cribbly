@@ -114,7 +114,7 @@ export function Testimonials() {
 			<Container className="relative">
 				<div className="mx-auto max-w-2xl md:text-center z-10">
 					<h2 className="font-display text-3xl sm:text-4xl font-medium tracking-tight bg-gradient-to-r to-blue-600 from-[#60a4ff] via-indigo-400 inline-block text-transparent bg-clip-text">
-						Loved by landlords worldwide.
+						Undoubtibbly loved by landlords.
 					</h2>
 					<p className="mt-4 text-lg tracking-tight text-slate-700 font-medium">
 						Join other landlords who’ve elevated their rental game. No hassle,

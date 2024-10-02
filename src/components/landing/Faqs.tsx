@@ -12,47 +12,46 @@ import {
 const faqs = [
 	[
 		{
-			question: "What is Cribbly, and who is it for?",
+			question: "What's Cribbly, and who the heck is it for?",
 			answer:
-				"Cribbly is property management software for independent landlords managing homes and apartments. It is the source of truth for all your property management needs, from rent collection to tax preparation. Keep all your data in one place and manage your properties from anywhere.",
+				"Cribbly is property management software for independent landlords managing homes and apartments. It is the source of truth for all your property management needs, from rent collection to tax preparation.",
 		},
 		{
-			question: "Is property management software really necessary?",
+			question: "Do I really need property management software?",
 			answer:
-				"No, but using property management software saves you a lot of time managing rental properties by automating routine tasks like rent collection, taxes, and maintenance scheduling but. It also reduces human error and improves tenant satisfaction.",
+				"Technically, no one's forcing you, but why make life harder? Cribbly saves you time and helps avoid mistakes, all the while keeping your tenants happy.",
 		},
 		{
-			question:
-				"Is property management software suitable for individual landlords or just property management companies?",
+			question: "What makes Cribbly different from other software?",
 			answer:
-				"It’s suitable for both, scaling efficiently for any number of properties, from one to hundreds. No matter the portfolio size, everyone can benefit from the time and cost savings, improved organization, and enhanced tenant experience that this software provides.",
+				"Cribbly is built specifically for independent landlords like you. No bloated features you don't need—just simple, powerful tools to make your life easier. Plus, with a one-time fee and no subscriptions, it's easy on the wallet.",
 		},
 		{
 			question: "What if I have a question that isn’t answered here?",
-			answer: "We’re here to help! Contact us at support@cribbly.io",
+			answer: "We are here to help; contact us at support@cribbly.io",
 		},
 	],
 	[
 		{
-			question: "How much does Cribbly cost?",
+			question: "How much is Cribbly gonna cost me?",
 			answer:
-				"The first property you list is free! If you have additional properties, Cribbly costs $78 for a lifetime license. This includes all features and updates, with no subscription fees.",
+				"Your first property's on the house. To manage more properties, it's just a one-time fee of $78 for a lifetime license. That means all features and updates, no annoying subscriptions.",
 		},
 		{
-			question: "How do I get started with Cribbly?",
+			question: "How do I start using Cribbly?",
 			answer:
-				"Simply sign up for an account, add your properties, and invite your tenants in order to start collecting rent and tracking expenses. Cribbly is designed to be intuitive and easy to use, so you can get started right away.",
+				"Just sign up, add your properties, go through a quick verification with our payment processor, and invite your tenants. You're good to go!",
 		},
 		{
-			question: "What does Cribbly offer?",
+			question: "Can I manage properties on the go?",
 			answer:
-				"Cribbly provides automated online rent payment, financial analytics, maintenance request tracking, and tax report automation in a user-friendly platform. You can also use Cribbly's mobile platform to manage your properties on the go.",
+				"Absolutely. Cribbly is mobile-friendly, so you can handle everything from your phone or tablet. Whether you're at the beach or on the couch, your properties are at your disposal.",
 		},
 		{
 			question:
-				"What types of properties can be managed using property management software?",
+				"What types of properties can be managed using this property management sotware?",
 			answer:
-				"All types, including single-family homes, condos, apartments, commercial properties, etc.",
+				"All types of properties. Whether it's a single-family home, a condo, or a 20-unit apartment building, Cribbly's got you covered.",
 		},
 	],
 ];

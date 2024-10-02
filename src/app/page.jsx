@@ -57,7 +57,7 @@ export default function Home() {
 									color="sky"
 									className={"mt-10 cursor-none"}
 								>
-									Use the Force
+									Yup, I'm in
 								</Button>
 							</div>
 						</Container>
