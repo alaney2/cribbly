@@ -31,7 +31,7 @@ export function BeforeAfter() {
 			<Container>
 				<div className="mx-auto md:max-w-4xl md:text-center z-20">
 					<h2 className="font-display text-3xl sm:text-4xl font-medium tracking-tighter text-slate-800 bg-gradient-to-r to-blue-600 from-[#60a4ff] via-indigo-400 inline-block text-transparent bg-clip-text p-4">
-						We make property management easy.
+						Indubitibbly the right choice
 					</h2>
 				</div>
 				<div className="mx-auto z-10 mt-8 lg:mt-12 flex justify-center max-w-4xl w-full">
