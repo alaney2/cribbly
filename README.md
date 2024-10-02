@@ -2,6 +2,8 @@
 
 transfer payment
 
+take in card info
+
 set up autopay
 
 tax forms
