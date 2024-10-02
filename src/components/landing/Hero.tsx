@@ -81,7 +81,7 @@ export function Hero() {
 			>
 				<div
 					ref={containerRef}
-					className="flex justify-center gap-x-6 my-1 relative py-4"
+					className="flex justify-center gap-x-6 my-1 relative py-3"
 				>
 					<Button onClick={handleClick} className="cursor-pointer">
 						Cool, let's dive in
