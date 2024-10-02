@@ -54,12 +54,12 @@ export function PrimaryFeatures() {
 			}}
 		>
 			<Container className="relative">
-				<div className="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
+				<div className="max-w-3xl mx-auto">
 					<h2 className="font-display text-3xl tracking-tight text-white md:text-4xl xl:text-5xl">
 						{/* Automate tasks, Amplify returns */}
 						Unbelievibbly practical features
 					</h2>
-					<p className="mt-6 max-w-xl lg:max-w-3xl mx-auto text-lg tracking-tight text-blue-100">
+					<p className="mt-6 lg:max-w-3xl text-lg tracking-tight text-blue-100">
 						It's not rocket science — especially when you have the right tools.
 					</p>
 				</div>
