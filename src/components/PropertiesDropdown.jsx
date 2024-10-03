@@ -39,7 +39,6 @@ export function PropertiesDropdown({
 				{properties?.map((property, index) => (
 					<DropdownItem
 						key={property.id}
-						href="/dashboard"
 						onClick={async () => {
 							await updateCurrentProperty(property.id);
 							mutate(["propertyRent", property.id]);
