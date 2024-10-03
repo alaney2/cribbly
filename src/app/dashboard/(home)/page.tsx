@@ -10,9 +10,10 @@ import {
 	getNameAndEmail,
 	updateCurrentProperty,
 } from "@/utils/supabase/actions";
+import { headers } from "next/headers";
 import { Heading, Subheading } from "@/components/catalyst/heading";
-import { NewProperty } from "@/components/Dashboard/NewProperty"; // import { getVerificationInfo } from "@/utils/supabase/actions";
-// import { Verification } from "@/components/Dashboard/Verification";
+import { NewProperty } from "@/components/Dashboard/NewProperty";
+import { supabaseAdmin } from "@/utils/supabase/admin";
 
 export default async function CurrentProperty() {
 	const supabase = createClient();
@@ -30,7 +31,17 @@ export default async function CurrentProperty() {
 		);
 	}
 
-	const tasks = await getTasks();
+	// const tasks = await getTasks();
+
+	const { data: tasks, error: tasksError } = await supabase
+		.from("maintenance")
+		.select("*")
+		.order("created_at", { ascending: false })
+		.eq("property_id", currentPropertyId);
+	if (tasksError) {
+		console.error("Error fetching tasks:", tasksError);
+		throw new Error("Error fetching tasks");
+	}
 
 	const { data: propertyData, error } = await supabase
 		.from("properties")
@@ -41,49 +52,52 @@ export default async function CurrentProperty() {
 		return;
 	}
 
-	let showBankText = false;
+	const { data: leaseData, error: leaseError } = await supabase
+		.from("leases")
+		.select("*")
+		.eq("property_id", currentPropertyId)
+		.maybeSingle();
 
-	const { data: existingAccounts } = await supabase
-		.from("plaid_accounts")
-		.select("account_id, use_for_payouts")
-		.eq("user_id", user.id);
+	// if (leaseError) throw error;
 
-	if (existingAccounts && existingAccounts.length > 0) {
-		showBankText = !existingAccounts.some(
-			(account) => account.use_for_payouts === true,
-		);
-	}
+	const { data: tenantsData, error: tenantsError } = await supabaseAdmin
+		.from("tenants")
+		.select("*")
+		.eq("property_id", currentPropertyId);
 
-	// const result = await getNameAndEmail();
-	// const full_name = result?.full_name;
-	// const email = result?.email;
+	// let showBankText = false;
 
-	const propertyAddress = `${propertyData[0]?.street_address}, ${propertyData[0]?.city} ${propertyData[0]?.state} ${propertyData[0]?.zip}`;
+	// const { data: existingAccounts } = await supabase
+	// 	.from("plaid_accounts")
+	// 	.select("account_id, use_for_payouts")
+	// 	.eq("user_id", user.id);
 
-	// const verificationInfo = await getVerificationInfo();
-
-	// if (!verificationInfo) {
-	// 	return (
-	// 		<div className="sm:mt-16">
-	// 			<Verification full_name={full_name} email={email} />
-	// 		</div>
+	// if (existingAccounts && existingAccounts.length > 0) {
+	// 	showBankText = !existingAccounts.some(
+	// 		(account) => account.use_for_payouts === true,
 	// 	);
 	// }
+
+	const propertyAddress = `${propertyData[0]?.street_address}, ${propertyData[0]?.city} ${propertyData[0]?.state} ${propertyData[0]?.zip}`;
 
 	return (
 		<>
 			<div className="h-full">
-				{showBankText && (
+				{/* {showBankText && (
 					<Text className="mb-4 rounded-lg bg-red-500/25 px-4 py-1">
 						To enable payouts, please link a primary bank account in your{" "}
 						<TextLink href="/dashboard/account">account settings</TextLink>.
 					</Text>
-				)}
+				)} */}
 				<Heading className="mb-8 ml-4 text-xl font-semibold tracking-tight lg:hidden">
 					{propertyAddress}
 				</Heading>
 				<div className="mb-4 cursor-default">
-					<PropertyStats currentPropertyId={currentPropertyId} />
+					<PropertyStats
+						currentPropertyId={currentPropertyId}
+						leaseData={leaseData}
+						tenantsData={tenantsData}
+					/>
 				</div>
 
 				<BentoStats tasks={tasks} />

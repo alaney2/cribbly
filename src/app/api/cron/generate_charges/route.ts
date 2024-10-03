@@ -76,7 +76,7 @@ async function generateMonthlyRentPeriods() {
 
 				if (insertError) {
 					console.error("Error inserting rent period:", insertError);
-					throw new Error("Error inserting rent period");
+					// throw new Error("Error inserting rent period");
 				}
 			}
 		}

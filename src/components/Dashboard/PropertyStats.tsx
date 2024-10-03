@@ -89,25 +89,31 @@ const tenantsFetcher = async (property_id: string) => {
 
 type PropertyStatsProps = {
 	currentPropertyId: string;
+	leaseData: any;
+	tenantsData: any;
 };
 
-export function PropertyStats({ currentPropertyId }: PropertyStatsProps) {
-	const { data, error, isLoading } = useSWR(
-		currentPropertyId ? ["propertyRent", currentPropertyId] : null,
-		() => (currentPropertyId ? rentFetcher(currentPropertyId) : null),
-	);
-	const {
-		data: tenantsData,
-		error: tenantsError,
-		isLoading: isTenantsLoading,
-	} = useSWR(currentPropertyId ? ["tenants", currentPropertyId] : null, () =>
-		currentPropertyId ? tenantsFetcher(currentPropertyId) : null,
-	);
+export function PropertyStats({
+	currentPropertyId,
+	leaseData,
+	tenantsData,
+}: PropertyStatsProps) {
+	// const { data, error, isLoading } = useSWR(
+	// 	currentPropertyId ? ["propertyRent", currentPropertyId] : null,
+	// 	() => (currentPropertyId ? rentFetcher(currentPropertyId) : null),
+	// );
+	// const {
+	// 	data: tenantsData,
+	// 	error: tenantsError,
+	// 	isLoading: isTenantsLoading,
+	// } = useSWR(currentPropertyId ? ["tenants", currentPropertyId] : null, () =>
+	// 	currentPropertyId ? tenantsFetcher(currentPropertyId) : null,
+	// );
 
 	const stats = [
 		{
 			name: "Rent price",
-			stat: data ? `$${data.rent_price}` : "-",
+			stat: leaseData ? `$${leaseData.rent_amount}` : "-",
 			icon: CurrencyIcon,
 			editIcon: <PencilSquareIcon className="h-5 w-5 text-gray-500" />,
 			href: "/dashboard/settings",
@@ -115,8 +121,8 @@ export function PropertyStats({ currentPropertyId }: PropertyStatsProps) {
 		{
 			name: "Lease period",
 			icon: HourglassIcon,
-			stat: data
-				? `${format(data.rent_start, "M/d/yy")} - ${format(data.rent_end, "M/d/yy")}`
+			stat: leaseData
+				? `${format(leaseData.start_date, "M/d/yy")} - ${format(leaseData.end_date, "M/d/yy")}`
 				: "-",
 		},
 		{

@@ -4,6 +4,7 @@ import { generateId } from "@/lib/utils";
 import { calculateRentDates } from "@/utils/helpers";
 import { redirect } from "next/navigation";
 import { supabaseAdmin } from "@/utils/supabase/admin";
+import { revalidatePath } from "next/cache";
 
 export async function deleteInvite(token: string) {
 	const supabase = createClient();
@@ -443,10 +444,11 @@ export async function updateCurrentProperty(propertyId: string) {
 		console.error("Error updating current property:", updateError);
 		throw new Error("Error updating current property");
 	}
+	revalidatePath("/dashboard");
 	return "Success";
 }
 
-export async function getCurrentProperty(): Promise<string> {
+export async function getCurrentProperty() {
 	const supabase = createClient();
 	const {
 		data: { user },
