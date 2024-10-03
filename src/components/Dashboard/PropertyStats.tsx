@@ -76,7 +76,7 @@ const rentFetcher = async (property_id: string) => {
 		.from("property_rents")
 		.select("*")
 		.eq("property_id", property_id)
-		.single();
+		.maybeSingle();
 
 	if (error) throw error;
 	return data;
