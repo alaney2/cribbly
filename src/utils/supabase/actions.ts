@@ -687,3 +687,12 @@ export async function getLease(propertyId: string) {
 
 	return lease;
 }
+
+export async function getTenants(propertyId: string) {
+	const { data, error } = await supabaseAdmin
+		.from("tenants")
+		.select("*")
+		.eq("property_id", propertyId);
+	if (error) throw error;
+	return data;
+}

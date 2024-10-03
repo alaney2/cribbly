@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import useSWR from "swr";
 import { useEffect } from "react";
 import { format } from "date-fns";
+import { getTenants } from "@/utils/supabase/actions";
 
 const CurrencyIcon = (
 	<svg
@@ -82,13 +83,8 @@ const rentFetcher = async (property_id: string) => {
 };
 
 const tenantsFetcher = async (property_id: string) => {
-	const supabase = createClient();
-	const { data, error } = await supabase
-		.from("tenants")
-		.select("*")
-		.eq("property_id", property_id);
-	if (error) throw error;
-	return data;
+	const tenants = await getTenants(property_id);
+	return tenants;
 };
 
 type PropertyStatsProps = {
@@ -128,7 +124,6 @@ export function PropertyStats({ currentPropertyId }: PropertyStatsProps) {
 			icon: TenantIcon,
 			stat: tenantsData ? `${tenantsData.length}` : "-",
 		},
-		// { name: 'This month\'s rent', icon: CalendarIcon, stat: data ? `Unpaid (0/${data.months_left} months)` : 'Paid' },
 	];
 
 	return (
