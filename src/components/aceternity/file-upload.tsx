@@ -223,7 +223,10 @@ export function GridPattern() {
 					const index = row * columns + col;
 					return (
 						<div
-							key={`${col}-${row}`}
+							key={`${col}-${
+								// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+								row
+							}`}
 							className={`w-10 h-10 flex flex-shrink-0 rounded-[2px] ${
 								index % 2 === 0
 									? "bg-gray-50 dark:bg-neutral-950"

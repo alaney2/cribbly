@@ -2,6 +2,8 @@
 
 <!-- transfer payment -->
 
+dialog for documents
+
 take in card info
 
 set up autopay
