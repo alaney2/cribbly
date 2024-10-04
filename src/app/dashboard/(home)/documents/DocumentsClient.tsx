@@ -46,6 +46,7 @@ import { FileUpload } from "@/components/aceternity/file-upload";
 import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 import useSWR from "swr";
 import { Skeleton } from "@/components/catalyst/skeleton";
+import { ViewDocumentDialog } from "@/components/dialogs/ViewDocumentDialog";
 
 type Document = {
 	key: string | undefined;
@@ -124,33 +125,7 @@ export function DocumentsClient() {
 		}
 	};
 
-	const handleUpload = async (formData: FormData) => {
-		const file = formData.get("file") as File;
-		if (!file) {
-			toast.error("No file selected");
-			return;
-		}
-
-		const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
-		if (!allowedTypes.includes(file.type)) {
-			toast.error("Only images (JPEG, PNG) and PDF files are allowed");
-			return;
-		}
-		const uploadToastId = toast.loading(`Uploading ${file.name}...`);
-		try {
-			await uploadDocument(propertyId, formData);
-			toast.success(`${file.name} uploaded successfully`, {
-				id: uploadToastId,
-			});
-		} catch (error) {
-			console.error("Error uploading document:", error);
-			toast.error(`Failed to upload ${file.name}`, { id: uploadToastId });
-		}
-	};
-
 	const handleFileUpload = async (uploadedFiles: File[]) => {
-		// setFiles(uploadedFiles)
-
 		for (const file of uploadedFiles) {
 			const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
 			if (!allowedTypes.includes(file.type)) {
@@ -175,14 +150,6 @@ export function DocumentsClient() {
 			}
 		}
 	};
-
-	// const SkeletonRow = () => (
-	//   <TableRow>
-	//     <TableCell><div className="h-4 bg-gray-200 rounded w-full md:w-3/4 animate-pulse"></div></TableCell>
-	//     <TableCell><div className="h-4 bg-gray-200 rounded w-full md:w-1/2 animate-pulse"></div></TableCell>
-	//     <TableCell className="text-right"><div className="h-4 bg-gray-200 rounded w-full md:w-1/4 animate-pulse ml-auto"></div></TableCell>
-	//   </TableRow>
-	// );
 
 	const TaxDocumentsTable = ({ documents }: { documents: Document[] }) => (
 		<div className="bg-white dark:bg-black border border-zinc-200 dark:border-zinc-400 rounded-lg p-6 mb-6">
@@ -381,7 +348,6 @@ export function DocumentsClient() {
 				<Heading className="mb-6">All Documents</Heading>
 				<TaxDocumentsTable documents={[]} />
 				<PropertyDocumentsTable
-					// documents={documents?.filter(doc => doc.name && !doc.name.toLowerCase().includes('tax')) || []}
 					documents={
 						documents?.filter(
 							(doc) => doc.name && !doc.name.toLowerCase().includes("tax"),
@@ -390,7 +356,29 @@ export function DocumentsClient() {
 				/>
 			</main>
 
-			<Dialog
+			<ViewDocumentDialog
+				isOpen={!!viewingDocument}
+				onClose={() => setViewingDocument(null)}
+				dialogBody={
+					<div className="mt-4" style={{ height: "80vh" }}>
+						{viewingDocument && (
+							<iframe
+								src={`${viewingDocument}#toolbar=1&view=FitH`}
+								width="100%"
+								height="100%"
+								style={{ border: "none" }}
+								title="Document Viewer"
+							/>
+						)}
+					</div>
+				}
+				dialogActions={
+					<Button outline onClick={() => setViewingDocument(null)}>
+						Close
+					</Button>
+				}
+			/>
+			{/* <Dialog
 				size="4xl"
 				open={!!viewingDocument}
 				onClose={() => setViewingDocument(null)}
@@ -414,7 +402,7 @@ export function DocumentsClient() {
 						Close
 					</Button>
 				</DialogActions>
-			</Dialog>
+			</Dialog> */}
 
 			<Dialog
 				open={isDeleteDialogOpen}
