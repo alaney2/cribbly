@@ -1,8 +1,6 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
-import { BentoStats } from "@/components/Dashboard/BentoStats";
 import { redirect } from "next/navigation";
-import { PropertyStats } from "@/components/Dashboard/PropertyStats";
 import { Strong, Text, TextLink } from "@/components/catalyst/text";
 import {
 	getTasks,
@@ -11,9 +9,9 @@ import {
 	updateCurrentProperty,
 } from "@/utils/supabase/actions";
 import { headers } from "next/headers";
-import { Heading, Subheading } from "@/components/catalyst/heading";
 import { NewProperty } from "@/components/Dashboard/NewProperty";
 import { supabaseAdmin } from "@/utils/supabase/admin";
+import { DashboardWrapper } from "@/components/Dashboard/DashboardWrapper";
 
 export default async function CurrentProperty() {
 	const supabase = createClient();
@@ -22,34 +20,34 @@ export default async function CurrentProperty() {
 	} = await supabase.auth.getUser();
 	if (!user) return;
 
-	const currentPropertyId = user.user_metadata.currentPropertyId;
-	if (!currentPropertyId) {
-		return (
-			<>
-				<NewProperty />
-			</>
-		);
-	}
+	// const currentPropertyId = user.user_metadata.currentPropertyId;
+	// if (!currentPropertyId) {
+	// 	return (
+	// 		<>
+	// 			<NewProperty />
+	// 		</>
+	// 	);
+	// }
 
-	const { data: tasks, error: tasksError } = await supabase
-		.from("maintenance")
-		.select("*")
-		.order("created_at", { ascending: false })
-		.eq("property_id", currentPropertyId);
+	// const { data: tasks, error: tasksError } = await supabase
+	// 	.from("maintenance")
+	// 	.select("*")
+	// 	.order("created_at", { ascending: false })
+	// 	.eq("property_id", currentPropertyId);
 
-	if (tasksError) {
-		console.error("Error fetching tasks:", tasksError);
-		throw new Error("Error fetching tasks");
-	}
+	// if (tasksError) {
+	// 	console.error("Error fetching tasks:", tasksError);
+	// 	throw new Error("Error fetching tasks");
+	// }
 
-	const { data: propertyData, error } = await supabase
-		.from("properties")
-		.select()
-		.eq("id", currentPropertyId);
+	// const { data: propertyData, error } = await supabase
+	// 	.from("properties")
+	// 	.select()
+	// 	.eq("id", currentPropertyId);
 
-	if (error || propertyData.length === 0) {
-		return;
-	}
+	// if (error || propertyData.length === 0) {
+	// 	return;
+	// }
 
 	// const { data: leaseData, error: leaseError } = await supabase
 	// 	.from("leases")
@@ -77,29 +75,7 @@ export default async function CurrentProperty() {
 	// 	);
 	// }
 
-	const propertyAddress = `${propertyData[0]?.street_address}, ${propertyData[0]?.city} ${propertyData[0]?.state} ${propertyData[0]?.zip}`;
+	// const propertyAddress = `${propertyData[0]?.street_address}, ${propertyData[0]?.city} ${propertyData[0]?.state} ${propertyData[0]?.zip}`;
 
-	return (
-		<>
-			<div className="h-full">
-				{/* {showBankText && (
-					<Text className="mb-4 rounded-lg bg-red-500/25 px-4 py-1">
-						To enable payouts, please link a primary bank account in your{" "}
-						<TextLink href="/dashboard/account">account settings</TextLink>.
-					</Text>
-				)} */}
-				<Heading className="mb-8 ml-4 text-xl font-semibold tracking-tight lg:hidden">
-					{propertyAddress}
-				</Heading>
-				<div className="mb-4 cursor-default">
-					<PropertyStats currentPropertyId={currentPropertyId} />
-				</div>
-
-				<BentoStats currentPropertyId={currentPropertyId} />
-				{/* <div className="flex justify-center mt-8">
-          <Button color="blue" className="">Randomize data</Button>
-        </div> */}
-			</div>
-		</>
-	);
+	return <DashboardWrapper />;
 }

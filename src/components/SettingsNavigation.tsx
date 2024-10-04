@@ -9,9 +9,10 @@ import { Text, Strong } from "@/components/catalyst/text";
 import { useRouter } from "next/navigation";
 import useSWR, { mutate } from "swr";
 import { createClient } from "@/utils/supabase/client";
+import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
 interface SettingsNavigationProps {
-	currentPropertyId: string;
+	currentPropertyId?: string;
 	// lease: any | null;
 	// userId: string;
 	initialTab?: string;
@@ -37,12 +38,13 @@ const NavButton = ({
 );
 
 export default function SettingsNavigation({
-	currentPropertyId,
+	// currentPropertyId,
 	// lease,
 	// userId,
 	initialTab,
 	// plaidAccounts,
 }: SettingsNavigationProps) {
+	const { currentPropertyId } = useCurrentProperty();
 	const [activeTab, setActiveTab] = useState(initialTab || "General");
 
 	const handleTabChange = (tab: string) => {

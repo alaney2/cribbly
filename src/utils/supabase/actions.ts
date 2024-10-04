@@ -444,7 +444,7 @@ export async function updateCurrentProperty(propertyId: string) {
 		console.error("Error updating current property:", updateError);
 		throw new Error("Error updating current property");
 	}
-	revalidatePath("/dashboard");
+	// revalidatePath("/dashboard");
 	return "Success";
 }
 

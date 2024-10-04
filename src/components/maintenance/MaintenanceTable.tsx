@@ -22,6 +22,8 @@ import { NewTaskDialog } from "@/components/dialogs/NewTaskDialog";
 import useSWR, { mutate } from "swr";
 import { getTasks } from "@/utils/supabase/actions";
 import { Skeleton } from "@/components/catalyst/skeleton";
+import { createClient } from "@/utils/supabase/client";
+import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
 type Request = {
 	id: string;
@@ -35,6 +37,17 @@ type Request = {
 	priority: string;
 };
 
+const tasksFetcher = async (currentPropertyId: string) => {
+	const supabase = createClient();
+	const { data, error } = await supabase
+		.from("maintenance")
+		.select("*")
+		.order("created_at", { ascending: false })
+		.eq("property_id", currentPropertyId);
+	if (error) throw error;
+	return data;
+};
+
 export function MaintenanceTable({
 	bento = false,
 	userId,
@@ -42,7 +55,10 @@ export function MaintenanceTable({
 	bento?: boolean;
 	userId?: string;
 }) {
-	const { data: tasks, error, isLoading } = useSWR("tasks", getTasks);
+	const { currentPropertyId } = useCurrentProperty();
+	const { data: tasks, isLoading } = useSWR(["tasks", currentPropertyId], () =>
+		tasksFetcher(currentPropertyId),
+	);
 
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [dialogMode, setDialogMode] = useState<"new" | "edit">("new");

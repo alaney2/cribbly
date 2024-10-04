@@ -18,21 +18,32 @@ import { useRouter } from "next/navigation";
 import { useSWRConfig } from "swr";
 import { useContext } from "react";
 import { SidebarContext } from "@/components/catalyst/sidebar-layout";
+import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
 export function PropertiesDropdown({
 	properties,
-	currentPropertyId,
-	streetAddress,
+	// currentPropertyId,
+	// streetAddress,
 }) {
 	const { mutate } = useSWRConfig();
 	const { closeSidebar } = useContext(SidebarContext);
 	const router = useRouter();
+	const { currentPropertyId, setCurrentPropertyId } = useCurrentProperty();
+	const currentProperty = properties?.find(
+		(property) => property.id === currentPropertyId,
+	);
+
+	console.log(
+		"currentPropertyId",
+		currentPropertyId,
+		currentProperty?.street_address,
+	);
 
 	return (
 		<Dropdown>
 			<DropdownButton as={SidebarItem} className="lg:mb-2.5">
 				{/* <Avatar src="/tailwind-logo.svg" /> */}
-				<SidebarLabel>{streetAddress}</SidebarLabel>
+				<SidebarLabel>{currentProperty?.street_address}</SidebarLabel>
 				<ChevronDownIcon />
 			</DropdownButton>
 
@@ -42,20 +53,31 @@ export function PropertiesDropdown({
 						key={property.id}
 						onClick={async () => {
 							closeSidebar();
-							await updateCurrentProperty(property.id);
+							// await updateCurrentProperty(property.id);
+							setCurrentPropertyId(property.id);
 							// mutate(["propertyRent", property.id]);
 							// mutate(
 							// 	() => true, // This matches all keys
 							// 	(data) => ({ ...data, isLoading: true }),
 							// 	{ revalidate: false },
 							// );
-							mutate(["lease", currentPropertyId], null, { revalidate: false });
+							updateCurrentProperty(property.id).then(() => {
+								// mutate(["lease", currentPropertyId], null, {
+								// 	revalidate: false,
+								// });
+								// mutate(["lease", property.id]);
+								// mutate(["tasks", currentPropertyId], null, {
+								// 	revalidate: false,
+								// });
+								// mutate(["tasks", property.id]);
+							});
+							// mutate(["lease", currentPropertyId], null, { revalidate: false });
 
-							// Revalidate data for the new property ID
-							mutate(["lease", property.id]);
+							// // Revalidate data for the new property ID
+							// mutate(["lease", property.id]);
 
-							mutate(["tasks", currentPropertyId], null, { revalidate: false });
-							mutate(["tasks", property.id]);
+							// mutate(["tasks", currentPropertyId], null, { revalidate: false });
+							// mutate(["tasks", property.id]);
 
 							// Trigger revalidation for all SWR data
 							// mutate(

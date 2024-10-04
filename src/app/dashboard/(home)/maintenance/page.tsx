@@ -9,10 +9,10 @@ import { redirect } from "next/navigation";
 
 export default async function Maintenance() {
 	// const data = await getTasks();
-	const currentPropertyId = await getCurrentProperty();
-	if (!currentPropertyId) {
-		redirect("/dashboard");
-	}
+	// const currentPropertyId = await getCurrentProperty();
+	// if (!currentPropertyId) {
+	// 	redirect("/dashboard");
+	// }
 	const user = await getUser();
 	if (!user) {
 		return <></>;
@@ -21,7 +21,7 @@ export default async function Maintenance() {
 
 	return (
 		<>
-			<MaintenanceTable key={currentPropertyId} userId={userId} />
+			<MaintenanceTable userId={userId} />
 		</>
 	);
 }

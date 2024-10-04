@@ -7,6 +7,7 @@ import useSWR from "swr";
 import { useEffect } from "react";
 import { format, parseISO } from "date-fns";
 import { getTenants } from "@/utils/supabase/actions";
+import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
 const CurrencyIcon = (
 	<svg
@@ -94,10 +95,12 @@ const tenantsFetcher = async (property_id: string) => {
 };
 
 type PropertyStatsProps = {
-	currentPropertyId: string;
+	currentPropertyId?: string;
 };
 
-export function PropertyStats({ currentPropertyId }: PropertyStatsProps) {
+export function PropertyStats() {
+	const { currentPropertyId } = useCurrentProperty();
+
 	const { data: leaseData, error: leaseError } = useSWR(
 		currentPropertyId ? ["lease", currentPropertyId] : null,
 		() => leaseFetcher(currentPropertyId),

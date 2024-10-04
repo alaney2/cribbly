@@ -9,11 +9,11 @@ export default async function SettingsLayout({
 	children: React.ReactNode;
 }) {
 	// const supabase = createClient();
-	const currentPropertyId = await getCurrentProperty();
+	// const currentPropertyId = await getCurrentProperty();
 
-	if (!currentPropertyId) {
-		return;
-	}
+	// if (!currentPropertyId) {
+	// 	return;
+	// }
 
 	// const { data: lease, error: leaseError } = await supabase
 	// 	.from("leases")
@@ -34,11 +34,11 @@ export default async function SettingsLayout({
 		<>
 			<main className="flex flex-col justify-center space-y-4 sm:space-y-8 w-full mx-auto">
 				<SettingsNavigation
-					currentPropertyId={currentPropertyId}
-					// userId={user.id}
-					// lease={lease}
-					// key={currentPropertyId}
-					// plaidAccounts={plaidAccounts ?? []}
+				// currentPropertyId={currentPropertyId}
+				// userId={user.id}
+				// lease={lease}
+				// key={currentPropertyId}
+				// plaidAccounts={plaidAccounts ?? []}
 				/>
 			</main>
 			{children}

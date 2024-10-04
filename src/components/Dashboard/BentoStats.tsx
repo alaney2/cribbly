@@ -17,10 +17,11 @@ import { motion } from "framer-motion";
 import { createMoovAccount } from "@/utils/moov/actions";
 import { loadMoov, type Drops } from "@moovio/moov-js";
 import { useState } from "react";
+import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
-export function BentoStats({
-	currentPropertyId,
-}: { currentPropertyId: string }) {
+export function BentoStats() {
+	const { currentPropertyId } = useCurrentProperty();
+
 	const SkeletonOne = () => {
 		const variants = {
 			initial: {
@@ -79,22 +80,22 @@ export function BentoStats({
 	};
 
 	const items = [
-		{
-			title: "Total income",
-			description: "Rent - (maintenance + utility costs)",
-			header: <IncomeGraph />,
-			className: "md:col-span-2",
-			icon: <IconPigMoney className="h-4 w-4 text-blue-500" />,
-			edit: false,
-		},
-		{
-			title: "Net income",
-			description: "+/- per month",
-			header: <BarGraph />,
-			className: "md:col-span-1",
-			icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
-			edit: false,
-		},
+		// {
+		// 	title: "Total income",
+		// 	description: "Rent - (maintenance + utility costs)",
+		// 	header: <IncomeGraph />,
+		// 	className: "md:col-span-2",
+		// 	icon: <IconPigMoney className="h-4 w-4 text-blue-500" />,
+		// 	edit: false,
+		// },
+		// {
+		// 	title: "Net income",
+		// 	description: "+/- per month",
+		// 	header: <BarGraph />,
+		// 	className: "md:col-span-1",
+		// 	icon: <IconTableColumn className="h-4 w-4 text-neutral-500" />,
+		// 	edit: false,
+		// },
 		{
 			title: "Documents",
 			description: "(e.g., taxes, insurance, lease)",
@@ -108,7 +109,7 @@ export function BentoStats({
 			title: "Maintenance requests",
 			description: "Most recent maintenance requests",
 			header: <BentoMaintenanceTable />,
-			className: "md:col-span-2",
+			className: "md:col-span-1 xl:col-span-2",
 			icon: <WrenchIcon className="h-4 w-4 text-blue-500" />,
 			edit: true,
 			href: "/dashboard/maintenance",
