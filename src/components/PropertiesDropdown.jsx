@@ -26,6 +26,7 @@ export function PropertiesDropdown({
 }) {
 	const { mutate } = useSWRConfig();
 	const { closeSidebar } = useContext(SidebarContext);
+	const router = useRouter();
 
 	return (
 		<Dropdown>
@@ -40,12 +41,31 @@ export function PropertiesDropdown({
 					<DropdownItem
 						key={property.id}
 						onClick={async () => {
-							await updateCurrentProperty(property.id);
-							mutate(["propertyRent", property.id]);
-							mutate(["tenants", property.id]);
-							mutate(`documents-${property.id}`);
-							mutate("tasks");
 							closeSidebar();
+							await updateCurrentProperty(property.id);
+							// mutate(["propertyRent", property.id]);
+							// mutate(
+							// 	() => true, // This matches all keys
+							// 	(data) => ({ ...data, isLoading: true }),
+							// 	{ revalidate: false },
+							// );
+							mutate(["lease", currentPropertyId], null, { revalidate: false });
+
+							// Revalidate data for the new property ID
+							mutate(["lease", property.id]);
+
+							mutate(["tasks", currentPropertyId], null, { revalidate: false });
+							mutate(["tasks", property.id]);
+
+							// Trigger revalidation for all SWR data
+							// mutate(
+							// 	() => true, // This matches all keys
+							// 	undefined,
+							// 	{ revalidate: true },
+							// );
+							// mutate(["tenants", property.id]);
+							// mutate(`documents-${property.id}`);
+							// mutate("tasks");
 						}}
 					>
 						{property.id === currentPropertyId && (

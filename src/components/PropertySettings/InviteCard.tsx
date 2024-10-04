@@ -103,9 +103,7 @@ export function InviteCard({
 
 	return (
 		<>
-			<Card
-				className={`w-full animate__animated animate__faster} ${animationClass}`}
-			>
+			<Card className={`w-full animate__faster} ${animationClass}`}>
 				<CardHeader>
 					<Heading>Invite tenants</Heading>
 					<Text className="">

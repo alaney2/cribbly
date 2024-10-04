@@ -30,7 +30,7 @@ const NavButton = ({
 	<button
 		type="button"
 		onClick={onClick}
-		className={`w-full cursor-default rounded-md px-4 py-2 text-left text-sm transition-colors ${active ? "bg-gray-100 dark:bg-black" : ""}`}
+		className={`w-full cursor-default rounded-md px-4 py-2 text-left text-sm transition-colors duration-50 ${active ? "bg-gray-100 dark:bg-black" : ""}`}
 	>
 		<Text>{active ? <Strong>{children}</Strong> : children}</Text>
 	</button>

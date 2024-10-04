@@ -163,9 +163,7 @@ export function RentCard({
 
 	return (
 		<>
-			<Card
-				className={`animate__animated animate__faster w-full ${animationClass}`}
-			>
+			<Card className={` animate__faster w-full ${animationClass}`}>
 				<form
 					action={async (formData) => {
 						setIsButtonClicked(true);
@@ -338,7 +336,7 @@ export function RentCard({
 								<div className="mb-2 flex items-center justify-between md:mb-0 md:w-40 md:flex-shrink-0">
 									<Label htmlFor="securityDeposit">Security deposit</Label>
 									{isLoading ? (
-										<Skeleton className="h-11 sm:h-9 w-8" />
+										<Skeleton className="h-6 sm:h-7 w-10 sm:w-8" />
 									) : (
 										<Switch
 											id="securityDeposit"
