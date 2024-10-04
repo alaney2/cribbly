@@ -55,6 +55,9 @@ export function PropertiesDropdown({
 							closeSidebar();
 							// await updateCurrentProperty(property.id);
 							setCurrentPropertyId(property.id);
+							mutate(["documents", property.id], null, {
+								revalidate: false,
+							});
 							// mutate(["propertyRent", property.id]);
 							// mutate(
 							// 	() => true, // This matches all keys
@@ -71,23 +74,6 @@ export function PropertiesDropdown({
 								// });
 								// mutate(["tasks", property.id]);
 							});
-							// mutate(["lease", currentPropertyId], null, { revalidate: false });
-
-							// // Revalidate data for the new property ID
-							// mutate(["lease", property.id]);
-
-							// mutate(["tasks", currentPropertyId], null, { revalidate: false });
-							// mutate(["tasks", property.id]);
-
-							// Trigger revalidation for all SWR data
-							// mutate(
-							// 	() => true, // This matches all keys
-							// 	undefined,
-							// 	{ revalidate: true },
-							// );
-							// mutate(["tenants", property.id]);
-							// mutate(`documents-${property.id}`);
-							// mutate("tasks");
 						}}
 					>
 						{property.id === currentPropertyId && (

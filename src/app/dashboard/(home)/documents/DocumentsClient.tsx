@@ -1,12 +1,5 @@
 "use client";
-import {
-	useRef,
-	useState,
-	useTransition,
-	type JSX,
-	type SVGProps,
-} from "react";
-import { useRouter } from "next/navigation";
+import { useRef, useState, type JSX, type SVGProps } from "react";
 import { Button } from "@/components/catalyst/button";
 import { Heading, Subheading } from "@/components/catalyst/heading";
 import {
@@ -50,6 +43,9 @@ import {
 } from "@heroicons/react/16/solid";
 import { toast } from "sonner";
 import { FileUpload } from "@/components/aceternity/file-upload";
+import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
+import useSWR from "swr";
+import { Skeleton } from "@/components/catalyst/skeleton";
 
 type Document = {
 	key: string | undefined;
@@ -57,10 +53,8 @@ type Document = {
 	date: Date | undefined;
 };
 
-export function DocumentsClient({
-	propertyId,
-	documents,
-}: { propertyId: string; documents: Document[] }) {
+export function DocumentsClient() {
+	const { currentPropertyId: propertyId } = useCurrentProperty();
 	const [selectedYear, setSelectedYear] = useState("2024");
 	const years = ["2024"];
 	const [viewingDocument, setViewingDocument] = useState<string | null>(null);
@@ -69,7 +63,14 @@ export function DocumentsClient({
 		null,
 	);
 	const fileInputRef = useRef<HTMLInputElement>(null);
-	const [files, setFiles] = useState<Document[]>(documents);
+	// const [files, setFiles] = useState<Document[]>(documents);
+
+	const {
+		data: documents,
+		error,
+		isLoading,
+		mutate,
+	} = useSWR(["documents", propertyId], () => fetchDocuments(propertyId));
 
 	const handleViewDocument = async (key: string) => {
 		try {
@@ -102,10 +103,8 @@ export function DocumentsClient({
 			});
 		} finally {
 			setIsDeleteDialogOpen(false);
-			setFiles((prevFiles) =>
-				prevFiles.filter((file) => file.name !== documentToDelete.name),
-			);
 			setDocumentToDelete(null);
+			mutate();
 		}
 	};
 
@@ -172,22 +171,7 @@ export function DocumentsClient({
 				console.error("Error uploading document:", error);
 				toast.error(`Failed to upload ${file.name}`, { id: uploadToastId });
 			} finally {
-				setFiles((prevFiles) => {
-					const fileExists = prevFiles.some(
-						(existingFile) => existingFile.name === file.name,
-					);
-
-					if (!fileExists) {
-						const newDocument = {
-							key: `properties/${propertyId}/documents/${file.name}`,
-							name: file.name,
-							date: new Date(),
-						};
-						return [...prevFiles, newDocument];
-					}
-
-					return prevFiles;
-				});
+				mutate();
 			}
 		}
 	};
@@ -232,7 +216,7 @@ export function DocumentsClient({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{files.map((doc) => (
+						{documents.map((doc) => (
 							<TableRow key={doc.key}>
 								<TableCell className="font-medium w-full md:w-3/4">
 									{doc.name}
@@ -279,7 +263,7 @@ export function DocumentsClient({
 		<div className="bg-white dark:bg-black border border-zinc-200 dark:border-zinc-400 rounded-lg p-6">
 			<div className="mb-6 flex flex-col">
 				<Subheading className="text-left mb-4">Property Documents</Subheading>
-				<div className="w-full mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
+				<div className="w-full mx-auto min-h-72 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
 					<FileUpload onChange={handleFileUpload} />
 				</div>
 				{/* <form action={handleUpload}>
@@ -301,87 +285,93 @@ export function DocumentsClient({
           </label>
         </form> */}
 			</div>
-			{
-				// fetcherLoading ? (
-				//   <Table>
-				//     <TableHead>
-				//       <TableRow>
-				//         <TableHeader className="w-1/2">Document Name</TableHeader>
-				//         <TableHeader className="w-1/4">Date</TableHeader>
-				//         <TableHeader className="relative w-0">
-				//           <span className="sr-only">Actions</span>
-				//         </TableHeader>
-				//       </TableRow>
-				//     </TableHead>
-				//     <TableBody>
-				//       {[...Array(2)].map((_, index) => (
-				//         <SkeletonRow key={index} />
-				//       ))}
-				//     </TableBody>
-				//   </Table>
-				// ) :
-				files.length === 0 ? (
-					<Text>No property documents found.</Text>
-				) : (
-					<Table>
-						<TableHead>
-							<TableRow>
-								<TableHeader className="w-1/2">Document Name</TableHeader>
-								<TableHeader className="w-1/4">Date</TableHeader>
-								<TableHeader className="relative w-0">
-									<span className="sr-only">Actions</span>
-								</TableHeader>
+			{isLoading ? (
+				<Table>
+					<TableHead>
+						<TableRow>
+							<TableHeader className="w-1/2">Document Name</TableHeader>
+							<TableHeader className="w-1/4">Date</TableHeader>
+							<TableHeader className="relative w-0">
+								<span className="sr-only">Actions</span>
+							</TableHeader>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{[...Array(2)].map((_, index) => (
+							// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+							<TableRow key={index}>
+								<TableCell>
+									<Skeleton className="h-4 w-3/4" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="h-4 w-1/2" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="h-4 w-1/4 ml-auto" />
+								</TableCell>
 							</TableRow>
-						</TableHead>
-						<TableBody>
-							{files.map((doc) => (
-								<TableRow key={doc.key}>
-									<TableCell className="font-medium w-1/2">
-										<div className="flex items-center">
-											<DocumentIcon className="mr-2 h-4 w-4" />
-											{doc.name}
-										</div>
-									</TableCell>
-									<TableCell className="w-1/4">
-										{doc?.date?.toLocaleDateString()}
-									</TableCell>
-									<TableCell className="text-right">
-										<Dropdown>
-											<DropdownButton plain aria-label="More options">
-												<EllipsisHorizontalIcon />
-											</DropdownButton>
-											<DropdownMenu anchor="bottom end">
-												{doc.name?.endsWith(".pdf") && (
-													<DropdownItem
-														onClick={() =>
-															doc.key && handleViewDocument(doc.key)
-														}
-													>
-														<EyeIcon />
-														<DropdownLabel>View</DropdownLabel>
-													</DropdownItem>
-												)}
+						))}
+					</TableBody>
+				</Table>
+			) : documents.length === 0 ? (
+				<Text>No property documents found.</Text>
+			) : (
+				<Table>
+					<TableHead>
+						<TableRow>
+							<TableHeader className="w-1/2">Document Name</TableHeader>
+							<TableHeader className="w-1/4">Date</TableHeader>
+							<TableHeader className="relative w-0">
+								<span className="sr-only">Actions</span>
+							</TableHeader>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{documents.map((doc) => (
+							<TableRow key={doc.key}>
+								<TableCell className="font-medium w-1/2">
+									<div className="flex items-center">
+										<DocumentIcon className="mr-2 h-4 w-4" />
+										{doc.name}
+									</div>
+								</TableCell>
+								<TableCell className="w-1/4">
+									{doc?.date?.toLocaleDateString()}
+								</TableCell>
+								<TableCell className="text-right">
+									<Dropdown>
+										<DropdownButton plain aria-label="More options">
+											<EllipsisHorizontalIcon />
+										</DropdownButton>
+										<DropdownMenu anchor="bottom end">
+											{doc.name?.endsWith(".pdf") && (
 												<DropdownItem
-													onClick={() =>
-														doc.key && handleDownloadDocument(doc.key)
-													}
+													onClick={() => doc.key && handleViewDocument(doc.key)}
 												>
-													<ArrowDownTrayIcon />
-													<DropdownLabel>Download</DropdownLabel>
+													<EyeIcon />
+													<DropdownLabel>View</DropdownLabel>
 												</DropdownItem>
-												<DropdownItem onClick={() => handleDeleteDocument(doc)}>
-													<TrashIcon />
-													<DropdownLabel>Delete</DropdownLabel>
-												</DropdownItem>
-											</DropdownMenu>
-										</Dropdown>
-									</TableCell>
-								</TableRow>
-							))}
-						</TableBody>
-					</Table>
-				)
-			}
+											)}
+											<DropdownItem
+												onClick={() =>
+													doc.key && handleDownloadDocument(doc.key)
+												}
+											>
+												<ArrowDownTrayIcon />
+												<DropdownLabel>Download</DropdownLabel>
+											</DropdownItem>
+											<DropdownItem onClick={() => handleDeleteDocument(doc)}>
+												<TrashIcon />
+												<DropdownLabel>Delete</DropdownLabel>
+											</DropdownItem>
+										</DropdownMenu>
+									</Dropdown>
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			)}
 		</div>
 	);
 
@@ -392,7 +382,11 @@ export function DocumentsClient({
 				<TaxDocumentsTable documents={[]} />
 				<PropertyDocumentsTable
 					// documents={documents?.filter(doc => doc.name && !doc.name.toLowerCase().includes('tax')) || []}
-					documents={files}
+					documents={
+						documents?.filter(
+							(doc) => doc.name && !doc.name.toLowerCase().includes("tax"),
+						) || []
+					}
 				/>
 			</main>
 

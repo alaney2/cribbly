@@ -1,4 +1,3 @@
-"use server";
 import { createClient } from "@/utils/supabase/server";
 import { DocumentsClient } from "./DocumentsClient";
 import { redirect } from "next/navigation";
@@ -16,23 +15,10 @@ type Document = {
 	date: Date | undefined;
 };
 
-export default async function Documents() {
-	const supabase = createClient();
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-	if (!user) return;
-	const currentPropertyId = user.user_metadata.currentPropertyId;
-	if (!currentPropertyId) {
-		return;
-	}
-
-	let documents = await fetchDocuments(currentPropertyId);
-	if (!documents) documents = [];
-
+export default async function DocumentsPage() {
 	return (
 		<>
-			<DocumentsClient propertyId={currentPropertyId} documents={documents} />
+			<DocumentsClient />
 		</>
 	);
 }
