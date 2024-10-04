@@ -1,6 +1,6 @@
 # Cribbly
 
-transfer payment
+<!-- transfer payment -->
 
 take in card info
 

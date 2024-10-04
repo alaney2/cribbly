@@ -1,13 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Button } from "@/components/catalyst/button";
-import {
-	Dialog,
-	DialogActions,
-	DialogBody,
-	DialogDescription,
-	DialogTitle,
-} from "@/components/catalyst/dialog";
+import { DialogActions } from "@/components/catalyst/dialog";
 import { Input } from "@/components/catalyst/input";
 import {
 	Table,
@@ -17,22 +11,17 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/catalyst/table";
-import {
-	Description,
-	Field,
-	FieldGroup,
-	Fieldset,
-	Label,
-	Legend,
-} from "@/components/catalyst/fieldset";
+import { Field, FieldGroup, Label } from "@/components/catalyst/fieldset";
 import { Select } from "@/components/catalyst/select";
 import { Text } from "@/components/catalyst/text";
 import { Textarea } from "@/components/catalyst/textarea";
-import { Radio, RadioField, RadioGroup } from "@/components/catalyst/radio";
 import { Heading, Subheading } from "@/components/catalyst/heading";
 import { createTask, deleteTask } from "@/utils/supabase/actions";
 import { toast } from "sonner";
 import { NewTaskDialog } from "@/components/dialogs/NewTaskDialog";
+import useSWR, { mutate } from "swr";
+import { getTasks } from "@/utils/supabase/actions";
+import { Skeleton } from "@/components/catalyst/skeleton";
 
 type Request = {
 	id: string;
@@ -47,17 +36,17 @@ type Request = {
 };
 
 export function MaintenanceTable({
-	tasks,
 	bento = false,
 	userId,
 }: {
-	tasks: Request[];
 	bento?: boolean;
 	userId?: string;
 }) {
-	const [requests, setRequests] = useState<Request[]>(tasks);
-	const [isNewDialogOpen, setIsNewDialogOpen] = useState(false);
-	const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+	const { data: tasks, error, isLoading } = useSWR("tasks", getTasks);
+
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [dialogMode, setDialogMode] = useState<"new" | "edit">("new");
+
 	const [currentRequest, setCurrentRequest] = useState({
 		id: "0",
 		created_at: new Date(),
@@ -93,17 +82,27 @@ export function MaintenanceTable({
 			priority: request.priority,
 			user_id: request.user_id || "",
 		});
-		setIsEditDialogOpen(true);
+		setDialogMode("edit");
+		setIsDialogOpen(true);
 	};
 
 	const handleDelete = async (id: string) => {
+		const loading = toast.loading("Deleting task...");
 		try {
 			await deleteTask(id);
-			setRequests(requests.filter((req) => req.id !== id));
-			setIsEditDialogOpen(false);
+			await mutate(
+				"tasks",
+				async (currentTasks: any[] | undefined) => {
+					return currentTasks?.filter((task) => task.id !== id) ?? [];
+				},
+				{ revalidate: false },
+			);
+			setIsDialogOpen(false);
+			toast.dismiss(loading);
 			toast.success("Task deleted successfully");
 		} catch (error) {
 			console.error("Error deleting task:", error);
+			toast.dismiss(loading);
 			toast.error("An error occurred while deleting the task");
 		}
 	};
@@ -114,7 +113,7 @@ export function MaintenanceTable({
 				{!bento && (
 					<Heading className="mb-4 text-left">Maintenance Requests</Heading>
 				)}
-				{!bento && requests.length > 0 && (
+				{!bento && (isLoading || (tasks && tasks.length > 0)) && (
 					<Button
 						onClick={() => {
 							setCurrentRequest({
@@ -127,8 +126,10 @@ export function MaintenanceTable({
 								priority: "Medium",
 								user_id: userId,
 							});
-							setIsNewDialogOpen(true);
+							setDialogMode("new");
+							setIsDialogOpen(true);
 						}}
+						disabled={isLoading}
 						className="mb-4"
 						color="blue"
 					>
@@ -136,8 +137,13 @@ export function MaintenanceTable({
 					</Button>
 				)}
 			</div>
-
-			{requests.length > 0 ? (
+			{isLoading ? (
+				<div className="space-y-4">
+					<Skeleton className="h-8 w-full" />
+					<Skeleton className="h-8 w-full" />
+					{/* <Skeleton className="h-8 w-full" /> */}
+				</div>
+			) : tasks && tasks.length > 0 ? (
 				<Table bleed grid>
 					<TableHead>
 						<TableRow>
@@ -150,7 +156,7 @@ export function MaintenanceTable({
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{requests.map((request) => (
+						{tasks.map((request) => (
 							<TableRow
 								key={request.id}
 								onClick={() => handleRowClick(request)}
@@ -205,7 +211,8 @@ export function MaintenanceTable({
 										priority: "Medium",
 										user_id: userId,
 									});
-									setIsNewDialogOpen(true);
+									setDialogMode("new");
+									setIsDialogOpen(true);
 								}}
 								color="blue"
 							>
@@ -216,17 +223,16 @@ export function MaintenanceTable({
 				</>
 			)}
 			<NewTaskDialog
-				isOpen={isNewDialogOpen || isEditDialogOpen}
+				isOpen={isDialogOpen}
 				title={
-					currentRequest.id === "0"
+					dialogMode === "new"
 						? "New Maintenance Request"
 						: isCurrentUserRequest
 							? "Edit Maintenance Request"
 							: "View Maintenance Request"
 				}
 				onClose={() => {
-					setIsNewDialogOpen(false);
-					setIsEditDialogOpen(false);
+					setIsDialogOpen(false);
 				}}
 				dialogBody={
 					<form
@@ -236,27 +242,24 @@ export function MaintenanceTable({
 								new Promise((resolve, reject) => {
 									createTask(formData)
 										.then((data) => {
-											if (currentRequest.id === "0") {
-												// New request
-												setRequests([
-													{
-														...currentRequest,
-														id: data.id,
-														updated_at: data.updated_at,
-														status: data.status,
+											if (dialogMode === "new") {
+												mutate(
+													"tasks",
+													(currentTasks: any) => {
+														return [data, ...(currentTasks || [])];
 													},
-													...requests,
-												]);
-											} else {
-												// Edit existing request
-												setRequests(
-													requests.map((req) =>
-														req.id === currentRequest.id ? currentRequest : req,
-													),
+													false,
 												);
+											} else {
+												mutate("tasks", (currentTasks: any[] | undefined) => {
+													return (
+														currentTasks?.map((task) =>
+															task.id === data.id ? data : task,
+														) ?? []
+													);
+												});
 											}
-											setIsNewDialogOpen(false);
-											setIsEditDialogOpen(false);
+											setIsDialogOpen(false);
 											setCurrentRequest({
 												id: "0",
 												created_at: new Date(),
@@ -274,8 +277,9 @@ export function MaintenanceTable({
 										});
 								}),
 								{
-									loading: "Adding...",
-									success: "Task added!",
+									loading: dialogMode === "new" ? "Adding..." : "Updating...",
+									success:
+										dialogMode === "new" ? "Task added!" : "Task updated!",
 									error:
 										"An error occurred, please check the form and try again.",
 								},
@@ -343,8 +347,7 @@ export function MaintenanceTable({
 									type="button"
 									plain
 									onClick={() => {
-										setIsNewDialogOpen(false);
-										setIsEditDialogOpen(false);
+										setIsDialogOpen(false);
 									}}
 								>
 									Cancel
@@ -354,27 +357,7 @@ export function MaintenanceTable({
 								</Button>
 							</DialogActions>
 						) : (
-							<div className="flex flex-col sm:flex-row w-full items-center sm:justify-between gap-y-2 sm:gap-y-0 mt-8">
-								<div className="flex flex-col sm:flex-row gap-4 sm:gap-x-2 w-full sm:w-auto">
-									<Button
-										type="submit"
-										color="blue"
-										className="w-full sm:w-auto order-first sm:order-last"
-									>
-										Submit
-									</Button>
-									<Button
-										type="button"
-										plain
-										onClick={() => {
-											setIsNewDialogOpen(false);
-											setIsEditDialogOpen(false);
-										}}
-										className="w-full sm:w-auto hidden sm:block"
-									>
-										Cancel
-									</Button>
-								</div>
+							<DialogActions>
 								<Button
 									type="button"
 									color="red"
@@ -384,7 +367,14 @@ export function MaintenanceTable({
 								>
 									Delete
 								</Button>
-							</div>
+								<Button
+									type="submit"
+									color="blue"
+									className="w-full sm:w-auto order-first sm:order-last"
+								>
+									Update
+								</Button>
+							</DialogActions>
 						)}
 					</form>
 				}

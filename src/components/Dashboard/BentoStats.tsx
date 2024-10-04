@@ -18,7 +18,9 @@ import { createMoovAccount } from "@/utils/moov/actions";
 import { loadMoov, type Drops } from "@moovio/moov-js";
 import { useState } from "react";
 
-export function BentoStats({ tasks }: { tasks: any }) {
+export function BentoStats({
+	currentPropertyId,
+}: { currentPropertyId: string }) {
 	const SkeletonOne = () => {
 		const variants = {
 			initial: {
@@ -105,7 +107,7 @@ export function BentoStats({ tasks }: { tasks: any }) {
 		{
 			title: "Maintenance requests",
 			description: "Most recent maintenance requests",
-			header: <BentoMaintenanceTable tasks={tasks} />,
+			header: <BentoMaintenanceTable />,
 			className: "md:col-span-2",
 			icon: <WrenchIcon className="h-4 w-4 text-blue-500" />,
 			edit: true,

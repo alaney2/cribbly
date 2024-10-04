@@ -5,34 +5,58 @@ import { setPrimaryAccount, getPlaidAccounts } from "@/utils/supabase/actions";
 import { PlaidLinkButton } from "@/components/PlaidLinkButton";
 import { Select } from "@/components/catalyst/select";
 import { LinkConfirmDialog } from "@/components/dialogs/LinkConfirmDialog";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
+import { createClient } from "@/utils/supabase/client";
+import { Skeleton } from "@/components/catalyst/skeleton";
 
 type BankSelectProps = {
-	plaidAccounts: any[] | null;
+	// userId: string;
+	// plaidAccounts: any[] | undefined;
 	setIsBankSelected?: (isBankSelected: boolean) => void;
 };
 
+const fetchPlaidAccounts = async () => {
+	const supabase = createClient();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+	if (!user) return;
+	const { data, error } = await supabase
+		.from("plaid_accounts")
+		.select("*")
+		.eq("user_id", user.id);
+	if (error) throw error;
+	return data;
+};
+
 export function BankSelect({
-	plaidAccounts,
+	// plaidAccounts,
+	// userId,
 	setIsBankSelected,
 }: BankSelectProps) {
-	const { data: banks, mutate } = useSWR("plaidAccounts", getPlaidAccounts, {
-		fallbackData: plaidAccounts || [],
-	});
+	// const { data: banks, mutate } = useSWR("plaidAccounts", getPlaidAccounts, {
+	// 	fallbackData: plaidAccounts || [],
+	// });
+	const {
+		data: plaidAccounts,
+		error: plaidAccountsError,
+		isLoading,
+	} = useSWR(["plaidAccounts"], () => fetchPlaidAccounts());
+
 	const [selectedBank, setSelectedBank] = useState<any | null>(null);
 
 	const [isLinkConfirmDialogOpen, setIsLinkConfirmDialogOpen] = useState(false);
 
-	useEffect(() => {
-		if (banks) {
-			const primaryBank =
-				banks.find((bank) => bank.use_for_payouts) || banks[0];
-			setSelectedBank(primaryBank);
-		}
-	}, [banks]);
+	// useEffect(() => {
+	// 	if (banks) {
+	// 		const primaryBank =
+	// 			banks.find((bank) => bank.use_for_payouts) || banks[0];
+	// 		setSelectedBank(primaryBank);
+	// 	}
+	// }, [banks]);
 
 	const handlePlaidSuccess = (newAccounts: any[]) => {
-		mutate();
+		mutate("plaidAccounts");
 		setSelectedBank(newAccounts[0]);
 	};
 
@@ -43,7 +67,7 @@ export function BankSelect({
 			event.target.value = "";
 			return;
 		}
-		const selected = banks?.find((bank) => bank.name === value);
+		const selected = plaidAccounts?.find((bank) => bank.name === value);
 		setIsBankSelected?.(true);
 		setSelectedBank(selected);
 		setPrimaryAccount(selected.account_id);
@@ -59,21 +83,25 @@ export function BankSelect({
 
 	return (
 		<>
-			<Select
-				name="bank-select"
-				value={selectedBank?.name || ""}
-				onChange={handleChange}
-			>
-				<option value="" disabled>
-					Select a bank&hellip;
-				</option>
-				{banks?.map((bank) => (
-					<option key={bank.account_id} value={bank.name}>
-						{bank.name}
+			{isLoading ? (
+				<Skeleton input={true} />
+			) : (
+				<Select
+					name="bank-select"
+					value={selectedBank?.name || ""}
+					onChange={handleChange}
+				>
+					<option value="" disabled>
+						Select a bank&hellip;
 					</option>
-				))}
-				<option value="add_bank">Add bank +</option>
-			</Select>
+					{plaidAccounts?.map((bank) => (
+						<option key={bank.account_id} value={bank.name}>
+							{bank.name}
+						</option>
+					))}
+					<option value="add_bank">Add bank +</option>
+				</Select>
+			)}
 
 			<LinkConfirmDialog
 				isOpen={isLinkConfirmDialogOpen}

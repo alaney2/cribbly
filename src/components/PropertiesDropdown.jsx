@@ -44,6 +44,7 @@ export function PropertiesDropdown({
 							mutate(["propertyRent", property.id]);
 							mutate(["tenants", property.id]);
 							mutate(`documents-${property.id}`);
+							mutate("tasks");
 							closeSidebar();
 						}}
 					>

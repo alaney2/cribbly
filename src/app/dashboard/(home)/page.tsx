@@ -31,13 +31,12 @@ export default async function CurrentProperty() {
 		);
 	}
 
-	// const tasks = await getTasks();
-
 	const { data: tasks, error: tasksError } = await supabase
 		.from("maintenance")
 		.select("*")
 		.order("created_at", { ascending: false })
 		.eq("property_id", currentPropertyId);
+
 	if (tasksError) {
 		console.error("Error fetching tasks:", tasksError);
 		throw new Error("Error fetching tasks");
@@ -52,18 +51,18 @@ export default async function CurrentProperty() {
 		return;
 	}
 
-	const { data: leaseData, error: leaseError } = await supabase
-		.from("leases")
-		.select("*")
-		.eq("property_id", currentPropertyId)
-		.maybeSingle();
+	// const { data: leaseData, error: leaseError } = await supabase
+	// 	.from("leases")
+	// 	.select("*")
+	// 	.eq("property_id", currentPropertyId)
+	// 	.maybeSingle();
 
-	// if (leaseError) throw error;
+	// // if (leaseError) throw error;
 
-	const { data: tenantsData, error: tenantsError } = await supabaseAdmin
-		.from("tenants")
-		.select("*")
-		.eq("property_id", currentPropertyId);
+	// const { data: tenantsData, error: tenantsError } = await supabaseAdmin
+	// 	.from("tenants")
+	// 	.select("*")
+	// 	.eq("property_id", currentPropertyId);
 
 	// let showBankText = false;
 
@@ -93,14 +92,10 @@ export default async function CurrentProperty() {
 					{propertyAddress}
 				</Heading>
 				<div className="mb-4 cursor-default">
-					<PropertyStats
-						currentPropertyId={currentPropertyId}
-						leaseData={leaseData}
-						tenantsData={tenantsData}
-					/>
+					<PropertyStats currentPropertyId={currentPropertyId} />
 				</div>
 
-				<BentoStats tasks={tasks} />
+				<BentoStats currentPropertyId={currentPropertyId} />
 				{/* <div className="flex justify-center mt-8">
           <Button color="blue" className="">Randomize data</Button>
         </div> */}

@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import useSWR from "swr";
 import { useEffect } from "react";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { getTenants } from "@/utils/supabase/actions";
 
 const CurrencyIcon = (
@@ -70,10 +70,10 @@ const HourglassIcon = (
 	</svg>
 );
 
-const rentFetcher = async (property_id: string) => {
+const leaseFetcher = async (property_id: string) => {
 	const supabase = createClient();
 	const { data, error } = await supabase
-		.from("property_rents")
+		.from("leases")
 		.select("*")
 		.eq("property_id", property_id)
 		.maybeSingle();
@@ -83,32 +83,30 @@ const rentFetcher = async (property_id: string) => {
 };
 
 const tenantsFetcher = async (property_id: string) => {
-	const tenants = await getTenants(property_id);
-	return tenants;
+	const supabase = createClient();
+	const { data, error } = await supabase
+		.from("tenants")
+		.select("*")
+		.eq("property_id", property_id);
+
+	if (error) throw error;
+	return data;
 };
 
 type PropertyStatsProps = {
 	currentPropertyId: string;
-	leaseData: any;
-	tenantsData: any;
 };
 
-export function PropertyStats({
-	currentPropertyId,
-	leaseData,
-	tenantsData,
-}: PropertyStatsProps) {
-	// const { data, error, isLoading } = useSWR(
-	// 	currentPropertyId ? ["propertyRent", currentPropertyId] : null,
-	// 	() => (currentPropertyId ? rentFetcher(currentPropertyId) : null),
-	// );
-	// const {
-	// 	data: tenantsData,
-	// 	error: tenantsError,
-	// 	isLoading: isTenantsLoading,
-	// } = useSWR(currentPropertyId ? ["tenants", currentPropertyId] : null, () =>
-	// 	currentPropertyId ? tenantsFetcher(currentPropertyId) : null,
-	// );
+export function PropertyStats({ currentPropertyId }: PropertyStatsProps) {
+	const { data: leaseData, error: leaseError } = useSWR(
+		currentPropertyId ? ["lease", currentPropertyId] : null,
+		() => leaseFetcher(currentPropertyId),
+	);
+
+	const { data: tenantsData, error: tenantsError } = useSWR(
+		currentPropertyId ? ["tenants", currentPropertyId] : null,
+		() => tenantsFetcher(currentPropertyId),
+	);
 
 	const stats = [
 		{
@@ -122,7 +120,7 @@ export function PropertyStats({
 			name: "Lease period",
 			icon: HourglassIcon,
 			stat: leaseData
-				? `${format(leaseData.start_date, "M/d/yy")} - ${format(leaseData.end_date, "M/d/yy")}`
+				? `${format(parseISO(leaseData.start_date), "M/d/yy")} - ${format(parseISO(leaseData.end_date), "M/d/yy")}`
 				: "-",
 		},
 		{

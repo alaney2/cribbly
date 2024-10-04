@@ -7,14 +7,15 @@ import { Heading } from "@/components/catalyst/heading";
 import { Divider } from "@/components/catalyst/divider";
 import { Text, Strong } from "@/components/catalyst/text";
 import { useRouter } from "next/navigation";
-import { mutate } from "swr";
+import useSWR, { mutate } from "swr";
+import { createClient } from "@/utils/supabase/client";
 
 interface SettingsNavigationProps {
 	currentPropertyId: string;
-	lease: any | null;
-	key: string;
+	// lease: any | null;
+	// userId: string;
 	initialTab?: string;
-	plaidAccounts: any[] | null;
+	// plaidAccounts: any[] | null;
 }
 
 const NavButton = ({
@@ -37,9 +38,10 @@ const NavButton = ({
 
 export default function SettingsNavigation({
 	currentPropertyId,
-	lease,
+	// lease,
+	// userId,
 	initialTab,
-	plaidAccounts,
+	// plaidAccounts,
 }: SettingsNavigationProps) {
 	const [activeTab, setActiveTab] = useState(initialTab || "General");
 
@@ -73,12 +75,14 @@ export default function SettingsNavigation({
 				return (
 					<RentCard
 						propertyId={currentPropertyId}
-						lease={lease}
+						// lease={lease}
+
 						// propertyRent={propertyRent}
 						// securityDeposit={securityDeposit}
 						// propertyFees={propertyFees}
+						// userId={userId}
 						buttonOnClick={() => handleTabChange("Tenants")}
-						plaidAccounts={plaidAccounts}
+						// plaidAccounts={plaidAccounts}
 					/>
 				);
 			case "Tenants":
@@ -125,8 +129,9 @@ export default function SettingsNavigation({
 			<div className="block space-y-6 xl:hidden max-w-xl mx-auto">
 				<RentCard
 					propertyId={currentPropertyId}
-					lease={lease}
-					plaidAccounts={plaidAccounts}
+					// userId={userId}
+					// lease={lease}
+					// plaidAccounts={plaidAccounts}
 				/>
 				<InviteCard propertyId={currentPropertyId} />
 				<DeleteCard propertyId={currentPropertyId} />

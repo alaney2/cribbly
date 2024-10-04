@@ -63,7 +63,7 @@ export function NewTaskDialog({
 	return (
 		<>
 			<Dialog open={isOpen} onClose={onClose}>
-				<DialogTitle>New Maintenance Request</DialogTitle>
+				<DialogTitle>{title}</DialogTitle>
 				<DialogBody>{dialogBody}</DialogBody>
 			</Dialog>
 		</>

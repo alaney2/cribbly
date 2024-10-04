@@ -8,7 +8,7 @@ import {
 import { redirect } from "next/navigation";
 
 export default async function Maintenance() {
-	const data = await getTasks();
+	// const data = await getTasks();
 	const currentPropertyId = await getCurrentProperty();
 	if (!currentPropertyId) {
 		redirect("/dashboard");
@@ -21,7 +21,7 @@ export default async function Maintenance() {
 
 	return (
 		<>
-			<MaintenanceTable tasks={data} key={currentPropertyId} userId={userId} />
+			<MaintenanceTable key={currentPropertyId} userId={userId} />
 		</>
 	);
 }
