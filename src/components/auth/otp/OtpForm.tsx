@@ -27,9 +27,9 @@ export function OtpForm({ email, backToSignIn }: OtpFormProps) {
 				fadeOut ? "animate__fadeOut" : "animate__fadeIn animate__fastest",
 			)}
 		>
-			<div className="text-center text-md text-gray-500 fond-medium tracking-tight">
+			<div className="text-center text-md text-gray-500 dark:text-gray-400 fond-medium tracking-tight">
 				<p>We&apos;ve sent a verification code to your email</p>
-				<p className="text-gray-700">{email}</p>
+				<p className="text-gray-700 dark:text-gray-300">{email}</p>
 			</div>
 			<div className="flex flex-col">
 				<OtpInput email={email} />

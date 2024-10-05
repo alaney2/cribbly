@@ -26,25 +26,5 @@ export default async function WelcomePage() {
 		redirect("/dashboard");
 	}
 
-	// const { subscription, error } = await getSubscription();
-	// if (error) {
-	// 	console.log(error);
-	// }
-	// const products = await getProducts();
-
-	// const { data: subscriptionData, error: subscriptionError } = await supabase
-	// 	.from("subscriptions")
-	// 	.select("*")
-	// 	.eq("user_id", user.id)
-	// 	.single();
-
-	// const { data: propertyData, error: propertyError } = await supabase
-	// 	.from("properties")
-	// 	.select(
-	// 		"*, property_rents(*), property_fees(*), property_security_deposits(*)",
-	// 	)
-	// 	.eq("user_id", user.id)
-	// 	.order("created_at", { ascending: false });
-
 	return <WelcomeLayout user={user} />;
 }
