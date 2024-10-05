@@ -59,7 +59,7 @@ export default async function PropertyDashboardLayout({
 
 	return (
 		<>
-			<div className="lg:bg-zinc-100 dark:bg-zinc-900 text-zinc-950 dark:text-white dark:lg:bg-zinc-950 h-full">
+			<div className="bg-gray-50 lg:bg-zinc-100 dark:bg-zinc-900 text-zinc-950 dark:text-white dark:lg:bg-zinc-950 h-full">
 				<AppLayout
 					userEmail={data?.email}
 					fullName={data?.full_name ?? undefined}
