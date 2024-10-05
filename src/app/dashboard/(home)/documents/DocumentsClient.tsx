@@ -47,6 +47,7 @@ import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 import useSWR from "swr";
 import { Skeleton } from "@/components/catalyst/skeleton";
 import { ViewDocumentDialog } from "@/components/dialogs/ViewDocumentDialog";
+import { DeleteDocumentDialog } from "@/components/dialogs/DeleteDocumentDialog";
 
 type Document = {
 	key: string | undefined;
@@ -233,24 +234,6 @@ export function DocumentsClient() {
 				<div className="w-full mx-auto min-h-72 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
 					<FileUpload onChange={handleFileUpload} />
 				</div>
-				{/* <form action={handleUpload}>
-          <label htmlFor="upload-document">
-            <Button disabled={isPending} color="blue" onClick={() => fileInputRef?.current?.click()}>
-              <PlusIcon className="mr-0 h-4 w-4" />
-              <span className="sm:hidden">Upload</span>
-              <span className="hidden sm:inline">Upload document</span>
-            </Button>
-            <input
-              ref={fileInputRef}
-              id="upload-document"
-              name="file"
-              type="file"
-              className="hidden"
-              accept=".pdf,image/*"
-              onChange={(e) => e.target.form?.requestSubmit()}
-            />
-          </label>
-        </form> */}
 			</div>
 			{isLoading ? (
 				<Table>
@@ -378,6 +361,22 @@ export function DocumentsClient() {
 					</Button>
 				}
 			/>
+
+			<DeleteDocumentDialog
+				isOpen={isDeleteDialogOpen}
+				onClose={() => setIsDeleteDialogOpen(false)}
+				documentName={documentToDelete?.name}
+				dialogActions={
+					<>
+						<Button outline onClick={() => setIsDeleteDialogOpen(false)}>
+							Cancel
+						</Button>
+						<Button color="red" onClick={confirmDelete}>
+							Delete
+						</Button>
+					</>
+				}
+			/>
 			{/* <Dialog
 				size="4xl"
 				open={!!viewingDocument}
@@ -404,7 +403,7 @@ export function DocumentsClient() {
 				</DialogActions>
 			</Dialog> */}
 
-			<Dialog
+			{/* <Dialog
 				open={isDeleteDialogOpen}
 				onClose={() => setIsDeleteDialogOpen(false)}
 			>
@@ -413,7 +412,6 @@ export function DocumentsClient() {
 					Are you sure you want to delete the document &quot;
 					{documentToDelete?.name}&quot;? This action cannot be undone.
 				</DialogDescription>
-				{/* <DialogBody></DialogBody> */}
 				<DialogActions>
 					<Button outline onClick={() => setIsDeleteDialogOpen(false)}>
 						Cancel
@@ -422,7 +420,7 @@ export function DocumentsClient() {
 						Delete
 					</Button>
 				</DialogActions>
-			</Dialog>
+			</Dialog> */}
 		</>
 	);
 }

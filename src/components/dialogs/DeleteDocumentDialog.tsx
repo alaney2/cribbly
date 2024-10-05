@@ -12,19 +12,19 @@ import {
 import { Heading, Subheading } from "@/components/catalyst/heading";
 import { Text } from "@/components/catalyst/text";
 
-type ViewDocumentDialogProps = {
+type DeleteDocumentDialogProps = {
 	isOpen: boolean;
 	onClose: () => void;
-	dialogBody: React.ReactNode;
 	dialogActions: React.ReactNode;
+	documentName: string | undefined;
 };
 
-export function ViewDocumentDialog({
+export function DeleteDocumentDialog({
 	isOpen,
 	onClose,
-	dialogBody,
 	dialogActions,
-}: ViewDocumentDialogProps) {
+	documentName,
+}: DeleteDocumentDialogProps) {
 	const isMobile = useMediaQuery("(max-width: 640px)");
 	const [isMounted, setIsMounted] = useState(false);
 
@@ -49,18 +49,20 @@ export function ViewDocumentDialog({
 						<div className="max-w-md w-full mx-auto overflow-auto p-4 rounded-t-[10px]">
 							<Drawer.Handle />
 							<Drawer.Title asChild className="mt-8">
-								<Subheading level={1}>Document Viewer</Subheading>
+								<Subheading level={1}>Confirm Deletion</Subheading>
 							</Drawer.Title>
-							{/* <Drawer.Description
+							<Drawer.Description
 								asChild
 								className="leading-6 mt-2 text-gray-600"
 							>
-								<Text>Template text</Text>
-							</Drawer.Description> */}
-							{dialogBody}
-							{/* <div className="flex flex-col mt-8 space-y-2">
+								<Text>
+									Are you sure you want to delete the document &quot;
+									{documentName}&quot;? This action cannot be undone.
+								</Text>
+							</Drawer.Description>
+							<div className="flex flex-col mt-8 space-y-2">
 								{dialogActions}
-							</div> */}
+							</div>
 						</div>
 					</Drawer.Content>
 				</Drawer.Portal>
@@ -69,11 +71,13 @@ export function ViewDocumentDialog({
 	}
 	return (
 		<>
-			<Dialog open={isOpen} onClose={onClose} size="5xl">
-				<DialogTitle>Document Viewer</DialogTitle>
-				{/* <DialogDescription>Description</DialogDescription> */}
-				<DialogBody>{dialogBody}</DialogBody>
-				{/* <DialogActions>{dialogActions}</DialogActions> */}
+			<Dialog open={isOpen} onClose={onClose}>
+				<DialogTitle>Confirm Deletion</DialogTitle>
+				<DialogDescription>
+					Are you sure you want to delete the document &quot;
+					{documentName}&quot;? This action cannot be undone.
+				</DialogDescription>
+				<DialogActions>{dialogActions}</DialogActions>
 			</Dialog>
 		</>
 	);

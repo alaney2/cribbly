@@ -36,24 +36,17 @@ export const FileUpload = ({
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const handleFileChange = (newFiles: File[]) => {
-		// setFiles((prevFiles) => [...prevFiles, ...newFiles]);
 		for (const file of newFiles) {
 			setFiles((prevFiles) => {
 				const fileExists = prevFiles.some(
 					(existingFile) => existingFile.name === file.name,
 				);
 				if (!fileExists) {
-					// const newDocument = {
-					// 	key: file.name,
-					// 	name: file.name,
-					// 	date: new Date(),
-					// };
 					return [...prevFiles, file];
 				}
 				return prevFiles;
 			});
 		}
-		// onChange?.(newFiles);
 	};
 
 	const handleClick = () => {
@@ -64,10 +57,6 @@ export const FileUpload = ({
 		multiple: false,
 		noClick: true,
 		onDrop: handleFileChange,
-		// onDrop: (acceptedFiles) => {
-		// 	// Instead of calling handleFileChange directly, we'll just log the dropped files
-		// 	console.log("Files dropped:", acceptedFiles);
-		// },
 		onDropRejected: (error) => {
 			console.log(error);
 		},
@@ -105,7 +94,6 @@ export const FileUpload = ({
 										// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 										idx
 									}`}
-									layoutId={idx === 0 ? "file-upload" : `file-upload-${idx}`}
 									className={cn(
 										"relative overflow-hidden z-40 bg-white dark:bg-neutral-900 flex flex-col items-start justify-start md:h-24 p-4 mt-4 w-full mx-auto rounded-md",
 										"shadow-sm",
@@ -173,7 +161,6 @@ export const FileUpload = ({
 							))}
 						{!files.length && (
 							<motion.div
-								layoutId="file-upload"
 								variants={mainVariant}
 								transition={{
 									type: "spring",
