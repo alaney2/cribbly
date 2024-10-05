@@ -1,5 +1,4 @@
 "use client";
-import { CurrentPropertyProvider } from "@/contexts/CurrentPropertyContext";
 import { Heading, Subheading } from "@/components/catalyst/heading";
 import { BentoStats } from "@/components/Dashboard/BentoStats";
 import { PropertyStats } from "@/components/Dashboard/PropertyStats";

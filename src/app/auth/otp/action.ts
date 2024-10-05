@@ -17,23 +17,19 @@ export async function verifyOtp(email: string, otpValue: string) {
 
 	// Handle successful verification
 	if (user) {
-		if (user.user_metadata.role && user.user_metadata.role === "tenant") {
-			redirect("/tenant-dashboard");
-		} else {
-			const { data: show_welcome } = await supabase
-				.from("users")
-				.select("welcome_screen")
-				.eq("id", user?.id)
-				.single();
+		const { data: show_welcome } = await supabase
+			.from("users")
+			.select("welcome_screen")
+			.eq("id", user?.id)
+			.single();
 
-			const welcome_screen = show_welcome?.welcome_screen;
+		const welcome_screen = show_welcome?.welcome_screen;
 
-			if (welcome_screen) {
-				redirect("/welcome");
-			}
-
-			redirect("/dashboard");
+		if (welcome_screen) {
+			redirect("/welcome");
 		}
+
+		redirect("/dashboard");
 	} else {
 		throw new Error("Invalid verification code");
 	}

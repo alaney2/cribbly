@@ -50,6 +50,7 @@ import { createClient } from "@/utils/supabase/server";
 import { signOut } from "@/utils/supabase/sign-out";
 import { SignOutDropdown } from "@/components/SignOutDropdown";
 import { CurrentPropertyProvider } from "@/contexts/CurrentPropertyContext";
+import { updateCurrentProperty } from "@/utils/supabase/actions";
 
 export async function AppLayout({
 	children,
@@ -68,6 +69,10 @@ export async function AppLayout({
 		.from("properties")
 		.select("*, tenants(*)")
 		.eq("user_id", userId);
+
+	if (!properties) {
+		await updateCurrentProperty("");
+	}
 
 	// Get current property ID from authenticated user data
 	const {
@@ -98,11 +103,11 @@ export async function AppLayout({
 		// Handle the error appropriately
 	}
 
-	const { data, error: propertyError } = await supabase
-		.from("properties")
-		.select("*")
-		.eq("id", currentPropertyId)
-		.single();
+	// const { data, error: propertyError } = await supabase
+	// 	.from("properties")
+	// 	.select("*")
+	// 	.eq("id", currentPropertyId)
+	// 	.single();
 
 	return (
 		<CurrentPropertyProvider initialPropertyId={currentPropertyId}>

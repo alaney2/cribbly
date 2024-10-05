@@ -2,7 +2,7 @@
 
 <!-- transfer payment -->
 
-dialog for documents
+convert tenant side to client instead of server
 
 take in card info
 

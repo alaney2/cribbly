@@ -33,11 +33,9 @@ export function PropertiesDropdown({
 		(property) => property.id === currentPropertyId,
 	);
 
-	console.log(
-		"currentPropertyId",
-		currentPropertyId,
-		currentProperty?.street_address,
-	);
+	if (!properties || !currentProperty) {
+		setCurrentPropertyId("");
+	}
 
 	return (
 		<Dropdown>
