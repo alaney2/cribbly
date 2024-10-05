@@ -4,46 +4,35 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function verifyOtp(formData: FormData) {
-	const email = String(formData.get("email"));
-	let token = "";
-	for (let i = 0; i < 6; i++) {
-		const otpPart = String(formData.get(`otp${i}`));
-		if (otpPart !== null) {
-			token += otpPart;
-		}
+export async function verifyOtp(email: string, otpValue: string) {
+	const supabase = createClient();
+	const {
+		data: { user },
+		error,
+	} = await supabase.auth.verifyOtp({ email, token: otpValue, type: "email" });
+
+	if (error) {
+		throw new Error("Invalid verification code");
 	}
 
-	if (token && email) {
-		const supabase = createClient();
-		const {
-			data: { user },
-			error,
-		} = await supabase.auth.verifyOtp({ email, token, type: "email" });
+	// Handle successful verification
+	if (user) {
+		if (user.user_metadata.role && user.user_metadata.role === "tenant") {
+			redirect("/tenant-dashboard");
+		} else {
+			const { data: show_welcome } = await supabase
+				.from("users")
+				.select("welcome_screen")
+				.eq("id", user?.id)
+				.single();
 
-		if (error) {
-			throw new Error("Invalid verification code");
-		}
+			const welcome_screen = show_welcome?.welcome_screen;
 
-		// Handle successful verification
-		if (user) {
-			if (user.user_metadata.role && user.user_metadata.role === "tenant") {
-				redirect("/tenant-dashboard");
-			} else {
-				const { data: show_welcome } = await supabase
-					.from("users")
-					.select("welcome_screen")
-					.eq("id", user?.id)
-					.single();
-
-				const welcome_screen = show_welcome?.welcome_screen;
-
-				if (welcome_screen) {
-					redirect("/welcome");
-				}
-
-				redirect("/dashboard");
+			if (welcome_screen) {
+				redirect("/welcome");
 			}
+
+			redirect("/dashboard");
 		}
 	} else {
 		throw new Error("Invalid verification code");
