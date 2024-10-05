@@ -17,17 +17,17 @@ export async function verifyOtp(email: string, otpValue: string) {
 
 	// Handle successful verification
 	if (user) {
-		const { data: show_welcome } = await supabase
-			.from("users")
-			.select("welcome_screen")
-			.eq("id", user?.id)
-			.single();
+		// const { data: show_welcome } = await supabase
+		// 	.from("users")
+		// 	.select("welcome_screen")
+		// 	.eq("id", user?.id)
+		// 	.single();
 
-		const welcome_screen = show_welcome?.welcome_screen;
+		// const welcome_screen = show_welcome?.welcome_screen;
 
-		if (welcome_screen) {
-			redirect("/welcome");
-		}
+		// if (welcome_screen) {
+		// 	redirect("/welcome");
+		// }
 
 		redirect("/dashboard");
 	} else {
