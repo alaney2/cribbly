@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, Suspense } from "react";
+import { useRef, useState, Suspense } from "react";
 import { Button } from "@/components/catalyst/button";
 import { Spinner } from "@/components/Spinners/Spinner";
 import { verifyOtp } from "@/app/auth/otp/action";
@@ -93,10 +93,6 @@ function OtpInputWithParams({ email }: { email: string }) {
 		inputsRef.current[5].focus();
 	};
 
-	// useEffect(() => {
-	// 	inputsRef.current[0]?.focus();
-	// }, []);
-
 	return (
 		<>
 			<form
@@ -111,7 +107,7 @@ function OtpInputWithParams({ email }: { email: string }) {
 					}
 				}}
 				className=""
-				autoComplete="off"
+				autoComplete="one-time-code"
 			>
 				<div
 					className="flex justify-center space-x-2 mt-10 mb-4"
@@ -127,7 +123,6 @@ function OtpInputWithParams({ email }: { email: string }) {
 								}
 							}}
 							className="w-10 h-12 ring-1 dark:ring-2 rounded-lg focus:ring-blue-300 ring-gray-200 dark:ring-gray-600 outline-none text-center text-lg sm:text-lg caret-transparent bg-white dark:bg-black dark:text-white"
-							type="number"
 							pattern="[0-9]*"
 							inputMode="numeric"
 							min="0"
@@ -137,10 +132,11 @@ function OtpInputWithParams({ email }: { email: string }) {
 							onKeyDown={(e) => handleKeyPress(index, e)}
 							onFocus={() => handleFocus(index)}
 							onPaste={handlePaste}
-							autoComplete="off"
+							autoComplete="one-time-code"
 							required
 							autoFocus={index === 0}
 							disabled={allInputsFilled}
+							aria-label={`OTP digit ${index + 1}`}
 						/>
 					))}
 				</div>
