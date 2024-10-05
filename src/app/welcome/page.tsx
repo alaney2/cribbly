@@ -23,7 +23,7 @@ export default async function WelcomePage() {
 	const welcome_screen = show_welcome_data?.welcome_screen;
 
 	if (!welcome_screen) {
-		redirect("/welcome");
+		redirect("/dashboard");
 	}
 
 	// const { subscription, error } = await getSubscription();
