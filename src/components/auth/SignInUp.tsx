@@ -123,7 +123,7 @@ export function SignInUp({
 										type="email"
 										name="email"
 										id="email"
-										className={`${formClasses} ${styles.inputCenterText}`}
+										className={`${formClasses} ${styles.inputCenterText} font-semibold`}
 										placeholder="Email"
 										onChange={handleInputChange}
 										required={true}
@@ -138,18 +138,18 @@ export function SignInUp({
 									</p>
 								)}
 								<Button
-									outline
+									color="light"
 									type={buttonType}
-									className="w-full mt-4 h-12 text-zinc-600 cursor-default"
+									className="w-full mt-3 h-12 text-zinc-600 cursor-default"
 									onClick={
 										buttonType === "button"
 											? handleButtonClick
 											: handleButtonSubmit
 									}
 								>
-									<span className="text-sm leading-6 font-semibold">
-										Continue with Email
-									</span>
+									{/* <span className="text-sm leading-6 font-semibold"> */}
+									Continue with Email
+									{/* </span> */}
 								</Button>
 							</form>
 							{!signIn && (

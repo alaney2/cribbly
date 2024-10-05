@@ -152,15 +152,9 @@ function OtpInputWithParams({ email }: { email: string }) {
 				<Button
 					id="submitButton"
 					type="submit"
-					// variant="solid"
 					disabled={isSubmitting}
 					color={"blue"}
 					className="w-full h-10 mt-2"
-					// onClick={() => {
-					// if (inputsRef.current.every((input) => input.value !== "")) {
-					// 	setIsSubmitting(true);
-					// }
-					// }}
 				>
 					{isSubmitting ? <Spinner /> : "Submit"}
 				</Button>
