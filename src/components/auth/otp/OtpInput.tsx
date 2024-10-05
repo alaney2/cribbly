@@ -123,7 +123,7 @@ function OtpInputWithParams({ email }: { email: string }) {
 								}
 							}}
 							className="w-10 h-12 ring-1 dark:ring-2 rounded-lg focus:ring-blue-300 ring-gray-200 dark:ring-gray-600 outline-none text-center text-lg sm:text-lg caret-transparent bg-white dark:bg-black dark:text-white"
-							pattern="[0-9]*"
+							pattern="\d*"
 							inputMode="numeric"
 							min="0"
 							max="9"
