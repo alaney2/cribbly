@@ -56,7 +56,7 @@ function Slot(props: SlotProps) {
 				"relative w-12 h-14 text-[1.75rem] text-zinc-700 dark:text-zinc-200",
 				"flex items-center justify-center",
 				// "transition-colors duration-300",
-				"border-y border-r first:border-l first:rounded-l-sm last:rounded-r-sm border-gray-500",
+				"border-y border-r first:border-l first:rounded-l-md last:rounded-r-md border-gray-500",
 				"group-hover:border-gray-500 group-focus-within:border-gray-500",
 				"overflow-hidden",
 				props.isActive && props.hasFakeCaret
@@ -73,7 +73,7 @@ function Slot(props: SlotProps) {
 function FakeCaret() {
 	return (
 		<div className="absolute pointer-events-none inset-0 flex items-center justify-center animate-caret-blink">
-			<div className="w-px h-7 bg-white" />
+			<div className="w-px h-7 dark:bg-zinc-200 bg-zinc-800" />
 		</div>
 	);
 }

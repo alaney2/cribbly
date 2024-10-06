@@ -1,6 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback, useRef, Suspense } from "react";
-import { Button } from "@/components/catalyst/button";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { Spinner } from "@/components/Spinners/Spinner";
 import { verifyOtp } from "@/app/auth/otp/action";
 import { toast } from "sonner";
@@ -8,9 +7,9 @@ import { NewOtp } from "@/components/auth/otp/NewOtp";
 
 function OtpInputWithParams({ email }: { email: string }) {
 	const [isFilled, setIsFilled] = useState(false);
-	const buttonRef = useRef<HTMLButtonElement>(null);
 	const formRef = useRef<HTMLFormElement>(null);
 	const [otpValue, setOtpValue] = useState("");
+	const [otpKey, setOtpKey] = useState(0);
 
 	const handleSubmit = async () => {
 		const loading = toast.loading("Verifying OTP...");
@@ -23,6 +22,7 @@ function OtpInputWithParams({ email }: { email: string }) {
 			toast.error("An error occurred, please try again.");
 			setIsFilled(false);
 			setOtpValue("");
+			setOtpKey((prevKey) => prevKey + 1);
 		}
 	};
 
@@ -43,6 +43,7 @@ function OtpInputWithParams({ email }: { email: string }) {
 		>
 			<div className="flex justify-center space-x-2 mt-10 mb-4">
 				<NewOtp
+					key={otpKey}
 					onComplete={() => {
 						setIsFilled(true);
 					}}
@@ -51,16 +52,6 @@ function OtpInputWithParams({ email }: { email: string }) {
 					onChange={setOtpValue}
 				/>
 			</div>
-			{/* <Button
-				id="submitButton"
-				type="submit"
-				disabled={isSubmitting}
-				color={"blue"}
-				className="w-full h-10 mt-2"
-				ref={buttonRef}
-			>
-				{isFilled ? <Spinner /> : "Submit"}
-			</Button> */}
 		</form>
 	);
 }
