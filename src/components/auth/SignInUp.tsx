@@ -138,7 +138,7 @@ export function SignInUp({
 										placeholder="Email"
 										onChange={handleInputChange}
 										required={true}
-										// autoComplete="off"
+										autoComplete="email"
 										// biome-ignore lint/a11y/noAutofocus: <explanation>
 										autoFocus
 									/>
