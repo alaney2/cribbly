@@ -55,7 +55,7 @@ export const InviteUserEmail = ({
 					<Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] max-w-[465px]">
 						<Section className="mt-[32px]">
 							<Img
-								src={"https://www.cribbly.io/images/logotext.png"}
+								src={"https://www.cribbly.io/images/logowithtext.png"}
 								width="200"
 								height="110"
 								alt="Cribbly"
