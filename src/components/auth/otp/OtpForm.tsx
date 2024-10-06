@@ -39,7 +39,7 @@ export function OtpForm({ email, backToSignIn }: OtpFormProps) {
 						<button
 							type="button"
 							onClick={handleButtonSubmit}
-							className="text-sm tracking-tight font-medium leading-6 text-gray-400 hover:text-gray-500 active:text-gray-600 cursor-pointer"
+							className="text-sm tracking-tight font-medium leading-6 text-gray-400 hover:text-gray-500 active:text-gray-600 cursor-default"
 						>
 							Back to sign-in
 						</button>
