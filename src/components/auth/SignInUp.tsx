@@ -65,16 +65,16 @@ export function SignInUp({
 		return emailRegex.test(email.toLowerCase());
 	};
 
-	const handleButtonSubmit = () => {
-		if (isValidEmail(email)) {
-			setFadeOut(true);
-			setTimeout(() => {
-				setCurrentStep(1);
-			}, 400);
-		} else {
-			setShowInvalidEmail(true);
-		}
-	};
+	// const handleButtonSubmit = () => {
+	// 	if (isValidEmail(email)) {
+	// 		setFadeOut(true);
+	// 		setTimeout(() => {
+	// 			setCurrentStep(1);
+	// 		}, 400);
+	// 	} else {
+	// 		setShowInvalidEmail(true);
+	// 	}
+	// };
 
 	const renderStepContent = (stepIndex: number) => {
 		switch (stepIndex) {
@@ -110,8 +110,19 @@ export function SignInUp({
 							<form
 								className=""
 								action={async (formData) => {
+									const loading = toast.loading("Sending...");
 									try {
-										await signInWithOtp(formData);
+										if (isValidEmail(email)) {
+											await signInWithOtp(formData);
+											setFadeOut(true);
+											setTimeout(() => {
+												setCurrentStep(1);
+											}, 400);
+											toast.dismiss(loading);
+											toast.success("OTP sent successfully");
+										} else {
+											setShowInvalidEmail(true);
+										}
 									} catch (error) {
 										toast.error("An error occurred, please try again");
 										console.error(error);
@@ -142,9 +153,7 @@ export function SignInUp({
 									type={buttonType}
 									className="w-full mt-3 h-12 text-zinc-600 cursor-default"
 									onClick={
-										buttonType === "button"
-											? handleButtonClick
-											: handleButtonSubmit
+										buttonType === "button" ? handleButtonClick : undefined
 									}
 								>
 									{/* <span className="text-sm leading-6 font-semibold"> */}
