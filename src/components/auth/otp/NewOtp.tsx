@@ -36,9 +36,7 @@ export function NewOtp({
 							<Slot key={idx} {...slot} />
 						))}
 					</div>
-
 					<FakeDash />
-
 					<div className="flex">
 						{slots.slice(3).map((slot, idx) => (
 							// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
@@ -55,7 +53,7 @@ function Slot(props: SlotProps) {
 	return (
 		<div
 			className={cn(
-				"relative w-12 h-14 text-[1.675rem] text-zinc-700",
+				"relative w-12 h-14 text-[1.75rem] text-zinc-700 dark:text-zinc-200",
 				"flex items-center justify-center",
 				// "transition-colors duration-300",
 				"border-y border-r first:border-l first:rounded-l-sm last:rounded-r-sm border-gray-500",
@@ -67,7 +65,7 @@ function Slot(props: SlotProps) {
 			)}
 		>
 			{props.char !== null && <div>{props.char}</div>}
-			{/* {props.hasFakeCaret && <FakeCaret />} */}
+			{props.hasFakeCaret && <FakeCaret />}
 		</div>
 	);
 }
