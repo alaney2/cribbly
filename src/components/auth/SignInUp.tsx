@@ -16,12 +16,21 @@ import { toast } from "sonner";
 import { Heading } from "@/components/catalyst/heading";
 
 const formClasses = `
-    block text-base w-full mt-6 h-11 appearance-none bg-gray-50 rounded-md 
-    border-0.5 border-gray-200 bg-white dark:bg-zinc-800 px-3 py-1.5 text-gray-900 dark:text-white 
-    placeholder-gray-400 focus:border-blue-500 focus:outline-none 
-    focus:ring-blue-500 sm:text-sm ring-1 focus:ring-2 ring-inset ring-gray-300 dark:ring-gray-500
+    block w-full mt-6 h-11 appearance-none rounded-lg px-3 py-2
+    text-base/6 text-zinc-950 placeholder:text-zinc-500 sm:text-sm/6 dark:text-white
+    border border-zinc-950/10 hover:border-zinc-950/20 dark:border-white/10 dark:hover:border-white/20
+    bg-white dark:bg-white/5
+    focus:outline-none focus:ring-2 focus:ring-blue-500
+    relative
+    before:absolute before:inset-px before:rounded-[calc(theme(borderRadius.lg)-1px)] before:bg-white before:shadow
+    dark:before:hidden
+    after:pointer-events-none after:absolute after:inset-0 after:rounded-lg after:ring-inset after:ring-transparent
+    data-[invalid]:border-red-500 data-[invalid]:hover:border-red-500 data-[invalid]:dark:border-red-500 data-[invalid]:hover:dark:border-red-500
+    data-[disabled]:border-zinc-950/20 dark:hover:data-[disabled]:border-white/15 data-[disabled]:dark:border-white/15 data-[disabled]:dark:bg-white/[2.5%]
+    dark:[color-scheme:dark]
     text-center animate__animated animate__fadeIn animate__fast
-    transition-colors duration-300 box-border	`;
+    transition-colors duration-300 box-border
+`;
 
 export function SignInUp({
 	signIn,
