@@ -19,7 +19,7 @@ const formClasses = `
     block text-base w-full mt-6 h-11 appearance-none bg-gray-50 rounded-md 
     border-0.5 border-gray-200 bg-white dark:bg-zinc-800 px-3 py-1.5 text-gray-900 dark:text-white 
     placeholder-gray-400 focus:border-blue-500 focus:outline-none 
-    focus:ring-blue-500 sm:text-sm ring-1 focus:ring-2 ring-inset ring-gray-300 
+    focus:ring-blue-500 sm:text-sm ring-1 focus:ring-2 ring-inset ring-gray-300 dark:ring-gray-500
     text-center animate__animated animate__fadeIn animate__fast
     transition-colors duration-300 box-border	`;
 
