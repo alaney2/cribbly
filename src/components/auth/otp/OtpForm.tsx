@@ -35,13 +35,15 @@ export function OtpForm({ email, backToSignIn }: OtpFormProps) {
 				<OtpInput email={email} />
 				<OtpResend email={email} />
 				{backToSignIn && (
-					<button
-						type="button"
-						onClick={handleButtonSubmit}
-						className="mt-16 text-sm tracking-tight font-medium text-center leading-6 text-gray-400 active:text-gray-500 cursor-default"
-					>
-						Back to sign-in
-					</button>
+					<div className="mt-16 text-center">
+						<button
+							type="button"
+							onClick={handleButtonSubmit}
+							className="text-sm tracking-tight font-medium leading-6 text-gray-400 hover:text-gray-500 active:text-gray-600 cursor-pointer"
+						>
+							Back to sign-in
+						</button>
+					</div>
 				)}
 			</div>
 		</div>
