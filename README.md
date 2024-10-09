@@ -2,6 +2,12 @@
 
 <!-- transfer payment -->
 
+stripe payment for unlimited properties
+
+phone verification
+
+identity verification plaid
+
 convert tenant side to client instead of server
 
 take in card info
@@ -10,7 +16,11 @@ set up autopay
 
 tax forms
 
+manage previous leases
+
 email notifications for payments, maintenance requests, lease renewals, etc.
+
+underwriting
 
 <https://docs.mapbox.com/help/tutorials/use-mapbox-js-as-fallback/>
 
@@ -18,16 +28,12 @@ svgomg
 
 vectorart.ai
 
-React suspense
-
-lemon squeezy
-
 Open Runde font
 Can Sans for headlines
 
 property management software for independent landlords
 
-visx, chart.js
+tremor charts, visx, chart.js
 
 fffuel.co
 
