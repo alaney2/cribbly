@@ -92,6 +92,10 @@ export function InviteCard({
 	const [buttonEnabled, setButtonEnabled] = useState(true);
 	const [isPending, startTransition] = useTransition();
 
+	const isFormValid = () => {
+		return email.trim() !== "" && fullName.trim() !== "";
+	};
+
 	const handleDeleteInvite = async (token: string) => {
 		try {
 			await deleteInvite(token);
@@ -146,10 +150,11 @@ export function InviteCard({
 											<Input
 												id="fullName"
 												type="text"
-												placeholder="John Doe"
+												placeholder="Full Name"
 												name="fullName"
 												value={fullName}
 												onChange={(e) => setFullName(e.target.value)}
+												required
 												autoComplete="off"
 											/>
 										</Field>
@@ -215,7 +220,11 @@ export function InviteCard({
 					<Divider />
 
 					<CardFooter className="flex justify-end">
-						<Button type="submit" color="blue" disabled={isPending}>
+						<Button
+							type="submit"
+							color="blue"
+							disabled={isPending || !isFormValid()}
+						>
 							{isPending ? "Sending..." : "Send invite"}
 						</Button>
 					</CardFooter>
