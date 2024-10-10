@@ -190,15 +190,15 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 									<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-2 md:gap-x-6 py-6">
 										<div className="font-medium text-gray-700 dark:text-neutral-300 flex items-center">
 											{bank_account.name} ••••{bank_account.mask}
-											{bank_account.use_for_payouts && (
+											{/* {bank_account.use_for_payouts && (
 												<StarIcon
 													className="h-5 w-5 text-yellow-400 ml-2"
 													aria-hidden="true"
 												/>
-											)}
+											)} */}
 										</div>
 										<div className="flex justify-between md:justify-end items-center space-x-4">
-											{!bank_account.use_for_payouts && (
+											{/* {!bank_account.use_for_payouts && (
 												<button
 													type="button"
 													className="text-sm md:px-2 font-semibold text-blue-600 hover:text-blue-500"
@@ -208,23 +208,22 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 												>
 													Set as primary
 												</button>
-											)}
-											{!bank_account.use_for_payouts && (
-												<button
-													type="button"
-													className="md:px-2 font-semibold text-red-600 hover:text-red-500"
-													onClick={() => {
-														setBankDetails(
-															`${bank_account.name} ••••${bank_account.mask}`,
-														);
-														setAccountId(bank_account.account_id);
-														setIsRemoveBankDialogOpen(true);
-													}}
-												>
-													Remove{" "}
-													<span className="hidden sm:inline">account</span>
-												</button>
-											)}
+											)} */}
+											{/* {!bank_account.use_for_payouts && ( */}
+											<button
+												type="button"
+												className="md:px-2 font-semibold text-red-600 hover:text-red-500"
+												onClick={() => {
+													setBankDetails(
+														`${bank_account.name} ••••${bank_account.mask}`,
+													);
+													setAccountId(bank_account.account_id);
+													setIsRemoveBankDialogOpen(true);
+												}}
+											>
+												Remove <span className="hidden sm:inline">account</span>
+											</button>
+											{/* )} */}
 										</div>
 									</div>
 								</li>

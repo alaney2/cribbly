@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import useSWR, { mutate } from "swr";
 import { createClient } from "@/utils/supabase/client";
 import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
+import { BankCard } from "@/components/PropertySettings/BankCard";
 
 interface SettingsNavigationProps {
 	currentPropertyId?: string;
@@ -45,7 +46,7 @@ export default function SettingsNavigation({
 	// plaidAccounts,
 }: SettingsNavigationProps) {
 	const { currentPropertyId } = useCurrentProperty();
-	const [activeTab, setActiveTab] = useState(initialTab || "Delete");
+	const [activeTab, setActiveTab] = useState(initialTab || "Bank");
 
 	const handleTabChange = (tab: string) => {
 		mutate("lease");
@@ -56,6 +57,7 @@ export default function SettingsNavigation({
 		() => [
 			// { name: "General", component: RentCard },
 			// { name: "Invite", component: InviteCard },
+			{ name: "Bank", component: BankCard },
 			{ name: "Delete", component: DeleteCard },
 		],
 		[],
@@ -63,15 +65,17 @@ export default function SettingsNavigation({
 
 	const renderContent = () => {
 		switch (activeTab) {
-			case "General":
-				return (
-					<RentCard
-						propertyId={currentPropertyId}
-						buttonOnClick={() => handleTabChange("Tenants")}
-					/>
-				);
-			case "Invite":
-				return <InviteCard propertyId={currentPropertyId} />;
+			// case "General":
+			// 	return (
+			// 		<RentCard
+			// 			propertyId={currentPropertyId}
+			// 			buttonOnClick={() => handleTabChange("Tenants")}
+			// 		/>
+			// 	);
+			// case "Invite":
+			// 	return <InviteCard propertyId={currentPropertyId} />;
+			case "Bank":
+				return <BankCard />;
 			case "Delete":
 				return <DeleteCard propertyId={currentPropertyId} />;
 			default:
@@ -116,6 +120,7 @@ export default function SettingsNavigation({
 					propertyId={currentPropertyId}
 				/>
 				<InviteCard propertyId={currentPropertyId} /> */}
+				<BankCard />
 				<DeleteCard propertyId={currentPropertyId} />
 			</div>
 		</div>
