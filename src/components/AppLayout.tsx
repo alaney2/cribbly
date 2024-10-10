@@ -43,7 +43,7 @@ import {
 	QuestionMarkCircleIcon,
 	SparklesIcon,
 } from "@heroicons/react/20/solid";
-import { AppLayoutLinks } from "@/components/AppLayoutLinks";
+import { AppLayoutLinks, AppLayoutTop } from "@/components/AppLayoutLinks";
 import { PropertiesDropdown } from "@/components/PropertiesDropdown";
 import { getInitials } from "@/utils/helpers";
 import { createClient } from "@/utils/supabase/server";
@@ -86,28 +86,10 @@ export async function AppLayout({
 		// Handle the error appropriately
 	}
 
-	// If no current property is set, set it to the first property (if available)
-	// if (!currentPropertyId && properties && properties.length > 0) {
-	// 	currentPropertyId = properties[0].id;
-	// 	const { error: updateError } = await supabase.auth.updateUser({
-	// 		data: { currentPropertyId: currentPropertyId },
-	// 	});
-	// 	if (updateError) {
-	// 		console.error("Error updating user metadata:", updateError);
-	// 		// Handle the error appropriately
-	// 	}
-	// }
-
 	if (propertiesError) {
 		console.error("Error fetching properties:", propertiesError);
 		// Handle the error appropriately
 	}
-
-	// const { data, error: propertyError } = await supabase
-	// 	.from("properties")
-	// 	.select("*")
-	// 	.eq("id", currentPropertyId)
-	// 	.single();
 
 	return (
 		<CurrentPropertyProvider initialPropertyId={currentPropertyId}>
@@ -148,17 +130,8 @@ export async function AppLayout({
 				sidebar={
 					<Sidebar>
 						<SidebarHeader>
-							<PropertiesDropdown
-								// currentPropertyId={currentPropertyId}
-								properties={properties}
-								// streetAddress={data?.street_address ?? "Properties"}
-							/>
-							<SidebarSection className="max-lg:hidden">
-								<SidebarItem href="/dashboard/inbox">
-									<InboxIcon />
-									<SidebarLabel>Inbox</SidebarLabel>
-								</SidebarItem>
-							</SidebarSection>
+							<PropertiesDropdown properties={properties} />
+							<AppLayoutTop />
 						</SidebarHeader>
 						<SidebarBody>
 							<AppLayoutLinks />

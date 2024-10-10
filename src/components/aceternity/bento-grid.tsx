@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/utils/cn";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -30,6 +31,7 @@ export const BentoGridItem = ({
 	icon,
 	edit = false,
 	href,
+	onClick,
 }: {
 	className?: string;
 	title?: string | React.ReactNode;
@@ -38,8 +40,8 @@ export const BentoGridItem = ({
 	icon?: React.ReactNode;
 	edit?: boolean;
 	href?: string;
+	onClick?: () => void;
 }) => {
-	const router = useRouter();
 	const ItemContent = () => (
 		<>
 			<div className="h-full overflow-hidden">{header}</div>

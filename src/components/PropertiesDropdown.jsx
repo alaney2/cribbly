@@ -51,27 +51,9 @@ export function PropertiesDropdown({
 						key={property.id}
 						onClick={async () => {
 							closeSidebar();
-							// await updateCurrentProperty(property.id);
 							setCurrentPropertyId(property.id);
-							mutate(["documents", property.id], null, {
-								revalidate: false,
-							});
-							// mutate(["propertyRent", property.id]);
-							// mutate(
-							// 	() => true, // This matches all keys
-							// 	(data) => ({ ...data, isLoading: true }),
-							// 	{ revalidate: false },
-							// );
-							updateCurrentProperty(property.id).then(() => {
-								// mutate(["lease", currentPropertyId], null, {
-								// 	revalidate: false,
-								// });
-								// mutate(["lease", property.id]);
-								// mutate(["tasks", currentPropertyId], null, {
-								// 	revalidate: false,
-								// });
-								// mutate(["tasks", property.id]);
-							});
+
+							updateCurrentProperty(property.id).then(() => {});
 						}}
 					>
 						{property.id === currentPropertyId && (

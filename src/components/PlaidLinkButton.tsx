@@ -66,6 +66,8 @@ export const PlaidLinkButton = forwardRef<
 					body: JSON.stringify({ publicToken }),
 				});
 				if (!response.ok) {
+					const errorData = await response.json();
+					console.error("Error response:", errorData);
 					throw new Error("Failed to exchange public token for access token");
 				}
 				const result = await response.json();

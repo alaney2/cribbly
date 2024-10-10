@@ -51,12 +51,10 @@ export interface Fee {
 
 type RentCardProps = {
 	propertyId: string;
-	// lease?: Lease | null;
-	// userId: string;
+	lease?: any;
 	setCurrentProperty?: (property: any) => void;
 	setPropertyId?: (propertyId: string) => void;
 	buttonOnClick?: () => void;
-	// plaidAccounts: any[] | undefined;
 };
 
 const fetchLease = async (propertyId: string) => {
@@ -66,6 +64,7 @@ const fetchLease = async (propertyId: string) => {
 		.select("*")
 		.eq("property_id", propertyId)
 		.single();
+
 	if (error) throw error;
 	return data;
 };
@@ -73,16 +72,19 @@ const fetchLease = async (propertyId: string) => {
 export function RentCard({
 	propertyId,
 	// userId,
+	lease,
 	// lease: initialLease,
 	setCurrentProperty,
 	buttonOnClick,
 	// plaidAccounts,
 }: RentCardProps) {
-	const {
-		data: lease,
-		error: leaseError,
-		isLoading,
-	} = useSWR(["lease", propertyId], () => fetchLease(propertyId));
+	// if (!lease) {
+	// 	const {
+	// 		data: lease,
+	// 		error: leaseError,
+	// 		isLoading,
+	// 	} = useSWR(["lease", propertyId], () => fetchLease(propertyId));
+	// }
 
 	useEffect(() => {
 		if (lease) {
@@ -231,43 +233,31 @@ export function RentCard({
 									Lease start and end
 								</Label>
 								<div className="flex flex-grow flex-row gap-1 sm:gap-2 w-full md:flex-1">
-									{isLoading ? (
-										<>
-											<Skeleton input={true} className="w-full" />
-											<span className="hidden sm:flex text-gray-700 items-center justify-center select-none">
-												-
-											</span>
-											<Skeleton input={true} className="w-full" />
-										</>
-									) : (
-										<>
-											<Input
-												type="date"
-												id="startDate"
-												name="startDate"
-												value={startDate}
-												placeholder="MM/DD/YYYY"
-												onChange={(e) => setStartDate(e.target.value)}
-												min={format(new Date(), "yyyy-MM-dd")}
-												required
-												disabled={leaseExists || daysBetweenDates <= 0}
-											/>
-											<span className="hidden sm:flex text-gray-700 items-center justify-center select-none">
-												-
-											</span>
-											<Input
-												type="date"
-												id="endDate"
-												name="endDate"
-												placeholder="MM/DD/YYYY"
-												value={endDate > startDate ? endDate : ""}
-												onChange={(e) => setEndDate(e.target.value)}
-												min={startDate}
-												required
-												disabled={leaseExists || daysBetweenDates <= 0}
-											/>
-										</>
-									)}
+									<Input
+										type="date"
+										id="startDate"
+										name="startDate"
+										value={startDate}
+										placeholder="MM/DD/YYYY"
+										onChange={(e) => setStartDate(e.target.value)}
+										min={format(new Date(), "yyyy-MM-dd")}
+										required
+										disabled={leaseExists || daysBetweenDates <= 0}
+									/>
+									<span className="hidden sm:flex text-gray-700 items-center justify-center select-none">
+										-
+									</span>
+									<Input
+										type="date"
+										id="endDate"
+										name="endDate"
+										placeholder="MM/DD/YYYY"
+										value={endDate > startDate ? endDate : ""}
+										onChange={(e) => setEndDate(e.target.value)}
+										min={startDate}
+										required
+										disabled={leaseExists || daysBetweenDates <= 0}
+									/>
 								</div>
 							</Headless.Field>
 
@@ -294,40 +284,33 @@ export function RentCard({
 								</Label>
 								<div className="flex-grow">
 									<InputGroup className="w-full relative">
-										{isLoading ? (
-											<Skeleton input={true} className="" />
-										) : (
-											<>
-												<span className="text-zinc-500 dark:text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 select-none pointer-events-none z-20">
-													$
-												</span>
-												<Input
-													id="rentAmount"
-													name="rentAmount"
-													placeholder="0"
-													className="w-full flex-grow"
-													autoComplete="off"
-													value={rentAmount === 0 ? "" : rentAmount}
-													onChange={(e) => {
-														const value = e.target.value;
-														const cleanedValue = value.replace(/[^0-9.]/g, "");
-														const numericValue =
-															Number.parseFloat(cleanedValue);
-														if (!Number.isNaN(numericValue)) {
-															setRentAmount(numericValue);
-														} else if (value === "") {
-															setRentAmount(0);
-														}
-													}}
-													inputMode="numeric"
-													step="1"
-													required
-													min="0"
-													pattern="^\d+(?:\.\d{1,2})?$"
-													disabled={leaseExists || daysBetweenDates <= 0}
-												/>
-											</>
-										)}
+										<span className="text-zinc-500 dark:text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 select-none pointer-events-none z-20">
+											$
+										</span>
+										<Input
+											id="rentAmount"
+											name="rentAmount"
+											placeholder="0"
+											className="w-full flex-grow"
+											autoComplete="off"
+											value={rentAmount === 0 ? "" : rentAmount}
+											onChange={(e) => {
+												const value = e.target.value;
+												const cleanedValue = value.replace(/[^0-9.]/g, "");
+												const numericValue = Number.parseFloat(cleanedValue);
+												if (!Number.isNaN(numericValue)) {
+													setRentAmount(numericValue);
+												} else if (value === "") {
+													setRentAmount(0);
+												}
+											}}
+											inputMode="numeric"
+											step="1"
+											required
+											min="0"
+											pattern="^\d+(?:\.\d{1,2})?$"
+											disabled={leaseExists || daysBetweenDates <= 0}
+										/>
 									</InputGroup>
 								</div>
 							</Headless.Field>
@@ -335,20 +318,17 @@ export function RentCard({
 							<Headless.Field className="relative flex flex-col md:flex-row md:items-center md:gap-4">
 								<div className="mb-2 flex items-center justify-between md:mb-0 md:w-40 md:flex-shrink-0">
 									<Label htmlFor="securityDeposit">Security deposit</Label>
-									{isLoading ? (
-										<Skeleton className="h-6 sm:h-7 w-10 sm:w-8" />
-									) : (
-										<Switch
-											id="securityDeposit"
-											name="securityDepositSwitch"
-											color="blue"
-											checked={hasSecurityDeposit}
-											onChange={() => {
-												setHasSecurityDeposit(!hasSecurityDeposit);
-											}}
-											disabled={leaseExists || daysBetweenDates <= 0}
-										/>
-									)}
+
+									<Switch
+										id="securityDeposit"
+										name="securityDepositSwitch"
+										color="blue"
+										checked={hasSecurityDeposit}
+										onChange={() => {
+											setHasSecurityDeposit(!hasSecurityDeposit);
+										}}
+										disabled={leaseExists || daysBetweenDates <= 0}
+									/>
 								</div>
 								{/* <AnimatePresence>
 									{hasSecurityDeposit && (
@@ -361,46 +341,37 @@ export function RentCard({
 										> */}
 								<div className="flex-grow">
 									<InputGroup className="w-full relative">
-										{isLoading ? (
-											<Skeleton input={true} className="" />
-										) : (
-											<>
-												<span className="text-zinc-500 dark:text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 select-none pointer-events-none z-20">
-													$
-												</span>
-												<Input
-													inputMode="numeric"
-													id="depositAmount"
-													name="depositAmount"
-													placeholder="0"
-													disabled={
-														!hasSecurityDeposit ||
-														leaseExists ||
-														daysBetweenDates <= 0
-													}
-													className="w-full flex-grow"
-													autoComplete="off"
-													value={
-														securityDepositFee === 0 ? "" : securityDepositFee
-													}
-													required={hasSecurityDeposit}
-													onChange={(e) => {
-														const value = e.target.value;
-														const cleanedValue = value.replace(/[^0-9.]/g, "");
-														const numericValue =
-															Number.parseFloat(cleanedValue);
-														if (!Number.isNaN(numericValue)) {
-															setSecurityDepositFee(numericValue);
-														} else if (value === "") {
-															setSecurityDepositFee(0);
-														}
-													}}
-													step="1"
-													min="0"
-													pattern="^\d+(?:\.\d{1,2})?$"
-												/>
-											</>
-										)}
+										<span className="text-zinc-500 dark:text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 select-none pointer-events-none z-20">
+											$
+										</span>
+										<Input
+											inputMode="numeric"
+											id="depositAmount"
+											name="depositAmount"
+											placeholder="0"
+											disabled={
+												!hasSecurityDeposit ||
+												leaseExists ||
+												daysBetweenDates <= 0
+											}
+											className="w-full flex-grow"
+											autoComplete="off"
+											value={securityDepositFee === 0 ? "" : securityDepositFee}
+											required={hasSecurityDeposit}
+											onChange={(e) => {
+												const value = e.target.value;
+												const cleanedValue = value.replace(/[^0-9.]/g, "");
+												const numericValue = Number.parseFloat(cleanedValue);
+												if (!Number.isNaN(numericValue)) {
+													setSecurityDepositFee(numericValue);
+												} else if (value === "") {
+													setSecurityDepositFee(0);
+												}
+											}}
+											step="1"
+											min="0"
+											pattern="^\d+(?:\.\d{1,2})?$"
+										/>
 									</InputGroup>
 								</div>
 								{/* </motion.div>

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import SettingsNavigation from "@/components/SettingsNavigation";
 import { getCurrentProperty, getUser } from "@/utils/supabase/actions";
 
-export default async function SettingsLayout({
+export default async function SettingsPage({
 	children,
 }: {
 	children: React.ReactNode;

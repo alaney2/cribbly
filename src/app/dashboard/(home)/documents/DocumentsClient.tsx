@@ -64,8 +64,6 @@ export function DocumentsClient() {
 	const [documentToDelete, setDocumentToDelete] = useState<Document | null>(
 		null,
 	);
-	const fileInputRef = useRef<HTMLInputElement>(null);
-	// const [files, setFiles] = useState<Document[]>(documents);
 
 	const {
 		data: documents,
@@ -153,7 +151,7 @@ export function DocumentsClient() {
 	};
 
 	const TaxDocumentsTable = ({ documents }: { documents: Document[] }) => (
-		<div className="bg-white dark:bg-black border border-zinc-200 dark:border-zinc-400 rounded-lg p-6 mb-6">
+		<div className="bg-white dark:bg-black ring-1 dark:ring-2 ring-inset ring-gray-200 dark:ring-gray-600 rounded-lg p-6 mb-6">
 			<div className="flex justify-between items-center mb-4">
 				<Subheading>Tax Documents</Subheading>
 				<Field>
@@ -228,7 +226,7 @@ export function DocumentsClient() {
 	);
 
 	const PropertyDocumentsTable = ({ documents }: { documents: Document[] }) => (
-		<div className="bg-white dark:bg-black border border-zinc-200 dark:border-zinc-400 rounded-lg p-6">
+		<div className="bg-white dark:bg-black ring-1 dark:ring-2 ring-inset ring-gray-200 dark:ring-gray-600 rounded-lg p-6">
 			<div className="mb-6 flex flex-col">
 				<Subheading className="text-left mb-4">Property Documents</Subheading>
 				<div className="w-full mx-auto min-h-72 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">

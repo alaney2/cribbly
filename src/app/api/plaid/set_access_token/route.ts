@@ -79,20 +79,12 @@ export async function POST(request: Request) {
 			numbers: { ach },
 		} = authResponse.data;
 
-		// if (!item.available_products.includes(Products.Transfer)) {
-		// 	return NextResponse.json({
-		// 		error: "This institution does not have transfer capabilities",
-		// 	});
-		// }
-
 		if (
 			accounts.length === 0 ||
 			accounts.length >= 2 ||
 			accounts.length !== ach.length
 		) {
-			return NextResponse.json({
-				error: "Please link only one account",
-			});
+			throw new Error("Invalid number of accounts");
 		}
 
 		const ach0 = ach[0];
@@ -128,19 +120,19 @@ export async function POST(request: Request) {
 		]);
 
 		if (error) {
-			return NextResponse.json({
-				error: error,
-			});
+			throw error;
 		}
 
-		return NextResponse.json({
+		const response = {
 			success: "Bank linked successfully",
 			accountId: account_id,
 			accountNumber: account_number,
 			routingNumber: routing,
 			subtype: subtype,
 			processorToken: processorToken,
-		});
+		};
+
+		return NextResponse.json(response);
 	} catch (error) {
 		return NextResponse.json({
 			error: error,

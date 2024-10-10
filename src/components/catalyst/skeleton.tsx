@@ -14,7 +14,7 @@ export function Skeleton({
 	return (
 		<div
 			className={cn(
-				"rounded-md bg-zinc-200 dark:bg-zinc-700",
+				"rounded-md bg-zinc-200/50 dark:bg-zinc-700/70",
 				input === true ? "h-11 sm:h-9 w-full" : "",
 				className,
 			)}

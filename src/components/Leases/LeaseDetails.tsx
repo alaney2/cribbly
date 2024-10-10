@@ -11,11 +11,12 @@ import useSWR, { mutate } from "swr";
 import { createClient } from "@/utils/supabase/client";
 import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
-interface SettingsNavigationProps {
+interface LeaseDetailsProps {
 	currentPropertyId?: string;
 	// lease: any | null;
 	// userId: string;
 	initialTab?: string;
+	lease: any;
 	// plaidAccounts: any[] | null;
 }
 
@@ -37,15 +38,9 @@ const NavButton = ({
 	</button>
 );
 
-export default function SettingsNavigation({
-	// currentPropertyId,
-	// lease,
-	// userId,
-	initialTab,
-	// plaidAccounts,
-}: SettingsNavigationProps) {
+export function LeaseDetails({ initialTab, lease }: LeaseDetailsProps) {
 	const { currentPropertyId } = useCurrentProperty();
-	const [activeTab, setActiveTab] = useState(initialTab || "Delete");
+	const [activeTab, setActiveTab] = useState(initialTab || "General");
 
 	const handleTabChange = (tab: string) => {
 		mutate("lease");
@@ -54,9 +49,9 @@ export default function SettingsNavigation({
 
 	const tabs = useMemo(
 		() => [
-			// { name: "General", component: RentCard },
-			// { name: "Invite", component: InviteCard },
-			{ name: "Delete", component: DeleteCard },
+			{ name: "General", component: RentCard },
+			{ name: "Invite", component: InviteCard },
+			// { name: "Delete", component: DeleteCard },
 		],
 		[],
 	);
@@ -68,6 +63,7 @@ export default function SettingsNavigation({
 					<RentCard
 						propertyId={currentPropertyId}
 						buttonOnClick={() => handleTabChange("Tenants")}
+						lease={lease}
 					/>
 				);
 			case "Invite":
@@ -81,12 +77,12 @@ export default function SettingsNavigation({
 
 	return (
 		<div className="">
-			<div className="hidden lg:block">
-				<Heading className="ml-2 text-2xl font-semibold text-gray-900">
-					Property Settings
-				</Heading>
-				<Divider className="mb-8 mt-4" />
-			</div>
+			{/* <div className="hidden lg:block"> */}
+			{/* <Heading className="ml-2 text-2xl font-semibold text-gray-900">
+					Lease Settings
+				</Heading> */}
+			<Divider className="mb-8 mt-4" />
+			{/* </div> */}
 
 			<div className="hidden xl:flex max-w-5xl mx-auto">
 				{/* Vertical Navbar */}
@@ -112,11 +108,9 @@ export default function SettingsNavigation({
 				</main>
 			</div>
 			<div className="block space-y-6 xl:hidden max-w-xl mx-auto">
-				{/* <RentCard
-					propertyId={currentPropertyId}
-				/>
-				<InviteCard propertyId={currentPropertyId} /> */}
-				<DeleteCard propertyId={currentPropertyId} />
+				<RentCard propertyId={currentPropertyId} />
+				<InviteCard propertyId={currentPropertyId} />
+				{/* <DeleteCard propertyId={currentPropertyId} /> */}
 			</div>
 		</div>
 	);
