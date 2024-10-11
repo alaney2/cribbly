@@ -42,18 +42,22 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { Heading } from "@/components/catalyst/heading";
 import { Strong, Text, TextLink } from "@/components/catalyst/text";
 
-const tenantsFetcher = async (leaseId: string) => {
+interface Tenant {
+	user_id: string;
+	users:
+		| {
+				email: string;
+				full_name: string | null;
+		  }
+		| {
+				email: string;
+				full_name: string | null;
+		  }[];
+}
+
+const tenantsFetcher = async (leaseId: string): Promise<Tenant[]> => {
 	const data = await getTenants(leaseId);
 	return data;
-	// const supabase = createClient();
-	// const { data, error } = await supabase
-	// 	.from("tenants")
-	// 	.select("*")
-	// 	.eq("lease_id", leaseId);
-	// if (error) {
-	// 	throw error;
-	// }
-	// return data;
 };
 
 const fetcher = async (leaseId: string) => {
@@ -84,9 +88,13 @@ export function InviteCard({
 	setFinishWelcome,
 }: InviteCardProps) {
 	const { data: invites, error, mutate } = useSWR(lease.id, fetcher);
-	const { data: tenants, error: tenantsError } = useSWR("tenants", () =>
-		tenantsFetcher(lease.id),
+	const { data: tenants, error: tenantsError } = useSWR<Tenant[]>(
+		"tenants",
+		() => tenantsFetcher(lease.id),
 	);
+
+	console.log("tenants", tenants);
+	console.log(JSON.stringify(tenants, null, 2));
 
 	useEffect(() => {
 		if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
@@ -248,12 +256,18 @@ export function InviteCard({
 										</TableRow>
 									</TableHead>
 									<TableBody>
-										{tenants.map((tenant) => (
-											<TableRow key={tenant.id}>
-												<TableCell>{tenant.full_name || "-"}</TableCell>
-												<TableCell>{tenant.email}</TableCell>
-											</TableRow>
-										))}
+										{tenants.map((tenant) => {
+											const user = Array.isArray(tenant.users)
+												? tenant.users[0]
+												: tenant.users;
+
+											return (
+												<TableRow key={tenant.user_id}>
+													<TableCell>{user?.full_name || "-"}</TableCell>
+													<TableCell>{user?.email}</TableCell>
+												</TableRow>
+											);
+										})}
 									</TableBody>
 								</Table>
 							</div>

@@ -4,11 +4,9 @@ import InviteUserEmail from "@/components/PropertySettings/InviteUserEmail";
 import { createClient } from "@/utils/supabase/server";
 import { getUser } from "@/utils/supabase/actions";
 import { generateId } from "@/lib/utils";
-import { unstable_noStore as noStore } from "next/cache";
 import { supabaseAdmin } from "@/utils/supabase/admin";
 
 export async function sendInviteEmail(formData: FormData) {
-	// noStore();
 	const supabase = createClient();
 	const user = await getUser();
 	if (!user) {
@@ -73,6 +71,7 @@ export async function sendInviteEmail(formData: FormData) {
 			full_name: fullName,
 			email,
 			lease_id: leaseId,
+			property_id: propertyId,
 		});
 
 	if (tokenError) {

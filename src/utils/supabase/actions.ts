@@ -691,7 +691,13 @@ export async function getLease(propertyId: string) {
 export async function getTenants(leaseId: string) {
 	const { data, error } = await supabaseAdmin
 		.from("tenants")
-		.select("*")
+		.select(`
+      user_id,
+      users (
+        full_name,
+        email
+      )
+    `)
 		.eq("lease_id", leaseId);
 	if (error) throw error;
 	return data;
