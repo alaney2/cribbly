@@ -93,9 +93,6 @@ export function InviteCard({
 		() => tenantsFetcher(lease.id),
 	);
 
-	console.log("tenants", tenants);
-	console.log(JSON.stringify(tenants, null, 2));
-
 	useEffect(() => {
 		if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
 			setFinishWelcome(true);
