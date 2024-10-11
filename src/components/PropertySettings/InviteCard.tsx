@@ -23,7 +23,11 @@ import {
 } from "@/components/catalyst/fieldset";
 import { toast } from "sonner";
 import { sendInviteEmail } from "@/utils/resend/actions";
-import { setWelcomeScreen, deleteInvite } from "@/utils/supabase/actions";
+import {
+	setWelcomeScreen,
+	deleteInvite,
+	getTenants,
+} from "@/utils/supabase/actions";
 import useSWR from "swr";
 import { createClient } from "@/utils/supabase/client";
 import {
@@ -37,6 +41,20 @@ import {
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { Heading } from "@/components/catalyst/heading";
 import { Strong, Text, TextLink } from "@/components/catalyst/text";
+
+const tenantsFetcher = async (leaseId: string) => {
+	const data = await getTenants(leaseId);
+	return data;
+	// const supabase = createClient();
+	// const { data, error } = await supabase
+	// 	.from("tenants")
+	// 	.select("*")
+	// 	.eq("lease_id", leaseId);
+	// if (error) {
+	// 	throw error;
+	// }
+	// return data;
+};
 
 const fetcher = async (leaseId: string) => {
 	const supabase = createClient();
@@ -66,6 +84,9 @@ export function InviteCard({
 	setFinishWelcome,
 }: InviteCardProps) {
 	const { data: invites, error, mutate } = useSWR(lease.id, fetcher);
+	const { data: tenants, error: tenantsError } = useSWR("tenants", () =>
+		tenantsFetcher(lease.id),
+	);
 
 	useEffect(() => {
 		if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
@@ -210,6 +231,27 @@ export function InviteCard({
 														<TrashIcon className="size-5 text-red-600 hover:text-red-500" />
 													</button>
 												</TableCell>
+											</TableRow>
+										))}
+									</TableBody>
+								</Table>
+							</div>
+						)}
+						{tenants && tenants.length > 0 && (
+							<div className="mt-6">
+								<h3 className="text-md font-semibold mb-2">Current Tenants</h3>
+								<Table striped>
+									<TableHead>
+										<TableRow>
+											<TableHeader>Name</TableHeader>
+											<TableHeader>Email</TableHeader>
+										</TableRow>
+									</TableHead>
+									<TableBody>
+										{tenants.map((tenant) => (
+											<TableRow key={tenant.id}>
+												<TableCell>{tenant.full_name || "-"}</TableCell>
+												<TableCell>{tenant.email}</TableCell>
 											</TableRow>
 										))}
 									</TableBody>
