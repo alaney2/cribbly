@@ -106,6 +106,13 @@ export function InviteCard({
 		previousTenantsFetcher(propertyId, lease.id),
 	);
 
+	const filteredPreviousTenants = previousTenants?.filter((tenant) => {
+		const tenantEmail = Array.isArray(tenant.users)
+			? tenant.users[0].email
+			: tenant.users.email;
+		return !invites?.some((invite) => invite.email === tenantEmail);
+	});
+
 	console.log("prev", previousTenants);
 
 	useEffect(() => {
@@ -293,7 +300,7 @@ export function InviteCard({
 									disabled={!previousTenants || previousTenants.length === 0}
 								>
 									<option value="">Select tenant</option>
-									{previousTenants?.map((tenant) => {
+									{filteredPreviousTenants?.map((tenant) => {
 										const user = Array.isArray(tenant.users)
 											? tenant.users[0]
 											: tenant.users;
