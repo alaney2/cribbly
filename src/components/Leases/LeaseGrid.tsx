@@ -12,19 +12,20 @@ import { createClient } from "@/utils/supabase/client";
 import { Text } from "@/components/catalyst/text";
 import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 import useSWR from "swr";
-import SettingsNavigation from "@/components/SettingsNavigation";
 import { Button } from "@/components/catalyst/button";
 import { Heading } from "@/components/catalyst/heading";
 import { Divider } from "@/components/catalyst/divider";
 import { LeaseDetails } from "@/components/Leases/LeaseDetails";
 import { parseISO } from "date-fns";
+import { NewLeaseDialog } from "@/components/dialogs/NewLeaseDialog";
 
 const fetcher = async (propertyId: string) => {
 	const supabase = createClient();
 	const { data: leases, error: leaseError } = await supabase
 		.from("leases")
 		.select("*")
-		.eq("property_id", propertyId);
+		.eq("property_id", propertyId)
+		.order("start_date", { ascending: false });
 
 	if (leaseError) {
 		throw leaseError;
@@ -53,6 +54,7 @@ const fetcher = async (propertyId: string) => {
 export function LeaseGrid() {
 	const { currentPropertyId } = useCurrentProperty();
 	const [selectedLease, setSelectedLease] = useState(null);
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
@@ -135,6 +137,7 @@ export function LeaseGrid() {
 					currentPropertyId={currentPropertyId}
 					initialTab="General"
 					lease={selectedLease}
+					setSelectedLease={setSelectedLease}
 				/>
 			</div>
 		);
@@ -142,9 +145,14 @@ export function LeaseGrid() {
 
 	return (
 		<>
-			<Heading className="ml-2 text-2xl font-semibold text-gray-900">
-				Leases
-			</Heading>
+			<div className="flex justify-between items-center mb-4">
+				<Heading className="text-2xl font-semibold text-gray-900">
+					Leases
+				</Heading>
+				<Button color="blue" onClick={() => setIsDialogOpen(true)}>
+					+ Create Lease
+				</Button>
+			</div>
 			<Divider className="mb-8 mt-4" />
 			<BentoGrid className="auto-rows-[14rem] md:auto-rows-[14rem] sm:grid-cols-2">
 				{isLoading
@@ -167,7 +175,7 @@ export function LeaseGrid() {
 									}}
 									role="button"
 									tabIndex={0}
-									className="cursor-default"
+									className="cursor-default h-[14rem] md:h-[14rem]"
 								>
 									<BentoGridItem
 										key={lease.id}
@@ -176,12 +184,17 @@ export function LeaseGrid() {
 										onClick={() => handleLeaseClick(lease)}
 										icon={<HomeIcon className="h-5 w-5" />}
 										header={<LeaseHeader lease={lease} />}
-										className="sm:col-span-1"
+										className="sm:col-span-1 h-full"
 									/>
 								</div>
 							);
 						})}
 			</BentoGrid>
+			<NewLeaseDialog
+				isOpen={isDialogOpen}
+				onClose={() => setIsDialogOpen(false)}
+				propertyId={currentPropertyId}
+			/>
 		</>
 	);
 }

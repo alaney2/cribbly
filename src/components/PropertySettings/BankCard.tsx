@@ -17,7 +17,7 @@ import { Strong, Text, TextLink } from "@/components/catalyst/text";
 import * as Headless from "@headlessui/react";
 import { Switch } from "@/components/catalyst/switch";
 import { EditFeeDialog } from "@/components/dialogs/EditFeeDialog";
-import { addPropertyFees, addFee, getLease } from "@/utils/supabase/actions";
+import { createLease, addFee, getLease } from "@/utils/supabase/actions";
 import { format, addYears, subDays, addDays, addWeeks } from "date-fns";
 import { BillingScheduleDialog } from "@/components/dialogs/BillingScheduleDialog";
 import { AddFeeDialog } from "@/components/dialogs/AddFeeDialog";

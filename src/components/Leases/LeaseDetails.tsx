@@ -2,7 +2,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { RentCard } from "@/components/PropertySettings/RentCard";
 import { InviteCard } from "@/components/PropertySettings/InviteCard";
-import { DeleteCard } from "@/components/PropertySettings/DeleteCard";
+import { DeleteLeaseCard } from "@/components/PropertySettings/DeleteLeaseCard";
 import { Heading } from "@/components/catalyst/heading";
 import { Divider } from "@/components/catalyst/divider";
 import { Text, Strong } from "@/components/catalyst/text";
@@ -13,11 +13,9 @@ import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
 interface LeaseDetailsProps {
 	currentPropertyId?: string;
-	// lease: any | null;
-	// userId: string;
 	initialTab?: string;
 	lease: any;
-	// plaidAccounts: any[] | null;
+	setSelectedLease: (lease: any) => void;
 }
 
 const NavButton = ({
@@ -38,22 +36,32 @@ const NavButton = ({
 	</button>
 );
 
-export function LeaseDetails({ initialTab, lease }: LeaseDetailsProps) {
+export function LeaseDetails({
+	initialTab,
+	lease,
+	setSelectedLease,
+}: LeaseDetailsProps) {
 	const { currentPropertyId } = useCurrentProperty();
 	const [activeTab, setActiveTab] = useState(initialTab || "General");
-
 	const handleTabChange = (tab: string) => {
-		mutate("lease");
 		setActiveTab(tab);
 	};
+
+	const canDeleteLease = useMemo(() => {
+		const currentDate = new Date();
+		const leaseStartDate = new Date(lease.start_date);
+		return lease.tenantCount === 0 || currentDate < leaseStartDate;
+	}, [lease]);
 
 	const tabs = useMemo(
 		() => [
 			{ name: "General", component: RentCard },
 			{ name: "Invite", component: InviteCard },
-			// { name: "Delete", component: DeleteCard },
+			...(canDeleteLease
+				? [{ name: "Delete", component: DeleteLeaseCard }]
+				: []),
 		],
-		[],
+		[canDeleteLease],
 	);
 
 	const renderContent = () => {
@@ -67,9 +75,11 @@ export function LeaseDetails({ initialTab, lease }: LeaseDetailsProps) {
 					/>
 				);
 			case "Invite":
-				return <InviteCard propertyId={currentPropertyId} />;
+				return <InviteCard lease={lease} />;
 			case "Delete":
-				return <DeleteCard propertyId={currentPropertyId} />;
+				return canDeleteLease ? (
+					<DeleteLeaseCard lease={lease} setSelectedLease={setSelectedLease} />
+				) : null;
 			default:
 				return null;
 		}
@@ -109,8 +119,10 @@ export function LeaseDetails({ initialTab, lease }: LeaseDetailsProps) {
 			</div>
 			<div className="block space-y-6 xl:hidden max-w-xl mx-auto">
 				<RentCard propertyId={currentPropertyId} />
-				<InviteCard propertyId={currentPropertyId} />
-				{/* <DeleteCard propertyId={currentPropertyId} /> */}
+				<InviteCard lease={lease} />
+				{canDeleteLease && (
+					<DeleteLeaseCard lease={lease} setSelectedLease={setSelectedLease} />
+				)}
 			</div>
 		</div>
 	);

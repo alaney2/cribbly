@@ -51,39 +51,39 @@ const fetcher = async (propertyId: string) => {
 };
 
 type InviteCardProps = {
-	propertyId: string;
+	lease: any;
 	setPropertyId?: (propertyId: string) => void;
 	finishWelcome?: boolean;
 	setFinishWelcome?: (finishWelcome: boolean) => void;
 };
 
 export function InviteCard({
-	propertyId,
+	lease,
 	setPropertyId,
 	finishWelcome,
 	setFinishWelcome,
 }: InviteCardProps) {
-	useEffect(() => {
-		if (typeof window !== "undefined" && setPropertyId && !propertyId) {
-			setPropertyId(localStorage.getItem("propertyId") || "");
-		}
-	}, [propertyId, setPropertyId]);
+	// useEffect(() => {
+	// 	if (typeof window !== "undefined" && setPropertyId && !propertyId) {
+	// 		setPropertyId(localStorage.getItem("propertyId") || "");
+	// 	}
+	// }, [propertyId, setPropertyId]);
 
-	const {
-		data: invites,
-		error,
-		isLoading,
-		mutate,
-	} = useSWR(
-		propertyId ? ["invitesSent", propertyId] : null,
-		([_, propertyId]) => fetcher(propertyId),
-	);
+	// const {
+	// 	data: invites,
+	// 	error,
+	// 	isLoading,
+	// 	mutate,
+	// } = useSWR(
+	// 	propertyId ? ["invitesSent", propertyId] : null,
+	// 	([_, propertyId]) => fetcher(propertyId),
+	// );
 
-	useEffect(() => {
-		if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
-			setFinishWelcome(true);
-		}
-	}, [finishWelcome, invites, setFinishWelcome]);
+	// useEffect(() => {
+	// 	if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
+	// 		setFinishWelcome(true);
+	// 	}
+	// }, [finishWelcome, invites, setFinishWelcome]);
 
 	const [fadeOut, setFadeOut] = useState(false);
 	const [email, setEmail] = useState("");
@@ -99,7 +99,6 @@ export function InviteCard({
 	const handleDeleteInvite = async (token: string) => {
 		try {
 			await deleteInvite(token);
-			mutate();
 		} catch (error) {
 			console.error(error);
 		}
@@ -111,7 +110,7 @@ export function InviteCard({
 				<CardHeader>
 					<Heading>Invite tenants</Heading>
 					<Text className="">
-						Invite a tenant to this property to pay rent online.
+						Invite a tenant to this lease to pay rent online.
 					</Text>
 				</CardHeader>
 				<form
@@ -123,7 +122,6 @@ export function InviteCard({
 										await sendInviteEmail(formData);
 										setEmail("");
 										setFullName("");
-										mutate();
 										return "Email sent!";
 									} catch (error) {
 										console.error(error);
@@ -178,12 +176,12 @@ export function InviteCard({
 							</div>
 						</div>
 						<input
-							name="propertyId"
-							defaultValue={propertyId}
+							name="leaseId"
+							defaultValue={lease.id}
 							readOnly
 							className="hidden"
 						/>
-						{invites && invites.length > 0 && (
+						{/* {invites && invites.length > 0 && (
 							<div className="mt-6">
 								<h3 className="text-md font-semibold mb-2">Invites Sent</h3>
 								<Table striped>
@@ -215,7 +213,7 @@ export function InviteCard({
 									</TableBody>
 								</Table>
 							</div>
-						)}
+						)} */}
 					</CardContent>
 					<Divider />
 

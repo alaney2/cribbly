@@ -22,14 +22,12 @@ export function DeleteCard({ propertyId }: { propertyId: string }) {
 			<Card className="w-full border border-red-500/25">
 				<CardHeader>
 					<Heading>Delete property</Heading>
-				</CardHeader>
-				<CardContent>
 					<Text>
 						Permanently remove your property and all of its contents from the
 						Cribbly platform. This action is irreversible.
 					</Text>
-				</CardContent>
-				<Divider />
+				</CardHeader>
+				<Divider className="mb-0" />
 				<CardFooter className="flex justify-end ">
 					<Button type="button" color="red" onClick={() => setIsOpen(true)}>
 						Delete property

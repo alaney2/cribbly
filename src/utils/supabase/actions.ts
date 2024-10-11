@@ -138,7 +138,7 @@ export async function addFee(formData: FormData, propertyId: string) {
 	return data;
 }
 
-export async function addPropertyFees(formData: FormData) {
+export async function createLease(formData: FormData) {
 	const user = await getUser();
 	if (!user) {
 		throw new Error("User not found");
@@ -154,14 +154,12 @@ export async function addPropertyFees(formData: FormData) {
 	const depositAmount = Number.parseFloat(
 		String(formData.get("depositAmount")),
 	);
-	const rent_id = String(formData.get("rent_id"));
 	// const rentInfo = calculateRentDates(dateFrom, dateTo);
 	// const monthsOfRent = rentInfo.monthsOfRent;
 	if (dateFrom >= dateTo) {
 		throw new Error("Invalid date range");
 	}
 	// const rentDates = rentInfo.rentDates;
-	// console.log(rentDates)
 	const supabase = createClient();
 	const { data: leaseData, error: leaseError } = await supabase
 		.from("leases")
@@ -697,4 +695,17 @@ export async function getTenants(propertyId: string) {
 		.eq("property_id", propertyId);
 	if (error) throw error;
 	return data;
+}
+
+export async function deleteLease(leaseId: string) {
+	const supabase = createClient();
+	const { error } = await supabase.from("leases").delete().eq("id", leaseId);
+
+	if (error) {
+		console.error("Error deleting lease:", error);
+		throw new Error("Failed to delete lease");
+	}
+
+	// Revalidate the dashboard path to reflect the changes
+	revalidatePath("/dashboard/leases");
 }
