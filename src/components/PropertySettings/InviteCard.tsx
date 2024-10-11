@@ -9,7 +9,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-// import { Separator } from "@/components/ui/separator"
 import { Divider } from "@/components/catalyst/divider";
 import { useState, useEffect, useTransition } from "react";
 import { Input } from "@/components/catalyst/input";
@@ -24,9 +23,9 @@ import {
 import { toast } from "sonner";
 import { sendInviteEmail } from "@/utils/resend/actions";
 import {
-	setWelcomeScreen,
 	deleteInvite,
 	getTenants,
+	getPreviousTenants,
 } from "@/utils/supabase/actions";
 import useSWR from "swr";
 import { createClient } from "@/utils/supabase/client";
@@ -39,8 +38,9 @@ import {
 	TableRow,
 } from "@/components/catalyst/table";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { Heading } from "@/components/catalyst/heading";
+import { Heading, Subheading } from "@/components/catalyst/heading";
 import { Strong, Text, TextLink } from "@/components/catalyst/text";
+import { Select } from "@/components/catalyst/select";
 
 interface Tenant {
 	user_id: string;
@@ -54,6 +54,14 @@ interface Tenant {
 				full_name: string | null;
 		  }[];
 }
+
+const previousTenantsFetcher = async (
+	propertyId: string,
+	leaseId: string,
+): Promise<Tenant[]> => {
+	const data = await getPreviousTenants(propertyId, leaseId);
+	return data;
+};
 
 const tenantsFetcher = async (leaseId: string): Promise<Tenant[]> => {
 	const data = await getTenants(leaseId);
@@ -92,6 +100,13 @@ export function InviteCard({
 		"tenants",
 		() => tenantsFetcher(lease.id),
 	);
+	const { data: previousTenants, error: previousTenantsError } = useSWR<
+		Tenant[]
+	>(["previousTenants", propertyId, lease.id], () =>
+		previousTenantsFetcher(propertyId, lease.id),
+	);
+
+	console.log("prev", previousTenants);
 
 	useEffect(() => {
 		if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
@@ -105,6 +120,8 @@ export function InviteCard({
 	const animationClass = fadeOut ? " animate__fadeOut" : "animate__fadeIn";
 	const [buttonEnabled, setButtonEnabled] = useState(true);
 	const [isPending, startTransition] = useTransition();
+	const [selectedPreviousTenant, setSelectedPreviousTenant] =
+		useState<string>("");
 
 	const isFormValid = () => {
 		return email.trim() !== "" && fullName.trim() !== "";
@@ -124,6 +141,44 @@ export function InviteCard({
 		}
 	};
 
+	const handleInvitePreviousTenant = async () => {
+		if (!selectedPreviousTenant) return;
+
+		const tenant = previousTenants?.find(
+			(t) => t.user_id === selectedPreviousTenant,
+		);
+		if (!tenant) return;
+
+		const formData = new FormData();
+		const user = Array.isArray(tenant.users) ? tenant.users[0] : tenant.users;
+		formData.append("fullName", user.full_name || "");
+		formData.append("email", user.email);
+		formData.append("leaseId", lease.id);
+		formData.append("propertyId", propertyId);
+
+		startTransition(async () => {
+			toast.promise(
+				(async () => {
+					try {
+						await sendInviteEmail(formData);
+						setSelectedPreviousTenant("");
+						return "Email sent!";
+					} catch (error) {
+						console.error(error);
+						throw error;
+					} finally {
+						mutate();
+					}
+				})(),
+				{
+					loading: "Inviting previous tenant...",
+					success: "Previous tenant has been invited!",
+					error: "An error occurred, please try again.",
+				},
+			);
+		});
+	};
+
 	return (
 		<>
 			<Card className={`w-full animate__faster} ${animationClass}`}>
@@ -133,6 +188,7 @@ export function InviteCard({
 						Invite a tenant to this lease to pay rent online.
 					</Text>
 				</CardHeader>
+
 				<form
 					action={(formData) => {
 						startTransition(async () => {
@@ -163,6 +219,21 @@ export function InviteCard({
 					<CardContent>
 						<div className="grid w-full items-center gap-4">
 							<div className="flex flex-col space-y-1.5">
+								<Field>
+									<Label htmlFor="email">Email</Label>
+									<Input
+										id="email"
+										type="email"
+										placeholder="name@example.com"
+										name="email"
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
+										required
+										autoComplete="off"
+									/>
+								</Field>
+							</div>
+							<div className="flex flex-col space-y-1.5">
 								<Fieldset>
 									<FieldGroup>
 										<Field>
@@ -181,21 +252,6 @@ export function InviteCard({
 									</FieldGroup>
 								</Fieldset>
 							</div>
-							<div className="flex flex-col space-y-1.5">
-								<Field>
-									<Label htmlFor="email">Email</Label>
-									<Input
-										id="email"
-										type="email"
-										placeholder="name@example.com"
-										name="email"
-										value={email}
-										onChange={(e) => setEmail(e.target.value)}
-										required
-										autoComplete="off"
-									/>
-								</Field>
-							</div>
 						</div>
 						<input
 							name="leaseId"
@@ -209,6 +265,59 @@ export function InviteCard({
 							readOnly
 							className="hidden"
 						/>
+						<div className="mt-6 flex justify-end">
+							<Button
+								type="submit"
+								color="blue"
+								disabled={isPending || !isFormValid()}
+							>
+								{isPending ? "Sending..." : "Invite"}
+							</Button>
+						</div>
+
+						<div className="my-2 flex items-center">
+							<Divider className="flex-grow" />
+							<span className="mx-4 text-md text-zinc-600 dark:text-zinc-300">
+								or
+							</span>
+							<Divider className="flex-grow" />
+						</div>
+
+						<div className="flex items-end gap-4">
+							<Field className="flex-grow">
+								<Label htmlFor="previousTenant">Invite Previous Tenant</Label>
+								<Select
+									id="previousTenant"
+									value={selectedPreviousTenant}
+									onChange={(e) => setSelectedPreviousTenant(e.target.value)}
+									disabled={!previousTenants || previousTenants.length === 0}
+								>
+									<option value="">Select tenant</option>
+									{previousTenants?.map((tenant) => {
+										const user = Array.isArray(tenant.users)
+											? tenant.users[0]
+											: tenant.users;
+
+										return (
+											<option key={tenant.user_id} value={tenant.user_id}>
+												{`${user.full_name} — ${user.email}`}
+											</option>
+										);
+									})}
+								</Select>
+							</Field>
+							<Button
+								type="button"
+								color="blue"
+								disabled={!selectedPreviousTenant || isPending}
+								onClick={handleInvitePreviousTenant}
+							>
+								Invite
+							</Button>
+						</div>
+
+						<Divider strong className="mt-12 mb-8" />
+
 						{invites && invites.length > 0 && (
 							<div className="mt-6">
 								<h3 className="text-md font-semibold mb-2">Invites Sent</h3>
@@ -244,7 +353,9 @@ export function InviteCard({
 						)}
 						{tenants && tenants.length > 0 && (
 							<div className="mt-6">
-								<h3 className="text-md font-semibold mb-2">Current Tenants</h3>
+								<Subheading className="text-md font-semibold mb-2">
+									Current Tenants
+								</Subheading>
 								<Table striped>
 									<TableHead>
 										<TableRow>
@@ -272,7 +383,7 @@ export function InviteCard({
 					</CardContent>
 					<Divider />
 
-					<CardFooter className="flex justify-end">
+					{/* <CardFooter className="flex justify-end">
 						<Button
 							type="submit"
 							color="blue"
@@ -280,7 +391,7 @@ export function InviteCard({
 						>
 							{isPending ? "Sending..." : "Send invite"}
 						</Button>
-					</CardFooter>
+					</CardFooter> */}
 				</form>
 			</Card>
 		</>

@@ -703,6 +703,17 @@ export async function getTenants(leaseId: string) {
 	return data;
 }
 
+export async function getPreviousTenants(propertyId: string, leaseId: string) {
+	const { data, error } = await supabaseAdmin
+		.from("tenants")
+		.select("*, users!inner(*)")
+		.eq("property_id", propertyId)
+		.neq("lease_id", leaseId);
+
+	if (error) throw error;
+	return data;
+}
+
 export async function deleteLease(leaseId: string) {
 	const supabase = createClient();
 	const { error } = await supabase.from("leases").delete().eq("id", leaseId);
