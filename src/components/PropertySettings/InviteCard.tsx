@@ -85,9 +85,15 @@ export function InviteCard({
 	};
 
 	const handleDeleteInvite = async (token: string) => {
+		const loading = toast.loading("Deleting invite...");
 		try {
 			await deleteInvite(token);
+			toast.dismiss(loading);
+			toast.success("Invite deleted");
+			mutate();
 		} catch (error) {
+			toast.dismiss(loading);
+			toast.error("Failed to delete invite");
 			console.error(error);
 		}
 	};
@@ -193,7 +199,7 @@ export function InviteCard({
 											<TableRow key={invite.token}>
 												<TableCell>{invite.full_name || "-"}</TableCell>
 												<TableCell>{invite.email}</TableCell>
-												<TableCell>
+												<TableCell className="text-right">
 													<button
 														type="button"
 														onClick={() => {

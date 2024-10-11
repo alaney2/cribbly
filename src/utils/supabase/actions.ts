@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 
 export async function deleteInvite(token: string) {
 	const supabase = createClient();
-	const { error } = await supabase
+	const { error } = await supabaseAdmin
 		.from("property_invites")
 		.delete()
 		.eq("token", token);

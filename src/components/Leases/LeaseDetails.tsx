@@ -1,14 +1,11 @@
 "use client";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { RentCard } from "@/components/PropertySettings/RentCard";
 import { InviteCard } from "@/components/PropertySettings/InviteCard";
 import { DeleteLeaseCard } from "@/components/PropertySettings/DeleteLeaseCard";
 import { Heading } from "@/components/catalyst/heading";
 import { Divider } from "@/components/catalyst/divider";
 import { Text, Strong } from "@/components/catalyst/text";
-import { useRouter } from "next/navigation";
-import useSWR, { mutate } from "swr";
-import { createClient } from "@/utils/supabase/client";
 import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
 interface LeaseDetailsProps {
@@ -56,7 +53,7 @@ export function LeaseDetails({
 	const tabs = useMemo(
 		() => [
 			{ name: "General", component: RentCard },
-			{ name: "Invite", component: InviteCard },
+			{ name: "Tenants", component: InviteCard },
 			...(canDeleteLease
 				? [{ name: "Delete", component: DeleteLeaseCard }]
 				: []),
@@ -74,7 +71,7 @@ export function LeaseDetails({
 						lease={lease}
 					/>
 				);
-			case "Invite":
+			case "Tenants":
 				return <InviteCard lease={lease} propertyId={currentPropertyId} />;
 			case "Delete":
 				return canDeleteLease ? (
