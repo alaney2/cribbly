@@ -114,6 +114,8 @@ export function InviteCard({
 									} catch (error) {
 										console.error(error);
 										throw error;
+									} finally {
+										mutate();
 									}
 								})(),
 								{
@@ -175,7 +177,7 @@ export function InviteCard({
 							readOnly
 							className="hidden"
 						/>
-						{/* {invites && invites.length > 0 && (
+						{invites && invites.length > 0 && (
 							<div className="mt-6">
 								<h3 className="text-md font-semibold mb-2">Invites Sent</h3>
 								<Table striped>
@@ -207,7 +209,7 @@ export function InviteCard({
 									</TableBody>
 								</Table>
 							</div>
-						)} */}
+						)}
 					</CardContent>
 					<Divider />
 

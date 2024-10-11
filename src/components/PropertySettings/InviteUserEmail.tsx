@@ -56,14 +56,14 @@ export const InviteUserEmail = ({
 						<Section className="mt-[32px]">
 							<Img
 								src={"https://www.cribbly.io/images/logowithtext.png"}
-								width="200"
-								height="110"
+								width="120"
+								height="41"
 								alt="Cribbly"
 								className="my-0 mx-auto"
 							/>
 						</Section>
 						<Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-							Join <strong>{teamName}</strong> on <strong>Cribbly</strong>
+							Join <strong>{teamName}</strong>
 						</Heading>
 						<Text className="text-black text-[14px] leading-[24px]">
 							Hello {username}!

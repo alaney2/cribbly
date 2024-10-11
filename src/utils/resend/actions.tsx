@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import { getUser } from "@/utils/supabase/actions";
 import { generateId } from "@/lib/utils";
 import { unstable_noStore as noStore } from "next/cache";
+import { supabaseAdmin } from "@/utils/supabase/admin";
 
 export async function sendInviteEmail(formData: FormData) {
 	// noStore();
@@ -65,15 +66,17 @@ export async function sendInviteEmail(formData: FormData) {
 		throw new Error("Error sending email");
 	}
 
-	const { error: tokenError } = await supabase.from("property_invites").upsert({
-		token,
-		full_name: fullName,
-		email,
-		property_id: propertyId,
-		lease_id: leaseId,
-	});
+	const { error: tokenError } = await supabaseAdmin
+		.from("property_invites")
+		.upsert({
+			token,
+			full_name: fullName,
+			email,
+			lease_id: leaseId,
+		});
 
 	if (tokenError) {
+		console.error(tokenError);
 		throw new Error("Error creating invite");
 	}
 }
