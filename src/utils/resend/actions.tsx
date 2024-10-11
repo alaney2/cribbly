@@ -7,7 +7,7 @@ import { generateId } from "@/lib/utils";
 import { unstable_noStore as noStore } from "next/cache";
 
 export async function sendInviteEmail(formData: FormData) {
-	noStore();
+	// noStore();
 	const supabase = createClient();
 	const user = await getUser();
 	if (!user) {
@@ -26,6 +26,7 @@ export async function sendInviteEmail(formData: FormData) {
 	const email = String(formData.get("email"));
 	const fullName = String(formData.get("fullName"));
 	const propertyId = String(formData.get("propertyId"));
+	const leaseId = String(formData.get("leaseId"));
 	if (!propertyId) throw new Error("Property not found");
 	const { data: property } = await supabase
 		.from("properties")
@@ -55,7 +56,6 @@ export async function sendInviteEmail(formData: FormData) {
 					property?.street_address + (property?.apt ? ` ${property.apt}` : "")
 				}
 				inviteLink={`https://resident.cribbly.io/invite?token=${token}`}
-				// inviteLink={`http://localhost:3001/invite?property=${propertyId}&token=${token}&email=${email}&name=${fullName}&address=${property.street_address} ${property.apt}`}
 			/>
 		),
 	});
@@ -70,6 +70,7 @@ export async function sendInviteEmail(formData: FormData) {
 		full_name: fullName,
 		email,
 		property_id: propertyId,
+		lease_id: leaseId,
 	});
 
 	if (tokenError) {

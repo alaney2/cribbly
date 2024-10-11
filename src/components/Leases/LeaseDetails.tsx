@@ -75,7 +75,7 @@ export function LeaseDetails({
 					/>
 				);
 			case "Invite":
-				return <InviteCard lease={lease} />;
+				return <InviteCard lease={lease} propertyId={currentPropertyId} />;
 			case "Delete":
 				return canDeleteLease ? (
 					<DeleteLeaseCard lease={lease} setSelectedLease={setSelectedLease} />
@@ -119,7 +119,7 @@ export function LeaseDetails({
 			</div>
 			<div className="block space-y-6 xl:hidden max-w-xl mx-auto">
 				<RentCard propertyId={currentPropertyId} />
-				<InviteCard lease={lease} />
+				<InviteCard lease={lease} propertyId={currentPropertyId} />
 				{canDeleteLease && (
 					<DeleteLeaseCard lease={lease} setSelectedLease={setSelectedLease} />
 				)}

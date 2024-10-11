@@ -7,6 +7,7 @@ import {
 	CheckCircleIcon,
 	ExclamationCircleIcon,
 	ArrowLeftIcon,
+	ClockIcon,
 } from "@heroicons/react/24/outline";
 import { createClient } from "@/utils/supabase/client";
 import { Text } from "@/components/catalyst/text";
@@ -16,8 +17,8 @@ import { Button } from "@/components/catalyst/button";
 import { Heading } from "@/components/catalyst/heading";
 import { Divider } from "@/components/catalyst/divider";
 import { LeaseDetails } from "@/components/Leases/LeaseDetails";
-import { parseISO } from "date-fns";
 import { NewLeaseDialog } from "@/components/dialogs/NewLeaseDialog";
+import { parseISO, isWithinInterval, addDays } from "date-fns";
 
 const fetcher = async (propertyId: string) => {
 	const supabase = createClient();
@@ -49,6 +50,16 @@ const fetcher = async (propertyId: string) => {
 		...lease,
 		tenantCount: tenantCounts[lease.id] || 0,
 	}));
+};
+
+const getLeaseStatus = (startDate: string, endDate: string) => {
+	const now = new Date();
+	const start = parseISO(startDate);
+	const end = addDays(parseISO(endDate), 1);
+
+	if (now < start) return "future";
+	if (now > end) return "expired";
+	return "active";
 };
 
 export function LeaseGrid() {
@@ -87,27 +98,40 @@ export function LeaseGrid() {
 
 	const isLeaseActive = (startDate: string, endDate: string) => {
 		const now = new Date();
-		const start = new Date(startDate);
-		const end = new Date(endDate);
-		return now >= start && now <= end;
+		const start = parseISO(startDate);
+		const end = addDays(parseISO(endDate), 1);
+		return isWithinInterval(now, { start, end });
 	};
 
 	const LeaseHeader = ({ lease }: { lease: any }) => {
-		const active = isLeaseActive(lease.start_date, lease.end_date);
+		const status = getLeaseStatus(lease.start_date, lease.end_date);
 
+		const statusConfig = {
+			future: {
+				bgColor: "bg-blue-500/80",
+				icon: <ClockIcon className="h-4 w-4 mr-1" />,
+				text: "Future",
+			},
+			active: {
+				bgColor: "bg-green-500/80",
+				icon: <CheckCircleIcon className="h-4 w-4 mr-1" />,
+				text: "Active",
+			},
+			expired: {
+				bgColor: "bg-yellow-500/80",
+				icon: <ExclamationCircleIcon className="h-4 w-4 mr-1" />,
+				text: "Expired",
+			},
+		};
+		const { bgColor, icon, text } = statusConfig[status];
 		return (
 			<div className="flex flex-col gap-1 h-full w-full space-y-0">
-				{active ? (
-					<div className="bg-green-500/80 w-20 text-white text-xs font-semibold px-2 py-1 mb-4 rounded-full flex items-center">
-						<CheckCircleIcon className="h-4 w-4 mr-1" />
-						Active
-					</div>
-				) : (
-					<div className="bg-yellow-500/80 w-20 text-white text-xs font-semibold px-2 py-1 mb-4 rounded-full flex items-center">
-						<ExclamationCircleIcon className="h-4 w-4 mr-1" />
-						Inactive
-					</div>
-				)}
+				<div
+					className={`${bgColor} w-24 text-white text-xs font-semibold px-2 py-1 mb-4 rounded-full flex items-center`}
+				>
+					{icon}
+					{text}
+				</div>
 				<Text className={"px-1"}>Rent per month: {lease.rent_amount}</Text>
 				<Text className={"px-1"}>Tenants: {lease.tenantCount}</Text>
 				{lease.sd_amount > 0 && (

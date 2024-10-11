@@ -38,12 +38,12 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { Heading } from "@/components/catalyst/heading";
 import { Strong, Text, TextLink } from "@/components/catalyst/text";
 
-const fetcher = async (propertyId: string) => {
+const fetcher = async (leaseId: string) => {
 	const supabase = createClient();
 	const { data, error } = await supabase
 		.from("property_invites")
 		.select("*")
-		.eq("property_id", propertyId);
+		.eq("lease_id", leaseId);
 	if (error) {
 		throw error;
 	}
@@ -52,6 +52,7 @@ const fetcher = async (propertyId: string) => {
 
 type InviteCardProps = {
 	lease: any;
+	propertyId: string;
 	setPropertyId?: (propertyId: string) => void;
 	finishWelcome?: boolean;
 	setFinishWelcome?: (finishWelcome: boolean) => void;
@@ -59,31 +60,18 @@ type InviteCardProps = {
 
 export function InviteCard({
 	lease,
+	propertyId,
 	setPropertyId,
 	finishWelcome,
 	setFinishWelcome,
 }: InviteCardProps) {
-	// useEffect(() => {
-	// 	if (typeof window !== "undefined" && setPropertyId && !propertyId) {
-	// 		setPropertyId(localStorage.getItem("propertyId") || "");
-	// 	}
-	// }, [propertyId, setPropertyId]);
+	const { data: invites, error, mutate } = useSWR(lease.id, fetcher);
 
-	// const {
-	// 	data: invites,
-	// 	error,
-	// 	isLoading,
-	// 	mutate,
-	// } = useSWR(
-	// 	propertyId ? ["invitesSent", propertyId] : null,
-	// 	([_, propertyId]) => fetcher(propertyId),
-	// );
-
-	// useEffect(() => {
-	// 	if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
-	// 		setFinishWelcome(true);
-	// 	}
-	// }, [finishWelcome, invites, setFinishWelcome]);
+	useEffect(() => {
+		if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
+			setFinishWelcome(true);
+		}
+	}, [finishWelcome, invites, setFinishWelcome]);
 
 	const [fadeOut, setFadeOut] = useState(false);
 	const [email, setEmail] = useState("");
@@ -178,6 +166,12 @@ export function InviteCard({
 						<input
 							name="leaseId"
 							defaultValue={lease.id}
+							readOnly
+							className="hidden"
+						/>
+						<input
+							name="propertyId"
+							defaultValue={propertyId}
 							readOnly
 							className="hidden"
 						/>
