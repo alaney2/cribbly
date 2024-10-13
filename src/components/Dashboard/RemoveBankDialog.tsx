@@ -13,13 +13,14 @@ import { Checkbox, CheckboxField } from "@/components/catalyst/checkbox";
 import { Field, Label } from "@/components/catalyst/fieldset";
 import { toast } from "sonner";
 import type { PlaidAccount } from "./Account";
+
 type BankDialogProps = {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
 	bank_details: string;
 	account_id: string;
-	bankAccounts: PlaidAccount[];
-	setBankAccounts: (bankAccounts: PlaidAccount[]) => void;
+	bankAccounts: any[] | undefined;
+	mutate: () => void;
 };
 
 export function RemoveBankDialog({
@@ -28,7 +29,7 @@ export function RemoveBankDialog({
 	bank_details,
 	account_id,
 	bankAccounts,
-	setBankAccounts,
+	mutate,
 }: BankDialogProps) {
 	const [checked, setChecked] = useState(false);
 
@@ -37,26 +38,27 @@ export function RemoveBankDialog({
 	}, []);
 
 	const handleDeleteBank = async () => {
+		const loading = toast.loading("Removing bank account...");
 		const supabase = createClient();
 		const {
 			data: { user },
 		} = await supabase.auth.getUser();
 		if (!user) return;
 		const { error } = await supabase
-			.from("plaid_accounts")
+			.from("bank_accounts")
 			.delete()
 			.eq("user_id", user.id)
 			.eq("account_id", account_id);
 
 		if (error) {
 			console.error("Error removing account:", error);
+			toast.dismiss(loading);
 			toast.error("Error removing account");
+		} else {
+			mutate();
+			toast.dismiss(loading);
+			toast.success("Account removed successfully");
 		}
-		setBankAccounts(
-			bankAccounts.filter(
-				(account: PlaidAccount) => account.account_id !== account_id,
-			),
-		);
 	};
 
 	return (

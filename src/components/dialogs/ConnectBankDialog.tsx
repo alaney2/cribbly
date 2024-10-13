@@ -11,24 +11,27 @@ import {
 } from "@/components/catalyst/dialog";
 import { Heading, Subheading } from "@/components/catalyst/heading";
 import { Text } from "@/components/catalyst/text";
-import { RentCardInDialog } from "@/components/PropertySettings/RentCardInDialog";
-import { Button } from "@/components/catalyst/button";
+import {
+	Description,
+	Fieldset,
+	Label,
+	Legend,
+} from "@/components/catalyst/fieldset";
+import { Radio, RadioField, RadioGroup } from "@/components/catalyst/radio";
 
-type NewLeaseDialogProps = {
+type ConnectBankDialogProps = {
 	isOpen: boolean;
 	onClose: () => void;
-	propertyId: string;
-	// dialogBody: React.ReactNode;
-	// dialogActions: React.ReactNode;
+	dialogBody: React.ReactNode;
+	dialogActions: React.ReactNode;
 };
 
-export function NewLeaseDialog({
+export function ConnectBankDialog({
 	isOpen,
 	onClose,
-	propertyId,
-	// dialogBody,
-	// dialogActions,
-}: NewLeaseDialogProps) {
+	dialogBody,
+	dialogActions,
+}: ConnectBankDialogProps) {
 	const isMobile = useMediaQuery("(max-width: 640px)");
 	const [isMounted, setIsMounted] = useState(false);
 
@@ -39,21 +42,6 @@ export function NewLeaseDialog({
 	if (!isMounted) {
 		return null;
 	}
-
-	const dialogBody = (
-		<RentCardInDialog propertyId={propertyId} buttonOnClick={onClose} />
-	);
-
-	const dialogActions = (
-		<>
-			<Button onClick={onClose} className="w-full">
-				Cancel
-			</Button>
-			<Button onClick={onClose} className="w-full">
-				Create
-			</Button>
-		</>
-	);
 
 	if (isMobile) {
 		return (
@@ -68,22 +56,18 @@ export function NewLeaseDialog({
 						<div className="max-w-md w-full mx-auto overflow-auto p-4 rounded-t-[10px]">
 							<Drawer.Handle />
 							<Drawer.Title asChild className="mt-8">
-								<Subheading level={1}>Lease Details</Subheading>
+								<Subheading level={1}>Template heading</Subheading>
 							</Drawer.Title>
 							<Drawer.Description
 								asChild
-								className="leading-6 mt-2 text-gray-600 mb-4"
+								className="leading-6 mt-2 text-gray-600"
 							>
-								<Text>
-									Charges are billed on the start date, and then the first of
-									each month. After the lease starts, this information cannot be
-									changed.
-								</Text>
+								<Text>Template text</Text>
 							</Drawer.Description>
 							{dialogBody}
-							{/* <div className="flex flex-col mt-8 space-y-2">
+							<div className="flex flex-col mt-8 space-y-2">
 								{dialogActions}
-							</div> */}
+							</div>
 						</div>
 					</Drawer.Content>
 				</Drawer.Portal>
@@ -92,14 +76,11 @@ export function NewLeaseDialog({
 	}
 	return (
 		<>
-			<Dialog open={isOpen} onClose={onClose} size="xl">
-				<DialogTitle>Lease Details</DialogTitle>
-				<DialogDescription>
-					Charges are billed on the start date, and then the first of each
-					month. After the lease starts, this information cannot be changed.
-				</DialogDescription>
+			<Dialog open={isOpen} onClose={onClose}>
+				<DialogTitle>Title</DialogTitle>
+				<DialogDescription>Description</DialogDescription>
 				<DialogBody>{dialogBody}</DialogBody>
-				{/* <DialogActions>{dialogActions}</DialogActions> */}
+				<DialogActions>{dialogActions}</DialogActions>
 			</Dialog>
 		</>
 	);

@@ -108,7 +108,7 @@ export function LeaseGrid() {
 
 		const statusConfig = {
 			future: {
-				bgColor: "bg-blue-500/80",
+				bgColor: "bg-blue-500/90",
 				icon: <ClockIcon className="h-4 w-4 mr-1" />,
 				text: "Future",
 			},
@@ -173,7 +173,18 @@ export function LeaseGrid() {
 				<Heading className="text-2xl font-semibold text-gray-900">
 					Leases
 				</Heading>
-				<Button color="blue" onClick={() => setIsDialogOpen(true)}>
+				<Button
+					color="blue"
+					onClick={() => setIsDialogOpen(true)}
+					className="sm:hidden"
+				>
+					+ Create
+				</Button>
+				<Button
+					color="blue"
+					onClick={() => setIsDialogOpen(true)}
+					className="hidden sm:block"
+				>
 					+ Create Lease
 				</Button>
 			</div>

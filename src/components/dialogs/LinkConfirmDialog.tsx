@@ -21,12 +21,14 @@ type LinkConfirmDialogProps = {
 	setIsOpen: (isOpen: boolean) => void;
 	dialogBody?: React.ReactNode;
 	dialogActions: React.ReactNode;
+	isTeller?: boolean;
 };
 export function LinkConfirmDialog({
 	isOpen,
 	setIsOpen,
 	dialogBody,
 	dialogActions,
+	isTeller = true,
 }: LinkConfirmDialogProps) {
 	const isMobile = useMediaQuery("(max-width: 640px)");
 	const [isMounted, setIsMounted] = useState(false);
@@ -46,7 +48,6 @@ export function LinkConfirmDialog({
 				onOpenChange={(open) => {
 					setIsOpen(open);
 				}}
-				// dismissible={false}
 				repositionInputs={false}
 			>
 				<Drawer.Portal>
@@ -64,10 +65,17 @@ export function LinkConfirmDialog({
 								asChild
 								className="leading-6 mt-2 text-gray-600"
 							>
-								<Text>
-									In order to verify your bank account information, you will be
-									redirected to our third-party partner, Plaid.
-								</Text>
+								{isTeller ? (
+									<Text>
+										In order to connect your bank account information, you will
+										be redirected to our third-party partner, Teller.
+									</Text>
+								) : (
+									<Text>
+										In order to connect your bank account information, you will
+										be redirected to our third-party partner, Plaid.
+									</Text>
+								)}
 							</Drawer.Description>
 							{dialogBody}
 							<div className="flex flex-col mt-8 space-y-2 w-full">
@@ -84,8 +92,17 @@ export function LinkConfirmDialog({
 			<Dialog open={isOpen} onClose={setIsOpen} size="md">
 				<DialogTitle>Link Bank Account</DialogTitle>
 				<DialogDescription>
-					In order to verify your bank account information, you will be
-					redirected to our third-party partner, Plaid.
+					{isTeller ? (
+						<Text>
+							In order to connect your bank account information, you will be
+							redirected to our third-party partner, Teller.
+						</Text>
+					) : (
+						<Text>
+							In order to connect your bank account information, you will be
+							redirected to our third-party partner, Plaid.
+						</Text>
+					)}
 				</DialogDescription>
 				<DialogBody>{dialogBody}</DialogBody>
 				<DialogActions>{dialogActions}</DialogActions>

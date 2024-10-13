@@ -23,18 +23,18 @@ export default async function DashboardAccount({
 	const fullName = userTableUser.full_name;
 	const email = userTableUser.email;
 
-	const { data: plaidAccounts, error: plaidAccountsError } = await supabase
-		.from("plaid_accounts")
-		.select()
-		.eq("user_id", user.id)
-		.order("use_for_payouts", { ascending: false });
+	// const { data: plaidAccounts, error: plaidAccountsError } = await supabase
+	// 	.from("plaid_accounts")
+	// 	.select()
+	// 	.eq("user_id", user.id)
+	// 	.order("use_for_payouts", { ascending: false });
 
 	return (
 		<>
 			<Account
 				fullName={fullName}
 				email={email}
-				plaidAccounts={plaidAccounts || []}
+				// plaidAccounts={plaidAccounts || []}
 			/>
 			{children}
 		</>

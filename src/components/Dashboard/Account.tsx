@@ -9,6 +9,9 @@ import { Input } from "@/components/catalyst/input";
 import { Divider } from "@/components/catalyst/divider";
 import { PlaidLinkButton } from "@/components/PlaidLinkButton";
 import { LinkConfirmDialog } from "@/components/dialogs/LinkConfirmDialog";
+import { TellerConnectButton } from "../teller/TellerConnectButton";
+import useSWR from "swr";
+import { Text, Strong } from "@/components/catalyst/text";
 
 export type PlaidAccount = {
 	account_id: string;
@@ -27,17 +30,37 @@ export type PlaidAccount = {
 type AccountProps = {
 	fullName: string;
 	email: string;
-	plaidAccounts: PlaidAccount[];
 };
 
-export function Account({ fullName, email, plaidAccounts }: AccountProps) {
+const fetcher = async () => {
+	const supabase = createClient();
+
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+	if (!user) throw new Error("User not found");
+
+	const { data, error } = await supabase
+		.from("bank_accounts")
+		.select("*")
+		.eq("user_id", user.id);
+
+	if (error) throw error;
+	return data;
+};
+
+export function Account({ fullName, email }: AccountProps) {
 	const [isRemoveBankDialogOpen, setIsRemoveBankDialogOpen] = useState(false);
 	const [editedName, setEditedName] = useState(fullName);
 	const [bankDetails, setBankDetails] = useState("");
 	const [accountId, setAccountId] = useState("");
-	const [bankAccounts, setBankAccounts] =
-		useState<PlaidAccount[]>(plaidAccounts);
 	const [isLinkConfirmDialogOpen, setIsLinkConfirmDialogOpen] = useState(false);
+
+	const {
+		data: bankAccounts,
+		error,
+		mutate,
+	} = useSWR("bank_accounts", fetcher);
 
 	const handleSaveName = async (
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -68,48 +91,15 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 		setEditedName(fullName);
 	};
 
-	const setPrimaryAccount = async (accountId: string) => {
-		const supabase = createClient();
-		const {
-			data: { user },
-		} = await supabase.auth.getUser();
-		if (!user) {
-			return;
-		}
-
-		// First, set all accounts to not be primary
-		await supabase
-			.from("plaid_accounts")
-			.update({ use_for_payouts: false })
-			.eq("user_id", user.id);
-
-		// Then, set the selected account as primary
-		const { error } = await supabase
-			.from("plaid_accounts")
-			.update({ use_for_payouts: true })
-			.eq("account_id", accountId);
-
-		if (error) {
-			console.error(error);
-			toast.error("Failed to set primary account");
-		} else {
-			const updatedAccounts = bankAccounts.map((account) => {
-				if (account.account_id === accountId) {
-					return { ...account, use_for_payouts: true };
-				}
-				return { ...account, use_for_payouts: false };
-			});
-			setBankAccounts(updatedAccounts);
-			toast.success("Primary account updated");
-		}
+	const handlePlaidSuccess = (newAccounts: PlaidAccount[]) => {
+		setIsLinkConfirmDialogOpen(false);
+		mutate();
 	};
 
-	const handlePlaidSuccess = (newAccounts: PlaidAccount[]) => {
-		setBankAccounts(newAccounts);
-		if (newAccounts.length === 1) {
-			setPrimaryAccount(newAccounts[0].account_id);
-		}
+	const handleTellerSuccess = (newAccounts: any[]) => {
 		setIsLinkConfirmDialogOpen(false);
+		mutate();
+		console.log("newAccounts", newAccounts);
 	};
 
 	return (
@@ -176,46 +166,28 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 					</div>
 
 					<div>
-						<h2 className="text-base font-semibold leading-7 text-gray-900">
-							Bank accounts
-						</h2>
 						<p className="mt-1 text-sm leading-6 text-gray-500 dark:text-neutral-200">
-							Connect bank accounts to your account
+							Bank accounts
 						</p>
-						{/* <Divider className="mt-6" /> */}
+
 						<ul className="mt-6 text-sm leading-6">
 							{bankAccounts?.map((bank_account) => (
 								<li key={bank_account.account_id} className="">
 									<Divider key={bank_account.account_id} />
 									<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-2 md:gap-x-6 py-6">
-										<div className="font-medium text-gray-700 dark:text-neutral-300 flex items-center">
-											{bank_account.name} ••••{bank_account.mask}
-											{/* {bank_account.use_for_payouts && (
-												<StarIcon
-													className="h-5 w-5 text-yellow-400 ml-2"
-													aria-hidden="true"
-												/>
-											)} */}
-										</div>
+										<Text>
+											{bank_account.institution_name} - {bank_account.name}
+											<span className="ml-2">
+												<Strong>•••• {bank_account.last_four}</Strong>
+											</span>
+										</Text>
 										<div className="flex justify-between md:justify-end items-center space-x-4">
-											{/* {!bank_account.use_for_payouts && (
-												<button
-													type="button"
-													className="text-sm md:px-2 font-semibold text-blue-600 hover:text-blue-500"
-													onClick={async () =>
-														await setPrimaryAccount(bank_account.account_id)
-													}
-												>
-													Set as primary
-												</button>
-											)} */}
-											{/* {!bank_account.use_for_payouts && ( */}
 											<button
 												type="button"
 												className="md:px-2 font-semibold text-red-600 hover:text-red-500"
 												onClick={() => {
 													setBankDetails(
-														`${bank_account.name} ••••${bank_account.mask}`,
+														`${bank_account.institution_name} ${bank_account.name} ••••${bank_account.last_four}`,
 													);
 													setAccountId(bank_account.account_id);
 													setIsRemoveBankDialogOpen(true);
@@ -223,7 +195,6 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 											>
 												Remove <span className="hidden sm:inline">account</span>
 											</button>
-											{/* )} */}
 										</div>
 									</div>
 								</li>
@@ -235,7 +206,7 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 							bank_details={bankDetails}
 							account_id={accountId}
 							bankAccounts={bankAccounts}
-							setBankAccounts={setBankAccounts}
+							mutate={mutate}
 						/>
 						<Divider />
 						<div className="flex pt-6">
@@ -258,7 +229,7 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 										>
 											Cancel
 										</Button>
-										<PlaidLinkButton
+										{/* <PlaidLinkButton
 											onSuccess={(newAccounts) => {
 												handlePlaidSuccess(newAccounts);
 												setIsLinkConfirmDialogOpen(false);
@@ -268,7 +239,15 @@ export function Account({ fullName, email, plaidAccounts }: AccountProps) {
 											}}
 										>
 											<Button color="blue">Continue</Button>
-										</PlaidLinkButton>
+										</PlaidLinkButton> */}
+										<TellerConnectButton
+											onSuccess={handleTellerSuccess}
+											onClick={() => {
+												setIsLinkConfirmDialogOpen(false);
+											}}
+										>
+											<Button color="blue">Continue</Button>
+										</TellerConnectButton>
 									</>
 								}
 							/>

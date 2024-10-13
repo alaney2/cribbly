@@ -726,3 +726,21 @@ export async function deleteLease(leaseId: string) {
 	// Revalidate the dashboard path to reflect the changes
 	revalidatePath("/dashboard/leases");
 }
+
+export async function setBankForProperty(
+	propertyId: string,
+	accountId: string,
+) {
+	const supabase = createClient();
+
+	const { data, error } = await supabase
+		.from("properties")
+		.update({ account_id: accountId })
+		.eq("id", propertyId);
+
+	if (error) {
+		console.error("Error setting bank for property:", error);
+		throw new Error("Error setting bank for property");
+	}
+	return data;
+}
