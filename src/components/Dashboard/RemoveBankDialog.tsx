@@ -19,7 +19,6 @@ type BankDialogProps = {
 	setIsOpen: (isOpen: boolean) => void;
 	bank_details: string;
 	account_id: string;
-	bankAccounts: any[] | undefined;
 	mutate: () => void;
 };
 
@@ -28,7 +27,6 @@ export function RemoveBankDialog({
 	setIsOpen,
 	bank_details,
 	account_id,
-	bankAccounts,
 	mutate,
 }: BankDialogProps) {
 	const [checked, setChecked] = useState(false);

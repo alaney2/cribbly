@@ -205,7 +205,6 @@ export function Account({ fullName, email }: AccountProps) {
 							setIsOpen={setIsRemoveBankDialogOpen}
 							bank_details={bankDetails}
 							account_id={accountId}
-							bankAccounts={bankAccounts}
 							mutate={mutate}
 						/>
 						<Divider />

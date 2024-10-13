@@ -16,8 +16,6 @@ import { TellerConnectButton } from "@/components/teller/TellerConnectButton";
 import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
 type BankSelectProps = {
-	// userId: string;
-	// plaidAccounts: any[] | undefined;
 	setIsBankSelected?: (isBankSelected: boolean) => void;
 };
 

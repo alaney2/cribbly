@@ -25,9 +25,7 @@ export function PropertiesDropdown({
 	// currentPropertyId,
 	// streetAddress,
 }) {
-	const { mutate } = useSWRConfig();
 	const { closeSidebar } = useContext(SidebarContext);
-	const router = useRouter();
 	const { currentPropertyId, setCurrentPropertyId } = useCurrentProperty();
 	const currentProperty = properties?.find(
 		(property) => property.id === currentPropertyId,
