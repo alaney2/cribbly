@@ -12,7 +12,7 @@ import {
 const faqs = [
 	[
 		{
-			question: "What's Cribbly, and who the heck is it for?",
+			question: "What's Cribbly, and who is it for?",
 			answer:
 				"Cribbly is property management software for independent landlords managing homes and apartments. It is the source of truth for all your property management needs, from rent collection to tax preparation.",
 		},
