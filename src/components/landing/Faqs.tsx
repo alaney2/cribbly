@@ -49,7 +49,7 @@ const faqs = [
 		},
 		{
 			question:
-				"What types of properties can be managed using this property management sotware?",
+				"What types of properties can be managed using Cribbly?",
 			answer:
 				"All types of properties. Whether it's a single-family home, a condo, or a 20-unit apartment building, Cribbly's got you covered.",
 		},
