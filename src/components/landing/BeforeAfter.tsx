@@ -26,7 +26,7 @@ export function BeforeAfter() {
     <section
       id="benefits"
       aria-label="We make property management easy."
-      className="relative py-20 sm:py-32 overflow-hidden shadow-sm bg-gray-100 text-zinc-800 "
+      className="relative py-20 sm:py-32 overflow-hidden shadow-sm bg-slate-100 text-zinc-800 "
     >
       <Container>
         <div className="mx-auto md:max-w-4xl md:text-center z-20">
