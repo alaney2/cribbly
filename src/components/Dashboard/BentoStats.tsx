@@ -14,8 +14,6 @@ import { BentoMaintenanceTable } from "@/components/bento-stuff/BentoMaintenance
 import { BarGraph } from "@/components/bento-stuff/BarGraph";
 import { Button } from "@/components/catalyst/button";
 import { motion } from "framer-motion";
-import { createMoovAccount } from "@/utils/moov/actions";
-import { loadMoov, type Drops } from "@moovio/moov-js";
 import { useState } from "react";
 import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 

@@ -73,7 +73,7 @@ export function MaintenanceTable({
 		priority: "Medium",
 		user_id: userId,
 	});
-
+	// const [isCurrentUserRequest, setIsCurrentUserRequest] = useState(true);
 	const isCurrentUserRequest =
 		currentRequest.id === "0" || currentRequest.user_id === userId;
 
@@ -373,7 +373,26 @@ export function MaintenanceTable({
 								</Button>
 							</DialogActions>
 						) : (
-							<DialogActions>
+							<div className="flex flex-col sm:flex-row w-full items-center sm:justify-between gap-y-2 sm:gap-y-0 mt-8">
+								<div className="flex flex-col sm:flex-row gap-4 sm:gap-x-2 w-full sm:w-auto">
+									<Button
+										type="submit"
+										color="blue"
+										className="w-full sm:w-auto order-first sm:order-last"
+									>
+										Submit
+									</Button>
+									<Button
+										type="button"
+										plain
+										onClick={() => {
+											setIsDialogOpen(false);
+										}}
+										className="w-full sm:w-auto hidden sm:block"
+									>
+										Cancel
+									</Button>
+								</div>
 								<Button
 									type="button"
 									color="red"
@@ -383,14 +402,7 @@ export function MaintenanceTable({
 								>
 									Delete
 								</Button>
-								<Button
-									type="submit"
-									color="blue"
-									className="w-full sm:w-auto order-first sm:order-last"
-								>
-									Update
-								</Button>
-							</DialogActions>
+							</div>
 						)}
 					</form>
 				}

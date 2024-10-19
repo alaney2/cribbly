@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/catalyst/button";
 import logo from "@/images/icon.png";
 import { TextField } from "@/components/default/Fields";
@@ -14,6 +14,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Heading } from "@/components/catalyst/heading";
+import { debounce } from "lodash";
 
 const formClasses = `
     block w-full mt-6 h-11 appearance-none rounded-lg px-3 py-2
@@ -44,6 +45,33 @@ export function SignInUp({
 	const [currentStep, setCurrentStep] = useState(0);
 	const [email, setEmail] = useState("");
 	const [showInvalidEmail, setShowInvalidEmail] = useState(false);
+	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+	const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		setIsButtonDisabled(true);
+		const formData = new FormData(event.currentTarget);
+
+		const loading = toast.loading("Sending...");
+		try {
+			if (isValidEmail(email)) {
+				await signInWithOtp(formData);
+				setFadeOut(true);
+				setTimeout(() => {
+					setCurrentStep(1);
+				}, 0);
+				toast.dismiss(loading);
+				toast.success("OTP sent successfully");
+			} else {
+				setShowInvalidEmail(true);
+				setIsButtonDisabled(false);
+			}
+		} catch (error) {
+			setIsButtonDisabled(false);
+			toast.error("An error occurred, please try again");
+			console.error(error);
+		}
+	};
 
 	useEffect(() => {
 		setFadeOut(false);
@@ -56,6 +84,7 @@ export function SignInUp({
 		setEmail("");
 		setCurrentStep(0);
 		setShowInvalidEmail(false);
+		setIsButtonDisabled(false);
 	};
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,17 +102,6 @@ export function SignInUp({
 		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 		return emailRegex.test(email.toLowerCase());
 	};
-
-	// const handleButtonSubmit = () => {
-	// 	if (isValidEmail(email)) {
-	// 		setFadeOut(true);
-	// 		setTimeout(() => {
-	// 			setCurrentStep(1);
-	// 		}, 400);
-	// 	} else {
-	// 		setShowInvalidEmail(true);
-	// 	}
-	// };
 
 	const renderStepContent = (stepIndex: number) => {
 		switch (stepIndex) {
@@ -118,25 +136,8 @@ export function SignInUp({
 
 							<form
 								className=""
-								action={async (formData) => {
-									const loading = toast.loading("Sending...");
-									try {
-										if (isValidEmail(email)) {
-											await signInWithOtp(formData);
-											setFadeOut(true);
-											setTimeout(() => {
-												setCurrentStep(1);
-											}, 400);
-											toast.dismiss(loading);
-											toast.success("OTP sent successfully");
-										} else {
-											setShowInvalidEmail(true);
-										}
-									} catch (error) {
-										toast.error("An error occurred, please try again");
-										console.error(error);
-									}
-								}}
+								// action={handleFormSubmit}
+								onSubmit={handleFormSubmit}
 							>
 								{showEmailInput && (
 									<input
@@ -164,10 +165,9 @@ export function SignInUp({
 									onClick={
 										buttonType === "button" ? handleButtonClick : undefined
 									}
+									disabled={isButtonDisabled}
 								>
-									{/* <span className="text-sm leading-6 font-semibold"> */}
 									Continue with Email
-									{/* </span> */}
 								</Button>
 							</form>
 							{!signIn && (

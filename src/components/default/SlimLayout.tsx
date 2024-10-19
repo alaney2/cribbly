@@ -1,9 +1,16 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import Image from "next/image";
 import backgroundDefault from "@/images/background-auth.jpg";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Boxes } from "@/components/aceternity/background-boxes";
+// import { Boxes } from "@/components/aceternity/background-boxes";
+import dynamic from "next/dynamic";
+
+const Boxes = lazy(() =>
+	import("@/components/aceternity/background-boxes").then((module) => ({
+		default: module.Boxes,
+	})),
+);
 
 type SlimLayoutProps = {
 	children: React.ReactNode;
@@ -51,7 +58,11 @@ export function SlimLayout({
 									alt=""
 									className="absolute inset-0 h-full w-full object-cover z-0 "
 								/>
-								<Boxes />
+								<Suspense
+									fallback={<div className="w-full h-full bg-blue-500" />}
+								>
+									<Boxes />
+								</Suspense>
 								<h1
 									className={
 										"md:text-2xl xl:text-3xl text-xl text-white font-medium relative z-20"
