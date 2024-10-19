@@ -7,7 +7,7 @@ export default async function LeasesPage() {
 	return (
 		<main className="">
 			<LeaseGrid />
-			<TellerConnect />
+			{/* <TellerConnect /> */}
 		</main>
 	);
 }

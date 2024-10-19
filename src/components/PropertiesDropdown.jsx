@@ -16,7 +16,7 @@ import {
 import { updateCurrentProperty } from "@/utils/supabase/actions";
 import { useRouter } from "next/navigation";
 import { useSWRConfig } from "swr";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { SidebarContext } from "@/components/catalyst/sidebar-layout";
 import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
@@ -31,9 +31,15 @@ export function PropertiesDropdown({
 		(property) => property.id === currentPropertyId,
 	);
 
-	if (!properties || !currentProperty) {
-		setCurrentPropertyId("");
-	}
+	// if (!properties || !currentProperty) {
+	// 	setCurrentPropertyId("");
+	// }
+
+	// useEffect(() => {
+	// 	if (!properties || !currentProperty) {
+	// 		setCurrentPropertyId("");
+	// 	}
+	// }, [properties, currentProperty, setCurrentPropertyId]);
 
 	return (
 		<Dropdown>

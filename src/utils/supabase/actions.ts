@@ -195,17 +195,35 @@ export async function addPropertyNew(formData: FormData) {
 	const city = String(formData.get("city"));
 	const state = String(formData.get("state"));
 	const country = String(formData.get("country"));
-	const { data: currentProperty, error: currentPropertyError } = await supabase
-		.from("properties")
-		.select("*")
-		.eq("user_id", user.id)
-		.single();
-	if (currentProperty) {
-		await supabase.from("properties").delete().eq("id", currentProperty.id);
-	}
+	// const { data: currentProperty, error: currentPropertyError } = await supabase
+	// 	.from("properties")
+	// 	.select("*")
+	// 	.eq("user_id", user.id)
+	// 	.single();
+	// if (currentProperty) {
+	// 	await supabase.from("properties").delete().eq("id", currentProperty.id);
+	// }
+
+	// const { data: existingProperty, error: existingPropertyError } =
+	// 	await supabase
+	// 		.from("properties")
+	// 		.select("*")
+	// 		.eq("user_id", user.id)
+	// 		.eq("street_address", street_address)
+	// 		.eq("zip", zip)
+	// 		.eq("apt", apt)
+	// 		.eq("city", city)
+	// 		.eq("state", state)
+	// 		.eq("country", country)
+	// 		.single();
+
+	// if (existingProperty) {
+	// 	throw new Error("Property already exists");
+	// }
 
 	if (!street_address || !zip || !city || !state || !country)
 		throw new Error("Missing required fields");
+
 	const { data, error } = await supabase
 		.from("properties")
 		.upsert(
@@ -220,15 +238,15 @@ export async function addPropertyNew(formData: FormData) {
 			},
 			{
 				onConflict: "user_id, street_address, zip, apt, city, state, country",
-				ignoreDuplicates: false,
+				ignoreDuplicates: true,
 			},
 		)
 		.select()
 		.single();
 
-	if (error) {
+	if (!data || error) {
 		console.error(error);
-		throw new Error("Unable to add property");
+		throw new Error("Property already exists");
 	}
 	return data;
 }
@@ -395,6 +413,8 @@ export async function deleteProperty(currentPropertyId: string) {
 	if (!propertyIds.includes(user.user_metadata.currentPropertyId)) {
 		await updateCurrentProperty(propertyData[0].id);
 	}
+
+	return propertyData[0].id;
 }
 
 export async function getSubscription() {

@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { deleteProperty } from "@/utils/supabase/actions";
 import { useSWRConfig } from "swr";
 import { useRouter } from "next/navigation";
+import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
 type DeleteProperyDialogProps = {
 	isOpen: boolean;
@@ -37,6 +38,7 @@ export function DeleteProperyDialog({
 	const [isDeleting, setIsDeleting] = useState(false);
 	const { mutate } = useSWRConfig();
 	const router = useRouter();
+	const { setCurrentPropertyId } = useCurrentProperty();
 
 	const handleDeleteProperty = async (e: { preventDefault: () => void }) => {
 		e.preventDefault();
@@ -44,11 +46,12 @@ export function DeleteProperyDialog({
 		setIsDeleting(true);
 		const toastId = toast.loading("Deleting property...");
 		try {
-			await deleteProperty(propertyId);
-			mutate("properties");
-			mutate(["propertyRent", propertyId]);
-			mutate(["tenants", propertyId]);
-			mutate(`documents-${propertyId}`);
+			const newPropertyId = await deleteProperty(propertyId);
+			setCurrentPropertyId(newPropertyId);
+			// mutate("properties");
+			// mutate(["propertyRent", propertyId]);
+			// mutate(["tenants", propertyId]);
+			// mutate(`documents-${propertyId}`);
 			toast.success("Property has been deleted", {
 				id: toastId,
 				duration: 5000,
@@ -164,8 +167,10 @@ export function DeleteProperyDialog({
 								className="bg-red-300/75 px-3 py-2 mb-4 font-semibold text-sm rounded-lg"
 							>
 								<AlertTitle>
-									<span className="text-white">Warning: </span>
-									<span>This action is not reversible. Please be certain.</span>
+									<span className="text-red-600">Warning: </span>
+									<span className="">
+										This action is not reversible. Please be certain.
+									</span>
 								</AlertTitle>
 							</Alert>
 							<Field className="items-center">

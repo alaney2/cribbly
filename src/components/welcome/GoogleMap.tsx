@@ -19,7 +19,7 @@ import { addPropertyNew } from "@/utils/supabase/actions";
 import { useRouter } from "next/navigation";
 import { updateCurrentProperty } from "@/utils/supabase/actions";
 import React from "react";
-import { set } from "lodash";
+import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -57,6 +57,7 @@ export const AddressAutocomplete = ({
 		zip: currentProperty?.zip || "",
 		country: "United States",
 	});
+	const { setCurrentPropertyId } = useCurrentProperty();
 
 	const [inputDisabled, setInputDisabled] = useState(
 		currentProperty &&
@@ -216,6 +217,8 @@ export const AddressAutocomplete = ({
 					setIsButtonDisabled(true);
 					const promise = (async () => {
 						const result = await addPropertyNew(formData);
+						console.log("result", result);
+						setCurrentPropertyId(result.id);
 						await updateCurrentProperty(result.id);
 						return result;
 					})();
