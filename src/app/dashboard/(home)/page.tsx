@@ -9,9 +9,9 @@ import {
 	updateCurrentProperty,
 } from "@/utils/supabase/actions";
 import { headers } from "next/headers";
-import { NewProperty } from "@/components/Dashboard/NewProperty";
 import { supabaseAdmin } from "@/utils/supabase/admin";
 import { DashboardWrapper } from "@/components/Dashboard/DashboardWrapper";
+import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
 export default async function CurrentProperty() {
 	const supabase = createClient();

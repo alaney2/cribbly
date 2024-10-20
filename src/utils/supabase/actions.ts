@@ -410,11 +410,14 @@ export async function deleteProperty(currentPropertyId: string) {
 		return;
 	}
 	const propertyIds = propertyData.map((property) => property.id);
-	if (!propertyIds.includes(user.user_metadata.currentPropertyId)) {
+	if (
+		!propertyIds.includes(user.user_metadata.currentPropertyId) &&
+		propertyIds.length > 0
+	) {
 		await updateCurrentProperty(propertyData[0].id);
 	}
 
-	return propertyData[0].id;
+	return propertyData?.[0]?.id || null;
 }
 
 export async function getSubscription() {

@@ -131,10 +131,11 @@ export async function AppLayout({
 					<Sidebar>
 						<SidebarHeader>
 							<PropertiesDropdown properties={properties} />
-							<AppLayoutTop />
+							{currentPropertyId && <AppLayoutTop />}
 						</SidebarHeader>
 						<SidebarBody>
-							<AppLayoutLinks />
+							{currentPropertyId && <AppLayoutLinks />}
+
 							<SidebarSpacer />
 							<SidebarSection>
 								<SidebarItem href={"mailto:support@cribbly.io"}>

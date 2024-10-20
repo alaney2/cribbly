@@ -2,8 +2,15 @@
 import { Heading, Subheading } from "@/components/catalyst/heading";
 import { BentoStats } from "@/components/Dashboard/BentoStats";
 import { PropertyStats } from "@/components/Dashboard/PropertyStats";
+import { NewProperty } from "@/components/Dashboard/NewProperty";
+import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 
 export function DashboardWrapper() {
+	const { currentPropertyId } = useCurrentProperty();
+	if (!currentPropertyId) {
+		return <NewProperty />;
+	}
+
 	return (
 		<div className="h-full">
 			{/* {showBankText && (
