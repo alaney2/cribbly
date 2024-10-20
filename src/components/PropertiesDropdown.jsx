@@ -45,7 +45,9 @@ export function PropertiesDropdown({
 		<Dropdown>
 			<DropdownButton as={SidebarItem} className="lg:mb-2.5">
 				{/* <Avatar src="/tailwind-logo.svg" /> */}
-				<SidebarLabel>{currentProperty?.street_address}</SidebarLabel>
+				<SidebarLabel>
+					{currentProperty?.street_address || "Select property"}
+				</SidebarLabel>
 				<ChevronDownIcon />
 			</DropdownButton>
 
