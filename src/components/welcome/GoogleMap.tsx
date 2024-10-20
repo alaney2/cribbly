@@ -20,6 +20,8 @@ import { useRouter } from "next/navigation";
 import { updateCurrentProperty } from "@/utils/supabase/actions";
 import React from "react";
 import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
+import { motion, AnimatePresence } from "framer-motion";
+import { Text } from "@/components/catalyst/text";
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -75,6 +77,7 @@ export const AddressAutocomplete = ({
 	const places = useMapsLibrary("places");
 	const router = useRouter();
 	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+	const [showAptField, setShowAptField] = useState(false);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -114,8 +117,10 @@ export const AddressAutocomplete = ({
 						status === google.maps.places.PlacesServiceStatus.OK &&
 						predictions
 					) {
-						const filteredPredictions = predictions.filter((p) =>
-							/^\d/.test(p.description),
+						const filteredPredictions = predictions.filter(
+							(p) =>
+								p.types.includes("street_address") ||
+								p.types.includes("premise"),
 						);
 						setSuggestions(
 							filteredPredictions.map((p) => ({
@@ -240,7 +245,7 @@ export const AddressAutocomplete = ({
 							} else {
 								router.push("/dashboard/settings");
 							}
-							return "Property added successfully!";
+							return "Property added!";
 						},
 						error: (err) => `Error adding property: ${err.message}`,
 					});
@@ -307,17 +312,27 @@ export const AddressAutocomplete = ({
 								</ul>
 							)}
 						</div>
-						<Field>
-							<Label>Apt, Suite, etc (optional)</Label>
-							<Input
-								type="text"
-								name="apt"
-								value={address.apt}
-								onChange={handleInputChange}
-								autoComplete="off"
-								readOnly={inputDisabled}
-							/>
-						</Field>
+						{showAptField ? (
+							<Field>
+								<Label>Apt, Suite, etc (optional)</Label>
+								<Input
+									type="text"
+									name="apt"
+									value={address.apt}
+									onChange={handleInputChange}
+									autoComplete="off"
+									readOnly={inputDisabled}
+								/>
+							</Field>
+						) : (
+							<button
+								type="button"
+								onClick={() => setShowAptField(true)}
+								className="font-medium text-base/6 text-zinc-950 data-[disabled]:opacity-50 sm:text-sm/6 dark:text-white cursor-default underline"
+							>
+								Add apt, suite, etc. (optional)
+							</button>
+						)}
 						<Field>
 							<Label>City</Label>
 							<Input
@@ -326,8 +341,8 @@ export const AddressAutocomplete = ({
 								value={address.city}
 								onChange={handleInputChange}
 								autoComplete="off"
+								readOnly
 								required
-								readOnly={inputDisabled}
 							/>
 						</Field>
 						<div className="flex space-x-4">
@@ -356,18 +371,19 @@ export const AddressAutocomplete = ({
 								/>
 							</Field>
 						</div>
-						<Field>
-							<Label>Country</Label>
-							<Input
-								type="text"
-								name="country"
-								value={address.country}
-								onChange={handleInputChange}
-								autoComplete="off"
-								readOnly
-								required
-							/>
-						</Field>
+						{/* <Field>
+							<Label>Country</Label> */}
+						<Input
+							type="text"
+							name="country"
+							value={address.country}
+							onChange={handleInputChange}
+							autoComplete="off"
+							readOnly
+							required
+							className="hidden"
+						/>
+						{/* </Field> */}
 					</FieldGroup>
 				</Fieldset>
 				{inputDisabled ? (

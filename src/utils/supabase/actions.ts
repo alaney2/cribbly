@@ -173,16 +173,16 @@ export async function createLease(formData: FormData) {
 			sd_status: securityDepositSwitch === "on" ? "unpaid" : "none",
 			status: "active",
 			updated_at: new Date(),
-		});
+		})
+		.select()
+		.single();
 
 	if (leaseError) {
 		console.error(leaseError);
 		throw new Error("Error adding lease");
 	}
 
-	return {
-		message: "Success!",
-	};
+	return leaseData;
 }
 
 export async function addPropertyNew(formData: FormData) {
@@ -191,7 +191,7 @@ export async function addPropertyNew(formData: FormData) {
 	const supabase = createClient();
 	const street_address = String(formData.get("street"));
 	const zip = String(formData.get("zip"));
-	const apt = String(formData.get("apt"));
+	const apt = String(formData.get("apt") || ""); // Convert to empty string if null or undefined
 	const city = String(formData.get("city"));
 	const state = String(formData.get("state"));
 	const country = String(formData.get("country"));
@@ -366,8 +366,8 @@ export async function deleteProperty(currentPropertyId: string) {
 	if (!user) return;
 	const supabase = createClient();
 
-	const { error: rentError } = await supabase
-		.from("property_rents")
+	const { error: leaseError } = await supabase
+		.from("leases")
 		.delete()
 		.eq("property_id", currentPropertyId)
 		.select();
@@ -392,9 +392,9 @@ export async function deleteProperty(currentPropertyId: string) {
 		.eq("property_id", currentPropertyId)
 		.select();
 
-	if (rentError) {
-		console.error(rentError);
-		throw new Error("Error deleting rents");
+	if (leaseError) {
+		console.error(leaseError);
+		throw new Error("Error deleting lease/s");
 	}
 	if (error) {
 		console.error(error);

@@ -26,7 +26,7 @@ export function calculateProratedRent(
 ) {
 	const daysInPeriod = differenceInDays(periodEnd, periodStart) + 1;
 	const daysInMonth = getDaysInMonth(periodStart);
-	const proratedAmount = Math.round((rentAmount * daysInPeriod) / daysInMonth);
+	const proratedAmount = Math.ceil((rentAmount * daysInPeriod) / daysInMonth);
 	return proratedAmount;
 }
 

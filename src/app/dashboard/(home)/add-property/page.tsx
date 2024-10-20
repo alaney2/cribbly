@@ -6,11 +6,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { RentCard } from "@/components/PropertySettings/RentCard";
 import { RentCardInDialog } from "@/components/PropertySettings/RentCardInDialog";
 import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
+import { InviteCardInDialog } from "@/components/PropertySettings/InviteCardInDialog";
+import { BankCardInDialog } from "@/components/PropertySettings/BankCardInDialog";
+import { useRouter } from "next/navigation";
 
 export default function AddProperty() {
 	const [step, setStep] = useState(0);
+	const [lease, setLease] = useState(null);
 	const { currentPropertyId } = useCurrentProperty();
 	const totalSteps = 4;
+	const router = useRouter();
 
 	const stepVariants = {
 		hidden: { opacity: 0, y: -20 },
@@ -31,7 +36,7 @@ export default function AddProperty() {
 	};
 
 	return (
-		<div className="flex flex-col min-h-[550px] w-full max-w-2xl mx-auto sm:ring-1 ring-gray-200 rounded-lg sm:p-4">
+		<div className="flex flex-col w-full max-w-xl mx-auto sm:ring-1 ring-gray-200 rounded-lg sm:p-4">
 			<div className="w-full h-1.5 bg-gray-200 dark:bg-zinc-700 sm:rounded-full absolute top-0 left-0 sm:relative sm:mb-4 flex">
 				{[...Array(totalSteps)].map((_, i) => (
 					<div
@@ -67,36 +72,56 @@ export default function AddProperty() {
 						)}
 						{/* Add more steps here */}
 						{step === 1 && (
-							// <div className="flex justify-center">
 							<RentCardInDialog
 								buttonOnClick={() => {
 									setStep(step + 1);
 								}}
 								propertyId={currentPropertyId}
+								setLease={setLease}
 							/>
-							// </div>
 						)}
-						{step === 2 && <div>Step 3 content</div>}
+						{step === 2 && (
+							<InviteCardInDialog
+								lease={lease}
+								// buttonOnClick={() => {
+								// 	setStep(step + 1);
+								// }}
+								propertyId={currentPropertyId}
+							/>
+						)}
+						{step === 3 && <BankCardInDialog />}
 					</motion.div>
 				</AnimatePresence>
 			</div>
-			<div className="sm:flex sm:justify-between sm:mt-4">
-				{step > 0 && (
+			<>
+				{/* {step > 0 && (
 					<Button type="button" onClick={handlePrevious} plain>
 						Previous
 					</Button>
-				)}
-				{step < totalSteps - 1 && step !== 0 && (
-					<Button type="button" color="blue" onClick={handleNext}>
-						Continue
+				)} */}
+				{step === 2 && (
+					<Button
+						type="button"
+						color="blue"
+						onClick={handleNext}
+						className="w-full mt-4"
+					>
+						Skip / Continue
 					</Button>
 				)}
 				{step === totalSteps - 1 && (
-					<Button type="submit" color="blue">
-						Submit
+					<Button
+						type="submit"
+						color="blue"
+						className="w-full mt-2"
+						onClick={() => {
+							router.push("/dashboard");
+						}}
+					>
+						Done
 					</Button>
 				)}
-			</div>
+			</>
 		</div>
 	);
 }

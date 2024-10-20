@@ -37,6 +37,7 @@ type RentCardProps = {
 	setCurrentProperty?: (property: any) => void;
 	setPropertyId?: (propertyId: string) => void;
 	buttonOnClick?: () => void;
+	setLease?: (lease: any) => void;
 };
 
 const fetchLease = async (propertyId: string) => {
@@ -56,7 +57,7 @@ export function RentCardInDialog({
 	lease,
 	setCurrentProperty,
 	buttonOnClick,
-	// plaidAccounts,
+	setLease,
 }: RentCardProps) {
 	useEffect(() => {
 		if (lease) {
@@ -144,13 +145,14 @@ export function RentCardInDialog({
 						// biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
 						new Promise(async (resolve, reject) => {
 							try {
-								const data = await createLease(formData);
+								const lease = await createLease(formData);
+								setLease?.(lease);
 								if (buttonOnClick) {
 									setFadeOut(true);
 									resolve("Success");
 									setTimeout(() => {
 										buttonOnClick();
-									}, 300);
+									}, 0);
 								} else {
 									resolve("Success");
 								}
@@ -396,7 +398,12 @@ export function RentCardInDialog({
 							>
 								Add Fee
 							</Button> */}
-					<Button type="button" outline onClick={() => setIsScheduleOpen(true)}>
+					<Button
+						type="button"
+						outline
+						onClick={() => setIsScheduleOpen(true)}
+						disabled={rentAmount === 0}
+					>
 						Billing Schedule
 					</Button>
 					<div className="flex gap-x-3">

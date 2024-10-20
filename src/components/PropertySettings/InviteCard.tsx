@@ -83,7 +83,6 @@ const fetcher = async (leaseId: string) => {
 type InviteCardProps = {
 	lease: any;
 	propertyId: string;
-	setPropertyId?: (propertyId: string) => void;
 	finishWelcome?: boolean;
 	setFinishWelcome?: (finishWelcome: boolean) => void;
 };
@@ -91,7 +90,6 @@ type InviteCardProps = {
 export function InviteCard({
 	lease,
 	propertyId,
-	setPropertyId,
 	finishWelcome,
 	setFinishWelcome,
 }: InviteCardProps) {
@@ -323,7 +321,10 @@ export function InviteCard({
 							</Button>
 						</div>
 
-						<Divider strong className="mt-12 mb-8" />
+						{(invites && invites.length > 0) ||
+						(tenants && tenants.length > 0) ? (
+							<Divider strong className="mt-12 mb-8" />
+						) : null}
 
 						{invites && invites.length > 0 && (
 							<div className="mt-6">
