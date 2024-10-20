@@ -56,6 +56,7 @@ export function MaintenanceTable({
 	userId?: string;
 }) {
 	const { currentPropertyId } = useCurrentProperty();
+	if (!currentPropertyId) return null;
 	const { data: tasks, isLoading } = useSWR(["tasks", currentPropertyId], () =>
 		tasksFetcher(currentPropertyId),
 	);

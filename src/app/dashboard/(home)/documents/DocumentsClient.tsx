@@ -57,6 +57,7 @@ type Document = {
 
 export function DocumentsClient() {
 	const { currentPropertyId: propertyId } = useCurrentProperty();
+	if (!propertyId) return null;
 	const [selectedYear, setSelectedYear] = useState("2024");
 	const years = ["2024"];
 	const [viewingDocument, setViewingDocument] = useState<string | null>(null);

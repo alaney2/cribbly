@@ -13,37 +13,11 @@ export default async function TenantsPage() {
 	if (!user) redirect("/sign-in");
 	const currentPropertyId = user.user_metadata.currentPropertyId;
 
-	const { data: propertyData, error } = await supabase
-		.from("properties")
-		.select()
-		.eq("id", currentPropertyId);
-
-	if (error || propertyData.length === 0) {
-		redirect("/dashboard");
+	if (!currentPropertyId) {
+		return null;
 	}
 
 	const tenantsData = await getTenants(currentPropertyId);
-
-	// const { data: tenantsData, error: tenantsError } = await supabase
-	// 	.from("tenants")
-	// 	.select(
-	// 		`
-	//     id,
-	//     property_id,
-	//     user_id,
-	//     users:users (
-	//       email,
-	//       full_name,
-	//       created_at
-	//     )
-	//   `,
-	// 	)
-	// 	.eq("property_id", currentPropertyId);
-
-	// if (tenantsError) {
-	// 	console.error("Error fetching tenants:", tenantsError);
-	// 	// Handle error as needed
-	// }
 
 	return (
 		<>

@@ -13,11 +13,7 @@ import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
 import { BankCard } from "@/components/PropertySettings/BankCard";
 
 interface SettingsNavigationProps {
-	currentPropertyId?: string;
-	// lease: any | null;
-	// userId: string;
 	initialTab?: string;
-	// plaidAccounts: any[] | null;
 }
 
 const NavButton = ({
@@ -39,13 +35,12 @@ const NavButton = ({
 );
 
 export default function SettingsNavigation({
-	// currentPropertyId,
-	// lease,
-	// userId,
 	initialTab,
-	// plaidAccounts,
 }: SettingsNavigationProps) {
 	const { currentPropertyId } = useCurrentProperty();
+	if (!currentPropertyId) {
+		return null;
+	}
 	const [activeTab, setActiveTab] = useState(initialTab || "Bank");
 
 	const handleTabChange = (tab: string) => {
@@ -55,8 +50,6 @@ export default function SettingsNavigation({
 
 	const tabs = useMemo(
 		() => [
-			// { name: "General", component: RentCard },
-			// { name: "Invite", component: InviteCard },
 			{ name: "Bank", component: BankCard },
 			{ name: "Delete", component: DeleteCard },
 		],
@@ -65,15 +58,6 @@ export default function SettingsNavigation({
 
 	const renderContent = () => {
 		switch (activeTab) {
-			// case "General":
-			// 	return (
-			// 		<RentCard
-			// 			propertyId={currentPropertyId}
-			// 			buttonOnClick={() => handleTabChange("Tenants")}
-			// 		/>
-			// 	);
-			// case "Invite":
-			// 	return <InviteCard propertyId={currentPropertyId} />;
 			case "Bank":
 				return <BankCard />;
 			case "Delete":
@@ -116,10 +100,6 @@ export default function SettingsNavigation({
 				</main>
 			</div>
 			<div className="block space-y-6 xl:hidden max-w-xl mx-auto">
-				{/* <RentCard
-					propertyId={currentPropertyId}
-				/>
-				<InviteCard propertyId={currentPropertyId} /> */}
 				<BankCard />
 				<DeleteCard propertyId={currentPropertyId} />
 			</div>

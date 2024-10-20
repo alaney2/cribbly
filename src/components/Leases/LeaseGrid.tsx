@@ -64,6 +64,9 @@ const getLeaseStatus = (startDate: string, endDate: string) => {
 
 export function LeaseGrid() {
 	const { currentPropertyId } = useCurrentProperty();
+	if (!currentPropertyId) {
+		return null;
+	}
 	const [selectedLease, setSelectedLease] = useState(null);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 
