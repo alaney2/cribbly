@@ -1,7 +1,7 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/catalyst/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 import { RemoveBankDialog } from "@/components/Dashboard/RemoveBankDialog";
@@ -32,6 +32,23 @@ type AccountProps = {
 	email: string;
 };
 
+const userFetcher = async () => {
+	const supabase = createClient();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+	if (!user) throw new Error("User not found");
+
+	const { data, error } = await supabase
+		.from("users")
+		.select("full_name, email")
+		.eq("id", user.id)
+		.single();
+
+	if (error) throw error;
+	return data;
+};
+
 const fetcher = async () => {
 	const supabase = createClient();
 
@@ -49,12 +66,35 @@ const fetcher = async () => {
 	return data;
 };
 
-export function Account({ fullName, email }: AccountProps) {
+export function Account() {
+	const {
+		data: userData,
+		error: userError,
+		mutate: userMutate,
+	} = useSWR("user", userFetcher);
 	const [isRemoveBankDialogOpen, setIsRemoveBankDialogOpen] = useState(false);
-	const [editedName, setEditedName] = useState(fullName);
+	// const [editedName, setEditedName] = useState(fullName);
+	// const [savedName, setSavedName] = useState(fullName);
+	const [editedName, setEditedName] = useState("");
+	const [savedName, setSavedName] = useState("");
+
 	const [bankDetails, setBankDetails] = useState("");
 	const [accountId, setAccountId] = useState("");
 	const [isLinkConfirmDialogOpen, setIsLinkConfirmDialogOpen] = useState(false);
+	const [isSaveButtonEnabled, setIsSaveButtonEnabled] = useState(false);
+
+	useEffect(() => {
+		if (userData) {
+			setEditedName(userData.full_name);
+			setSavedName(userData.full_name);
+		}
+	}, [userData]);
+
+	useEffect(() => {
+		setIsSaveButtonEnabled(
+			editedName.trim() !== savedName && editedName.trim() !== "",
+		);
+	}, [editedName, savedName]);
 
 	const {
 		data: bankAccounts,
@@ -66,6 +106,7 @@ export function Account({ fullName, email }: AccountProps) {
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
 	) => {
 		e.preventDefault();
+		const loading = toast.loading("Saving...");
 		const supabase = createClient();
 		const {
 			data: { user },
@@ -85,10 +126,15 @@ export function Account({ fullName, email }: AccountProps) {
 			console.error(error);
 			toast.error(error.message);
 		}
+		toast.dismiss(loading);
+		toast.success("Name saved");
+		setSavedName(editedName.trim());
+		setIsSaveButtonEnabled(false);
 	};
 
 	const handleCancelEditName = () => {
-		setEditedName(fullName);
+		setEditedName(savedName);
+		setIsSaveButtonEnabled(false);
 	};
 
 	const handlePlaidSuccess = (newAccounts: PlaidAccount[]) => {
@@ -133,7 +179,7 @@ export function Account({ fullName, email }: AccountProps) {
 													outline
 													onClick={handleCancelEditName}
 													className="text-sm"
-													disabled={editedName === fullName}
+													disabled={!isSaveButtonEnabled}
 												>
 													Cancel
 												</Button>
@@ -142,7 +188,7 @@ export function Account({ fullName, email }: AccountProps) {
 													color="blue"
 													onClick={handleSaveName}
 													className="text-sm"
-													disabled={editedName === fullName}
+													disabled={!isSaveButtonEnabled}
 												>
 													Save
 												</Button>
@@ -158,7 +204,7 @@ export function Account({ fullName, email }: AccountProps) {
 								<dd className="mt-1 flex sm:mt-0 sm:flex-auto">
 									<Input
 										className="disabled cursor-default pointer-events-none"
-										placeholder={email}
+										placeholder={userData?.email}
 									/>
 								</dd>
 							</div>

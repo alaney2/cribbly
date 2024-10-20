@@ -10,20 +10,20 @@ export default async function Account() {
 		data: { user },
 	} = await supabase.auth.getUser();
 
-	const { data: userDetails } = await supabase
-		.from("users")
-		.select("*")
-		.single();
+	// const { data: userDetails } = await supabase
+	// 	.from("users")
+	// 	.select("*")
+	// 	.single();
 
-	const { data: subscription, error } = await supabase
-		.from("subscriptions")
-		.select("*, prices(*, products(*))")
-		.in("status", ["trialing", "active"])
-		.maybeSingle();
+	// const { data: subscription, error } = await supabase
+	// 	.from("subscriptions")
+	// 	.select("*, prices(*, products(*))")
+	// 	.in("status", ["trialing", "active"])
+	// 	.maybeSingle();
 
-	if (error) {
-		console.log(error);
-	}
+	// if (error) {
+	// 	console.log(error);
+	// }
 
 	if (!user) return;
 
