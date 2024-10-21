@@ -1,0 +1,141 @@
+"use client";
+import { useState } from "react";
+import { Input } from "@/components/catalyst/input";
+import {
+  Description,
+  Field,
+  FieldGroup,
+  Fieldset,
+  Label,
+  Legend,
+} from "@/components/catalyst/fieldset";
+import { Select } from "@/components/catalyst/select";
+import { Text } from "@/components/catalyst/text";
+import { Textarea } from "@/components/catalyst/textarea";
+import { Button } from "@/components/catalyst/button";
+import { createClient } from "@/utils/supabase/client";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
+export function WaitList() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [propertyCount, setPropertyCount] = useState("");
+  const [reason, setReason] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const router = useRouter();
+
+  const supabase = createClient();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const loading = toast.loading("Submitting...");
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.from("waitlist").insert([
+        {
+          email,
+          name,
+          propertyCount: propertyCount ? parseInt(propertyCount, 10) : null,
+
+          reason,
+        },
+      ]);
+
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+      toast.dismiss(loading);
+      toast.success(
+        "Thank you for joining our waitlist! We'll be in touch soon."
+      );
+      setSuccess(true);
+      setName("");
+      setEmail("");
+      setPropertyCount("");
+      setReason("");
+    } catch (err) {
+      toast.dismiss(loading);
+      toast.error("Failed to join waitlist. Please try again.");
+      console.error("Error submitting to waitlist:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // if (success) {
+  //   return (
+  //     <Text>Thank you for joining our waitlist! We'll be in touch soon.</Text>
+  //   );
+  // }
+
+  return (
+    <div className="flex h-full items-center justify-center px-4 md:px-12 lg:px-0">
+      <form
+        onSubmit={handleSubmit}
+        className="rounded-lg sm:ring-2 ring-gray-200 sm:p-6 bg-gray-50"
+      >
+        <Fieldset>
+          <Legend>Join our Waitlist</Legend>
+          <Text>
+            Fill out this form to join our waitlist and be notified when Cribbly
+            launches.
+          </Text>
+          <FieldGroup>
+            <Field>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="name">Name (optional)</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="property_count">
+                How many properties you are looking to manage (optional)
+              </Label>
+              <Input
+                id="property_count"
+                type="number"
+                inputMode="numeric"
+                value={propertyCount}
+                onChange={(e) => setPropertyCount(e.target.value)}
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="reason">
+                Any additional comments? (optional)
+              </Label>
+              <Textarea
+                id="reason"
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+              />
+            </Field>
+          </FieldGroup>
+        </Fieldset>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          color="blue"
+          className="mt-8 w-full h-32"
+        >
+          {isSubmitting ? "Submitting..." : "Join Waitlist"}
+        </Button>
+      </form>
+    </div>
+  );
+}
