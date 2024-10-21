@@ -17,14 +17,27 @@ import { Field, Label } from "@/components/catalyst/fieldset";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { deleteProperty } from "@/utils/supabase/actions";
-import { useSWRConfig } from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useRouter } from "next/navigation";
 import { useCurrentProperty } from "@/contexts/CurrentPropertyContext";
+import { createClient } from "@/utils/supabase/client";
 
 type DeleteProperyDialogProps = {
 	isOpen: boolean;
 	onClose: () => void;
 	propertyId: string;
+};
+
+const fetcher = async (propertyId: string) => {
+	const supabase = createClient();
+	const { data, error } = await supabase
+		.from("properties")
+		.select("street_address")
+		.eq("id", propertyId)
+		.single();
+
+	if (error) throw error;
+	return data;
 };
 
 export function DeleteProperyDialog({
@@ -39,10 +52,12 @@ export function DeleteProperyDialog({
 	const { mutate } = useSWRConfig();
 	const router = useRouter();
 	const { setCurrentPropertyId } = useCurrentProperty();
+	const { data: property, error } = useSWR(propertyId, fetcher);
+	const USER_INPUT = property?.street_address;
 
 	const handleDeleteProperty = async (e: { preventDefault: () => void }) => {
 		e.preventDefault();
-		if (deleteInput !== "delete my property") return;
+		if (deleteInput !== USER_INPUT) return;
 		setIsDeleting(true);
 		const toastId = toast.loading("Deleting property...");
 		try {
@@ -108,7 +123,7 @@ export function DeleteProperyDialog({
 											<Label htmlFor="verifyDelete" className="">
 												<span className="">To verify, type </span>
 												<span className="font-bold dark:text-white">
-													delete my property
+													{USER_INPUT}
 												</span>{" "}
 												below:
 											</Label>
@@ -117,11 +132,11 @@ export function DeleteProperyDialog({
 												id="verifyDelete"
 												name="verifyDelete"
 												className="mt-2"
-												pattern="\s*delete my property\s*"
-												title="Validate the input by typing 'delete my property' exactly as shown."
+												pattern={`\\s*${USER_INPUT}\\s*`}
+												title={`Validate the input by typing '${USER_INPUT}' exactly as shown.`}
 												required={true}
 												aria-required="true"
-												aria-invalid={deleteInput !== "delete my property"}
+												aria-invalid={deleteInput !== USER_INPUT}
 												autoCapitalize="off"
 												autoComplete="off"
 												autoCorrect="off"
@@ -177,7 +192,7 @@ export function DeleteProperyDialog({
 								<Label htmlFor="verifyDelete" className="">
 									<span className="">To verify, type </span>
 									<span className="font-bold dark:text-white">
-										delete my property
+										{USER_INPUT}
 									</span>{" "}
 									below:
 								</Label>
@@ -186,11 +201,11 @@ export function DeleteProperyDialog({
 									id="verifyDelete"
 									name="verifyDelete"
 									className="mt-2"
-									pattern="\s*delete my property\s*"
-									title="Validate the input by typing 'delete my property' exactly as shown."
+									pattern={`\\s*${USER_INPUT}\\s*`}
+									title={`Validate the input by typing '${USER_INPUT}' exactly as shown.`}
 									required={true}
 									aria-required="true"
-									aria-invalid={deleteInput !== "delete my property"}
+									aria-invalid={deleteInput !== USER_INPUT}
 									autoCapitalize="off"
 									autoComplete="off"
 									autoCorrect="off"
