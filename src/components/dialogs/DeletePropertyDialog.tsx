@@ -122,7 +122,7 @@ export function DeleteProperyDialog({
 										<Field className="items-center">
 											<Label htmlFor="verifyDelete" className="">
 												<span className="">To verify, type </span>
-												<span className="font-bold dark:text-white">
+												<span className="font-extrabold dark:text-white">
 													{USER_INPUT}
 												</span>{" "}
 												below:
@@ -191,7 +191,7 @@ export function DeleteProperyDialog({
 							<Field className="items-center">
 								<Label htmlFor="verifyDelete" className="">
 									<span className="">To verify, type </span>
-									<span className="font-bold dark:text-white">
+									<span className="font-extrabold dark:text-white">
 										{USER_INPUT}
 									</span>{" "}
 									below:
