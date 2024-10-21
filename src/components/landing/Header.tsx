@@ -4,7 +4,6 @@ import { Fragment, useRef } from "react";
 import Link from "next/link";
 import { Popover, Transition } from "@headlessui/react";
 import clsx from "clsx";
-
 import { Button } from "@/components/default/Button";
 import { Container } from "@/components/default/Container";
 import { Logo } from "@/components/Logo";
@@ -154,7 +153,7 @@ export function Header() {
                 alt="logo"
                 height={32}
                 width={32}
-                className="mr-2"
+                className="mr-1"
               />
               <>
                 <span className={"text-gray-600"}>Crib</span>

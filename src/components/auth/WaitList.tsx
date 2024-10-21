@@ -17,6 +17,9 @@ import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { AnimatedBackground } from "@/components/landing/AnimatedBackground";
+import icon from "@/images/icon.png";
+import Image from "next/image";
+import Link from "next/link";
 
 export function WaitList() {
   const [name, setName] = useState("");
@@ -84,6 +87,31 @@ export function WaitList() {
           onSubmit={handleSubmit}
           className="rounded-lg sm:ring-2 ring-gray-200 sm:p-6 bg-gray-50"
         >
+          <Link
+            href="/"
+            aria-label="Cribbly"
+            className="flex items-center font-lexend text-lg sm:text-md tracking-tight font-medium select-none w-full mb-4 sm:mb-3"
+          >
+            {/* <Logo className="h-8 mb-2 w-auto" /> */}
+            <Image
+              src={icon}
+              alt="logo"
+              height={32}
+              width={32}
+              className="mr-1 sm:hidden"
+            />
+            <Image
+              src={icon}
+              alt="logo"
+              height={28}
+              width={28}
+              className="mr-1 hidden sm:block"
+            />
+            <>
+              <span className={"text-gray-600"}>Crib</span>
+              <span className={"text-blue-500"}>bly</span>
+            </>
+          </Link>
           <Fieldset>
             <Legend>Join our Waitlist</Legend>
             <Text>
