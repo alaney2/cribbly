@@ -2,11 +2,11 @@
 
 <!-- transfer payment -->
 
-stripe payment for unlimited properties
+identity verification plaid
 
 phone verification
 
-identity verification plaid
+stripe payment for unlimited properties
 
 convert tenant side to client instead of server
 
