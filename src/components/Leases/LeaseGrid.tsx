@@ -135,7 +135,7 @@ export function LeaseGrid() {
 					{icon}
 					{text}
 				</div>
-				<Text className={"px-1"}>Rent per month: {lease.rent_amount}</Text>
+				<Text className={"px-1"}>Rent per month: ${lease.rent_amount}</Text>
 				<Text className={"px-1"}>Tenants: {lease.tenantCount}</Text>
 				{lease.sd_amount > 0 && (
 					<Text className={"px-1"}>

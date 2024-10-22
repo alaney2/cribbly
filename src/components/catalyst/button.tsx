@@ -16,6 +16,7 @@ const styles = {
 		"data-[disabled]:opacity-50",
 		// Icon
 		"[&>[data-slot=icon]]:-mx-0.5 [&>[data-slot=icon]]:my-0.5 [&>[data-slot=icon]]:size-5 [&>[data-slot=icon]]:shrink-0 [&>[data-slot=icon]]:text-[--btn-icon] [&>[data-slot=icon]]:sm:my-1 [&>[data-slot=icon]]:sm:size-4 forced-colors:[--btn-icon:ButtonText] forced-colors:data-[hover]:[--btn-icon:ButtonText]",
+		"select-none",
 	],
 	solid: [
 		// Optical border, implemented as the button background to avoid corner artifacts

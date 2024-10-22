@@ -120,7 +120,7 @@ export function DeleteProperyDialog({
 								<DialogBody>
 									<div className="">
 										<Field className="items-center">
-											<Label htmlFor="verifyDelete" className="">
+											<Label isPassive={true} htmlFor="verifyDelete">
 												<span className="">To verify, type </span>
 												<span className="font-extrabold dark:text-white">
 													{USER_INPUT}
@@ -189,7 +189,7 @@ export function DeleteProperyDialog({
 								</AlertTitle>
 							</Alert>
 							<Field className="items-center">
-								<Label htmlFor="verifyDelete" className="">
+								<Label isPassive={true} htmlFor="verifyDelete">
 									<span className="">To verify, type </span>
 									<span className="font-extrabold dark:text-white">
 										{USER_INPUT}

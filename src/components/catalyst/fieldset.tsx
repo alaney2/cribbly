@@ -1,6 +1,7 @@
 import * as Headless from "@headlessui/react";
 import clsx from "clsx";
 import type React from "react";
+import { cn } from "@/lib/utils";
 
 export function Fieldset({
 	className,
@@ -68,15 +69,20 @@ export function Field({
 
 export function Label({
 	className,
+	isPassive = false,
 	...props
-}: { className?: string } & Omit<Headless.LabelProps, "as" | "className">) {
+}: { className?: string; isPassive?: boolean } & Omit<
+	Headless.LabelProps,
+	"as" | "className"
+>) {
 	return (
 		<Headless.Label
 			data-slot="label"
 			{...props}
-			className={clsx(
+			passive={isPassive}
+			className={cn(
+				"text-base/6 text-zinc-950 data-[disabled]:opacity-50 sm:text-sm/6 dark:text-white",
 				className,
-				"select-none text-base/6 text-zinc-950 data-[disabled]:opacity-50 sm:text-sm/6 dark:text-white",
 			)}
 		/>
 	);
