@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import {
 	Configuration,
 	PlaidApi,
-	Products,
 	PlaidEnvironments,
+	type Products,
 	type LinkTokenCreateRequest,
 	type CountryCode,
 } from "plaid";
@@ -12,26 +12,10 @@ import { createClient } from "@/utils/supabase/server";
 const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
 const PLAID_SECRET = process.env.PLAID_SECRET;
 const PLAID_ENV = process.env.PLAID_ENV || "sandbox";
-const PLAID_PRODUCTS: Products[] = (
-	process.env.PLAID_PRODUCTS || Products.Transactions
-).split(",") as Products[];
+const ID_VER_TEMPLATE = process.env.TEMPLATE_ID || "";
 const PLAID_COUNTRY_CODES: CountryCode[] = (
 	process.env.PLAID_COUNTRY_CODES || "US"
 ).split(",") as CountryCode[];
-const PLAID_REDIRECT_URI = process.env.PLAID_REDIRECT_URI || "";
-
-// We store the access_token in memory - in production, store it in a secure
-// persistent data store
-// let ACCESS_TOKEN = null;
-// let PUBLIC_TOKEN = null;
-// let ITEM_ID = null;
-// let ACCOUNT_ID = null;
-
-// The transfer_id and authorization_id are only relevant for Transfer ACH product.
-// We store the transfer_id in memory - in production, store it in a secure
-// persistent data store
-// let AUTHORIZATION_ID = null;
-// let TRANSFER_ID = null;
 
 const configuration = new Configuration({
 	basePath: PlaidEnvironments[PLAID_ENV],
@@ -52,19 +36,20 @@ export async function POST(request: Request) {
 		data: { user },
 	} = await supabase.auth.getUser();
 	if (!user) return;
+	const email = user.email;
 	const configs: LinkTokenCreateRequest = {
 		user: {
 			client_user_id: user.id,
+			email_address: email,
 		},
 		client_name: "Cribbly",
-		products: PLAID_PRODUCTS,
+		products: ["identity_verification"] as Products[],
+		identity_verification: {
+			template_id: ID_VER_TEMPLATE,
+		},
 		country_codes: PLAID_COUNTRY_CODES,
 		language: "en",
 	};
-
-	if (PLAID_REDIRECT_URI !== "") {
-		configs.redirect_uri = PLAID_REDIRECT_URI;
-	}
 
 	const createTokenResponse = await client.linkTokenCreate(configs);
 	return NextResponse.json(createTokenResponse.data);
