@@ -19,6 +19,12 @@ import {
 	Verification,
 	VerificationForm,
 } from "@/components/Dashboard/Verification";
+import { IdentityVerification } from "@/components/welcome/IDV";
+import { Check, Lock } from "lucide-react";
+import { Heading } from "@/components/catalyst/heading";
+import icon from "@/images/icon.png";
+import Image from "next/image";
+import { signOut } from "@/utils/supabase/sign-out";
 
 export default function WelcomeLayout({
 	user,
@@ -34,7 +40,32 @@ export default function WelcomeLayout({
 			case 1:
 				return (
 					<>
-						<VerificationForm full_name={""} email={user.email} />
+						{/* <VerificationForm full_name={""} email={user.email} /> */}
+						<div className="max-w-lg w-full space-y-6 p-4">
+							<div className="flex flex-col mb-8">
+								<Lock className="w-12 h-12 text-blue-500 mb-3" />
+								<Heading>Verify Your Identity</Heading>
+							</div>
+							{/* <p className="mb-6">
+								As a secure platform, Cribbly needs to verify your identity to
+								comply with U.S. laws and protect our community.
+							</p> */}
+							<ul className="space-y-6 mb-36">
+								{[
+									"Protect your financial transactions and sensitive property information",
+									"Comply with legal requirements to prevent fraud and money laundering",
+									"Cribbly uses a verification platform to verify your name, birthday, encrypted SSN, and address",
+									"Your info is confidential, securely protected, and used solely for regulatory purposes",
+								].map((text, index) => (
+									// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+									<li key={index} className="flex items-start">
+										<Check className="flex-shrink-0 w-5 h-5 text-blue-500 mr-4 mt-1" />
+										<span>{text}</span>
+									</li>
+								))}
+							</ul>
+							<IdentityVerification />
+						</div>
 					</>
 				);
 
@@ -46,6 +77,27 @@ export default function WelcomeLayout({
 	return (
 		<>
 			<div className="flex flex-col h-full w-full bg-white dark:bg-zinc-900">
+				<div className="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-700">
+					<div className="flex items-center text-lg font-medium">
+						<Image
+							src={icon}
+							alt="logo"
+							height={30}
+							width={30}
+							className="mr-1"
+						/>
+						<span className={"text-gray-600 dark:text-gray-500"}>Crib</span>
+						<span className={"text-blue-500"}>bly</span>
+					</div>
+					<Button
+						plain
+						onClick={async () => {
+							await signOut();
+						}}
+					>
+						Sign out
+					</Button>
+				</div>
 				<div className="flex-grow flex flex-col items-center justify-center p-2">
 					{renderStepContent(currentStep)}
 				</div>

@@ -9,8 +9,6 @@ import {
 } from "plaid";
 import { createClient } from "@/utils/supabase/server";
 
-const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
-const PLAID_SECRET = process.env.PLAID_SECRET;
 const PLAID_ENV = process.env.PLAID_ENV || "sandbox";
 const ID_VER_TEMPLATE = process.env.TEMPLATE_ID || "";
 const PLAID_COUNTRY_CODES: CountryCode[] = (
@@ -21,14 +19,14 @@ const configuration = new Configuration({
 	basePath: PlaidEnvironments[PLAID_ENV],
 	baseOptions: {
 		headers: {
-			"PLAID-CLIENT-ID": PLAID_CLIENT_ID,
-			"PLAID-SECRET": PLAID_SECRET,
+			"PLAID-CLIENT-ID": process.env.PLAID_CLIENT_ID,
+			"PLAID-SECRET": process.env.PLAID_SECRET,
 			"Plaid-Version": "2020-09-14",
 		},
 	},
 });
 
-const client = new PlaidApi(configuration);
+const plaidClient = new PlaidApi(configuration);
 
 export async function POST(request: Request) {
 	const supabase = createClient();
@@ -51,6 +49,6 @@ export async function POST(request: Request) {
 		language: "en",
 	};
 
-	const createTokenResponse = await client.linkTokenCreate(configs);
+	const createTokenResponse = await plaidClient.linkTokenCreate(configs);
 	return NextResponse.json(createTokenResponse.data);
 }
