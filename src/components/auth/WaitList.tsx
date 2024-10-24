@@ -82,7 +82,7 @@ export function WaitList() {
 
 	return (
 		// <div className="min-h-screen w-screen h-full flex items-center justify-center">
-		<AnimatedBackground hideOnSmallScreens={true}>
+		<AnimatedBackground hideOnSmallScreens={true} darkBackground={true}>
 			<div className="w-full h-full mx-auto my-auto max-w-xl px-4 py-8 sm:px-6 lg:px-8">
 				<form
 					onSubmit={handleSubmit}

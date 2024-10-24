@@ -59,12 +59,14 @@ interface AnimatedBackgroundProps {
 	children: React.ReactNode;
 	className?: string;
 	hideOnSmallScreens?: boolean;
+	darkBackground?: boolean;
 }
 
 export function AnimatedBackground({
 	children,
 	className,
 	hideOnSmallScreens = false,
+	darkBackground = false,
 }: AnimatedBackgroundProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -240,8 +242,9 @@ export function AnimatedBackground({
 			/>
 			<div
 				className={cn(
-					"absolute inset-0 z-10 backdrop-blur-sm bg-white/20 dark:bg-black/20",
+					"absolute inset-0 z-10 backdrop-blur-sm bg-white/20",
 					hideOnSmallScreens && "hidden sm:block",
+					darkBackground && "dark:bg-black/20",
 				)}
 			/>{" "}
 			{/* Glass effect */}
