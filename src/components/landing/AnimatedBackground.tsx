@@ -231,7 +231,10 @@ export function AnimatedBackground({
 	return (
 		<div
 			ref={containerRef}
-			className={cn("relative overflow-hidden w-full h-full", className)}
+			className={cn(
+				"relative overflow-hidden w-full h-full overflow-y-auto",
+				className,
+			)}
 		>
 			<canvas
 				ref={canvasRef}

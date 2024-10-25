@@ -27,8 +27,6 @@ export function WaitList() {
 	const [propertyCount, setPropertyCount] = useState("");
 	const [reason, setReason] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [success, setSuccess] = useState(false);
-	const router = useRouter();
 
 	const supabase = createClient();
 
@@ -60,7 +58,6 @@ export function WaitList() {
 			toast.success(
 				"Thank you for joining our waitlist! We'll be in touch soon.",
 			);
-			setSuccess(true);
 			setName("");
 			setEmail("");
 			setPropertyCount("");
@@ -74,14 +71,7 @@ export function WaitList() {
 		}
 	};
 
-	// if (success) {
-	//   return (
-	//     <Text>Thank you for joining our waitlist! We'll be in touch soon.</Text>
-	//   );
-	// }
-
 	return (
-		// <div className="min-h-screen w-screen h-full flex items-center justify-center">
 		<AnimatedBackground hideOnSmallScreens={true} darkBackground={true}>
 			<div className="w-full h-full mx-auto my-auto max-w-xl px-4 py-8 sm:px-6 lg:px-8">
 				<form
@@ -93,7 +83,6 @@ export function WaitList() {
 						aria-label="Cribbly"
 						className="flex items-center font-lexend text-lg sm:text-md tracking-tight font-medium select-none w-full mb-4 sm:mb-3"
 					>
-						{/* <Logo className="h-8 mb-2 w-auto" /> */}
 						<Image
 							src={icon}
 							alt="logo"
@@ -173,6 +162,5 @@ export function WaitList() {
 				</form>
 			</div>
 		</AnimatedBackground>
-		// </div>
 	);
 }
