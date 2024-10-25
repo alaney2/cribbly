@@ -85,7 +85,7 @@ export function Hero() {
 					ref={containerRef}
 					className="flex justify-center gap-x-4 sm:gap-x-6 relative py-3 my-1"
 				>
-					<Button onClick={handleClick} className="cursor-pointer">
+					<Button onClick={handleClick} className="cursor-pointer h-11">
 						Join the waitlist
 					</Button>
 					{sparks.map((spark) => (
