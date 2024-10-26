@@ -314,10 +314,30 @@ export async function setWelcomeScreen(value: boolean) {
 	if (!user) return;
 	const supabase = createClient();
 
-	await supabase
+	const { error } = await supabase
 		.from("users")
 		.update({ welcome_screen: value })
 		.eq("id", user.id);
+
+	if (error) {
+		console.error("Error setting welcome screen:", error);
+		throw new Error("Failed to set welcome screen");
+	}
+}
+
+export async function setIdentityVerificationStatus() {
+	const user = await getUser();
+	if (!user) return;
+	const supabase = createClient();
+
+	const { data, error } = await supabase
+		.from("identity_verification")
+		.insert({ user_id: user.id, verified_at: new Date().toISOString() });
+
+	if (error) {
+		console.error("Error setting identity verification status:", error);
+		throw new Error("Failed to set identity verification status");
+	}
 }
 
 export async function addProperty(formData: FormData) {

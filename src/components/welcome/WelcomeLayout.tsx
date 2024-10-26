@@ -46,16 +46,12 @@ export default function WelcomeLayout({
 								<Lock className="w-12 h-12 text-blue-500 mb-3" />
 								<Heading>Verify Your Identity</Heading>
 							</div>
-							{/* <p className="mb-6">
-								As a secure platform, Cribbly needs to verify your identity to
-								comply with U.S. laws and protect our community.
-							</p> */}
 							<ul className="space-y-6 mb-36">
 								{[
-									"Protect your financial transactions and sensitive property information",
-									"Comply with legal requirements to prevent fraud and money laundering",
-									"Cribbly uses a verification platform to verify your name, birthday, encrypted SSN, and address",
-									"Your info is confidential, securely protected, and used solely for regulatory purposes",
+									"Cribbly uses a secure verification platform to confirm your identity",
+									"This helps us comply with legal requirements and prevent fraud and money laundering",
+									"Your sensitive information is protected and used only for regulatory purposes",
+									"Identity verification ensures the safety of your transactions and property data",
 								].map((text, index) => (
 									// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 									<li key={index} className="flex items-start">

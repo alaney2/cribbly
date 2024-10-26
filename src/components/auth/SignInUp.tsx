@@ -68,6 +68,7 @@ export function SignInUp({
 			}
 		} catch (error) {
 			setIsButtonDisabled(false);
+			toast.dismiss(loading);
 			toast.error("An error occurred, please try again");
 			console.error(error);
 		}

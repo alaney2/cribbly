@@ -16,6 +16,7 @@ export async function signInWithOtp(formData: FormData) {
 	});
 
 	if (error) {
-		throw new Error("Error sending OTP");
+		console.error(error);
+		throw new Error("Error sending OTP", error);
 	}
 }
