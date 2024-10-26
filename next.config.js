@@ -1,13 +1,11 @@
-/** @type {import('next').NextConfig} */
-
 const nextConfig = {
 	// async rewrites() {
-	//   return [
-	//     {
-	//       source: '/api/:path*',
-	//       destination: 'https://api.example.com/:path*',
-	//     },
-	//   ]
+	// 	return [
+	// 		{
+	// 			source: "/api/:path*",
+	// 			destination: "https://cribbly.io/:path*",
+	// 		},
+	// 	];
 	// },
 	async redirects() {
 		return [
@@ -21,16 +19,6 @@ const nextConfig = {
 				destination: "/sign-in",
 				permanent: true,
 			},
-			// {
-			//   source: '/register',
-			//   destination: '/get-started',
-			//   permanent: true,
-			// },
-			// {
-			//   source: '/sign-up',
-			//   destination: '/get-started',
-			//   permanent: true,
-			// },
 		];
 	},
 	images: {
