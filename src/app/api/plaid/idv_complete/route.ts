@@ -12,7 +12,6 @@ import {
 	setIdentityVerificationStatus,
 	setWelcomeScreen,
 } from "@/utils/supabase/actions";
-import { redirect } from "next/navigation";
 
 const PLAID_ENV = process.env.PLAID_ENV || "sandbox";
 const ID_VER_TEMPLATE = process.env.TEMPLATE_ID || "";
@@ -107,7 +106,7 @@ export async function POST(request: Request) {
 	try {
 		await setWelcomeScreen(false);
 		await setIdentityVerificationStatus();
-		redirect("/dashboard");
+		return NextResponse.redirect(new URL("/dashboard", request.url));
 	} catch (error) {
 		console.error("Error updating user data:", error);
 		return NextResponse.json(
