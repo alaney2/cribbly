@@ -341,7 +341,7 @@ export const AddressAutocomplete = ({
 								value={address.city}
 								onChange={handleInputChange}
 								autoComplete="off"
-								readOnly
+								readOnly={inputDisabled}
 								required
 							/>
 						</Field>

@@ -71,12 +71,9 @@ const fetchLease = async (propertyId: string) => {
 
 export function RentCard({
 	propertyId,
-	// userId,
 	lease,
-	// lease: initialLease,
 	setCurrentProperty,
 	buttonOnClick,
-	// plaidAccounts,
 }: RentCardProps) {
 	// if (!lease) {
 	// 	const {
@@ -85,33 +82,16 @@ export function RentCard({
 	// 		isLoading,
 	// 	} = useSWR(["lease", propertyId], () => fetchLease(propertyId));
 	// }
+	const [rentAmount, setRentAmount] = useState<number>(0);
 
-	useEffect(() => {
-		if (lease) {
-			setRentAmount(lease.rent_amount ?? 0);
-			setHasSecurityDeposit(lease.sd_status !== "none");
-			setSecurityDepositFee(
-				lease.sd_status !== "none" ? lease.sd_amount ?? 0 : 0,
-			);
-			setStartDate(format(parseISO(lease.start_date), "yyyy-MM-dd"));
-			setEndDate(format(parseISO(lease.end_date), "yyyy-MM-dd"));
-
-			setInitialRentAmount(lease.rent_amount ?? 0);
-			setInitialSecurityDepositFee(
-				lease.sd_status !== "none" ? lease.sd_amount ?? 0 : 0,
-			);
-			setInitialStartDate(format(parseISO(lease.start_date), "yyyy-MM-dd"));
-			setInitialEndDate(format(parseISO(lease.end_date), "yyyy-MM-dd"));
-			setLeaseExists(true);
-		}
-	}, [lease]);
+	console.log("lease", lease);
 
 	const [leaseExists, setLeaseExists] = useState(
 		lease !== null && lease !== undefined,
 	);
 
 	const [isScheduleOpen, setIsScheduleOpen] = useState(false);
-	const [rentAmount, setRentAmount] = useState<number>(lease?.rent_amount ?? 0);
+	// const [rentAmount, setRentAmount] = useState<number>(lease?.rent_amount ?? 0);
 	const [hasSecurityDeposit, setHasSecurityDeposit] = useState(
 		lease ? lease?.sd_status !== "none" : false,
 	);
@@ -162,6 +142,26 @@ export function RentCard({
 		rentAmount !== 0;
 
 	const daysBetweenDates = daysBetween(parseISO(startDate), new Date());
+
+	useEffect(() => {
+		if (lease) {
+			setRentAmount(lease.rent_amount ?? 0);
+			setHasSecurityDeposit(lease.sd_status !== "none");
+			setSecurityDepositFee(
+				lease.sd_status !== "none" ? lease.sd_amount ?? 0 : 0,
+			);
+			setStartDate(format(parseISO(lease.start_date), "yyyy-MM-dd"));
+			setEndDate(format(parseISO(lease.end_date), "yyyy-MM-dd"));
+
+			setInitialRentAmount(lease.rent_amount ?? 0);
+			setInitialSecurityDepositFee(
+				lease.sd_status !== "none" ? lease.sd_amount ?? 0 : 0,
+			);
+			setInitialStartDate(format(parseISO(lease.start_date), "yyyy-MM-dd"));
+			setInitialEndDate(format(parseISO(lease.end_date), "yyyy-MM-dd"));
+			setLeaseExists(true);
+		}
+	}, [lease]);
 
 	return (
 		<>

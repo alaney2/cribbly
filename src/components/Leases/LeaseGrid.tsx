@@ -91,6 +91,8 @@ export function LeaseGrid() {
 		fetcher(currentPropertyId),
 	);
 
+	console.log("leases", leases);
+
 	const formatDate = (date: Date) => {
 		return date.toLocaleDateString("en-US", {
 			year: "numeric",

@@ -111,8 +111,6 @@ export function InviteCard({
 		return !invites?.some((invite) => invite.email === tenantEmail);
 	});
 
-	console.log("prev", previousTenants);
-
 	useEffect(() => {
 		if (invites && invites.length > 0 && setFinishWelcome && !finishWelcome) {
 			setFinishWelcome(true);

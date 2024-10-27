@@ -38,6 +38,7 @@ export function LeaseDetails({
 	lease,
 	setSelectedLease,
 }: LeaseDetailsProps) {
+	console.log("LeaseDetailsProps", lease);
 	const { currentPropertyId } = useCurrentProperty();
 	const [activeTab, setActiveTab] = useState(initialTab || "General");
 	const handleTabChange = (tab: string) => {

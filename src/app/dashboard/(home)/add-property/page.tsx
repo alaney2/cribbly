@@ -112,25 +112,35 @@ export default function AddProperty() {
 								type="button"
 								color="blue"
 								onClick={handleNext}
-								className="w-full mt-8"
+								className="ml-auto mt-12"
 							>
 								Skip / Continue
 							</Button>
 						)}
 						{step === totalSteps - 1 && (
-							<Button
-								type="submit"
-								color="blue"
-								className="w-full mt-6"
-								onClick={() => {
-									setShowConfetti(true);
-									setTimeout(() => {
-										router.push("/dashboard");
-									}, 500);
-								}}
-							>
-								Done
-							</Button>
+							<div className="flex w-full justify-between mt-6">
+								<Button
+									outline
+									onClick={() => {
+										setStep(step - 1);
+									}}
+								>
+									Previous
+								</Button>
+								<Button
+									type="submit"
+									color="blue"
+									// className="w-full mt-6"
+									onClick={() => {
+										setShowConfetti(true);
+										setTimeout(() => {
+											router.push("/dashboard");
+										}, 500);
+									}}
+								>
+									Done
+								</Button>
+							</div>
 						)}
 					</>
 				</motion.div>
