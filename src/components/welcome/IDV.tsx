@@ -38,7 +38,6 @@ export const IdentityVerification = () => {
 					"Content-Type": "application/json",
 				},
 			});
-			console.log("response", response);
 			if (!response.ok) {
 				if (response.status >= 400 && response.status < 600) {
 					toast.error(
@@ -47,7 +46,6 @@ export const IdentityVerification = () => {
 				}
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
-			// const data = await response.json();
 			toast.success("Verification completed successfully");
 			router.push("/dashboard");
 		} catch (error) {
