@@ -77,7 +77,9 @@ const leaseFetcher = async (property_id: string) => {
 		.from("leases")
 		.select("*")
 		.eq("property_id", property_id)
-		.maybeSingle();
+		.order("start_date", { ascending: false })
+		.limit(1)
+		.single();
 
 	if (error) throw error;
 	return data;
@@ -94,10 +96,6 @@ const tenantsFetcher = async (property_id: string) => {
 	return data;
 };
 
-type PropertyStatsProps = {
-	currentPropertyId?: string;
-};
-
 export function PropertyStats() {
 	const { currentPropertyId } = useCurrentProperty();
 
@@ -105,6 +103,8 @@ export function PropertyStats() {
 		currentPropertyId ? ["lease", currentPropertyId] : null,
 		() => leaseFetcher(currentPropertyId),
 	);
+
+	console.log("leaseData", leaseData);
 
 	const { data: tenantsData, error: tenantsError } = useSWR(
 		currentPropertyId ? ["tenants", currentPropertyId] : null,
