@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState, Fragment } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/default/Button";
@@ -8,14 +8,15 @@ import useSparks from "@/components/default/useSparks";
 import { motion, useMotionValue } from "framer-motion";
 import { toast } from "sonner";
 import { BoxReveal } from "@/components/magicui/BoxReveal";
-import { Text } from "../catalyst/text";
-import { Subheading } from "../catalyst/heading";
+import { VideoDialog } from "@/components/dialogs/VideoDialog";
+import { Dialog, Transition } from "@headlessui/react";
 
 export function Hero() {
 	const { makeBurst, sparks } = useSparks();
 	const containerRef = useRef<HTMLDivElement>(null);
 	const router = useRouter();
 	const x = useMotionValue("100%");
+	const [showVideo, setShowVideo] = useState(false);
 
 	const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
@@ -104,7 +105,8 @@ export function Hero() {
 						href=""
 						variant="outline"
 						className="cursor-pointer"
-						onClick={() => toast.success("Demo video coming soon")}
+						// onClick={() => toast.success("Demo video coming soon")}
+						onClick={() => setShowVideo(true)}
 					>
 						<svg
 							aria-hidden="true"
@@ -117,6 +119,75 @@ export function Hero() {
 				</div>
 			</BoxReveal>
 			<div className="mt-12 lg:mt-16" />
+			{/* <VideoDialog isOpen={showVideo} onClose={() => setShowVideo(false)} /> */}
+			<Transition appear show={showVideo} as={Fragment}>
+				<Dialog
+					as="div"
+					className="relative z-50"
+					onClose={() => setShowVideo(false)}
+				>
+					<Transition.Child
+						as={Fragment}
+						enter="ease-out duration-300"
+						enterFrom="opacity-0"
+						enterTo="opacity-70"
+						leave="ease-in duration-200"
+						leaveFrom="opacity-70"
+						leaveTo="opacity-0"
+					>
+						<div className="fixed inset-0 bg-black opacity-70" />
+					</Transition.Child>
+
+					<div className="fixed inset-0 overflow-y-auto">
+						<div className="flex min-h-full items-center justify-center p-4 text-center">
+							<Transition.Child
+								as={Fragment}
+								enter="ease-out duration-300"
+								enterFrom="opacity-0 scale-95 translate-y-4"
+								enterTo="opacity-100 scale-100 translate-y-0"
+								leave="ease-in duration-200"
+								leaveFrom="opacity-100 scale-100 translate-y-0"
+								leaveTo="opacity-0 scale-95 translate-y-4"
+							>
+								<Dialog.Panel className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 max-w-3xl w-full">
+									<button
+										onClick={() => setShowVideo(false)}
+										className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 focus:outline-none"
+										type="button"
+									>
+										<span className="sr-only">Close</span>
+										<svg
+											className="h-6 w-6"
+											fill="none"
+											stroke="currentColor"
+											viewBox="0 0 24 24"
+										>
+											<title>Close</title>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M6 18L18 6M6 6l12 12"
+											/>
+										</svg>
+									</button>
+									<div className="w-full h-0 pb-[56.25%] relative">
+										<iframe
+											className="absolute top-0 left-0 w-full h-full"
+											src="https://www.youtube.com/embed/I9AZhm-yKWI?si=P41Dnvhjry83L0TP&autoplay=1"
+											title="YouTube video player"
+											frameBorder="0"
+											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+											referrerPolicy="strict-origin-when-cross-origin"
+											allowFullScreen
+										/>
+									</div>
+								</Dialog.Panel>
+							</Transition.Child>
+						</div>
+					</div>
+				</Dialog>
+			</Transition>
 		</Container>
 	);
 }
