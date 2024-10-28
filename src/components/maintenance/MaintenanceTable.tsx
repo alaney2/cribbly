@@ -108,7 +108,7 @@ export function MaintenanceTable({
 		try {
 			await deleteTask(id);
 			await mutate(
-				"tasks",
+				["tasks", currentPropertyId],
 				async (currentTasks: any[] | undefined) => {
 					return currentTasks?.filter((task) => task.id !== id) ?? [];
 				},
@@ -261,20 +261,23 @@ export function MaintenanceTable({
 										.then((data) => {
 											if (dialogMode === "new") {
 												mutate(
-													"tasks",
+													["tasks", currentPropertyId],
 													(currentTasks: any) => {
 														return [data, ...(currentTasks || [])];
 													},
 													false,
 												);
 											} else {
-												mutate("tasks", (currentTasks: any[] | undefined) => {
-													return (
-														currentTasks?.map((task) =>
-															task.id === data.id ? data : task,
-														) ?? []
-													);
-												});
+												mutate(
+													["tasks", currentPropertyId],
+													(currentTasks: any[] | undefined) => {
+														return (
+															currentTasks?.map((task) =>
+																task.id === data.id ? data : task,
+															) ?? []
+														);
+													},
+												);
 											}
 											setIsDialogOpen(false);
 											setCurrentRequest({
@@ -374,36 +377,19 @@ export function MaintenanceTable({
 								</Button>
 							</DialogActions>
 						) : (
-							<div className="flex flex-col sm:flex-row w-full items-center sm:justify-between gap-y-2 sm:gap-y-0 mt-8">
-								<div className="flex flex-col sm:flex-row gap-4 sm:gap-x-2 w-full sm:w-auto">
-									<Button
-										type="submit"
-										color="blue"
-										className="w-full sm:w-auto order-first sm:order-last"
-									>
-										Submit
-									</Button>
-									<Button
-										type="button"
-										plain
-										onClick={() => {
-											setIsDialogOpen(false);
-										}}
-										className="w-full sm:w-auto hidden sm:block"
-									>
-										Cancel
-									</Button>
-								</div>
+							<DialogActions className="flex justify-between">
 								<Button
 									type="button"
 									color="red"
 									onClick={() => handleDelete(currentRequest.id)}
 									disabled={!isCurrentUserRequest}
-									className="w-full sm:w-auto order-last"
 								>
 									Delete
 								</Button>
-							</div>
+								<Button type="submit" color="blue">
+									Save
+								</Button>
+							</DialogActions>
 						)}
 					</form>
 				}
