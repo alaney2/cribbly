@@ -179,7 +179,7 @@ export function Header() {
               className="cursor-pointer"
             >
               <span>
-                Join waitlist <span className="hidden lg:inline" />
+                Get access <span className="hidden lg:inline" />
               </span>
             </Button>
             {sparks.map((spark) => (
