@@ -28,6 +28,8 @@ magicui
 
 svgomg
 
+http://vecticon.co/tools/image-vectorizer
+
 vectorart.ai
 
 Open Runde font
