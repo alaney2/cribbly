@@ -86,7 +86,7 @@ export function VideoDialog({
           <iframe
             // width="560"
             // height="315"
-            src="https://www.youtube.com/embed/I9AZhm-yKWI?si=P41Dnvhjry83L0TP"
+            src="https://www.youtube.com/watch?v=7VobRo3EEok"
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
