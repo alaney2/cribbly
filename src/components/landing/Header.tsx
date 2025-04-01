@@ -109,7 +109,7 @@ function MobileNavigation() {
             <MobileNavLink href="#testimonials">Testimonials</MobileNavLink>
             {/* <MobileNavLink href="#pricing">Pricing</MobileNavLink> */}
             {/* <hr className="m-2 border-slate-300/40" /> */}
-            {/* <MobileNavLink href="/login">Sign in</MobileNavLink> */}
+            <MobileNavLink href="/login">Sign in</MobileNavLink>
           </Popover.Panel>
         </Transition.Child>
       </Transition.Root>
@@ -170,9 +170,9 @@ export function Header() {
             ref={containerRef}
             className="relative flex items-center gap-x-4 md:gap-x-6"
           >
-            {/* <div className="hidden md:block select-none">
+            <div className="hidden md:block select-none">
               <NavLink href="/sign-in">Sign in</NavLink>
-            </div> */}
+            </div>
             <Button
               onClick={handleClick}
               color="blue"
