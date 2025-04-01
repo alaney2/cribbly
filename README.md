@@ -1,5 +1,6 @@
 # Cribbly
 
+Stack: NextJS, Supabase, Tailwind, Plaid, Teller.io, Stripe, Mapbox, Moov, Recharts
 <!-- transfer payment -->
 
 identity verification plaid
